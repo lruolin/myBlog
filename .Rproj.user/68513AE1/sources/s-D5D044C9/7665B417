@@ -3,22 +3,22 @@
     "path": "~/Desktop/r-distill/myBlog/_posts/welcome/welcome.Rmd",
     "project_path": "_posts/welcome/welcome.Rmd",
     "type": "r_markdown",
-    "hash": "649467025",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1610591202487.0,
     "source_on_save": false,
     "relative_order": 1,
     "properties": {
-        "cursorPosition": "3,25",
-        "scrollLine": "0"
+        "cursorPosition": "29,20",
+        "scrollLine": "15"
     },
     "folds": "",
-    "lastKnownWriteTime": 1610591210,
+    "lastKnownWriteTime": 1610592331,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1610591210859,
+    "last_content_update": 1610592331498,
     "read_only": false,
     "read_only_alternatives": []
 }

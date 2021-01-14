@@ -1,12 +1,9 @@
 ---
-title: "Welcome to My Blog"
+title: "My first post: Learning goals for 2021"
 description: |
-  Welcome to our new blog
+  pRactice corner for coding in R
 author:
-  - name: Nora Jones 
-    url: https://example.com/norajones
-    affiliation: Spacely Sprockets
-    affiliation_url: https://example.com/spacelysprokets
+  - name: lruolin
 date: 01-14-2021
 output:
   distill::distill_article:
@@ -19,7 +16,19 @@ knitr::opts_chunk$set(echo = FALSE)
 # Learn more about creating blogs with Distill at:
 # https://rstudio.github.io/distill/blog.html
 
+# for the metadata above, can add in under author,name:
+# url:, # affiliation, affiliation_url
+
 ```
 
+Hi, this is my practice corner for coding in R. I would want to:
+
+- learn tidyverse
+- practice on data visualization, exploration.
+- learn tidymodels/machine learning
+- learn Design of Experiment
+- learn Chemometrics
+- learn how to analyse sensory data
+- be able to communicate insights from data analysis using the Rmarkdown/distill packages
 
 

@@ -3,17 +3,17 @@
     {
       "path": "about.html",
       "title": "About this blog",
-      "description": "Some additional details about the blog",
+      "description": "Hi, this is my practice corner for coding in R.",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-01-14T10:27:00+08:00"
+      "last_modified": "2021-01-14T10:40:01+08:00"
     },
     {
       "path": "index.html",
       "title": "My Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-01-14T10:27:02+08:00"
+      "last_modified": "2021-01-14T10:40:02+08:00"
     }
   ],
   "collections": ["posts/posts.json"]
