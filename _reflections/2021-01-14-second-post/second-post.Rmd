@@ -1,0 +1,25 @@
+---
+title: "Motivations"
+description: |
+  Why R?
+author:
+  - name: lruolin
+date: 01-14-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+Why do I want to learn R?
+
+- It is more efficient as compared to Excel in terms of structuring data
+- The visualizations can be customized and are gorgeous
+- The possibilities are endless: webscraping, machine learning
+- It cuts across many different domains: psychology, natural sciences, politics
+- My teachers for R have been inspiring and I want to build on what they have taught. 
+

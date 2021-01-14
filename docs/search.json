@@ -5,15 +5,15 @@
       "title": "About this blog",
       "description": "Hi, this is my practice corner for coding in R.",
       "author": [],
-      "contents": "\n\n\n\n",
-      "last_modified": "2021-01-14T10:40:01+08:00"
+      "contents": "\nAbout this blog: a place to code and build portfolio. About me: food scientist, used to analyse data with Excel and SPSS before I met R. Attended a short modular course on R and want to build and expand on what I have learnt.\nAristotle — ‘The more you know, the more you know you don’t know.’\nand that makes me want to learn even more.\n\n\n\n",
+      "last_modified": "2021-01-14T11:15:15+08:00"
     },
     {
       "path": "index.html",
       "title": "My Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-01-14T10:40:02+08:00"
+      "last_modified": "2021-01-14T11:15:15+08:00"
     }
   ],
   "collections": ["posts/posts.json"]
