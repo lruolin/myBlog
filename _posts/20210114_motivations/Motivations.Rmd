@@ -25,8 +25,12 @@ Why R?
 
 I attended a short modular course on R, and was introduced to more effective and efficient ways of structuring data for customised plots that look way better than on Excel and SPSS. At the end of the course, I really wanted to retain what I have learnt, and build on what I have learnt, so that I can be better at R.
 
-**Aristotle — 'The more you know, the more you know you don't know.'**
+R, to me, is a new form of literacy (like how Microsoft Office was taught in school last time). It is also an effective approach to learn problem solving, as well as a job skill. 
+
+*Aristotle — 'The more you know, the more you know you don't know.'*
 
 and that makes me want to learn even more. 
+
+
 
 
