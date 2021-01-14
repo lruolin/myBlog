@@ -1,5 +1,5 @@
-name: "myBlog: pRactice corner"
-title: "pRactice corner"
+name: "myBlog"
+title: "My Blog"
 description: |
   My Blog
 output_dir: "docs"
