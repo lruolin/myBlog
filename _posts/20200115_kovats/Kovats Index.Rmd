@@ -1,0 +1,151 @@
+---
+title: "Kovats Index"
+description: |
+  R script for calculating Kovats Index
+author:
+  - name: lruolin
+date: 01-15-2021
+output:
+  distill::distill_article:
+    toc: true
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
+# for the metadata above, can add in under author,name:
+# url:, # affiliation, affiliation_url
+
+```
+
+# Background
+
+About 70% of my time at work is spent on interpreting GCMS and GC data. It is more of a qualitative type of identifying what each peak is, and this requires a seach based on mass spectra found in the GCMS library, as well as using the retention index. When working on GC data, I am even more reliant on the retention index for cross checking of peaks on GCMS, since there is no spectra information available. 
+
+Retention time is influenced by GC conditions and column types. Using retention time alone is not useful when you are trying to compare with retention times stated in the literature, since the elution conditions are different. 
+
+The Kovats index (KI) may be used to convert retention times into standardised retention indices (RI), based on retention times of alkane standards. The equation for Non-Isothermal Kovats RI is shown below.
+
+
+$$
+I_x = 100n + 100(t_x-t_n) / (t_(n+1) − t_n)
+$$
+
+Prior to learning R, I used to do the calculation on an excel spreadsheet. This was cumbersome, first I had to key in the retention times of each alkane standard, and then update my formula for the range of retention times between each alkane standard, and then copy and paste all the compiled retention times into 2 columns. That involved a lot of clicking with the mouse.
+
+# R workflow
+
+1. Run alkane standards on instrument (for example, GCMS) and compile the retention times in either .csv or .xlsx.
+2. Create a function to calculate KI.
+3. Calculate the KI for retention times between each pair of alkane standard
+4. Merge the compiled retention times and corresponding KI together
+5. Export the data to excel and use the vlookup function to find out the KI when retention time is keyed in; alternatively, use inner_join function to tabulate calculated KI before identifying the peaks. I am using the former as there may be some small peaks that were not integrated, or coeluted with other peaks, so there is still a degree of manual input that is required. 
+
+# Example
+
+Sample retention time data was retrieved from: <https://massfinder.com/wiki/Retention_index_guide>
+
+## Load packages
+```{r, echo=TRUE}
+library(tidyverse)
+```
+
+
+## Import
+```{r, echo = T}
+# Key in values
+carbon_number <- c("8", "9", "10", "11", "12", "13", "14", "15", "16")
+MS_RT <- c(1.85, 2.71, 3.69, 4.59, 5.37, 6.19, 7.17, 8.40, 9.99)
+
+# Create a tibble
+ms_rt <- cbind(carbon_number, MS_RT) %>% as_tibble()
+ms_rt$carbon_number <- as.numeric(ms_rt$carbon_number)
+ms_rt$MS_RT <- as.numeric(ms_rt$MS_RT)
+
+# The data may also be imported from excel
+
+```
+
+## Transform
+
+```{r, echo = T}
+# create function to calculate KI ####
+to_Calc_KI = function(n,Tn,m,Tm,Ti){
+  RI = 100*n + (100*(m-n)*((Ti-Tn)/(Tm-Tn)))
+  round(RI, 0)
+  
+}
+```
+
+```{r, echo = T}
+# create function to filter by carbon number ####
+# dat refers to data
+# col refers to column
+# val refers to values
+
+filter_by_carbon_number <- function(dat, col, val){
+  filter(dat, col %in%  val)
+}
+```
+
+The following step could be improved on by creating another function to repeat the codes rather than manually changing the values. 
+
+```{r, echo = T}
+fil_c8c9 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(8,9)) 
+
+fil_c9c10 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(9,10)) 
+
+fil_c10c11 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(10,11)) 
+fil_c11c12 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(11,12)) 
+fil_c12c13 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(12,13)) 
+fil_c13c14 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(13,14)) 
+fil_c14c15 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(14,15)) 
+fil_c15c16 <- filter_by_carbon_number(ms_rt, ms_rt$carbon_number, c(15,16)) 
+```
+
+```{r, echo = T}
+# create function to generate tibble for KI calculation
+create_KI_tibble <- function(msrt_col, n , m){
+  seq(from = min(msrt_col), to = max(msrt_col), by = 0.01) %>% 
+    as_tibble() %>% 
+    rename("Ti" = value) %>% 
+    mutate(n = n,
+           m = m,
+           Tn = min(msrt_col), 
+           Tm = max(msrt_col)) %>% 
+    dplyr::select(n, Tn, m, Tm, Ti) %>% 
+    mutate(KI = pmap_dbl(., to_Calc_KI))
+}
+```
+
+
+```{r, echo = T}
+c8c9 <- create_KI_tibble(fil_c8c9$MS_RT, 8, 9)
+c9c10 <- create_KI_tibble(fil_c9c10$MS_RT, 9, 10)
+c10c11 <- create_KI_tibble(fil_c10c11$MS_RT, 10, 11)
+c11c12 <- create_KI_tibble(fil_c11c12$MS_RT, 11, 12)
+c12c13 <- create_KI_tibble(fil_c12c13$MS_RT, 12, 13)
+c13c14 <- create_KI_tibble(fil_c13c14$MS_RT, 13, 14)
+c14c15 <- create_KI_tibble(fil_c14c15$MS_RT, 14, 15)
+c15c16 <- create_KI_tibble(fil_c15c16$MS_RT, 15, 16)
+
+calculated_MS_KI <- rbind(c8c9, c9c10, c10c11, c11c12, c12c13, 
+                          c13c14, c14c15, c15c16) %>% 
+  select(Ti, KI)
+
+# Export created file if needed
+# write_xlsx(calculated_MS_KI, "Kovats_Indices.xlsx")
+```
+
+Looking at the first 6 lines of tabulated KI:
+
+```{r, echo = T}
+head(calculated_MS_KI)
+```
+
+# References:
+<https://webbook.nist.gov/chemistry/gc-ri/>

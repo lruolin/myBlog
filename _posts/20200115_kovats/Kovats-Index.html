@@ -86,635 +86,39 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>pRactice corner: My Blog</title>
+  <title>Kovats Index</title>
+  
+  <meta property="description" itemprop="description" content="R script for calculating Kovats Index"/>
   
   
-  
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2021-01-15"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-01-15"/>
+  <meta name="article:author" content="lruolin"/>
   
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="pRactice corner: My Blog"/>
+  <meta property="og:title" content="Kovats Index"/>
   <meta property="og:type" content="article"/>
+  <meta property="og:description" content="R script for calculating Kovats Index"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="pRactice corner"/>
   
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="pRactice corner: My Blog"/>
+  <meta property="twitter:title" content="Kovats Index"/>
+  <meta property="twitter:description" content="R script for calculating Kovats Index"/>
   
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","site","listing"]}},"value":[{"type":"character","attributes":{},"value":["My Blog"]},{"type":"character","attributes":{},"value":["distill::distill_website"]},{"type":"character","attributes":{},"value":["posts"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Kovats Index"]},{"type":"character","attributes":{},"value":["R script for calculating Kovats Index\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["lruolin"]}]}]},{"type":"character","attributes":{},"value":["01-15-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc","self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[true]},{"type":"logical","attributes":{},"value":[false]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["Kovats-Index_files/anchor-4.2.2/anchor.min.js","Kovats-Index_files/bowser-1.9.3/bowser.min.js","Kovats-Index_files/distill-2.2.21/template.v2.js","Kovats-Index_files/jquery-1.11.3/jquery.min.js","Kovats-Index_files/popper-2.6.0/popper.min.js","Kovats-Index_files/tippy-6.2.7/tippy-bundle.umd.min.js","Kovats-Index_files/tippy-6.2.7/tippy-light-border.css","Kovats-Index_files/tippy-6.2.7/tippy.css","Kovats-Index_files/tippy-6.2.7/tippy.umd.min.js","Kovats-Index_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
   <!--radix_placeholder_navigation_in_header-->
-  <meta name="distill:offset" content=""/>
-  
-  <script type="application/javascript">
-  
-    window.headroom_prevent_pin = false;
-  
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-  
-      // initialize headroom for banner
-      var header = $('header').get(0);
-      var headerHeight = header.offsetHeight;
-      var headroom = new Headroom(header, {
-        tolerance: 5,
-        onPin : function() {
-          if (window.headroom_prevent_pin) {
-            window.headroom_prevent_pin = false;
-            headroom.unpin();
-          }
-        }
-      });
-      headroom.init();
-      if(window.location.hash)
-        headroom.unpin();
-      $(header).addClass('headroom--transition');
-  
-      // offset scroll location for banner on hash change
-      // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
-      window.addEventListener("hashchange", function(event) {
-        window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
-      });
-  
-      // responsive menu
-      $('.distill-site-header').each(function(i, val) {
-        var topnav = $(this);
-        var toggle = topnav.find('.nav-toggle');
-        toggle.on('click', function() {
-          topnav.toggleClass('responsive');
-        });
-      });
-  
-      // nav dropdowns
-      $('.nav-dropbtn').click(function(e) {
-        $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
-        $(this).parent().siblings('.nav-dropdown')
-           .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $("body").click(function(e){
-        $('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $(".nav-dropdown").click(function(e){
-        e.stopPropagation();
-      });
-    });
-  </script>
-  
-  <style type="text/css">
-  
-  /* Theme (user-documented overrideables for nav appearance) */
-  
-  .distill-site-nav {
-    color: rgba(255, 255, 255, 0.8);
-    background-color: #0F2E3D;
-    font-size: 15px;
-    font-weight: 300;
-  }
-  
-  .distill-site-nav a {
-    color: inherit;
-    text-decoration: none;
-  }
-  
-  .distill-site-nav a:hover {
-    color: white;
-  }
-  
-  @media print {
-    .distill-site-nav {
-      display: none;
-    }
-  }
-  
-  .distill-site-header {
-  
-  }
-  
-  .distill-site-footer {
-  
-  }
-  
-  
-  /* Site Header */
-  
-  .distill-site-header {
-    width: 100%;
-    box-sizing: border-box;
-    z-index: 3;
-  }
-  
-  .distill-site-header .nav-left {
-    display: inline-block;
-    margin-left: 8px;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-header .nav-left {
-      margin-left: 0;
-    }
-  }
-  
-  
-  .distill-site-header .nav-right {
-    float: right;
-    margin-right: 8px;
-  }
-  
-  .distill-site-header a,
-  .distill-site-header .title {
-    display: inline-block;
-    text-align: center;
-    padding: 14px 10px 14px 10px;
-  }
-  
-  .distill-site-header .title {
-    font-size: 18px;
-    min-width: 150px;
-  }
-  
-  .distill-site-header .logo {
-    padding: 0;
-  }
-  
-  .distill-site-header .logo img {
-    display: none;
-    max-height: 20px;
-    width: auto;
-    margin-bottom: -4px;
-  }
-  
-  .distill-site-header .nav-image img {
-    max-height: 18px;
-    width: auto;
-    display: inline-block;
-    margin-bottom: -3px;
-  }
-  
-  
-  
-  @media screen and (min-width: 1000px) {
-    .distill-site-header .logo img {
-      display: inline-block;
-    }
-    .distill-site-header .nav-left {
-      margin-left: 20px;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 20px;
-    }
-    .distill-site-header .title {
-      padding-left: 12px;
-    }
-  }
-  
-  
-  .distill-site-header .nav-toggle {
-    display: none;
-  }
-  
-  .nav-dropdown {
-    display: inline-block;
-    position: relative;
-  }
-  
-  .nav-dropdown .nav-dropbtn {
-    border: none;
-    outline: none;
-    color: rgba(255, 255, 255, 0.8);
-    padding: 16px 10px;
-    background-color: transparent;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    margin: 0;
-    margin-top: 1px;
-    z-index: 2;
-  }
-  
-  .nav-dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 200px;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-    z-index: 1;
-    margin-top: 2px;
-    white-space: nowrap;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-  
-  .nav-dropdown-content hr {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-  
-  .nav-dropdown-active {
-    display: block;
-  }
-  
-  .nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
-    color: black;
-    padding: 6px 24px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-  }
-  
-  .nav-dropdown-content .nav-dropdown-header {
-    display: block;
-    padding: 5px 24px;
-    padding-bottom: 0;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: #999999;
-    white-space: nowrap;
-  }
-  
-  .nav-dropdown:hover .nav-dropbtn {
-    color: white;
-  }
-  
-  .nav-dropdown-content a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-  
-  .nav-right .nav-dropdown-content {
-    margin-left: -45%;
-    right: 0;
-  }
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
-    .distill-site-header a.nav-toggle {
-      float: right;
-      display: block;
-    }
-    .distill-site-header .title {
-      margin-left: 0;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 0;
-    }
-    .distill-site-header {
-      overflow: hidden;
-    }
-    .nav-right .nav-dropdown-content {
-      margin-left: 0;
-    }
-  }
-  
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-header.responsive {position: relative; min-height: 500px; }
-    .distill-site-header.responsive a.nav-toggle {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-    .distill-site-header.responsive a,
-    .distill-site-header.responsive .nav-dropdown {
-      display: block;
-      text-align: left;
-    }
-    .distill-site-header.responsive .nav-left,
-    .distill-site-header.responsive .nav-right {
-      width: 100%;
-    }
-    .distill-site-header.responsive .nav-dropdown {float: none;}
-    .distill-site-header.responsive .nav-dropdown-content {position: relative;}
-    .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
-      display: block;
-      width: 100%;
-      text-align: left;
-    }
-  }
-  
-  /* Site Footer */
-  
-  .distill-site-footer {
-    width: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-    z-index: 3;
-    margin-top: 30px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    text-align: center;
-  }
-  
-  /* Headroom */
-  
-  d-title {
-    padding-top: 6rem;
-  }
-  
-  @media print {
-    d-title {
-      padding-top: 4rem;
-    }
-  }
-  
-  .headroom {
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-  
-  .headroom--transition {
-    transition: all .4s ease-in-out;
-  }
-  
-  .headroom--unpinned {
-    top: -100px;
-  }
-  
-  .headroom--pinned {
-    top: 0;
-  }
-  
-  /* adjust viewport for navbar height */
-  /* helps vertically center bootstrap (non-distill) content */
-  .min-vh-100 {
-    min-height: calc(100vh - 100px) !important;
-  }
-  
-  </style>
-  
-  <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-  <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
-  <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
-  <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
-  <script src="site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
-  <script src="site_libs/fuse-6.4.1/fuse.min.js"></script>
-  
-  <script type="application/javascript">
-  
-  function getMeta(metaName) {
-    var metas = document.getElementsByTagName('meta');
-    for (let i = 0; i < metas.length; i++) {
-      if (metas[i].getAttribute('name') === metaName) {
-        return metas[i].getAttribute('content');
-      }
-    }
-    return '';
-  }
-  
-  function offsetURL(url) {
-    var offset = getMeta('distill:offset');
-    return offset ? offset + '/' + url : url;
-  }
-  
-  function createFuseIndex() {
-  
-    // create fuse index
-    var options = {
-      keys: [
-        { name: 'title', weight: 20 },
-        { name: 'categories', weight: 15 },
-        { name: 'description', weight: 10 },
-        { name: 'contents', weight: 5 },
-      ],
-      ignoreLocation: true,
-      threshold: 0
-    };
-    var fuse = new window.Fuse([], options);
-  
-    // fetch the main search.json
-    return fetch(offsetURL('search.json'))
-      .then(function(response) {
-        if (response.status == 200) {
-          return response.json().then(function(json) {
-            // index main articles
-            json.articles.forEach(function(article) {
-              fuse.add(article);
-            });
-            // download collections and index their articles
-            return Promise.all(json.collections.map(function(collection) {
-              return fetch(offsetURL(collection)).then(function(response) {
-                if (response.status === 200) {
-                  return response.json().then(function(articles) {
-                    articles.forEach(function(article) {
-                      fuse.add(article);
-                    });
-                  })
-                } else {
-                  return Promise.reject(
-                    new Error('Unexpected status from search index request: ' +
-                              response.status)
-                  );
-                }
-              });
-            })).then(function() {
-              return fuse;
-            });
-          });
-  
-        } else {
-          return Promise.reject(
-            new Error('Unexpected status from search index request: ' +
-                        response.status)
-          );
-        }
-      });
-  }
-  
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-  
-    // get search element (bail if we don't have one)
-    var searchEl = window.document.getElementById('distill-search');
-    if (!searchEl)
-      return;
-  
-    createFuseIndex()
-      .then(function(fuse) {
-  
-        // make search box visible
-        searchEl.classList.remove('hidden');
-  
-        // initialize autocomplete
-        var options = {
-          autoselect: true,
-          hint: false,
-          minLength: 2,
-        };
-        window.autocomplete(searchEl, options, [{
-          source: function(query, callback) {
-            const searchOptions = {
-              isCaseSensitive: false,
-              shouldSort: true,
-              minMatchCharLength: 2,
-              limit: 10,
-            };
-            var results = fuse.search(query, searchOptions);
-            callback(results
-              .map(function(result) { return result.item; })
-            );
-          },
-          templates: {
-            suggestion: function(suggestion) {
-              var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
-                ? `<img src="${offsetURL(suggestion.preview)}"</img>`
-                : '';
-              var html = `
-                <div class="search-item">
-                  <h3>${suggestion.title}</h3>
-                  <div class="search-item-description">
-                    ${suggestion.description || ''}
-                  </div>
-                  <div class="search-item-preview">
-                    ${img}
-                  </div>
-                </div>
-              `;
-              return html;
-            }
-          }
-        }]).on('autocomplete:selected', function(event, suggestion) {
-          window.location.href = offsetURL(suggestion.path);
-        });
-        // remove inline display style on autocompleter (we want to
-        // manage responsive display via css)
-        $('.algolia-autocomplete').css("display", "");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-  
-  });
-  
-  </script>
-  
-  <style type="text/css">
-  
-  .nav-search {
-    font-size: x-small;
-  }
-  
-  /* Algolioa Autocomplete */
-  
-  .algolia-autocomplete {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: sub;
-    background-color: white;
-    color: black;
-    padding: 6px;
-    padding-top: 8px;
-    padding-bottom: 0;
-    border-radius: 6px;
-    border: 1px #0F2E3D solid;
-    width: 180px;
-  }
-  
-  
-  @media screen and (max-width: 768px) {
-    .distill-site-nav .algolia-autocomplete {
-      display: none;
-      visibility: hidden;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete {
-      display: inline-block;
-      visibility: visible;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
-      margin-left: 0;
-      width: 400px;
-      max-height: 400px;
-    }
-  }
-  
-  .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
-    width: 90%;
-    outline: none;
-    border: none;
-  }
-  
-  .algolia-autocomplete .aa-hint {
-    color: #999;
-  }
-  .algolia-autocomplete .aa-dropdown-menu {
-    width: 550px;
-    max-height: 70vh;
-    overflow-x: visible;
-    overflow-y: scroll;
-    padding: 5px;
-    margin-top: 3px;
-    margin-left: -150px;
-    background-color: #fff;
-    border-radius: 5px;
-    border: 1px solid #999;
-    border-top: none;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
-    cursor: pointer;
-    padding: 5px 4px;
-    border-bottom: 1px solid #eee;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
-    border-bottom: none;
-    margin-bottom: 2px;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
-    overflow: hidden;
-    font-size: 0.8em;
-    line-height: 1.4em;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
-    font-size: 1rem;
-    margin-block-start: 0;
-    margin-block-end: 5px;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
-    display: inline-block;
-    overflow: hidden;
-    height: 2.8em;
-    width: 80%;
-    margin-right: 4%;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
-    display: inline-block;
-    width: 15%;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
-    height: 3em;
-    width: auto;
-    display: none;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
-    display: initial;
-  }
-  
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
-    background-color: #eee;
-  }
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
-    font-weight: bold;
-    font-style: normal;
-  }
-  
-  </style>
-  
-  
   <!--/radix_placeholder_navigation_in_header-->
   <!--radix_placeholder_distill-->
   
@@ -2030,250 +1434,202 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
   
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/popper-2.6.0/popper.min.js"></script>
-  <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
-  <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
-  <script src="site_libs/tippy-6.2.7/tippy.umd.min.js"></script>
-  <script src="site_libs/anchor-4.2.2/anchor.min.js"></script>
-  <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
-  <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
-  <script src="site_libs/distill-2.2.21/template.v2.js"></script>
+  <script src="Kovats-Index_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="Kovats-Index_files/popper-2.6.0/popper.min.js"></script>
+  <link href="Kovats-Index_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="Kovats-Index_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="Kovats-Index_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="Kovats-Index_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="Kovats-Index_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="Kovats-Index_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="Kovats-Index_files/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
   <!--/radix_placeholder_site_in_header-->
 
 
 </head>
 
-<body class="layout-listing">
+<body>
 
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"My Blog","authors":[]}
+{"title":"Kovats Index","description":"R script for calculating Kovats Index","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-01-15T00:00:00.000+00:00","citationText":"lruolin, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
 <!--radix_placeholder_navigation_before_body-->
-<header class="header header--fixed" role="banner">
-<nav class="distill-site-nav distill-site-header">
-<div class="nav-left">
-<a href="index.html" class="title">pRactice corner</a>
-<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
-</div>
-<div class="nav-right">
-<a href="index.html">Home</a>
-<a href="about.html">About</a>
-<a href="usefullinks.html">Useful Links</a>
-<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
-</div>
-</nav>
-</header>
 <!--/radix_placeholder_navigation_before_body-->
 <!--radix_placeholder_site_before_body-->
 <!--/radix_placeholder_site_before_body-->
-<!--radix_placeholder_article_listing-->
-
-
-<script type="application/javascript">
-
-function init_posts_list() {
-
-  function load_image(img) {
-    var src = $(img).attr('data-src');
-    if (src) {
-      $(img).attr('src', src);
-      $(img).load(function() {
-        img.removeAttribute('data-src');
-      });
-    }
-  }
-
-  function set_posts_visible(posts, visible) {
-    if (visible) {
-
-      // show bottom border by default
-      $(posts).removeClass('post-preview-last');
-
-      // apply limits if need be
-      var max_posts = 25;
-      var apply_limits = $('.posts-container').hasClass('posts-apply-limit');
-      if (apply_limits && posts.length > max_posts) {
-        posts = $(posts).slice(0, max_posts);
-      } else {
-        $('.posts-more a').addClass('hidden');
-      }
-
-      // apply last style
-      $(posts.slice(-1)[0]).addClass('post-preview-last');
-
-      $(posts).removeClass('hidden');
-      $(posts).find('img[data-src]').each(function(i, img) {
-        load_image(img);
-      });
-    } else {
-      $(posts).addClass('hidden');
-    }
-  }
-
-  function apply_hash_filter() {
-
-    // clear active state
-    $('.categories .active').removeClass('active');
-
-    // mark all posts invisible to start
-    set_posts_visible($('.posts-list').children('a'), false);
-
-    // if we have a hash filter
-    if (window.location.hash && window.location.hash.startsWith("#category:")) {
-
-      // mark posts that match the category visible
-      var page_category = window.location.hash.replace(/^#category:/, "");
-      var posts = $('.post-metadata').map(function(idx, script) {
-        var metadata = $.parseJSON($(script).html());
-        var post = null;
-        $.each(metadata.categories, function(idx, category) {
-          category = category.replace(/ /g,"_");
-          if ((page_category || '').toLowerCase() === "articles" || category === page_category) {
-            post = $(script).parent().get();
-            return false;
-          }
-        });
-        return post;
-      });
-      set_posts_visible(posts, true);
-
-      // mark the hash active
-      $('.categories li>a[href="' + window.location.hash + '"]').addClass('active');
-
-      // update the list_caption
-      var list_caption = $('.posts-list-caption');
-      var caption = (page_category || '').toLowerCase() === "articles"
-        ? list_caption.attr('data-caption')
-        : ('Category: ' + page_category.replace(/_/g," "));
-      list_caption.text(caption);
-
-    } else {
-
-      // no hash filter, make all posts visible (subject to max display)
-      set_posts_visible($('.posts-list').children(), true);
-
-      // reset list caption
-      var list_caption = $('.posts-list-caption');
-      list_caption.text(list_caption.attr('data-caption'));
-
-
-    }
-  }
-
-  // more articles
-  function apply_post_limits(apply) {
-    if (apply) {
-      $('.posts-container').addClass('posts-apply-limit');
-      $('.posts-more a').removeClass('hidden');
-    } else {
-      $('.posts-container').removeClass('posts-apply-limit');
-      $('.posts-more a').addClass('hidden');
-    }
-  }
-
-  // click handling for tags
-  $('.dt-tag').click(function(ev) {
-    window.location.hash = '#category:' + $(this).text().replace(/ /g, "_");
-    return false;
-  })
-
-  // hash filter handling
-  apply_hash_filter();
-  $(window).on('hashchange',function() {
-    apply_post_limits(true);
-    apply_hash_filter();
-  });
-
-  // more articles link
-  $('.posts-more a').click(function(e) {
-    e.preventDefault();
-    apply_post_limits(false);
-    apply_hash_filter();
-    return false;
-  });
-
-}
-
-</script>
-
-
-
-<div class="posts-container posts-apply-limit l-page">
-<div class="posts-list">
-<h1 class="posts-list-caption" data-caption="My Blog">My Blog</h1>
-<a href="posts/20200115_kovats/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 15, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Kovats Index</h2>
-<div class="dt-tags"></div>
-<p>R script for calculating Kovats Index</p>
-</div>
-</a>
-<a href="posts/20210114_motivations/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 14, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Motivations</h2>
-<div class="dt-tags"></div>
-<p>why R?</p>
-</div>
-</a>
-<a href="posts/welcome/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 14, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>My first post: Learning goals for 2021</h2>
-<div class="dt-tags"></div>
-<p>pRactice corner for coding in R</p>
-</div>
-</a>
-</div>
-<div class="posts-more">
-<a href="#">More articles &raquo;</a>
-</div>
-</div>
-<!--/radix_placeholder_article_listing-->
 
 <div class="d-title">
-<h1>My Blog</h1>
+<h1>Kovats Index</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-
+<p><p>R script for calculating Kovats Index</p></p>
 </div>
 
+<div class="d-byline">
+  lruolin  
+  
+<br/>01-15-2021
+</div>
 
 <div class="d-article">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#background">Background</a></li>
+<li><a href="#r-workflow">R workflow</a></li>
+<li><a href="#example">Example</a><ul>
+<li><a href="#load-packages">Load packages</a></li>
+<li><a href="#import">Import</a></li>
+<li><a href="#transform">Transform</a></li>
+</ul></li>
+<li><a href="#references">References:</a></li>
+</ul>
+</nav>
+</div>
+<h1 id="background">Background</h1>
+<p>About 70% of my time at work is spent on interpreting GCMS and GC data. It is more of a qualitative type of identifying what each peak is, and this requires a seach based on mass spectra found in the GCMS library, as well as using the retention index. When working on GC data, I am even more reliant on the retention index for cross checking of peaks on GCMS, since there is no spectra information available.</p>
+<p>Retention time is influenced by GC conditions and column types. Using retention time alone is not useful when you are trying to compare with retention times stated in the literature, since the elution conditions are different.</p>
+<p>The Kovats index (KI) may be used to convert retention times into standardised retention indices (RI), based on retention times of alkane standards. The equation for Non-Isothermal Kovats RI is shown below.</p>
+<p><span class="math display">\[
+I_x = 100n + 100(t_x-t_n) / (t_(n+1) − t_n)
+\]</span></p>
+<p>Prior to learning R, I used to do the calculation on an excel spreadsheet. This was cumbersome, first I had to key in the retention times of each alkane standard, and then update my formula for the range of retention times between each alkane standard, and then copy and paste all the compiled retention times into 2 columns. That involved a lot of clicking with the mouse.</p>
+<h1 id="r-workflow">R workflow</h1>
+<ol type="1">
+<li>Run alkane standards on instrument (for example, GCMS) and compile the retention times in either .csv or .xlsx.</li>
+<li>Create a function to calculate KI.</li>
+<li>Calculate the KI for retention times between each pair of alkane standard</li>
+<li>Merge the compiled retention times and corresponding KI together</li>
+<li>Export the data to excel and use the vlookup function to find out the KI when retention time is keyed in; alternatively, use inner_join function to tabulate calculated KI before identifying the peaks. I am using the former as there may be some small peaks that were not integrated, or coeluted with other peaks, so there is still a degree of manual input that is required.</li>
+</ol>
+<h1 id="example">Example</h1>
+<p>Sample retention time data was retrieved from: <a href="https://massfinder.com/wiki/Retention_index_guide" class="uri">https://massfinder.com/wiki/Retention_index_guide</a></p>
+<h2 id="load-packages">Load packages</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h2 id="import">Import</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Key in values</span>
+<span class='va'>carbon_number</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"8"</span>, <span class='st'>"9"</span>, <span class='st'>"10"</span>, <span class='st'>"11"</span>, <span class='st'>"12"</span>, <span class='st'>"13"</span>, <span class='st'>"14"</span>, <span class='st'>"15"</span>, <span class='st'>"16"</span><span class='op'>)</span>
+<span class='va'>MS_RT</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1.85</span>, <span class='fl'>2.71</span>, <span class='fl'>3.69</span>, <span class='fl'>4.59</span>, <span class='fl'>5.37</span>, <span class='fl'>6.19</span>, <span class='fl'>7.17</span>, <span class='fl'>8.40</span>, <span class='fl'>9.99</span><span class='op'>)</span>
+
+<span class='co'># Create a tibble</span>
+<span class='va'>ms_rt</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>carbon_number</span>, <span class='va'>MS_RT</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span>
+<span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span><span class='op'>)</span>
+<span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>MS_RT</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>MS_RT</span><span class='op'>)</span>
+
+<span class='co'># The data may also be imported from excel</span>
+</code></pre>
+</div>
+</div>
+<h2 id="transform">Transform</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># create function to calculate KI ####</span>
+<span class='va'>to_Calc_KI</span> <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>n</span>,<span class='va'>Tn</span>,<span class='va'>m</span>,<span class='va'>Tm</span>,<span class='va'>Ti</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='va'>RI</span> <span class='op'>=</span> <span class='fl'>100</span><span class='op'>*</span><span class='va'>n</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>100</span><span class='op'>*</span><span class='op'>(</span><span class='va'>m</span><span class='op'>-</span><span class='va'>n</span><span class='op'>)</span><span class='op'>*</span><span class='op'>(</span><span class='op'>(</span><span class='va'>Ti</span><span class='op'>-</span><span class='va'>Tn</span><span class='op'>)</span><span class='op'>/</span><span class='op'>(</span><span class='va'>Tm</span><span class='op'>-</span><span class='va'>Tn</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>RI</span>, <span class='fl'>0</span><span class='op'>)</span>
+  
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># create function to filter by carbon number ####</span>
+<span class='co'># dat refers to data</span>
+<span class='co'># col refers to column</span>
+<span class='co'># val refers to values</span>
+
+<span class='va'>filter_by_carbon_number</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>col</span>, <span class='va'>val</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>dat</span>, <span class='va'>col</span> <span class='op'>%in%</span>  <span class='va'>val</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<p>The following step could be improved on by creating another function to repeat the codes rather than manually changing the values.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>fil_c8c9</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>8</span>,<span class='fl'>9</span><span class='op'>)</span><span class='op'>)</span> 
+
+<span class='va'>fil_c9c10</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>9</span>,<span class='fl'>10</span><span class='op'>)</span><span class='op'>)</span> 
+
+<span class='va'>fil_c10c11</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10</span>,<span class='fl'>11</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>fil_c11c12</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11</span>,<span class='fl'>12</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>fil_c12c13</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>12</span>,<span class='fl'>13</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>fil_c13c14</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>13</span>,<span class='fl'>14</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>fil_c14c15</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>14</span>,<span class='fl'>15</span><span class='op'>)</span><span class='op'>)</span> 
+<span class='va'>fil_c15c16</span> <span class='op'>&lt;-</span> <span class='fu'>filter_by_carbon_number</span><span class='op'>(</span><span class='va'>ms_rt</span>, <span class='va'>ms_rt</span><span class='op'>$</span><span class='va'>carbon_number</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>15</span>,<span class='fl'>16</span><span class='op'>)</span><span class='op'>)</span> 
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># create function to generate tibble for KI calculation</span>
+<span class='va'>create_KI_tibble</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>msrt_col</span>, <span class='va'>n</span> , <span class='va'>m</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>msrt_col</span><span class='op'>)</span>, to <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>msrt_col</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>rename</span><span class='op'>(</span><span class='st'>"Ti"</span> <span class='op'>=</span> <span class='va'>value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>mutate</span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>n</span>,
+           m <span class='op'>=</span> <span class='va'>m</span>,
+           Tn <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>msrt_col</span><span class='op'>)</span>, 
+           Tm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>msrt_col</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='va'>Tn</span>, <span class='va'>m</span>, <span class='va'>Tm</span>, <span class='va'>Ti</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>mutate</span><span class='op'>(</span>KI <span class='op'>=</span> <span class='fu'>pmap_dbl</span><span class='op'>(</span><span class='va'>.</span>, <span class='va'>to_Calc_KI</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>c8c9</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c8c9</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>8</span>, <span class='fl'>9</span><span class='op'>)</span>
+<span class='va'>c9c10</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c9c10</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>9</span>, <span class='fl'>10</span><span class='op'>)</span>
+<span class='va'>c10c11</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c10c11</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>10</span>, <span class='fl'>11</span><span class='op'>)</span>
+<span class='va'>c11c12</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c11c12</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>11</span>, <span class='fl'>12</span><span class='op'>)</span>
+<span class='va'>c12c13</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c12c13</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>12</span>, <span class='fl'>13</span><span class='op'>)</span>
+<span class='va'>c13c14</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c13c14</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>13</span>, <span class='fl'>14</span><span class='op'>)</span>
+<span class='va'>c14c15</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c14c15</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>14</span>, <span class='fl'>15</span><span class='op'>)</span>
+<span class='va'>c15c16</span> <span class='op'>&lt;-</span> <span class='fu'>create_KI_tibble</span><span class='op'>(</span><span class='va'>fil_c15c16</span><span class='op'>$</span><span class='va'>MS_RT</span>, <span class='fl'>15</span>, <span class='fl'>16</span><span class='op'>)</span>
+
+<span class='va'>calculated_MS_KI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>c8c9</span>, <span class='va'>c9c10</span>, <span class='va'>c10c11</span>, <span class='va'>c11c12</span>, <span class='va'>c12c13</span>, 
+                          <span class='va'>c13c14</span>, <span class='va'>c14c15</span>, <span class='va'>c15c16</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>Ti</span>, <span class='va'>KI</span><span class='op'>)</span>
+
+<span class='co'># Export created file if needed</span>
+<span class='co'># write_xlsx(calculated_MS_KI, "Kovats_Indices.xlsx")</span>
+</code></pre>
+</div>
+</div>
+<p>Looking at the first 6 lines of tabulated KI:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>calculated_MS_KI</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 6 x 2
+     Ti    KI
+  &lt;dbl&gt; &lt;dbl&gt;
+1  1.85   800
+2  1.86   801
+3  1.87   802
+4  1.88   803
+5  1.89   805
+6  1.9    806</code></pre>
+</div>
+<h1 id="references">References:</h1>
+<p><a href="https://webbook.nist.gov/chemistry/gc-ri/" class="uri">https://webbook.nist.gov/chemistry/gc-ri/</a></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2281,6 +1637,15 @@ function init_posts_list() {
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
