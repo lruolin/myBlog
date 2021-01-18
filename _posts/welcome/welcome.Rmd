@@ -26,6 +26,7 @@ Hi, this is my practice corner for coding in R. I would want to:
 - learn tidyverse
 - practice on data visualization, exploration.
 - learn tidymodels/machine learning
+- work on chemistry related datasets using R
 - learn Design of Experiment
 - learn Chemometrics
 - learn how to analyse sensory data

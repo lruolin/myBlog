@@ -45,9 +45,9 @@
     ],
     "date": "2021-01-14",
     "categories": [],
-    "contents": "\nHi, this is my practice corner for coding in R. I would want to:\nlearn tidyverse\npractice on data visualization, exploration.\nlearn tidymodels/machine learning\nlearn Design of Experiment\nlearn Chemometrics\nlearn how to analyse sensory data\nbe able to communicate insights from data analysis using the Rmarkdown/distill packages\n\n\n\n",
+    "contents": "\nHi, this is my practice corner for coding in R. I would want to:\nlearn tidyverse\npractice on data visualization, exploration.\nlearn tidymodels/machine learning\nwork on chemistry related datasets using R\nlearn Design of Experiment\nlearn Chemometrics\nlearn how to analyse sensory data\nbe able to communicate insights from data analysis using the Rmarkdown/distill packages\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-01-14T10:45:35+08:00",
+    "last_modified": "2021-01-18T21:54:53+08:00",
     "input_file": {}
   }
 ]
