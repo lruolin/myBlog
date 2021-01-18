@@ -3,4 +3,6 @@ title: "My Blog"
 site: distill::distill_website
 listing: posts
 ---
-<meta name="google-site-verification" content="u63mAqnUoTrFGSWH9SGivtiaId-Qkh70CwFFZwjRrok" />
+
+
+

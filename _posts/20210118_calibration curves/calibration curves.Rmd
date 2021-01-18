@@ -1,0 +1,148 @@
+---
+title: "Calibration Curves Data"
+description: |
+  R script for calculating Limit of Detection and Limit of Quantification
+author:
+  - name: lruolin
+date: 01-15-2021
+output:
+  distill::distill_article:
+    toc: true
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
+# for the metadata above, can add in under author,name:
+# url:, # affiliation, affiliation_url
+
+```
+*Note: the data and theory on calibration curve were with reference from: Statistics and Chemometrics for Analytical Chemistry, James N. Miller and Jane Charlotte Miller, 6th edition, Chapter 5*
+
+# Loading required packages
+```{r, echo = TRUE}
+library(pacman)
+p_load(tidyverse, broom, chemCal)
+```
+
+
+# Background
+Chemists often work with calibration data using standards of known concentrations and putting them through instrumental analysis. When plotting a calibration curve, it is of interest to calculate the limit of detection (LOD) and limit of quantification (LOQ) of the method. 
+
+# Import Example Dataset
+
+The fluorescence intensities of standard aqueous fluorescein solutions were analysed with a spectrophotometer, and the fluorescence results are shown below:
+
+```{r}
+data <- tribble(
+  ~conc_pgml, ~fluo,
+  0,  2.1,
+  2,  5.0,
+  4,  9.0,
+  6,  12.6,
+  8,  17.3,
+  10, 21.0,
+  12, 24.7,
+)
+
+data
+```
+
+# Visualize
+```{r}
+theme_set(theme_bw())
+
+data %>% 
+  ggplot(aes(x = conc_pgml, y = fluo)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Calibration Plot of Fluorescence Units vs Fluorescein Concentration",
+       x = "Concentration (pg/ml)",
+       y = "Fluorescence Intensities") +
+  theme(title = element_text(face = "bold"),
+                axis.title = element_text(face = "bold"))
+
+```
+
+# Model
+
+Let's fit a linear model to get the slope (b) and intercept(a).
+
+$$
+y = a + bx
+$$
+
+```{r}
+fl_mod <- lm(fluo ~ conc_pgml, data = data)
+summary(fl_mod)
+```
+
+From above, we can see that slope = 1.9304, and intercept = 1.5179.
+
+# Errors in slope and intercept of regression line
+
+The limit of detection is defined as:
+
+$$
+LOD = \gamma_B + 3_{SB}
+$$
+where LOD is the analyte concentration wich gives a signal equal to the blank signal plus three standard deviations of the blank.
+
+A function was created to calculate LOD and LOQ:
+
+```{r, echo = TRUE}
+calcLOD_y <- function(model) {
+  SSE <- sum(model$residuals**2)
+  n <- length(model$residuals) -2
+  Syx <- sqrt(SSE/n)
+  intercept <- as.numeric(model$coefficients[1])
+  calculated_y <- intercept + 3*Syx
+  names(calculated_y) <- "calculated_y"
+  print(calculated_y)
+  
+  chemCal::inverse.predict(model,
+                  newdata = calculated_y,
+                  alpha = 0.05) 
+}
+```
+```{r, echo = TRUE}
+calcLOQ_y <- function(model) {
+  SSE <- sum(model$residuals**2)
+  n <- length(model$residuals) -2
+  Syx <- sqrt(SSE/n)
+  intercept <- as.numeric(model$coefficients[1])
+  calculated_y <- intercept + 10*Syx
+  names(calculated_y) <- "calculated_y"
+  print(calculated_y)
+  
+  chemCal::inverse.predict(model,
+                  newdata = calculated_y,
+                  alpha = 0.05) 
+}
+```
+
+Inserting the linear model from the fluorescence data:
+
+```{r, echo = TRUE}
+LOD_x <- calcLOD_y(fl_mod)
+LOD_x$Prediction 
+```
+
+```{r, echo = TRUE}
+LOQ_x <- calcLOQ_y(fl_mod)
+LOQ_x$Prediction 
+```
+
+# Predict the value of x from y:
+
+To predict the concentration of fluorescein that has fluorescence units of 2.9, we use the function **inverse.predict()**:
+
+```{r, echo = TRUE}
+chemCal::inverse.predict(fl_mod, 
+                newdata = 2.9,
+                alpha = 0.05)
+```
