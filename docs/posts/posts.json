@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/20210120_statistical concepts/",
+    "title": "Statistical Concepts",
+    "description": "Definition of terms",
+    "author": [
+      {
+        "name": "lruolin",
+        "url": {}
+      }
+    ],
+    "date": "2021-01-20",
+    "categories": [],
+    "contents": "\nThis is a glossary of terms, in alphabetical order.\nCorrelation, r : whether there is any relationship between two variables. If so, whether the relationship is weak or strong, and what the direction of relationship is.\nPrincipal Component Analysis (PCA): a multivariate technique used to reduce the number of dimensions to explain the total variation in the data with a few linear combinations of original variables, which are uncorrelated.\nVariance, Sˆ2: the average of squared deviations of the values from mean. Square root of variance = standard deviation.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-01-21T00:34:32+08:00",
+    "input_file": "Statistical-concepts.utf8.md"
+  },
+  {
     "path": "posts/20210115_kovats/",
     "title": "Kovats Index",
     "description": "R script for calculating Kovats Index",

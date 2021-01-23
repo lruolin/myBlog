@@ -1,0 +1,30 @@
+---
+title: "Statistical Concepts"
+description: |
+  Definition of terms
+author:
+  - name: lruolin
+date: 01-20-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
+# for the metadata above, can add in under author,name:
+# url:, # affiliation, affiliation_url
+
+```
+
+This is a glossary of terms, in alphabetical order.
+
+- Correlation, *r* : whether there is any relationship between two variables. If so, whether the relationship is weak or strong, and what the direction of relationship is.
+
+- Principal Component Analysis (PCA): a multivariate technique used to reduce the number of dimensions to explain the total variation in the data with a few linear combinations of original variables, which are uncorrelated. 
+
+- Variance, *Sˆ2*: the average of squared deviations of the values from mean. Square root of variance = standard deviation. 
