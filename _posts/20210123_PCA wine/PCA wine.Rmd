@@ -1,0 +1,366 @@
+---
+title: "PCA Wine"
+description: |
+  PCA (using tidymodels) with wine dataset
+author:
+  - name: lruolin
+date: 01-23-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Summary
+
+PCA is a data reduction technique, to uncover latent variables that are uncorrelated. It is an unsupervised way of classification. 
+Not all of the variables in high-dimensional data are required. Some are highly correlated with others and these variables may be omitted, while retaining a similar level of information in the dataset in terms of explaining the variance. 
+
+It is used as an exploratory data analysis tool, and may be used for feature engineering and/or clustering. 
+
+# Workflow
+
+1. Import data
+2. Exploratory data analysis
+
+  - skim
+  - ggcorr
+  - ggpairs
+  
+3. Check assumptions on whether PCA can be carried out
+  
+  - KMO
+  - Bartlett
+  
+4. Carry out PCA using tidymodels workflow
+
+Always use only continuous variables, ensure that there are no missing data. 
+Determine the number of components using eigenvalues, scree plots and parallel analysis. 
+  
+  - recipe : preprocess the data (missing values, center and scale, ensuring that variables are continuous)
+  - prep : evaluate the data
+  - bake : get the PCA Scores results
+  - visualize
+  - communicate results: show the scree plot, PCA loadings, variance explained by each component, loadings and score plot.
+  
+The scores plot show the **positions** of the individual wine samples *in the coordinate system of the PCs*.
+
+The loadings plot shows the **contribution of the X variables** to the PCs.
+
+## Loading packages
+
+```{r}
+library(pacman)
+p_load(corrr, palmerpenguins, GGally, tidymodels, tidytext, tidyverse, psych,
+       skimr, gridExtra, kohonen, janitor, learntidymodels, kohonen)
+```
+
+## Import
+
+This dataset is from the kohonen package. It contains 177 rows and 13 columns.
+
+These data are the results of chemical analyses of wines grown in the same region in Italy (Piedmont) but derived from three different cultivars: Nebbiolo, Barberas and Grignolino grapes. The wine from the Nebbiolo grape is called Barolo. The data contain the quantities of several constituents found in each of the three types of wines, as well as some spectroscopic variables.
+
+The dataset requires some cleaning, and the type of wine was added to the datset.
+
+```{r}
+data(wines)
+
+wines <- as.data.frame(wines) %>% 
+  janitor::clean_names() %>%  # require data.frame
+  as_tibble() %>% 
+  cbind(vintages)  # vintages = Y outcome = category
+ 
+glimpse(wines)
+```
+
+
+## EDA
+
+Some exploratory data analysis was carried out:
+
+- What are the types of variables? Categorical or numerical?
+- What is the distribution like? Skewed?
+- Are there any missing values?
+- Are there any outliers?
+- Check the types of wine
+- Are the variables quite correlated with each other?
+
+### skimr
+```{r}
+skim(wines) # 177 x 13, all numeric + Y outcome
+```
+
+
+### GGally
+
+```{r, fig.width=16, fig.height=12}
+wines %>% 
+  select(-vintages) %>% 
+  ggcorr(label = T, label_alpha = T, label_round = 2)
+
+wines %>% 
+  ggpairs(aes(col = vintages))
+```
+
+
+## Checking assumptions
+
+Is the dataset suitable for PCA analysis? 
+
+```{r}
+# Continuous Y
+# No missing data
+# Check assumptions for PCA #####
+wines_no_y <- wines %>% 
+  select(-vintages)
+
+glimpse(wines_no_y)
+
+# KMO: Indicates the proportion of variance in the variables that may be caused by underlying factors. High values (close to 1) indicate that factor analysis may be useful.
+wines_no_y %>% 
+  cor() %>% 
+  KMO() # .70 above : YES
+
+# Bartlett's test of sphericity: tests the hypothesis that the correlation matrix is an identity matrix (ie variables are unrelated and not suitable for structure detection.) For factor analysis, the p. value should be <0.05.
+
+wines_no_y %>% 
+  cor() %>% 
+  cortest.bartlett(., n = 177) # p<0.05
+
+```
+
+
+## Tidymodels (PCA)
+
+### Recipe
+
+With the use of update_role(), the types of wine information is retained in the dataset.
+
+step_normalize() combines step_center() and step_scale()
+
+Note that step_pca is the second step --> will need to retrieve the PCA results from the second list later. 
+
+```{r}
+wines_recipe <- recipe(~ ., data = wines) %>% 
+  update_role(vintages, new_role = "id") %>%  
+  # step_naomit(all_predictors()) %>% 
+  step_normalize(all_predictors()) %>% 
+  step_pca(all_predictors(), id = "pca")
+
+wines_recipe # 13 predictors
+
+```
+
+
+### Preparation
+
+```{r}
+wines_prep <- prep(wines_recipe)
+
+wines_prep # trained
+
+tidy_pca_loadings <- wines_prep %>% 
+  tidy(id = "pca")
+
+tidy_pca_loadings # values here are the loading
+```
+
+
+### Bake
+
+```{r}
+wines_bake <- bake(wines_prep, wines)
+wines_bake  # has the PCA SCORES that we are familiar with
+```
+
+
+### Check number of PC
+
+```{r}
+
+# a. Eigenvalues: Keep components greater than 1
+# data is stored in penguins_prep, step 3
+
+wines_prep$steps[[2]]$res$sdev # 3
+
+# b. Scree plot/Variance plot
+
+wines_prep %>% 
+  tidy(id = "pca", type = "variance") %>% 
+  filter(terms ==  "percent variance") %>% 
+  ggplot(aes(x = component, y = value)) +
+  geom_point(size = 2) +
+  geom_line(size = 1) +
+  scale_x_continuous(breaks = 1:4) +
+  labs(title = "% Variance explained",
+       y = "% total variance",
+       x = "PC",
+       caption = "Source: ChemometricswithR book") +
+  theme_minimal() +
+  theme(axis.title = element_text(face = "bold", size = 12),
+        axis.text = element_text(size = 10),
+        plot.title = element_text(size = 14, face = "bold"))  # 2 or 3
+
+# bii: Cumulative variance plot
+
+wines_prep %>% 
+  tidy(id = "pca", type = "variance") %>% 
+  filter(terms == "cumulative percent variance") %>%
+  ggplot(aes(component, value)) +
+  geom_col(fill= "forestgreen") +
+  labs(x = "Principal Components", 
+       y = "Cumulative variance explained (%)",
+       title = "Cumulative Variance explained") +
+  geom_text(aes(label = round(value, 2)), vjust = -0.2, size = 4) +
+  theme_minimal() +
+  theme(axis.title = element_text(face = "bold", size = 12),
+        axis.text = element_text(size = 10),
+        plot.title = element_text(size = 14, face = "bold")) 
+
+# c. Parallel analysis
+
+fa.parallel(cor(wines_no_y),
+            n.obs = 333,
+            cor = "cor",
+            plot = T)  # 3
+
+```
+
+### Visualize
+
+#### Loadings plot
+
+```{r, fig.width=12, fig.height=8}
+plot_loadings <- tidy_pca_loadings %>% 
+  filter(component %in% c("PC1", "PC2", "PC3", "PC4")) %>% 
+  mutate(terms = tidytext::reorder_within(terms, 
+                                          abs(value), 
+                                          component)) %>% 
+  ggplot(aes(abs(value), terms, fill = value>0)) +
+  geom_col() +
+  facet_wrap( ~component, scales = "free_y") +
+  scale_y_reordered() + # appends ___ and then the facet at the end of each string
+  scale_fill_manual(values = c("deepskyblue4", "darkorange")) +
+  labs( x = "absolute value of contribution",
+        y = NULL,
+        fill = "Positive?",
+        title = "PCA Loadings Plot",
+        subtitle = "Number of PC should be 3, compare the pos and the neg",
+        caption = "Source: ChemometricswithR") +
+  theme_minimal()
+
+
+plot_loadings
+# PC1: flavonoids, tot_phenols, od_ratio, proanthocyanidins, col_hue, 36%
+# PC2: col_int, alcohol, proline, ash, magnesium; 19.2%
+# PC3: ash, ash_alkalinity, non_flav phenols; 11.2%
+# PC4: malic acid?
+
+
+```
+
+An alternative way to plot:
+
+```{r}
+# alternate plot loadings
+
+learntidymodels::plot_top_loadings(wines_prep,
+                  component_number <= 4, n = 5) +
+  scale_fill_manual(values = c("deepskyblue4", "darkorange")) +
+  theme_minimal()
+```
+
+
+#### Loadings only
+
+```{r}
+# define arrow style
+arrow_style <- arrow(angle = 30,
+                     length = unit(0.2, "inches"),
+                     type = "closed")
+
+# get pca loadings into wider format
+pca_loadings_wider <- tidy_pca_loadings%>% 
+  pivot_wider(names_from = component, id_cols = terms)
+
+
+pca_loadings_only <- pca_loadings_wider %>% 
+  ggplot(aes(x = PC1, y = PC2)) +
+  geom_segment(aes(xend = PC1, yend = PC2),
+               x = 0, 
+               y = 0,
+               arrow = arrow_style) +
+  ggrepel::geom_text_repel(aes(x = PC1, y = PC2, label = terms),
+            hjust = 0, 
+            vjust = 1,
+            size = 5,
+            color = "red") +
+  labs(title = "Loadings on PCs 1 and 2 for normalized data") +
+  theme_classic()
+```
+
+
+#### Scores plot
+```{r}
+
+# Scores plot #####
+# PCA SCORES are in bake
+pc1pc2_scores_plot <- wines_bake %>% 
+  ggplot(aes(PC1, PC2)) +
+  geom_point(aes(color = vintages, shape = vintages), 
+             alpha = 0.8, size = 2) +
+  scale_color_manual(values = c("deepskyblue4", "darkorange", "purple")) +
+  labs(title = "Scores on PCs 1 and 2 for normalized data",
+       x = "PC1 (36%)",
+       y = "PC2 (19.2%)") +
+  theme_classic() +
+  theme(legend.position = "none") 
+
+```
+
+#### Finalised plots
+```{r, fig.width=18, fig.height=12}
+grid.arrange(pc1pc2_scores_plot, pca_loadings_only, ncol = 2)
+```
+
+
+## Check against Data
+
+```{r}
+wines %>% 
+  group_by(vintages) %>% 
+  summarise(across(c(flavonoids, col_int, ash, malic_acid),
+                   mean,
+                   na.rm = T))
+```
+
+
+## Interpretation of results
+
+PCA allows for exploratory characterizing of x variables that are associated with each other. 
+
+PC1: flavanoids, total phenols, OD_ratio.
+PC2: color intensity, alcohol, proline 
+PC3: ash, ash_alkalinity 
+PC4: malic acid (by right 3 components are sufficient)
+
+Barbera, indicated in blue, has the largest score on PC 1 and PC2.
+Barolo, indicated in orange, has the smallest score on PC 1.
+Grignolo, indicated in purple, has the lowest score on PC 2. 
+
+
+Barbera has low flavonoids, high col_int and high malic acid
+Barolo has high flavonoids, medium col_int and intermediate malic acid
+Grignolino has intermediate flavonoids, high col_int and low malic acid.
+
+# References
+
+- <https://rdrr.io/github/tidymodels/learntidymodels/f/inst/tutorials/pca_recipes/pca_recipes.Rmd>
+- <https://allisonhorst.github.io/palmerpenguins/articles/articles/pca.html>
+- <https://www.ibm.com/support/knowledgecenter/en/SSLVMB_subs/statistics_casestudies_project_ddita/spss/tutorials/fac_telco_kmo_01.html>
