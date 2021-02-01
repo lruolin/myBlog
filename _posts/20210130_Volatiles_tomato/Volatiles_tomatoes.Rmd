@@ -1,0 +1,379 @@
+---
+title: "Volatile Compounds in Tomato and Tomato Products"
+description: |
+  Scraping information from journal article
+author:
+  - name: lruolin
+date: 02-01-2021
+bibliography: tomatoes.bib
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview of tomato volatiles  
+
+Tomato flavor is the result of interaction of aroma and taste, arising from the interplay of mixture of acids, sugars, amino acids, minerals and volatile compounds. Presence of sugar or organic acids alters taste panel perception of aroma descriptions of samples with the same concentration of volatile compounds.
+
+Volatile compounds may originate from different biosynthesis pathways [@buttery_fresh_1987], [@baldwin_relationship_1998], [@yilmaz_chemistry_2001]:
+
+- Derived from amino acids: Amino acids are acted upon by transaminase enzymes and converted into alpha-keto acids; which then undergo decarboxylation to form aldehydes, which may be reduced to form ketones.
+- Derived from carotenoids: eg 6-methyl-5-hepten-2-one and geranial
+- Derived from lipid degradation by lipoxygenase: eg C6 volatiles
+- Derived from peroxide lyase and alcohol dehydrogenase enzymes (ADH catalysed alcohol formation from aldehydes)
+- Maillard reaction products: furans, pyrroles (Strecker degradation products), pyrazines. These are usually seen in thermally processed tomato products/flavors
+- Derived from action of endogenous glycosidases (eg guaiacol, eugenol, methyl salicylate)
+
+The amount and types of volatiles are also influenced by:
+
+- Tissue disruption
+- Ripening of fruit
+- Cultivar
+- Processing/Heating
+- Addition of other ingredients (eg herbs and spices for pasta sauces)
+
+
+# Aim of this exercise:
+
+The aim of this exercise was to scrape the table of approximately 400 compounds from the pdf, and to visualize them by chemical categories.
+
+There is a very handy package, **tabulizer**, which allows for scraping of information from pdf articles. I tried out text scraping, and text cleaning, from the article [@petroturza_flavor_1986]
+
+# Workflow
+
+1. Import data using tabulizer
+2. Text cleaning using stringr package
+3. Visualize using ggplot2
+
+## Loading packages
+
+```{r}
+library(rJava)
+library(tabulizer)
+library(tidyverse)
+library(stringr)
+library(stringi)
+
+```
+
+## Import & Tidy
+
+I am interested in scraping the table of approximately 400 volatiles from page 18 to page 28. A copy of the pdf is saved in my working directory. I used the **locate_area()** function to determine the coordinates for scraping, and then extracted the text using **extract_text()** function.
+
+```{r}
+file <- "1986-tomato volatiles.pdf"
+# locate_areas(file)
+
+p18 <- extract_text(file, pages = 18, area = list(c(115.5, 33.05, 641.923, 443.94)))
+
+p19 <- extract_text(file, pages = 19, 
+                    area = list(c(117.15636,  53.20364, 651.60000, 465.22545 )))
+
+p20 <- extract_text(file, pages = 20, 
+                    area = list(c(114.52364,  38.72364, 650.28364, 449.42909 )))
+
+p21 <- extract_text(file, pages = 21, 
+                    area = list(c(119.29273 , 48.89727, 656.76545, 457.90091 )))
+
+p22 <- extract_text(file, pages = 22, 
+                    area = list(c(113.20727,  30.32545, 643.70182, 466.04182)))
+
+p23 <- extract_text(file, pages = 23, 
+                    area = list(c(122.25273,  49.84636, 652.01455, 473.13000 )))
+
+p24 <- extract_text(file, pages = 24, 
+                    area = list(c(113.,  34, 645.01818, 430.50000 )))
+
+p25 <- extract_text(file, pages = 25, 
+                    area = list(c(119,  58 ,642.81273, 478.38818)))
+
+p26 <- extract_text(file, pages = 26, 
+                    area = list(c(114,  35, 668.17818, 443.44000)))
+
+p27 <- extract_text(file, pages = 27, 
+                    area = list(c(114.20727,  41.24545, 656.36364, 442.94000)))
+
+p28 <- extract_text(file, pages = 28, 
+                    area = list(c(115.52000,  33.86909, 404.32000, 469.69455 )))
+
+combined <- tribble(~page, ~text,
+                    "p18", p18,
+                    "p19", p19,
+                    "p20", p20,
+                    "p20", p20,
+                    "p21", p21,
+                    "p22", p22,
+                    "p23", p23,
+                    "p24", p24,
+                    "p25", p25,
+                    "p26", p26,
+                    "p27", p27,
+                    "p28", p28) %>% 
+  dplyr::mutate(text_2 = gsub("\\n", "; ", text),
+         text_3 = str_split(text_2, "; ")) %>% # split by ; into new columns
+  unnest() 
+
+```
+I combined all the text that was extracted into a tibble.
+Then I replaced all the "\n" with ";", and then used str_split() to split the compounds into individual rows.
+
+Following which, I used a series to str_replace_all to clean up the text. 
+The list of things to remove include:
+
+- digits that followed after chemical names 
+- series of commars
+- text that mentioned unknown structure
+- alternative synonoyms of chemical compounds that were located within square brackets
+- odd chemical names
+
+As I replaced the commars, some of the chemical names were also changed. For example, 2,6-dimethylpyrazine became 26-dimethylpyrazine. I had to change the names by looking for numbers 26, and replacing them as 2,6. 
+
+I visually scanned through the list again and made changes where necessary, for eg, 2-formylpyiTole is actually 2-formylpyrrole.
+
+```{r}
+cleaned_text <- combined %>% 
+  dplyr::select(text_3) # 521
+
+
+cleaned_text_b <- cleaned_text %>% 
+  filter(!text_3 %in% c("(Continued)", "")) %>%  # 503
+  filter(!is.na(text_3)) %>% 
+  mutate(text_4 = str_replace_all(text_3, "[0-9]{2,3}", ""),
+         text_4 = str_replace_all(text_4, "\\ , ", ""),
+         text_4 = str_replace_all(text_4, "\\,,+", ""),
+         text_4 = str_replace_all(text_4, "\\(unknown structure\\)", ""),
+         text_4 = str_replace_all(text_4, "\\[[^\\]\\[]*]", ""),
+         text_4 = str_replace_all(text_4, "\\[[^\\[]*", ""),
+         text_4 = str_replace_all(text_4, " \\,", ""),
+         text_4 = str_replace_all(text_4, " \\/", ""),
+         # replace last commar, dash
+         text_4 = stri_replace_last(text_4, fixed = ",", ""),
+         text_4 = str_replace_all(text_4, "PJ-dimethyl-ö-octen-l-ol]", ""),
+         text_4 = str_replace_all(text_4, "/", ""),
+         
+         # correct for commar replacement
+         text_4 = str_replace_all(text_4, "45", "4,5"),
+         text_4 = str_replace_all(text_4, "26", "2,6"),
+         text_4 = str_replace_all(text_4, "25", "2,5"),
+         text_4 = str_replace_all(text_4, "33", "3,3"),
+         text_4 = str_replace_all(text_4, "23", "2,3"),
+         text_4 = str_replace_all(text_4, "14", "1,4"),
+         text_4 = str_replace_all(text_4, "12", "1,2"),
+         text_4 = str_replace_all(text_4, "24", "2,4"),
+         text_4 = str_replace_all(text_4, "34", "3,4"),
+         text_4 = str_replace_all(text_4, "11", "1,1"),
+         text_4 = str_replace_all(text_4, "2E 4Z", "2E,4Z"),
+         text_4 = str_replace_all(text_4, "2E4E", "2E,4E"),
+         text_4 = str_replace_all(text_4, "2E4Z", "2E,4Z"),
+         text_4 = str_replace_all(text_4, "hy droxy", "hydroxy"),
+         text_4 = str_replace_all(text_4, "66", "6,6"),
+         text_4 = str_replace_all(text_4, "3E5E", "3E,5E"),
+         
+         # further clean up
+         text_4 = str_replace_all(text_4, "\\(unknownstructure\\)", ""),
+         text_4 = str_replace_all(text_4, "\\(unknown", ""),
+         text_4 = str_replace_all(text_4, "2-formylpyiTole ", "2-formylpyrrole"),
+         text_4 = str_replace_all(text_4, "neraUcis-SJ-dimethyl\\^.o-octadienal]", 
+                                  "neral"),
+         text_4 = str_replace_all(text_4, "2-methyl-l-propanol -", 
+                                  "2-methyl-l-propanol"),
+         text_4 = str_replace_all(text_4, "propanal 9 09 39 49 5",
+                                  "propanal"),
+         text_4 = str_replace_all(text_4, "\\(methylthioH-propanol",
+                                  "\\(methylthio)-propanol"),
+         text_4 = str_replace_all(text_4, "\\(2,2,6-trimethyl-7-oxabicyclo",
+                                  ""),
+         text_4 = str_replace_all(text_4, "._.", ""),
+         
+         # remove white space
+         text_4 = str_replace_all(text_4, " \\s", ""),
+         
+         # remove quotation marks
+         text_4 = str_remove_all(text_4, "\"")) 
+
+```
+
+One final clean:
+
+```{r}
+tomato_cleaned <- cleaned_text_b$text_4 %>% 
+  as.data.frame() %>% 
+  unique()
+
+names(tomato_cleaned) <- c("compounds")
+
+tomato_cleaned <- print(tomato_cleaned, quote = FALSE) %>% 
+  filter(!compounds == " ",
+         !compounds == "") # remove quotation marks 
+  
+
+tomato_cleaned$compounds <- str_remove_all(tomato_cleaned$compounds, 
+                                           "\\s")
+
+```
+
+The file could be exported as a .csv file as a back up, in case it is needed again in the future.
+
+
+## TRANSFORM
+
+Next, I had to split the compounds into various chemical categories.
+
+```{r}
+hydrocarbons <- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(2:39) %>% 
+  mutate(category = "hydrocarbons")
+
+
+alcohols <- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(41:98) %>% 
+  mutate(category = "alcohols")
+
+phenols <- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(99:108) %>% 
+  mutate(category = "phenols")
+
+ethers<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(111:116) %>% 
+  mutate(category = "ethers")
+
+aldehydes<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(118:176) %>% 
+  mutate(category = "aldehydes")
+
+ketones<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(178:219) %>% 
+  mutate(category = "ketones")
+
+dicarbonyl<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(221:226) %>% 
+  mutate(category = "dicarbonyl")
+
+acids<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(228:254) %>% 
+  mutate(category = "acids")
+
+esters<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(256:314) %>% 
+  mutate(category = "esters")
+
+lactones<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(316:328) %>% 
+  mutate(category = "lactones")
+
+sulfur<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(330:341) %>% 
+  mutate(category = "sulfur")
+
+nitrogen<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(343:362) %>% 
+  mutate(category = "nitrogen")
+
+halogen<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(364:366) %>% 
+  mutate(category = "halogen")
+
+oxygen<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(368:398) %>% 
+  mutate(category = "oxygen")
+
+sulfur_heterocyclic<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(400:404) %>% 
+  mutate(category = "sulfur_heterocyclic")
+
+nitrogen_heterocyclic<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(406:417) %>% 
+  mutate(category = "nitrogen_heterocyclic")
+
+nitrogen_sulfur_heterocyclic<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(419:423) %>% 
+  mutate(category = "nitrogen_sulfur_heterocyclic")
+
+nitrogen_oxygen_heterocyclic<- tomato_cleaned %>% 
+  as_tibble() %>% 
+  slice(425:427) %>% 
+  mutate(category = "nitrogen_oxygen_heterocyclic")
+
+```
+
+
+## Visualize
+
+```{r, layout="l-page-outset", fig.width=20, fig.height=12}
+tomatoes_compounds <- bind_rows(hydrocarbons,
+                                alcohols,
+                                phenols,
+                                ethers,
+                                aldehydes,
+                                ketones,
+                                dicarbonyl,
+                                acids,
+                                esters,
+                                lactones,
+                                sulfur,
+                                halogen,
+                                oxygen,
+                                sulfur_heterocyclic,
+                                nitrogen_heterocyclic,
+                                nitrogen_sulfur_heterocyclic,
+                                nitrogen_oxygen_heterocyclic
+                                )
+
+plot <- tomatoes_compounds %>% 
+  group_by(category) %>% 
+  summarise(count = n()) %>% 
+  ggplot(aes(x = reorder(category, count), y = count, label = count)) +
+  geom_col(fill = "tomato2") +
+  geom_text(aes(label = count), hjust = -0.5, size = 5) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 80)) +
+  labs(y = "No. of compounds",
+       x = "Category",
+       title = "Number of volatile compounds identified in tomatoes, sorted by chemical category",
+       subtitle = "Esters, aldehydes and alcohols dominate the types of compounds identified",
+       caption = "Petro-Turza(1989): Flavor of tomato and tomato products ") +
+  coord_flip() +
+  theme_classic() +
+   theme(title = element_text(size = 28),
+        axis.title = element_text(size = 24, face = "bold"),
+        axis.text = element_text(size = 20))
+
+plot
+
+```
+
+## Reflections
+
+It may have been easier to type out the list of 400 compounds, which would only take an hour or less, with the formatting done properly on the onset. However, if the table was much longer, text cleaning would be more effectively carried out by stringr. Some improvements could be made to the script so that I do not have to carry out multiple str_replace_all, and to automatically filter out by categories instead of manually defining them. However, it was a good beginner's practice on text cleaning using the stringr package as I do not often have the chance to use regular expressions, and I found the str_detect, str_which and str_view_all functions extremely useful in locating regex matches.
+
+The plot above only lists the number of compounds identified so far by chemical classes, but does not show which are the character impact compounds that contribute significantly to tomatoes.
+
+Historically, researchers focused on identifying volatiles, quantifying them and classifying them based on their odor thresholds to determine which compounds played a contributory role to tomato flavor. However, the new trend is in assessing the importance of compounds based on how much they contribute to the **liking** of tomato flavor, and this could be by means of targeted metabolomics, or by generating prediction models for different descriptors of tomato flavor using regression analysis of both volatile and non-volatile compounds, or by carrying out multivariate modelling on physicochemical, volatile and sensory parameters[@rambla_expanded_2013].
+
+It would be interesting to try to apply prediction models and multivariate analysis in R.
+
+# References
+
+- <https://www.r-bloggers.com/2019/09/pdf-scraping-in-r-with-tabulizer/>
+
