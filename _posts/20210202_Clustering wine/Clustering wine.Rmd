@@ -1,0 +1,391 @@
+---
+title: "Clustering Analysis on Wine Dataset"
+description: |
+  A continuation from PCA analysis of wine dataset: k-means clustering and hierarchical clustering
+author:
+  - name: lruolin
+date: 02-02-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Summary
+
+PCA is used as an exploratory data analysis tool, and may be used for feature engineering and/or clustering. This is a continuation of clustering analysis on the wines dataset in the kohonen package, in which I carry out k-means clustering using the tidymodels framework, as well as hierarchical clustering using factoextra pacage. 
+
+# Workflow
+
+1. Import data
+2. Exploratory data analysis
+
+  - skim
+  - ggcorr
+  - ggpairs
+  
+3. Check assumptions on whether PCA can be carried out
+  
+  - KMO
+  - Bartlett
+  
+4. Carry out PCA using tidymodels workflow
+
+Always use only continuous variables, ensure that there are no missing data. 
+Determine the number of components using eigenvalues, scree plots and parallel analysis. 
+  
+  - recipe : preprocess the data (missing values, center and scale, ensuring that variables are continuous)
+  - prep : evaluate the data
+  - bake : get the PCA Scores results
+  - visualize
+  - communicate results: show the scree plot, PCA loadings, variance explained by each component, loadings and score plot.
+
+The loading shows the linear combinations of the original variables - ie the new dimension.
+
+The scores show the coordinates of the individual wine samples in the new low-dimensional space.
+
+
+5. Use the loadings to carry out k-means clustering and hierarchical clustering.
+
+## Loading packages
+
+```{r}
+library(pacman)
+p_load(corrr, GGally, tidymodels, tidytext, tidyverse, psych,
+       skimr, gridExtra, kohonen, janitor, learntidymodels, kohonen,
+       cluster, factoextra)
+```
+
+## Import
+
+This dataset is from the kohonen package. It contains 177 rows and 13 columns.
+
+These data are the results of chemical analyses of wines grown in the same region in Italy (Piedmont) but derived from three different cultivars: Nebbiolo, Barberas and Grignolino grapes. The wine from the Nebbiolo grape is called Barolo. The data contain the quantities of several constituents found in each of the three types of wines, as well as some spectroscopic variables.
+
+PCA analysis was performed earlier, and k-means clustering and hierarchical clustering analysis (HCA) will be built upon the PCA loadings. 
+
+```{r}
+data(wines)
+
+wines <- as.data.frame(wines) %>% 
+  janitor::clean_names() %>%  # require data.frame
+  as_tibble() 
+ 
+glimpse(wines) # does not contain the types of wine (Y variable)
+```
+
+
+## EDA
+
+Refer to the post for PCA of wine analysis
+
+## Tidymodels (PCA)
+
+### Recipe
+
+The dataset did not include the y variable (type of wine), so the update_role() function will be omitted. 
+
+step_normalize() combines step_center() and step_scale()
+
+Note that step_pca is the second step --> will need to retrieve the PCA results from the second list later. 
+
+```{r}
+wines_recipe <- recipe(~ ., data = wines) %>% 
+  # update_role(vintages, new_role = "id") %>%  # skipped
+  # step_naomit(all_predictors()) %>% 
+  step_normalize(all_predictors()) %>% 
+  step_pca(all_predictors(), id = "pca")
+
+wines_recipe # 13 predictors
+
+```
+
+
+### Preparation
+
+```{r}
+wines_prep <- prep(wines_recipe)
+
+wines_prep # trained
+
+tidy_pca_loadings <- wines_prep %>% 
+  tidy(id = "pca")
+
+tidy_pca_loadings # values here are the loading
+```
+
+
+### Bake
+
+```{r}
+wines_bake <- bake(wines_prep, wines)
+wines_bake  # has the PCA SCORES to run HCA and k-means clustering
+```
+
+
+### Check number of PC 
+
+Only the scree plot is showed below. Refer to PCA analysis of wine for other options in determining number of PCs. 
+
+```{r}
+
+# b. Scree plot/Variance plot
+
+wines_prep %>% 
+  tidy(id = "pca", type = "variance") %>% 
+  filter(terms ==  "percent variance") %>% 
+  ggplot(aes(x = component, y = value)) +
+  geom_point(size = 2) +
+  geom_line(size = 1) +
+  scale_x_continuous(breaks = 1:13) +
+  labs(title = "% Variance explained",
+       y = "% total variance",
+       x = "PC",
+       caption = "Source: Wines dataset from kohonen package") +
+  theme_classic() +
+  theme(axis.title = element_text(face = "bold", size = 12),
+        axis.text = element_text(size = 10),
+        plot.title = element_text(size = 14, face = "bold"))  # 2 or 3
+
+```
+
+### Visualize
+
+#### Loadings plot
+
+```{r, layout="l-page-outset", fig.width=18, fig.height=12}
+plot_loadings <- tidy_pca_loadings %>% 
+  filter(component %in% c("PC1", "PC2", "PC3")) %>% 
+  mutate(terms = tidytext::reorder_within(terms, 
+                                          abs(value), 
+                                          component)) %>% 
+  ggplot(aes(abs(value), terms, fill = value>0)) +
+  geom_col() +
+  facet_wrap( ~component, scales = "free_y") +
+  scale_y_reordered() + # appends ___ and then the facet at the end of each string
+  scale_fill_manual(values = c("deepskyblue4", "darkorange")) +
+  labs( x = "Absolute value of contribution",
+        y = NULL,
+        fill = "Positive?",
+        title = "PCA Loadings Plot",
+        subtitle = "Number of PC should be 3, compare the pos and the neg",
+        caption = "Source: ChemometricswithR") +
+  theme_minimal() +
+  theme(title = element_text(size = 24, face = "bold"),
+        axis.text = element_text(size = 16),
+        axis.title = element_text(size = 20))
+
+
+plot_loadings
+# PC1: flavonoids, tot_phenols, od_ratio, proanthocyanidins, col_hue, 36%
+# PC2: col_int, alcohol, proline, ash, magnesium; 19.2%
+# PC3: ash, ash_alkalinity, non_flav phenols; 11.2%
+
+```
+
+
+#### Loadings only
+
+```{r}
+# define arrow style
+arrow_style <- arrow(angle = 30,
+                     length = unit(0.2, "inches"),
+                     type = "closed")
+
+# get pca loadings into wider format
+pca_loadings_wider <- tidy_pca_loadings%>% 
+  pivot_wider(names_from = component, id_cols = terms)
+
+
+pca_loadings_only <- pca_loadings_wider %>% 
+  ggplot(aes(x = PC1, y = PC2)) +
+  geom_segment(aes(xend = PC1, yend = PC2),
+               x = 0, 
+               y = 0,
+               arrow = arrow_style) +
+  ggrepel::geom_text_repel(aes(x = PC1, y = PC2, label = terms),
+            hjust = 0, 
+            vjust = 1,
+            size = 5,
+            color = "red") +
+  labs(title = "Loadings on PCs 1 and 2 for normalized data") +
+  theme_classic()
+```
+
+
+#### Scores plot
+
+```{r, layout="l-page-outset", fig.width=18, fig.height=12}
+
+# Scores plot #####
+# PCA SCORES are in bake
+pc1pc2_scores_plot <- wines_bake %>% 
+  ggplot(aes(PC1, PC2)) +
+  geom_point(aes(color = vintages, shape = vintages), 
+             alpha = 0.8, size = 2) +
+  scale_color_manual(values = c("deepskyblue4", "darkorange", "purple")) +
+  labs(title = "Scores on PCs 1 and 2 for normalized data",
+       x = "PC1 (36%)",
+       y = "PC2 (19.2%)") +
+  theme_classic() +
+  theme(legend.position = "none") 
+
+```
+
+
+
+## k-means clustering
+
+The PCA scores will be used for clustering analysis
+
+```{r}
+wines_bake
+```
+
+### Number of clusters?
+
+There are 3 common ways for determining the number of clusters:
+
+- gap statistic method
+- within sum of square method
+- silhouette method
+
+Let us look at all three of them.
+
+#### Gap Statistic Method
+
+```{r}
+gap_statistic <- cluster::clusGap(wines_bake,
+                                  FUN = kmeans,
+                                  nstart = 50, 
+                                  K.max = 10, # max number of clusters
+                                  B = 1000) # bootstrap
+
+factoextra::fviz_gap_stat(gap_statistic) # theoretically should have only 3 clusters
+```
+
+
+#### Within Sum of Square Method
+
+```{r}
+fviz_nbclust(wines_bake,
+             kmeans,
+             method = "wss") # this suggests 3 clusters, in line with theory
+```
+
+
+#### Silhouette Method
+
+```{r}
+fviz_nbclust(wines_bake,
+             FUN = hcut,
+             method = "silhouette") # this suggests 3 clusters
+```
+
+All three methods agree that there should be 3 clusters. This may not always be the case. In any case, we know that there are 3 different types of wine in the dataset. 
+
+
+### Tidymodels workflow for k-means clustering
+
+
+```{r}
+# exploring different k numbers #####
+kclusts_explore <- tibble(k = 1:10) %>% 
+  mutate(kclust = purrr::map(k, ~kmeans(wines_bake, .x)),
+         tidied = purrr::map(kclust, tidy),
+         glanced = purrr::map(kclust, glance),
+         augmented = purrr::map(kclust, augment, wines_bake))
+
+kclusts_explore
+
+# turn this into 3 separate datasets, each representing a
+# different type of data
+
+#
+clusters <- kclusts_explore %>% 
+  unnest(cols = c(tidied))
+
+clusters
+
+#
+assignments <- kclusts_explore %>% 
+  unnest(cols = c(augmented))
+
+assignments  # can be used to plot, with each point colored according to predicted cluster
+
+#
+clusterings <- kclusts_explore %>% 
+  unnest(cols = c(glanced))
+
+clusterings
+
+#  visualize
+
+# number of clusters
+clusterings %>% # from glance
+  ggplot(aes(k, tot.withinss)) + # total within cluster sum of squares, keep low
+  geom_line() +
+  geom_point() +
+  scale_x_continuous(breaks = 1:10) +
+  labs(title = "Plot of Total Within Sum of Squares for different number of clusters",
+       subtitle = "Additional clusters beyond k = 3 have little value") +
+  theme_classic()
+
+# how datapoints are separated
+glimpse(assignments)
+
+assignments %>% # from augment
+  ggplot(aes(x = PC1, y = PC2)) + # use PCA data
+  geom_point(aes(color = .cluster), size = 2, alpha = 0.8) +
+  facet_wrap( ~ k) +
+  # to see the center of the clusters
+  geom_point(data = clusters, size = 9, shape  = "x") +
+  labs(x = "PC1 (36% variance)",
+       y = "PC2 (19.2% variance",
+       title = "Visualization of k-means clustering",
+       subtitle = "Optimal k = 3",
+       caption = "Source: Wines dataset from kohonen package") +
+  theme_minimal()
+```
+
+
+### Hierarchical Clustering Analysis
+```{r}
+wines_HC <- wines_bake %>% 
+    dist(.,method = "euclidean") %>% 
+    hclust(., method = "ward.D2")
+
+# 3 clusters:
+fviz_dend(wines_HC,
+          k = 3,
+          rect = T,
+          rect_border = "jco",
+          rect_fill = T)
+```
+
+
+
+# Learning pointers:
+
+Initially, I was stuck at the visualization part for k-means clustering as I didn't know how to bring in my x and y-axis data. I had been using the original dataset all along, and was wondering why plots created using the factoextra::fviz_cluster() could report Dim 1 for x axis and Dim 2 for y axis. I finally had the eureka moment when I realised I should use the PCA scores from the bake step earlier. 
+
+I really like the tidymodels way of allowing for visualizing how the clusters are separated when different values of k are used. The functions augment, tidy and glance were very efficient in reporting the results for k-means clustering. Previously I only used tidy and glance for regression, and I didn't know they could be extended to cluster analysis as well.
+
+Lastly, I find dendrograms very aesthetically intuitive and I like how the colors and types of dendrograms could be customised. However, the assumption is that there must be some structure in the data in the first place, otherwise HCA would give very misleading results. 
+
+
+# References
+
+- <https://rdrr.io/github/tidymodels/learntidymodels/f/inst/tutorials/pca_recipes/pca_recipes.Rmd>
+- <https://allisonhorst.github.io/palmerpenguins/articles/articles/pca.html>
+- <https://www.ibm.com/support/knowledgecenter/en/SSLVMB_subs/statistics_casestudies_project_ddita/spss/tutorials/fac_telco_kmo_01.html>
+- <https://www.tidymodels.org/learn/statistics/k-means/>
+- <https://www.r-bloggers.com/2019/07/use-the-k-means-clustering-luke/>
+- <https://statsandr.com/blog/clustering-analysis-k-means-and-hierarchical-clustering-by-hand-and-in-r/>
+- <https://agroninfotech.blogspot.com/2020/06/visualizing-clusters-in-r-hierarchical.html>
+
