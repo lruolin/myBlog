@@ -1,26 +1,64 @@
+---
+title: "Tidy Tuesday on Coffee Ratings Dataset"
+description: |
+  Exploratory Data Analysis on Coffee Ratings
+author:
+  - name: lruolin
+date: 02-09-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
 
-# Tidy tuesdays coffee rating
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Objective
+
+- To practice data transformation and visualization on a tidytuesday dataset that is relatable to food (since I am a food science graduate).
+
+- The main areas that I will focus on would be the scoring differences between types of coffee (Arabica vs Robusta), processing methods (Wet vs Dry), country of origin/companies (top 6 by score), as well as varieties (top 6 by count). 
 
 # Load packages
+
+```{r}
 library(pacman)
 p_load(tidyverse,skimr,tidytuesdayR, ggthemes, GGally, broom)
+```
 
+# Import
 
-#coffee_ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-07-07/coffee_ratings.csv')
-
+```{r}
 tuesdata <- tidytuesdayR::tt_load(2020, week = 28)
 coffee_ratings <- tuesdata$coffee_ratings
+```
 
-glimpse(coffee_ratings)
+
+# Understanding the data
+
+Skimming the data using the skimr package.
+
+```{r}
 skim(coffee_ratings)
+```
 
-# how many species of coffee?
-coffee_ratings %>% 
-  select(species) %>% 
-  unique()
+This is an incomplete dataset. I am not familiar with all the terms, such as ICO number, altitude, certification details.
 
-# what is the distribution?
+To address my focal questions, I would need to take note that there are missing values in:
 
+- country of origin
+- variety
+- processing method
+
+The distribution for scoring criteria is quite right-skewed. The total cup points is also very right skewed, most of the coffee graded are probably good coffee, so this may not be a representative dataset since it only contains information on above average coffee, but does not show data for average and sub-par coffee.
+
+
+
+## Species: Arabica vs Robusta
+
+```{r}
 coffee_ratings %>% 
   select(species) %>% 
   count(species) %>% # equivalent to df %>% group_by(a, b) %>% summarise(n = n()).
@@ -34,12 +72,11 @@ coffee_ratings %>%
        y = "Percentage of samples",
        caption = "Source: Coffee Quality Institute") +
   theme_clean()
+```
 
-# Maybe I should just look at Arabica coffee ratings
+Even though there is very little representation from Robusta coffee, which is considered to be a more inferior type, out of curiosity and for data exploratory purposes, I will look at the averate total cup score. Personally, I prefer the Robusta type of coffee unique to Singapore and Malaysia because of the way coffee beans are fried with butter and sugar, which gives it a unique aromatic taste.
 
-glimpse(coffee_ratings)
-
-# Arabica beans has higher ratings than Robusta
+```{r}
 coffee_ratings %>% 
   select(species,total_cup_points) %>% 
   group_by(species) %>% 
@@ -51,91 +88,24 @@ coffee_ratings %>%
   labs(title = "Mean Total Cup Points for Arabica and Robusta",
        subtitle = "Arabica has higher mean score than Robusta",
        caption  = "Source: Coffee Quality Institute") +
+  ylim(0,100) +
   theme_clean()
-  
-glimpse(coffee_ratings)
+```
 
-# Let's just focus on Arabica beans
-# What are the countries of origin and if there is any diff in mean cup score?
 
+## Processing method
+
+To compare like with like,  I will look the effect of processing methods on scores for Arabica coffee only.
+
+
+```{r}
 arabica <- coffee_ratings %>% 
   filter(species == "Arabica")
+```
 
-glimpse(arabica)
+The plot below shows what the commonly used processing methods are.
 
-# check missing values for coffee_ratings
-sapply(arabica, function(x) sum(is.na(x))) # 1 missing value for country
-
-# what is the mean score for coffee rating?
-mean(arabica$total_cup_points) #82.11
-
-# what is the median score?
-median(arabica$total_cup_points) # 82.5
-
-# what is the distribution for ratings like?
-arabica %>% 
-  select(total_cup_points) %>% 
-  ggplot(aes(total_cup_points)) +
-  geom_density(fill = "coral") +
-  labs(title = "Distribution of Ratings for Arabica Coffee",
-       subtitle = "Ratings are right skewed",
-       caption = "Source: Coffee Quality Institute") +
-  theme_few()
-
-# in this case, it's ok to use either mean or median, and I will use mean
-
-# plot to see which countries are above/below mean rating
-
-arabica_dotplot <- arabica %>% 
-  filter(!is.na(country_of_origin)) %>% # 1 missing value
-  group_by(country_of_origin) %>% 
-  summarise(mean_rating = mean(total_cup_points)) %>% 
-  mutate(above_below_mean = as.factor(ifelse(mean_rating > mean(arabica$total_cup_points),
-                                             "above_mean", "below_mean"))) %>% 
-  ggplot(aes(x = reorder(country_of_origin, mean_rating), 
-             y = mean_rating, 
-             col = above_below_mean,
-             label = round(mean_rating,1))) +
-  geom_point(aes(col = above_below_mean), stat = "identity", size = 9) +
-  scale_color_few() +
-  geom_text(col = "black", size = 4) +
-  geom_hline(aes(yintercept = mean(arabica$total_cup_points)), size = 2,
-             col = "grey")+
-  labs(title = "Dot plot for Arabica Coffee Ratings",
-       subtitle = "Countries with ratings above mean values are coloured blue, and countries below mean values are colored orange.",
-       x =  "Country of Origin",
-       y = "Mean Rating",
-       caption = "Source: Coffee Quality Institute") +
-  coord_flip() +
-  theme_clean() +
-  theme(legend.position = "none",
-        axis.title = element_text(size = 16, face = "bold"),
-        axis.text = element_text(size = 14),
-        title = element_text(size = 20, face = "bold"))
-
-arabica_dotplot
-
-# how does processing method affect coffee ratings?
-
-arabica %>% 
-  select(processing_method) %>% 
-  unique()
-
-# from website:
-# there are three types of processing methods:
-# a. washed: focus solely on the bean, most specialty coffees are washed.
-#            needs to have enough natural sugars inherently. Fruit flesh
-#              is removed from the bean before beans are dried. 
-#            leads to bright and acidic flavors in the cup. 
-# b. natural: fruit remains on the bean and dries undisturbed, 
-#             considered a lower quality method that can lead to inconsistent flavors
-#             due to unripe fruit drying and turning brown alongside ripe fruits
-# c. honey: often has a rounded acidity than washed coffees, with intense
-# sweetness and complex mouthfeel. Strongly associated with Costa Rica
-# d. Other processing methods:
-# anaerobic, carbonic maceration, giling basah
-
-# breakdown by processing methods
+```{r}
 arabica %>% 
   filter(!is.na(processing_method)) %>% 
   count(processing_method) %>% 
@@ -153,65 +123,53 @@ arabica %>%
   coord_flip() +
   theme_clean() +
   theme(legend.position = "none")
+```
 
-# how are the ratings like when you account for country of origin, 
-# and look at either wet or dry processed
+I did some reading online (see Reference section below), and found that there were three main types of processing methods:
 
-arabica %>% 
-  select(country_of_origin, processing_method, total_cup_points) %>% 
-  group_by(country_of_origin) %>% 
-  filter(processing_method %in% c("Washed / Wet", "Natural / Dry")) %>% 
-  group_by(country_of_origin, processing_method) %>% 
-  mutate(mean_ratings = mean(total_cup_points)) %>% 
-  ggplot(aes(x = reorder(country_of_origin, mean_ratings), y = mean_ratings,
-             group = processing_method)) +
-  geom_point(aes(col = processing_method)) +
-  scale_color_few() +
-  facet_grid(processing_method ~.) +
-  labs(title = "Comparing Mean Ratings for Arabica Coffee for Dry Processing and Wet Processing",
-       subtitle = "Mean ratings were higher for Wet Processing",
-       x = NULL,
-       caption = "Source: Coffee Quality Institute") +
-  coord_flip() +
-  theme_clean() +
-  theme(legend.position = "none",
-        axis.title = element_text(size = 16, face = "bold"),
-        axis.text = element_text(size = 14),
-        title = element_text(size = 20, face = "bold"))
+- Wet/Washed: Most specialty coffees are washed, and the fruit flesh is removed from the bean before the beans are dried. There should be enough inherently present natural sugars in the bean so that sweetness will not be compromised. 
 
+- Dry/Natural: The fruit remains on the bean and dries undisturbed. This is considered to be a lower quality method that may lead to inconsistent flavors due to unripe fruit drying and turning brown alongside ripe fruits. 
 
-# Check the scores
+- Honey: Often has a rounded acidity than washed coffees, with intense sweetness and complex mouthfeel.
 
-glimpse(coffee_ratings)
+- Others: May include anaerobic processing, carbonic maceration etc. 
 
+For the purpose of comparing the scores across processing methods, I will just look at Wet vs Dry processing. 
+
+However, it is important to compare like with like for different processing methods. What does the total cup points mean? The total cup points could be used as a classifier:
+
+- 95 - 100: Super Premium Specialty
+- 90 - 94: Premium Specialty
+- 85 - 89: Specialty
+- 80 - 84: Premium
+- 75 - 79: Usual Good Quality
+- 70 - 74: Average Quality
+- 60 - 70: Exchange grade
+- 50 - 60: Commercial grade
+
+I will add in the class into the dataset to compare effect of processing method in the class with the most datapoints. 
+
+### EDA on total cup points
+
+```{r}
 sensory <- coffee_ratings %>% 
   select(total_cup_points, species, country_of_origin,
          processing_method:category_two_defects)
 
-glimpse(sensory)
-
-sensory %>% ggcorr(label = T, label_alpha = T, label_round = 2)
-
-summary(sensory)
-
-# category for total_cup_points
-# 95 - 100: Super Premium Specialty
-# 90 - 94: Premium Specialty
-# 85 - 89: Specialty
-# 80 - 84: Premium
-# 75 - 79: Usual Good Quality
-# 70 - 74: Average Quality
-# 60 - 70: Exchange grade
-# 50 - 60: Commercial grade
-
 sensory %>% 
   ggplot(aes(total_cup_points)) +
-  geom_histogram()
+  geom_histogram(fill = "chocolate4") +
+  theme_few()
 
-min(sensory$total_cup_points)  # 0 : means got missing values
+min(sensory$total_cup_points)  # 0 : has missing values
 
 table(sensory$total_cup_points) # 1 missing value, lowest is 59.83
+```
 
+### Creating a classification variable
+
+```{r}
 
 sensory_with_category <- sensory %>% 
   filter(total_cup_points != 0) %>% # remove zero score
@@ -223,7 +181,11 @@ sensory_with_category <- sensory %>%
                                                              ifelse(total_cup_points >70, "Average Quality",
                                                                     ifelse(total_cup_points >60, "Exchange grade",
                                                                            "Commercial grade"))))))))
-# just to check
+```
+
+Understanding the coffee with the highest score:
+
+```{r}
 sensory_with_category %>% 
   select(total_cup_points, classification) %>% 
   arrange(desc(total_cup_points))
@@ -232,21 +194,18 @@ min(coffee_ratings$total_cup_points)
 
 # which coffee had the highest score?
 coffee_ratings %>% 
-  filter(total_cup_points == 90.58) %>% 
+  filter(total_cup_points == max(coffee_ratings$total_cup_points)) %>% 
   t() # transpose
-
-max(coffee_ratings$total_cup_points)
 
 # which coffee had the lowest score?
 coffee_ratings %>% 
   filter(total_cup_points == 59.83) %>% 
   t() # transpose
 
-#
-sensory_with_category %>% 
-  select(total_cup_points, classification) %>% 
-  arrange(total_cup_points)
+# min score is actually 0, which is a missing datapoint.
+```
 
+```{r, layout="l-page", fig.width=12, fig.height=6}
 # distribution of types of coffee
 sensory_with_category %>% 
   filter(species == "Arabica",
@@ -262,76 +221,12 @@ sensory_with_category %>%
   theme_clean() +
   coord_flip() +
   theme(legend.position = "none")
+```
+
+The Premium category has the most number of datapoints, and I will focus on this category for analysis. 
 
 
-# established that most of the coffee is arabica
-# types of processing dominated by natural/dry and washed/wet
-# should just focus on arabica, wet vs dry: sensory scores
-
-
-glimpse(sensory_with_category)
-
-plot_sensory <- sensory_with_category %>% 
-  filter(classification == "Premium",
-         species == "Arabica",
-         processing_method %in% c("Natural / Dry", "Washed / Wet")) %>% 
-  mutate(processing_mtd_fct = ifelse(processing_method == c("Natural / Dry"), "Dry",
-                                                            "Wet")) %>% 
-  select(-quakers, -color, - category_one_defects, 
-         - category_two_defects, - processing_method) %>% 
-  pivot_longer(cols = aroma:cupper_points,
-               names_to = "parameters",
-               values_to = "score") %>% 
-  mutate(parameters_fct = factor(parameters,
-                                 levels = c("acidity", "aroma", "clean_cup",
-                                            "sweetness", "uniformity", "aftertaste",
-                                            "balance", "body", "cupper_points", "flavor"
-                                            ))) %>% 
-  group_by(processing_mtd_fct, parameters_fct) %>% 
-  summarise(mean_score = mean(score)) %>% 
-  ggplot(aes(x = processing_mtd_fct, y = mean_score)) +
-  geom_point(aes(col = processing_mtd_fct), size = 2) +
-  scale_color_manual(values = c("Dry" = "chocolate4",
-                                "Wet" = "cadetblue4")) +
-  facet_wrap(vars(parameters_fct), scales = "free", ncol= 5) +
-  labs(x = NULL,
-       title = "Comparison of mean score for Arabica coffee: Dry vs Wet Processing",
-       subtitle = "Wet processed coffee has higher acidity, aroma, clean_cup, sweetness, uniformity.",
-       caption = "Source: Coffee Quality Institute") +
-  theme_few() +
-  theme(legend.position = "none")
-
-plot_sensory
-glimpse(plot_sensory)
-
-
-# mean total cup 
-
-plot_sensory_total <- sensory_with_category %>% 
-  filter(classification == "Premium",
-         species == "Arabica",
-         processing_method %in% c("Natural / Dry", "Washed / Wet")) %>% 
-  mutate(processing_mtd_fct = ifelse(processing_method == c("Natural / Dry"), "Dry",
-                                     "Wet")) %>% 
-  select(total_cup_points, processing_mtd_fct) %>% 
-  group_by(processing_mtd_fct) %>% 
-  summarise(mean_score = mean(total_cup_points)) %>% 
-  ggplot(aes(x = processing_mtd_fct, y = mean_score)) +
-  geom_point(aes(col = processing_mtd_fct), size = 2) +
-  scale_color_manual(values = c("Dry" = "chocolate4",
-                                "Wet" = "cadetblue4")) +
-  labs(x = NULL,
-       title = "Comparison of average total cup points for Arabica coffee: Dry vs Wet Processing",
-       subtitle = "Both processing methods had similar average total cup points.",
-       caption = "Source: Coffee Quality Institute") +
-  theme_few() +
-  theme(legend.position = "none")
-
-plot_sensory_total
-glimpse(plot_sensory_total)
-
-# should show as boxplot
-
+```{r, layout="l-page", fig.width=12, fig.height=6}
 plot_sensory_total_boxplot <- sensory_with_category %>% 
   filter(classification == "Premium",
          species == "Arabica",
@@ -356,11 +251,10 @@ plot_sensory_total_boxplot <- sensory_with_category %>%
   theme_few() +
   theme(legend.position = "none")
 
-glimpse(plot_sensory_total_boxplot)
 plot_sensory_total_boxplot 
+```
 
-
-# individual
+```{r, layout="l-page", fig.width=12, fig.height=6}
 plot_sensory_boxplot <- sensory_with_category %>% 
   filter(classification == "Premium",
          species == "Arabica",
@@ -391,8 +285,45 @@ plot_sensory_boxplot <- sensory_with_category %>%
   theme(legend.position = "none")
 
 plot_sensory_boxplot
-glimpse(plot_sensory_boxplot)
+```
 
+
+## Country of origin/Owner
+
+```{r, layout="l-page", fig.width=12, fig.height=8}
+# plot to see which countries are above/below mean rating
+
+arabica_dotplot <- arabica %>% 
+  filter(!is.na(country_of_origin)) %>% # 1 missing value
+  group_by(country_of_origin) %>% 
+  summarise(mean_rating = mean(total_cup_points)) %>% 
+  mutate(above_below_mean = as.factor(ifelse(mean_rating > mean(arabica$total_cup_points),
+                                             "above_mean", "below_mean"))) %>% 
+  ggplot(aes(x = reorder(country_of_origin, mean_rating), 
+             y = mean_rating, 
+             col = above_below_mean,
+             label = round(mean_rating,1))) +
+  geom_point(aes(col = above_below_mean), stat = "identity", size = 9) +
+  scale_color_few() +
+  geom_text(col = "black", size = 4) +
+  geom_hline(aes(yintercept = mean(arabica$total_cup_points)), size = 2,
+             col = "grey")+
+  labs(title = "Dot plot for Arabica Coffee Ratings",
+       subtitle = "Countries with ratings above mean values are coloured blue,\nand countries below mean values are colored orange.",
+       x =  "Country of Origin",
+       y = "Mean Rating",
+       caption = "Source: Coffee Quality Institute") +
+  coord_flip() +
+  theme_clean() +
+  theme(legend.position = "none",
+        axis.title = element_text(size = 16, face = "bold"),
+        axis.text = element_text(size = 14),
+        title = element_text(size = 20, face = "bold"))
+
+arabica_dotplot
+```
+
+```{r}
 # sensory scores for arabica coffee, top scorers for sensory
 
 sensory_by_country <- coffee_ratings %>% 
@@ -402,9 +333,16 @@ sensory_by_country <- coffee_ratings %>%
          !is.na(owner)) %>% 
   select(country_of_origin, owner, 
          total_cup_points, aroma:cupper_points)
+```
 
+```{r}
 skim(sensory_by_country)
-  
+```
+
+Looking at the coffee with clean cup score = 0:
+Is it really that the coffee had a score of 0? Or was it a data entry mistake?
+
+```{r}
 # there is one datapoint in which clean_cup score = 0
 coffee_ratings %>% 
   filter(clean_cup == 0) %>% 
@@ -415,20 +353,11 @@ coffee_ratings %>%
 
 7.08 + 6.83 + 6.25 + 7.42 + 7.25 + 6.75 + 10 + 10  + 6.75 # 68.33
 
+```
 
-# check for other scores
+It turned out that total cup points is a summation of scores for aroma, flavor, aftertaste, acidity, body, balance, uniformity, clean_cup, sweetness and cupper_points.
 
-coffee_ratings %>% 
-  slice(2) %>% 
-  t()
-
-8.67 + 8.83 + 8.67 + 8.75 + 8.5 + 8.42 + 10 + 10 + 10  + 8.75 # 90.58
-
-# 89.92
-8.75 + 8.67 + 8.5 + 8.58 + 8.42 + 8.42 + 10 + 10 + 10 + 8.58
-
-glimpse(sensory_by_country)
-
+```{r}
 country_mean_score <- sensory_by_country %>% 
   group_by(country_of_origin, owner) %>% 
   summarise(mean_score = mean(total_cup_points)) %>% 
@@ -438,15 +367,13 @@ country_mean_score
 
 min(country_mean_score$mean_score) # 68.33
 max(country_mean_score$mean_score) # 89.7767
+```
 
-# plot profile for top 10 owners
+How do the top 8 coffee owners by country compare against each other in terms of the ten scoring criteria?
 
+```{r, layout="l-page", fig.width=16, fig.height=8}
+# plot profile for top 8 owners
 
-sensory_by_country
-
-glimpse(sensory_by_country) 
-
-# dot plot
 top_owners_data <- sensory_by_country%>% 
   group_by(country_of_origin, owner) %>% 
   summarise_at(.vars = vars(total_cup_points:cupper_points),
@@ -478,35 +405,17 @@ top_owners_data <- sensory_by_country%>%
   theme_few() +
   theme(legend.position = "none")
   
-  
-top_owners_data  
-glimpse(top_owners_data)
+top_owners_data
+```
 
-#
-top_owners_data %>% 
-  select(owner) %>% 
-  unique()
+The scores for clean_cup, sweetness, uniformity is a perfect 10 for all 8 owners. Slight differences were observed for mean scores for cupper_points, aftertaste and body. These were probably the distinguishing parameters.  
 
-country_ownder_order <- sensory_by_country%>% 
-  group_by(country_of_origin, owner) %>% 
-  summarise_at(.vars = vars(total_cup_points:cupper_points),
-               .funs = c(mean = "mean")) %>% 
-  ungroup() %>% 
-  mutate(country_owner = str_c(country_of_origin, owner, sep = ","),
-         country_owner_fct = factor(country_owner)) %>% 
-  group_by(country_owner_fct) %>% 
-  arrange(desc(total_cup_points_mean)) %>% 
-  ungroup() %>% 
-  slice_max(total_cup_points_mean, n = 8) %>% 
-  select(country_owner) %>% 
-  as.character()
 
-country_ownder_order
+## Variety
 
-# types of coffee (variety)
+The first few sections above looked mainly at highly scored coffee. Would there be any differenced in scoring profile, if I were to look at different varieties of coffee?
 
-glimpse(coffee_ratings)
-
+```{r}
 variety_count <- coffee_ratings %>% 
   count(variety) %>% 
   arrange(desc(n)) # 30 observations
@@ -523,6 +432,7 @@ data_variety <- coffee_ratings %>%
 
 glimpse(data_variety)
 
+# Top 6 coffee by number of datapoints
 
 data_variety %>% 
   count(species) # all arabica
@@ -534,37 +444,34 @@ data_variety %>%
   ungroup() %>% 
   count(country_of_origin) %>% 
   arrange(desc(n))
-
-# see sensory ratings across variety
-glimpse(data_variety)
+```
 
 
+```{r}
 data_variety %>% 
   ungroup() %>% 
   group_by(variety) %>% 
   skim()
+```
 
-
-
-# boxplot
+```{r}
 data_variety %>% 
   select(variety, total_cup_points) %>% 
   filter(total_cup_points != 0) %>% 
   ggplot(aes(fct_reorder(variety, total_cup_points), total_cup_points)) +
   geom_boxplot(aes(col = variety), show.legend = F) +
-  labs(title = "Comparison of Total Cup Points across top 6 varieties (by count)",
-       subtitle = "Caturra has the higest mean Total Cup Score",
-       x = "Variety",
+  labs(title = "Comparison of Total Cup Points across top 6 varieties \n(by count)",
+       subtitle = "Caturra has the higest mean Total Cup Score. Catuai had a wider distribution of scores.",
+       x = NULL,
        y = "Total Cup Points",
        caption = "Source: Coffee Quality Institute") +
   geom_jitter(aes(col = variety), alpha = 0.2, show.legend = F) +
   scale_color_few() +
   coord_flip()  +
   theme_few()
+```
 
-# dot plot by variety
-glimpse(data_variety)
-
+```{r, layout="l-page", fig.width=12, fig.height=6}
 dot_plot_variety <- data_variety %>% 
   filter(total_cup_points != 0) %>% 
   select(variety, aroma:cupper_points) %>% 
@@ -589,14 +496,29 @@ Main areas of differences were in balance, clean_cup, cupper_points, sweetness, 
         axis.title = element_text(face = "bold"))
 
 dot_plot_variety
+```
 
-glimpse(dot_plot_variety)
+Canturra had an edge over Hawaiian Kona for aroma, clean_cup, sweetness and uniformity, resulting in higher mean total_cup_points. What is Canturra coffee? It's actually a mutated type of Bourbon coffee that is known for great flavor. 
+
+As mentioned at the beginning, most of the coffee had very high scores in this dataset. Hence, the plots only show a snapshot of the flavor profiles of the scored coffee, but not all the coffee. 
+
+# Main Learning Pointers
+
+I am really glad to have found this #tidytuesday hashtag, which allows me to practice on readily available datasets and understand how different people in the community approach exploratory data analysis! I am really amazed that there is a dedicated package for loading the dataset with convenience, and this dataset even comes with a data dictionary to understand what each variable means. The R community is really committed to sharing and becoming better, together.
+
+The process of EDA is about getting to know your dataset, through asking questions, which are to be answered by carrying out data transformations and creating data visualizations. One question often leads to another, and EDA is a repetitive process until you finish getting to know your data. There were several aspects that I did not look at, such as the effect of altitude, and the grading dates. I may have concentrated too much on the sensory aspect of coffee since that was the more familiar aspect to me, and should have also looked at geographical region and coffee varieties. As an initial learning exercise, I sharpened my focus and concentrated on the effect of species, variety, processing methods, country/owners. 
+
+As the total cup points is a summation of the scores for attributes such as aroma, flavor, etc, I think it is hard to do classification based on these scores. I would prefer to have physicochemical data as well so that differentiation is more objective and to better countercheck the sensorial data. However, this may be a personal bias as I work in the analytical chemistry field. :)
+
+I think coffee is really complex. You can have a poorer grade (Robusta), but the roasting process plays a very important role in flavor development. You can have a very good variety, but the processing method may spoil/enhance its flavor profile. You can have a very good farm/owner, but maybe the year of harvest was particularly good or bad. Hence, it is really important to consider all (both familar and unfamilar) aspects when carrying out data analysis, and this is one area I need to improve on. 
+
+Coding wise, I got a chance to practice ggplots, data transformation, filtering and selecting rows and columns, as well as calculating means efficiently by using summarise(across, var, mean). I also managed to create new classifications using ifelse, and used fct_reorder to make my plot better. I like to use theme_clean and scale_color_few for my plots, making aesthetically pleasant plots are a breeze as compared to using Microsoft Excel.
 
 # References
-# https://perfectdailygrind.com/2016/07/washed-natural-honey-coffee-processing-101/
-# https://www.baristainstitute.com/blog/jori-korhonen/january-2020/coffee-processing-methods-drying-washing-or-honey
-# https://www.coffeechemistry.com/cupping-fundamentals
-# https://www.data-to-viz.com/caveat/spider.html
 
-# write.csv(coffee_ratings, "data-coffee_ratings.csv")
+<https://perfectdailygrind.com/2016/07/washed-natural-honey-coffee-processing-101/>
+<https://www.baristainstitute.com/blog/jori-korhonen/january-2020/coffee-processing-methods-drying-washing-or-honey>
+<https://www.coffeechemistry.com/cupping-fundamentals>
+<https://www.data-to-viz.com/caveat/spider.html>
+<https://www.javapresse.com/blogs/buying-coffee/beginners-guide-coffee-varieties>
 
