@@ -1,0 +1,347 @@
+---
+title: "Comparison of Volatile Compounds in Durians"
+description: |
+  Data visualization for volatile compounds in different durian varieties
+author:
+  - name: lruolin
+date: 02-16-2021
+output:
+  distill::distill_article:
+    self_contained: false
+bibliography: durian_3.bib
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introduction
+
+Durian is a tropical fruit that is either much loved or much hated in Singapore. There are different varieties of durians, and the top durians such as Mao Shan Wang can command prices of around $20-30 per kg (double the price of normal varieties). The price depends on the supply, the quality, and of course the demand. 
+
+The durian aroma comes mainly from the sulfur compounds, which gives it the characteristic pungent smell; as well as esters, which contributes to the fruity character.  It would be interesting to look at how volatile compounds differ from variety to variety in durians. 
+
+The data below is from the work done by @chin_analysis_2007. A total of 39 volatiles were identified in three varieties of durian: D2, D24 and D101 (using headspace SPME-GCMS). In the paper, PCA was carried out to distinguish between the three varieties.
+
+
+# Objective
+
+- Data visualization for top 10 volatile compounds (by concentration) in three different durian varieties: D2, D24 and D101
+
+
+# Load packages
+
+```{r}
+library(tidyverse)
+library(janitor)
+```
+
+# Import
+
+The file was saved on my working directory and I imported it into R
+
+```{r}
+durian <- read_csv("Durian.csv") %>% 
+  clean_names() 
+```
+
+
+# Data visualization
+
+```{r, layout="l-page", fig.width=20, fig.height=8}
+d101 <- durian %>% 
+  select(-peak_no, -odor_description, - category) %>% 
+  pivot_longer(cols = starts_with("d"),
+               names_to = "variety",
+               values_to = "concentration") %>% 
+  filter(variety == "d101") %>% 
+  top_n(10, concentration) %>% 
+  ggplot(aes(fct_reorder(compound, concentration), concentration)) +
+  geom_col(fill = "goldenrod") +
+  labs(x = NULL,
+       title = "D101",
+       x = "Relative Concentration (ug/g)",
+       caption = "Chin et al, 2007") +
+  coord_flip() +
+  theme_classic() +
+  theme(title = element_text(face = "bold", size = 16),
+        axis.text = element_text(size = 14))
+  
+d2 <- durian %>% 
+  select(-peak_no, -odor_description, - category) %>% 
+  pivot_longer(cols = starts_with("d"),
+               names_to = "variety",
+               values_to = "concentration") %>% 
+  filter(variety == "d2") %>% 
+  top_n(10, concentration) %>% 
+  ggplot(aes(fct_reorder(compound, concentration), concentration)) +
+  geom_col(fill = "forestgreen") +
+  labs(x = NULL,
+       title = "D2",
+       x = "Relative Concentration (ug/g)",
+       caption = "Chin et al, 2007") +
+  coord_flip() +
+  theme_classic() +
+  theme(title = element_text(face = "bold", size = 16),
+        axis.text = element_text(size = 14))
+
+d24 <- durian %>% 
+  select(-peak_no, -odor_description, - category) %>% 
+  pivot_longer(cols = starts_with("d"),
+               names_to = "variety",
+               values_to = "concentration") %>% 
+  filter(variety == "d24") %>% 
+  top_n(10, concentration) %>% 
+  ggplot(aes(fct_reorder(compound, concentration), concentration)) +
+  geom_col(fill = "darkorange2") +
+  labs(x = NULL,
+       title = "D24",
+       x = "Relative Concentration (ug/g)",
+       caption = "Chin et al, 2007") +
+  coord_flip() +
+  theme_classic() +
+  theme(title = element_text(face = "bold", size = 16),
+        axis.text = element_text(size = 14))
+
+
+gridExtra::grid.arrange(d101, d2, d24, ncol = 3,
+                        top = "Comparison of top volatiles found in different durian varieties")
+
+
+durian %>% 
+  select(-peak_no, -odor_description) %>% 
+  pivot_longer(cols = starts_with("d"),
+               names_to = "variety",
+               values_to = "concentration") %>% 
+  group_by(category, variety) %>% 
+  summarize(sum_conc = sum(concentration)) %>% 
+  arrange(desc(sum_conc))
+```
+# Interpretation
+
+From the plot above, half of the top ten volatile compounds in D24 were sulfur-containing compounds, and the most abundant volatile was diethyl disulfide (18.76 ug/g). The odor description for diethyl disulfide is "Sulfury, roasty, cabbage-like odor". 
+
+For D101, the top two most abundant volatile compounds were esters: ethyl 2-methylbutanoate (21.89 ug/g) (poweful green, fruity, apple-like odor) and propyl 2-methylbutanoate (12.67 ug/g), followed by sulfur compounds diethyl disulfide (12.42ug/g) and diethyl trisulfide (5.97ug/g). 
+
+For D2, ethyl 2-methylbutanoate (29.68 ug/g) was relatively higher than in D101.
+
+If we look at the total concentration of esters and sulfur compounds, D24 has the highest concentration of sulfur compounds (in line with the plot above).
+Comparing D2 and D101, the concentration of esters is about the same, but D2 has higher concentration of sulfur-containing compounds than D101.  According to @takeoka_odor_1995, branched chain esters have lower odor thresholds than their straight chain counterparts. It appeared that D101, with slightly lower concentration of sulfur-compounds, would be perceived as more fruity. However, the authors found that D2 was perceived to have a stronger sweet and fruity odor; and that D101 was perceived to have a well-balanced aroma. I'm not quite sure why, I guess I would need to taste in person to find out!
+
+# PCA
+
+I attempted to do PCA with the data provided, but it was a bit silly as n = 3, as I did not have the raw data with me. In addition, the assumptions for KMO and Bartlett's tests were not met. 
+
+Due to the very small number of observations, I ran into this error:
+*Error in comps[, 1:object$num_comp, drop = FALSE] : subscript out of bounds*
+
+After specifying that num_comp = 3, I did not receive this error message again.
+
+
+The script below shows my attempt to reproduce the PCA variable loadings plot. I managed to get the same plot as the authors, so probably if I have raw data with me, that would be great. Note that I did not show the scree plot, eigenvalues and variance explained plot, as n=3 is really very small and PCA should not even be conducted. Nevertheless, it was an exercise in attempting to understand the conclusions drawn by the authors. 
+
+```{r}
+# PACKAGES ####
+library(pacman)
+p_load(tidyverse, janitor, skimr, psych, tidymodels, learntidymodels)
+
+# IMPORT ####
+
+durian <- read_csv("Durian.csv") %>% 
+  clean_names() %>% 
+  mutate(peak_no_2 = paste( "peak", peak_no, sep = "_")) %>% 
+  select(-peak_no) %>% 
+  rename(peak_no = peak_no_2) %>% 
+  select(peak_no, everything())
+
+glimpse(durian)
+
+# so that can pivot longer later
+# durian$d101 <- as.character(durian$d101)
+# durian$d2 <- as.character(durian$d2)
+durian$d24 <- as.numeric(durian$d24)
+
+# TRANSFORM #####
+
+durian_reshape <- durian %>% 
+  
+  # remove unnecessary columns
+  select(-category, -odor_description, -compound) %>% 
+  # pivot longer for variety
+  pivot_longer(cols = starts_with("d"),
+               names_to = "variety",
+               values_to = "concentration") %>% 
+  
+  pivot_wider(names_from = peak_no,
+              values_from = concentration) %>% 
+  
+  clean_names() %>% 
+
+  # pivot wider for compound names as (X)/Features
+  dplyr::group_by(variety) %>% 
+  dplyr::summarize_all(sum, na.rm = T)
+
+  
+glimpse(durian_reshape)  # 40 variables: 1Y and 39 X
+
+durian_reshape$variety <- factor(durian_reshape$variety)
+
+# EDA
+skim(durian_reshape)
+
+# no missing values
+# should do auto-scale and means centering later
+
+# Check assumptions for EDA
+
+durian_no_y <- durian_reshape %>% 
+  dplyr::select(-variety)
+
+# KMO test
+durian_no_y %>% 
+  cor() %>% 
+  KMO() # overall MSA = 0.5
+
+# Bartlett 
+
+durian_no_y %>% 
+  cor() %>% 
+  cortest.bartlett(., n = 3) # p = 1, by right not suitable for PCA
+
+# 3 observations - not really ok for PCA
+
+# PCA ####
+glimpse(durian_reshape)
+
+# recipe
+durian_recipe <- recipe(~ ., data = durian_reshape) %>% 
+  update_role(variety, new_role = "id") %>%  
+  # step_naomit(all_predictors()) %>% 
+  step_normalize(all_predictors()) %>% 
+  step_pca(all_predictors(), id = "pca", num_comp = 3)
+
+
+# need to specify num_comp = 3 if not will have error
+# Error in comps[, 1:object$num_comp, drop = FALSE] : 
+# subscript out of bounds
+
+
+# prep: estimate the required parameters from a training set
+# that can be later applied to other data sets
+# returns an updated recipe with its estimates
+
+durian_prep <- prep(durian_recipe)
+
+tidy_pca_loadings <- durian_prep %>% 
+  tidy(id = "pca")
+
+
+# bake
+
+durian_bake <- bake(durian_prep, durian_reshape)
+
+
+# plot loadings for top 8
+
+loadings_top_8 <- tidy_pca_loadings %>% 
+  group_by(component) %>% 
+  top_n(8, abs(value)) %>% 
+  ungroup() %>% 
+  mutate(terms = tidytext::reorder_within(terms, abs(value), component)) %>% 
+  ggplot(aes(abs(value), terms, fill = value>0)) +
+  geom_col() +
+  facet_wrap(~component, scales = "free_y") +
+  tidytext::scale_y_reordered() +
+  ggthemes::scale_fill_few() +
+  theme_minimal()
+
+
+juice(durian_prep) %>% 
+  ggplot(aes(PC1, PC2, label = variety)) +
+  geom_point(aes(col = variety), show.legend = F) +
+  geom_text() +
+  labs(x = "PC1",
+       y = "PC2") +
+  theme_classic()
+                   
+
+# loadings only
+
+# define arrow style
+arrow_style <- arrow(angle = 30,
+                     length = unit(0.02, "inches"),
+                     type = "closed")
+
+# get pca loadings into wider format
+pca_loadings_wider <- tidy_pca_loadings%>% 
+  pivot_wider(names_from = component, id_cols = terms)
+
+
+pca_loadings_only <- pca_loadings_wider %>% 
+  ggplot(aes(x = PC1, y = PC2)) +
+  geom_segment(aes(xend = PC1, yend = PC2),
+               x = 0, 
+               y = 0,
+               arrow = arrow_style) +
+  ggrepel::geom_text_repel(aes(x = PC1, y = PC2, label = terms),
+                           hjust = 0, 
+                           vjust = 1,
+                           size = 4,
+                           color = "deepskyblue4") +
+  labs(title = "Loadings on PCs 1 and 2 for normalized data") +
+  theme_classic()
+
+
+
+# check raw data
+
+# PC 1
+pc1_raw <- durian %>% 
+  filter(peak_no %in% c("peak_19",
+                        "peak_12",
+                        "peak_6",
+                        "peak_34",
+                        "peak_2",
+                        "peak_10",
+                        "peak_14",
+                        "peak_26"))
+
+
+
+# PC 2
+pc2_raw <- durian %>% 
+  filter(peak_no %in% c("peak_11",
+                        "peak_15",
+                        "peak_8",
+                        "peak_37",
+                        "peak_36",
+                        "peak_1",
+                        "peak_32",
+                        "peak_24"))
+
+
+pc1_raw %>% arrange(peak_no)
+pc2_raw %>%  arrange(peak_no)
+
+pca_loadings_only
+
+loadings_top_8
+```
+
+# Learning pointers
+
+I feel that data visualization is a very important data exploratory tool to better understand your data. After data visualization, PCA can be performed to further explore your data and uncover latent structures. Together with the insights from earlier visualizations, the findings of PCA could be better interpreted. 
+
+The number of observations should not be so small until it is a bit meaningless to carry out PCA. This, was due to me carrying out analysis on aggregated data. I would need to remember to carry out more replicates if I am doing this experiment in the lab.
+
+What I like about the paper was that there was proper documentation on how extraction efficiency was optimised through sample size, vial size, the use of salting out, as well as equilibration time. The use of salting out is rather controversial as salt alters the equilibrium space between SPME fiber coatings and headspace. The results with and without addition of salt should always be compared to understand the effect of salt addition. 
+
+In addition, internal standard was used as a semi-quantitative analysis for relative concentration of volatile compounds. This would be better than just comparing percentage area of compounds because it gives the concentration in "absolute" value. However, it is still a semi-quantitative method as the IS cannot correct for differences in ionization during analysis, but it is better than nothing.
+
+Flavor analysis is not straightforward as numbers used to describe concentration do not indicate odor threshold and intensity perceived. They also do not descripe the type of odor. I wonder if text analysis could be applied to odor descriptions in flavor analysis? Odor threshold is further influenced by chemical structure, and extraction efficiency is also affected by sample matrix and volatility of compound when SPME is used as extraction. SPME offers a snapshot of flavor of food, but it would be more robust to compare against other extraction techniques as well. The ideal extraction method should not introduce artefacts (high temperature extraction, use of solvents etc), and requires high-end techniques. Alas, not every lab is that well-equipped. However, we should always make sure that our data is "clean", so that our insights are factually correct and not contaminated by errors in extraction. The most advanced data analytics cannot correct for erroneous data, and any further analysis on such data carries no meaning. 
+
+
+
+
+
