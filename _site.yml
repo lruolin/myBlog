@@ -3,6 +3,7 @@ title: "pRactice corner"
 description: |
   My Blog
 output_dir: "docs"
+base_url: https://lruolin.github.io/myBlog/
 navbar:
   right:
     - text: "Home"
@@ -12,3 +13,7 @@ navbar:
     - text: "Useful Links"
       href: usefullinks.html
 output: distill::distill_article
+collections:
+  posts:
+    disqus: https-lruolin-github-io-myblog-2
+    share: [linkedin]

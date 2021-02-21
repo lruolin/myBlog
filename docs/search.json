@@ -6,21 +6,21 @@
       "description": "Hi, this is my practice corner for coding in R.",
       "author": [],
       "contents": "\nAbout this blog: a place to code and build portfolio. About me: food scientist, used to analyse data with Excel and SPSS before I met R. Attended a short modular course on R and want to build and expand on what I have learnt.\nAristotle — ‘The more you know, the more you know you don’t know.’\nand that makes me want to learn even more.\n\n\n\n",
-      "last_modified": "2021-02-21T15:53:10+08:00"
+      "last_modified": "2021-02-21T16:13:42+08:00"
     },
     {
       "path": "index.html",
       "title": "My Blog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2021-02-21T15:53:12+08:00"
+      "last_modified": "2021-02-21T16:13:44+08:00"
     },
     {
       "path": "usefullinks.html",
       "title": "Useful Links",
       "author": [],
       "contents": "\nCreating blog using distill package:\nProgramming for Psychologists :https://youtu.be/uLUqZp1kAWc\nMath inside RMarkdown:\nhttps://rpruim.github.io/s341/S19/from-class/MathinRmd.html\n\n\n\n",
-      "last_modified": "2021-02-21T15:53:13+08:00"
+      "last_modified": "2021-02-21T16:13:46+08:00"
     }
   ],
   "collections": ["posts/posts.json"]
