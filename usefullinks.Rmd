@@ -5,3 +5,6 @@ Creating blog using distill package:
 
 - Programming for Psychologists :<https://youtu.be/uLUqZp1kAWc>
 
+Math inside RMarkdown:
+
+- <https://rpruim.github.io/s341/S19/from-class/MathinRmd.html>
