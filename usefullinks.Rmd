@@ -8,3 +8,7 @@ Creating blog using distill package:
 Math inside RMarkdown:
 
 - <https://rpruim.github.io/s341/S19/from-class/MathinRmd.html>
+
+Machine Learning:
+
+- <https://online.stat.psu.edu/stat508/lesson/1a

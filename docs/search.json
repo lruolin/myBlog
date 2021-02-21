@@ -19,8 +19,8 @@
       "path": "usefullinks.html",
       "title": "Useful Links",
       "author": [],
-      "contents": "\nCreating blog using distill package:\nProgramming for Psychologists :https://youtu.be/uLUqZp1kAWc\nMath inside RMarkdown:\nhttps://rpruim.github.io/s341/S19/from-class/MathinRmd.html\n\n\n\n",
-      "last_modified": "2021-02-21T16:24:58+08:00"
+      "contents": "\nCreating blog using distill package:\nProgramming for Psychologists :https://youtu.be/uLUqZp1kAWc\nMath inside RMarkdown:\nhttps://rpruim.github.io/s341/S19/from-class/MathinRmd.html\nMachine Learning:\n<https://online.stat.psu.edu/stat508/lesson/1a\n\n\n\n",
+      "last_modified": "2021-02-21T23:30:32+08:00"
     }
   ],
   "collections": ["posts/posts.json"]
