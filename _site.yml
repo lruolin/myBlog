@@ -1,9 +1,9 @@
 name: "myBlog: pRactice corner"
 title: "pRactice corner"
+base_url: https://lruolin.github.io/myBlog/
 description: |
   My Blog
 output_dir: "docs"
-base_url: https://lruolin.github.io/myBlog/
 navbar:
   right:
     - text: "Home"
