@@ -11,7 +11,7 @@
 # Packages #####
 library(pacman)
 
-p_load(tidyverse)
+p_load(tidyverse, janitor)
 
 # Import data #####
 
@@ -23,8 +23,10 @@ white_rawdata <- read.table("https://archive.ics.uci.edu/ml/machine-learning-dat
                             strip.white = T, sep = ";", header = T) %>% 
   as_tibble()
 
+data_raw <- rbind(red_rawdata, white_rawdata) %>% 
+  clean_names()
 
-
+glimpse(data_raw)
 # References ######
 # https://online.stat.psu.edu/stat508/lesson/1a
 
