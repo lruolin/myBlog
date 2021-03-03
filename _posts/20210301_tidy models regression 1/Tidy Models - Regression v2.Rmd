@@ -1,0 +1,427 @@
+---
+title: "Tidy Models - Regression"
+description: |
+  Predicting numerical outcomes using linear regression and random forest
+author:
+  - name: lruolin
+date: 03-01-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+This is an exercise for me to revise the tidymodels way of carrying out regression using linear regression (OLS) and random forest models. Only after going through the readings, my course materials, and actually trying to work through a dataset myself do I really appreciate what my Prof was trying to teach during his machine learning course..
+
+I will be working on a dataset familiar to me - the white wine dataset.
+
+Machine learning can be divided into supervised and unsupervised machine learning - the differentiating point is whether you know the outcome. In this case, I want to apply what I have learnt on predicting a known numerical outcome - this would be regression. If I want to predict a known categorical outcome - for eg whether the wine is red or white, then that would be classification. If I am unsure what are the types of wine, and just want to group them, then that would be clustering.
+
+For regression, I could work on predicting the quality of wine from the white wine dataset, the quality of wine from the red wine dataset, or the quality of wine from both the red and white wine dataset. 
+
+As a start, let me try to predict the quality score of white wine from the various attributes.
+
+## General Workflow for Predicting Numerical Outcome using Linear Regression and Random Forest
+
+Most of the points mentioned below were taken from: <https://jhudatascience.org/tidyversecourse/model.html#summary-of-tidymodels>. 
+
+This was a great read for me to frame my learning and see the whole picture
+
+The general steps are outlined below:
+
+
+### 1. Import the data
+
+- I will import the white wine dataset from <https://archive.ics.uci.edu/ml/datasets/wine+quality>. The attributes are:
+
+
+**Features/X variables**
+
+- fixed acidity
+- volatile acidity
+- citric acid
+- residual sugar
+- chlorides
+- free sulfur dioxide
+- total sulfur dioxide
+- density
+- pH
+- sulphates
+- alcohol
+
+
+**Outcome/Y variable**:
+12 - quality (score between 0 and 10)
+
+### 2. Define the question you want to ask the data
+
+- Can I predict the quality score (Y variable), based on the physicochemical attributes of white wine (X variables)?
+
+### 3. Clean and transform the data
+
+- In this case, the data is already in a tidy format. As for transformations required, I will leave it to the pre-processing step later. 
+
+### 4. Exploratory data analysis (EDA)
+
+What do you look out for when doing EDA?
+
+- Shape of data: How many Y and how many X variables are there? How many observations are there? The number of observations (n) and number of parameters (p) may affect your choice of models.
+  
+- Type of variables: are they numerical or categorical? Or are they numerical, but actually can be transformed into categorical (eg month of the year), or are they categorical, but should be transformed into dummy variables (eg for regression)?
+
+- Are there any missing values? This may affect the modelling as some models cannot handle missing values.
+
+- Within each variable, what is the min, max, mean, median, range? Are the datapoints normally distributed, or skewed? This affects whether modelling, for eg OLS regression can be carried out, or should further transformations be carried out first?
+
+- How are the X variables related to each other? Are they correlated? What is the strength of correlation? Is there a multi-collinearity issue? These are points to be addressed for linear regression. 
+
+### 5. Preprocessing the data
+
+After identifying all the "touch-up" points required for successful modelling, the data may be pre-processed using the recipes package. This is really a powerful package that can transform the data the way you want, using single-line commands (as compared to multiple clicks of the mouse). However, it requires the user to know what steps are to be taken. 
+
+A list of preprocessig steps is given below:
+
+<https://recipes.tidymodels.org/reference/index.html#section-basic-functions>
+
+Like cooking, this is part art part science. If I want to do missing values imputation, which kind of imputation do I use? I am still learning as I go along for this step..
+
+In a way, this preprocessing step helps you to zoom in razor sharp to the important X variables that can be used to predict Y. These X variables may exist as hidden variables that need carving out and polishing/transformation. There may be X variables that are of not much importance, so it is important to extract relevant information and keep the number of variables as small as possible without compromising on accuracy. In other words, that is called feature engineering.
+
+### 6. Carry out modelling on the training dataset
+
+- Split dataset into training, testing and cross-validation. The training dataset is for you to train models with. The cross-validation dataset should be a subset of training dataset, for tuning different parameters of the model to make it an even better model. Cross-validation is useful when the number of observations isn't big enough to split into three different datasets for training, validation and testing. Instead, the data is randomly partitioned into subsamples to be used as training dataset for one partition, and the same subsample would be used as test dataset for another partition. In repeated cross-validation, the cross-validation is repeated many times, giving random partitions of the original sample. The test dataset is for testing the trained model to see if the model is able to deliver predictive results. 
+
+- Usually, you will train more than one model, and then compare the results. The choice of model could span over simple, easy to understand linear models, or difficult to interpret but accurate models (eg neural networks which is like a blackbox). The results of the trained dataset will usually not fare too badly, since the model was built using the training dataset. Different models may require different preprocessing and different types of parameter tuning. 
+
+### 7. Assessing the test dataset.
+
+A litmus test of whether the model works is to look at how well the model performs its predictive task when a set of completely new data is provided to the model. Models may be assessed in terms of r-sq, root mean square error or mean absolute error to judge the performance.
+
+The indicators above give us an understanding of how accurate the model is in terms of predicting new data. A model that is over-fitted fits the training dataset well, but is unable to predict the test dataset well. A model that can fit the test dataset well, may not be accurate enough to give good predictions. This is known as the bias-variance tradeoff. 
+
+### 8. Communicate the modelling results
+
+Results should be shown as visualizations/data tables to communicate the findings. 
+
+## Load required packages
+
+Load required packages:
+
+```{r}
+library(pacman)
+p_load(tidyverse, janitor, GGally, skimr, ggthemes, ggsci,
+       broom, gvlma, ggfortify, jtools, car, huxtable, sandwich,
+       tidymodels, parsnip, vip)
+```
+
+# Import
+
+```{r}
+white_rawdata <- read.table("https://archive.ics.uci.edu/ml/machine-learning-databases/wine-quality/winequality-white.csv", 
+                            strip.white = T, sep = ";", header = T) %>% 
+  as_tibble() 
+
+# save as another variable 
+data_white <- white_rawdata
+
+```
+
+# Exploratory data analysis
+
+```{r}
+glimpse(data_white) # 12 variables, all numerical
+
+summary(data_white) # scale and range of values are quite different
+
+skim(data_white) # no missing values, probably need to normalize data
+
+data_white %>% 
+  ggpairs() # distribution of X is quite skewed, except maybe for pH.
+            # outcome is not unimodal --> ? 
+
+data_white %>% 
+  ggcorr(label = T, label_alpha = T, label_round = 2) # some collinearity issues?
+```
+
+Seems like OLS linear model isn't really the best option for this case, since Y is multi-modal. It may be more suitable for classification to predict Y instead.  
+
+Nevertheless, let me compare the performance of OLS linear model with random forest, just for me to familiarise myself with the workflow for regression.
+
+# Tidymodels 
+
+### Splitting the dataset into training and testing datasets
+
+```{r}
+set.seed(202102212)
+whitewine_split <- initial_split(data_white, prop = 0.8)
+
+whitewine_train <- training(whitewine_split)
+whitewine_test <- testing(whitewine_split)
+
+# split training dataset for cross-validation
+set.seed(20210228)
+white_cv <- vfold_cv(whitewine_train) # split training dataset for tuning mtry later
+```
+
+Splitting the dataset into a training and testing dataset helps to minimise over-fitting of the model. Over-fitting the model would mean that the model fits the existing data very well, but is unable to predict for new data accurately. 
+
+### Preprocessing
+
+The aim of preprocessing would be to solve the multi-collinearity issue, transform the data so that the distribution is not skewed, as well as to normalize the data.
+
+```{r}
+
+whitewine_reciped <- whitewine_train %>% 
+  recipe(quality ~., .) %>% 
+  step_log(all_predictors(), -pH, offset = 1) %>% # do not use all numeric since will affect Y (outcome)
+  step_corr(all_predictors(), threshold = 0.5) %>%  # remove variables with r-sq > 0.5
+  step_normalize(all_predictors()) # means centering and scaling
+
+whitewine_reciped 
+  
+
+```
+
+### Train the data recipe
+
+```{r}
+whitewine_preprocessed <- prep(whitewine_reciped, verbose = T)
+
+ww_transformed <- whitewine_preprocessed %>% bake(new_data = NULL) # see preprocessed data
+ww_transformed %>%  as_tibble() %>% round(., digits = 3) %>%  head()
+
+# check for missing values 
+ww_transformed %>% 
+  map(is.na) %>%  
+  map_df(sum) %>% 
+  tidy() %>% 
+  select(column, mean) %>%  # no missing values
+  as_tibble()
+```
+
+### Specify the models
+
+#### Linear regression (OLS)
+
+```{r}
+ww_lr_model <- linear_reg() %>% 
+  set_engine("lm") %>% # there are other options available, eg glmnet
+  set_mode("regression") # could also be classification for certain models, so just specify as best practice to be clear
+
+ww_lr_workflow <- workflow() %>% 
+  add_recipe(whitewine_reciped) %>% 
+  add_model(ww_lr_model)
+
+#  fit model to training data, and get predicted values
+final_ww_lm_model_fit <- fit(ww_lr_workflow, whitewine_train)
+
+# understanding the lm model
+
+lm_fit_output <- final_ww_lm_model_fit %>% 
+  pull_workflow_fit() %>% 
+  tidy() %>% 
+  as_tibble()
+
+lm_fit_output
+
+lm_fit <- final_ww_lm_model_fit %>% 
+  pull_workflow_fit()
+
+lm_fit
+
+# Looking at the fitted values:
+lm_fitted_values <- lm_fit$fit$fitted.values
+
+# another way, from workflow
+lm_wf_fitted_values <- 
+  broom::augment(lm_fit$fit, data = whitewine_train) %>% 
+  select(quality, .fitted: .std.resid)
+
+glimpse(lm_wf_fitted_values)
+
+# looking at variable importance
+vip_lm <- final_ww_lm_model_fit %>% 
+  pull_workflow_fit() %>% # extracts the model information
+  vip(num_features = 10, 
+      aesthetics = list(fill = "deepskyblue4")) + # most important factor is alcohol +
+  labs(title = "Variable Importance: Linear Regression") +
+  theme_few() +
+  theme(axis.text = element_text(face = "bold", size = 14))
+
+vip_lm
+
+```
+
+#### Random forest model
+
+```{r}
+rf_model <- rand_forest() %>% 
+  set_args(mtry = tune()) %>% 
+  set_mode(mode = "regression") %>% 
+  set_engine(engine = "ranger", importance = "impurity")
+
+rf_model
+
+rf_workflow <- workflow() %>% 
+  add_recipe(whitewine_reciped) %>% 
+  add_model(rf_model)
+
+rf_grid <- expand.grid(mtry = 3:7) # choose sqrt(no. of variables) usually
+
+tuned_rf_results <- rf_workflow %>% 
+  tune_grid(resamples = white_cv, # using cv dataset from training dataset
+            grid = rf_grid,
+            metrics = metric_set(rmse, rsq, mae))
+
+model_results <- tuned_rf_results %>% 
+  collect_metrics()
+
+finalized_rf_param <- tuned_rf_results %>% 
+  select_best(metric = "rmse") %>% 
+  as_tibble()
+
+finalized_rf_param #M TRY = 3
+
+rf_model_b <- rand_forest() %>% 
+  set_args(mtry = 3) %>% 
+  set_engine(engine = "ranger", importance = "impurity") %>% 
+  set_mode(mode = "regression")
+
+rf_workflow_b <- workflow() %>% 
+  add_recipe(whitewine_reciped) %>% 
+  add_model(rf_model_b)
+
+final_ww_rf_model_fit <- fit(rf_workflow_b, whitewine_train)
+
+# understanding the rf model
+
+# for random forest, need to set importance = impurity in set_engine() to extract this
+vip_rf <- final_ww_rf_model_fit %>% 
+  pull_workflow_fit() %>% # extracts the model information
+  vip(num_features = 10, 
+      aesthetics = list(fill = "darkorange"))+ # most important factor is alcohol
+  labs(title = "Variable Importance: Random Forest") +
+  theme_few() +
+  theme(axis.text = element_text(face = "bold", size = 14))
+
+vip_rf
+
+```
+
+### Comparing Linear Regression (OLS) vs Random Forest (RF)
+
+```{r, fig.height=8, fig.width=10}
+gridExtra::grid.arrange(vip_lm, vip_rf, nrow = 2)
+```
+
+Alcohol content was the most important variable for both OLS and random forest models. 
+
+### Assessing on test data
+
+```{r}
+results_train <- final_ww_lm_model_fit %>% 
+  predict(new_data = whitewine_train) %>%  # use actual train data, not preprocessed data
+  mutate(truth = whitewine_train$quality,
+         model = "lm") %>% 
+  bind_rows(final_ww_rf_model_fit %>% 
+              predict(new_data = whitewine_train) %>% 
+              mutate(truth = whitewine_train$quality,
+                     model = "rf")) 
+  
+results_train %>% 
+  group_by(model) %>% 
+  metrics(truth = truth, estimate = .pred) %>% 
+  as_tibble()
+
+
+results_test <- final_ww_lm_model_fit %>% 
+  predict(new_data = whitewine_test) %>% 
+  mutate(truth = whitewine_test$quality,
+         model = "lm") %>% 
+  bind_rows(final_ww_rf_model_fit %>% 
+              predict(new_data = whitewine_test) %>% 
+              mutate(truth = whitewine_test$quality,
+                     model = "rf")) 
+
+results_test %>% 
+  group_by(model) %>% 
+  metrics(truth = truth, estimate = .pred) %>% 
+  as_tibble()
+```
+
+When comparing rmse, rf has lower rmse in training dataset but the rmse value increased in the test dataset --> overfitting and cannot predict as well.This was the same for other indicators rsq and mean absolute error.
+
+Bear in mind that in the first place, the outcome variable Y was multi-modal. This may be the reason why OLS wasn't a suitable learner. 
+
+### Visualizing the assessment
+
+```{r}
+results_train %>% 
+  ggplot(aes(x =  truth, y = .pred)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  geom_abline(col = "darkorange") +
+  labs(x = "actual values (truth)",
+       y = "predicted values",
+       title = "Training dataset") +
+  scale_x_continuous(breaks = c(1:10)) +
+  facet_wrap( model ~ ., ncol = 2) +
+  theme_few()
+
+results_test %>% 
+  ggplot(aes(x =  truth, y = .pred)) + 
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  geom_abline(col = "darkorange") +
+  labs(x = "actual values (truth)",
+       y = "predicted values",
+       title = "Testing dataset") +
+  scale_x_continuous(breaks = c(1:10)) +
+  facet_wrap( model ~ ., ncol = 2) +
+  theme_few()
+```
+
+
+# Learning points
+
+It took me a while to piece different pieces of the jigsaw together to see the whole picture for machine learning. Initially, I will be carrying out EDA blindly, simply using skim() because it is a convenient function, but not fully understanding what I should be looking out for. I would be doing pre-processing steps at random, depending on what I saw from other websites. Finally, I saw the light that the purpose of doing EDA was to understand what I should be doing for preprocessing!
+
+It is always good to start with the simple OLS when I am learning regression. There are assumptions that must be met before doing OLS -- these could be checked using the gvlma package, and you can carry out the necessary transformations before doing OLS. There are other types of linear regression, for example generalized linear model (GLM), which I should try as well.
+
+The order of carrying out preprocessing steps matter! 
+
+The choice of all_numerical, all_predictors in the recipe step matters!
+In this case, all_numerical includes the Y variable. Although Y is multimodal, it is not skewed, so I should not log transform it (which is what would happen if I were to use step_log(all_numerical())). If I log-transformed Y, I would run into errors further along the script, as there are some bugs regarding predict function if Y is transformed. 
+The OLS model performed relatively consistently in both training and test dataset. However, the RF model performed better in the training dataset, but performance was poorer in the test dataset. This suggested that the RF model, in this case, had over-fitting issues. 
+
+
+# Next steps: 
+
+
+- Try out regression on a dataset in which Y is suitable for regression analysis
+- Try out classification on wine dataset.
+- Try out step_dummy, which creates numerical variables out of categorical variables
+- Try out different algorithms and their tuning parameters
+
+*“There is only one corner of the universe you can be certain of improving, and that's your own self.” - ― Aldous Huxley*
+
+This is just the beginning of my learning journey!
+
+
+# References
+
+- <https://www.tmwr.org/>
+- <https://online.stat.psu.edu/stat508/lesson/1a>
+- <https://semba-blog.netlify.app/05/11/2020/regression-with-tidymodels/>
+- <https://stackoverflow.com/questions/63239600/how-to-make-predictions-in-tidymodels-r-when-the-data-has-been-preprocessed>
+- <https://stackoverflow.com/questions/13956435/setting-values-for-ntree-and-mtry-for-random-forest-regression-model>
+- <https://rviews.rstudio.com/2019/06/19/a-gentle-intro-to-tidymodels/>
+- <https://jhudatascience.org/tidyversecourse/model.html>
+- <https://koalaverse.github.io/vip/articles/vip.html>
+- <http://rstudio-pubs-static.s3.amazonaws.com/565136_b4395e2500ec4c129ab776b9e8dd24de.html#results>
