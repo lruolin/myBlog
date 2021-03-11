@@ -1,0 +1,67 @@
+---
+title: "Notes - Resampling"
+description: |
+  Types of resampling techniqes and considerations on which to choose
+author:
+  - name: lruolin
+date: 03-11-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Background
+
+When I was trying out PLS regression on the gasoline data (a small dataset of 60 samples with NIR spectra measured over more than 400 wavelengths), I was a little stuck at the resampling part. Most examples online used k-fold cross validation as the resampling method, but I was also wondering about bootstrapping, because I remembered that my Prof mentioned it would also help in model performance to prevent overfitting.
+  
+I think there was a need for me to get my concepts right for:
+
+- Overfitting - why it is bad --> so that new data can be predicted accurately, not just having an accurate model for old training data.
+- Resampling, when do you need to do it? --> to improve model tuning, and give good predictions of how well the model will perform on future samples. 
+- How to split the data: 80/20? 70/30? 75/25? --> if you don't have a lot of data, suggest to use 80/20 so that more datapoints can be used to training. 
+- What are the various resampling techniques available, and how to choose which one to use?
+
+I got the information below from the book **Applied Predictive Modelling** <http://appliedpredictivemodeling.com/>, Chapter 4. 
+
+# Resampling techniques
+
+## k-fold cross-validation
+
+  Samples are randomly divided into *k* sets of the same size. A model is fit using all the samples except the first subset. The first subset is then used to assess model performance. The whole process is repeated *k* times, using other subsets. Model performance may be assessed by comparing error rates or r-squared values. 
+  
+  k-fold cross-validation usually has a high variance (low bias) compared to other methods. However, for large training sets, the variance-bias issue should be negligible. 
+  
+  k is usually fixed as 5 or 10. The bias is smaller for k = 10.
+  
+  **This method is recommended for tuning model parameters to get the best indicator of performance for small sample sizes as the bias-variance properties are good, and does not come with high computational costs (unlike leave-one-out method).**
+  
+## Bootstrapping
+
+  A bootstrap sample is a random sample of the data taken with replacement. Some samples may be selected multiple times, while there may be others that are not selected at all. In general, bootstrap error rates tend to have less uncertainty than k-fold. 
+  
+ **This method may be preferred if the aim is to choose between models, as bootstrapping technique has low variance (high bias).**
+  
+# Choosing models
+
+  There is a spectrum of interpretability and flexibility for models. Choose variaous models that occur at different parts of the spectrum, for example, a simple and inflexible but easy to interpret linear model, as compared to partial least squares which is lower down the interpretability but higher up the flexibility, as compared to random forests which are hard to interpret but very flexible. 
+  
+
+# Reflections
+
+  I am really glad to have this Applied Predictive Modelling book with me. It clarified a lot on the concepts part, but most of the code is given in the older coding styles. Looking forward to try on the worked examples using tidymodels framework!
+
+# References
+
+- <https://stackoverflow.com/questions/64254295/predictor-importance-for-pls-model-trained-with-tidymodels>
+
+- <https://rpubs.com/RandallThompson15/HW10_624>
+
+- <https://www.tidyverse.org/blog/2020/04/parsnip-adjacent/>
+
+- Applied Predictive Modelling, Max Kuhn and Kjell Johnson, Chapter 4. <http://appliedpredictivemodeling.com/>
+

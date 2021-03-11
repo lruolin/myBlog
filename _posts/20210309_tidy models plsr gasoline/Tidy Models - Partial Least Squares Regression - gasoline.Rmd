@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
   
   The problem with using ordinary least square linear regression for such datasets is that when X variables are highly correlated, it is difficult to interpret coefficients of different X meaningfully, since they are all correlated. 
   
-  PLS technique is also useful when the number of samples is lesser than the number of variables. It maximises the **covariance** of **both** X and Y to calculate scores (how much a particular object contributes to a latent variable) and loadings (contribution of a particular variable). For principal component regression (PCR), only X variables are taken into account. If the variability of X is not related to variability of Y, then PCR will have difficulty identifying a predictive relationship, when one might exist. It helps to uncover latent structures in the highly correlated X variables, so as to predict Y. 
+  PLS technique is also useful when the number of samples is lesser than the number of variables. It maximises the **covariance** of **both** X and Y to calculate scores (how much a particular object contributes to a latent variable) and loadings (variable coefficients used to define a component). For principal component regression (PCR), only X variables are taken into account. If the variability of X is not related to variability of Y, then PCR will have difficulty identifying a predictive relationship, when one might exist. It helps to uncover latent structures in the highly correlated X variables, so as to predict Y. 
   
   In a way, PLS is a supervised dimension reduction. It finds components that maximally summarise the variation of the predictors while simultaneiously requiring these components to have maximum correlation with the response. 
   
