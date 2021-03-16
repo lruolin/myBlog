@@ -176,7 +176,7 @@ tidy_pca_loadings # values here are the loading
 
 ```{r}
 wines_bake <- bake(wines_prep, wines)
-wines_bake  # has the PCA SCORES that we are familiar with
+wines_bake  # has the PCA LOADING VECTORS that we are familiar with
 ```
 
 
@@ -202,6 +202,7 @@ wines_prep %>%
        y = "% total variance",
        x = "PC",
        caption = "Source: ChemometricswithR book") +
+  geom_text(aes(label = round(value, 2)), vjust = -0.3, size = 4) +
   theme_minimal() +
   theme(axis.title = element_text(face = "bold", size = 12),
         axis.text = element_text(size = 10),
