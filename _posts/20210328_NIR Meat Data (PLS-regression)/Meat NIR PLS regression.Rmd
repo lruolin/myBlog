@@ -1,0 +1,865 @@
+---
+title: "Meat NIR data"
+description: |
+  PLS regression on Meat NIR data
+author:
+  - name: lruolin
+date: 03-18-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Background
+
+This example provides the workflow for analysing NIR data spectra to predict the fat, water and protein content of meat.
+
+# Workflow
+
+- Exploratory Data Analysis
+- PCA for dimension reduction/exploratory to determine the effective dimension of the dataset.
+- Split dataset into TRAINING and TESTING dataset. Split training dataset into cross validation dataset.
+- Data processing for training dataset, with the understanding the PLS regression will be used for modeling. Data should be centered and scaled, especially if the predictors are on scales of different magnitude. 
+- Build model: In this case, PLS-regression will be used, due to high correlation among X variables; and also because the number of X variables is greater than the number of samples. 
+- Assess model for cross-validation dataset, and tune to select optimal number of PC to be retained. Resampling techniques include k-fold cross validation, Leave One Out (LOO) cross validation and bootstrapping. For large datasets, 10-fold CV would suffice. For small datasets, **repeated 10-fold CV** is recommended. For very small datasets (n<50), LOO is recommended. 
+- Assess model on TESTING dataset
+- Visualization of model performance - number of components to be retained and model coefficients, observed vs predicted values (indicator of accuracy)
+- For models with more than 1 Y variable, the PLS1 approach is taken: each Y outcome has its own tuned model.
+- Reporting model coefficients
+- Assessing variable importance, using variable importance scores. As a rule of thumb, VIP values exceeding 1 are considered to contain predictive information for the outcome, Y.
+
+# PLS regression - Theory
+
+One of the many advantages of PLS is that it can handle many noisy, collinear (correlated) and missing variables, and can also simultaneously model several response variables Y.
+
+The default algorithm is the NIPALS algorithm, which seeks to find the latent (or hidden) relationships among the X variables, which are highly correlated with the response (Y outcome). 
+
+Like PCA, PLS finds **linear** combinations of the predictors. These linear combinations are commonly called components, or latent variables. PLS linear combinations of X variables are chosen to maximally summarise covariance with the Y outcomes. This means that PLS finds components that maximally summarise the variation of the predictors (X) while simultaneously requiring these components to have maximum correlation with the response (Y). PLS is a supervised dimension reduction procedure, as compared to Principal Component Regression (PCR), which is an unsupervised procedure. PLS will identify the optimal predictor space dimension reduction for the purpose of regression with the outcome, Y. For PCA, the variance in X is captured as much as possible, but there may be cases in which variation in X is not related to variation in Y, or there may be high noise present, and in turn is not related to Y. Hence, Y cannot be predicted correctly since there is no relationship. 
+
+The NIPALS algorithm is suitable for large datasets (when number of samples, n is much greater than number of predictors, X). For scenarios where there are more predictors than samples, the algorithm by Rannar, which is a kernel based algorithm, is computationally more efficient. 
+
+There are two versions of PLS - PLS 1 and PLS 2. PLS 1 is used when there is only one Y outcome variable, and PLS 2 may be used when there are more than one Y outcome variables. In PLS 1, a model is build and tuned specific for a Y outcome variabe. In PLS 2, the model is tuned for more than one Y outcomes. It is preferred to tune a model specific for each Y outcome rather in practice. 
+
+
+# IR
+
+IR spectroscopy is used to determine the chemical makeup of a substance. The theory of IR spectroscopy holds that unique molecualr structures absorb IR frequencies differently. In practice, a spectrometer fires a series of IR frequencies into a sample material, and the devide measures the absorbance of the sample at each individual frequency. This series of measurements creates a spectrum profile which can then be used to determine the chemical makeup of the sample material.
+
+# Data
+
+A Tecator Infratec Food and Feed Analyzer instrument was used to analyse 215 samples of meat across 100 frequencies (800-1050 nm). In addition to an IR profile, the percent content of water, fat and protein for each sample was determined using analytical chemistry. 
+
+The objective is the establish a predictive relationship between IR spectrum and fat content, to predict a sample's fat content with IR. 
+
+# Packages required
+
+```{r}
+# Load packages: 
+
+library(pacman)
+
+p_load(pls, AppliedPredictiveModeling, tidyverse, modeldata, tidymodels,  janitor, skimr, caret, ggthemes, ggrepel, psych, GGally)
+
+```
+
+# Import data
+
+These data are recorded on a Tecator Infratec Food and Feed Analyzer working in the wavelength range 850 - 1050 nm by the Near Infrared Transmission (NIT) principle. Each sample contains finely chopped pure meat with different moisture, fat and protein contents.
+
+For each meat sample the data consists of a 100 channel spectrum of absorbances and the contents of moisture (water), fat and protein. The absorbance is -log10 of the transmittance measured by the spectrometer. The three contents, measured in percent, are determined by analytic chemistry.
+
+```{r}
+data(tecator)
+```
+
+The matrix *absorp* contains the 100 absorbance values for the 215 samples
+The matrix *endpoints* contains the percent of moisture, fat, and protein in columns 1, 2, 3 respectively. 
+
+```{r}
+wavelengths = seq(800,1050, length.out = 100)
+
+matplot(wavelengths, t(absorp), type = "l", lty = 1,
+        ylab = "Absorbance (-log 10 of transmittance)")
+```
+
+
+# PCA - the  base R way
+
+```{r}
+nir.prcomp <- prcomp(absorp, rank. = 8)
+
+summary(nir.prcomp)
+```
+
+One can see that the first component explains 98.7% of variance in X.
+
+## Scree plot
+
+```{r}
+plot(nir.prcomp, main = "NIR Meat PCA scree plot",
+     xlab = "No. of PC")
+```
+
+One can choose number of PC = 2
+
+## Loadings
+
+```{r}
+nir.loadings <- nir.prcomp$rotation[, 1:2]
+
+# find max loading for PC 1
+nir.loadings %>% 
+  as_tibble() %>% 
+  rowid_to_column() %>% 
+  pivot_longer(cols = starts_with("PC"),
+               names_to = "PC",
+               values_to = "loadings") %>% 
+  dplyr::filter(PC == "PC1") %>% 
+  mutate(abs_loading = abs(loadings)) %>% 
+  arrange(desc(abs_loading)) %>% 
+  head(n = 10)
+
+# find max loading for PC 2
+nir.loadings %>% 
+  as_tibble() %>% 
+  rowid_to_column() %>% 
+  pivot_longer(cols = starts_with("PC"),
+               names_to = "PC",
+               values_to = "loadings") %>% 
+  dplyr::filter(PC == "PC2") %>% 
+  mutate(abs_loading = abs(loadings)) %>% 
+  arrange(desc(abs_loading)) %>% 
+  head(n = 10)
+
+# check which wavelengths
+
+wavelengths[42]
+wavelengths[68]
+wavelengths[14]
+wavelengths[17]
+
+# Plot
+offset <- c(0, 0.009)
+plot(nir.loadings[, 1:2], type = "l",
+     xlim = range(nir.loadings[, 1]) + offset,
+     xlab = "PC 1 (98.7%)", ylab = "PC 2 (0.009%)")
+
+points(nir.loadings[c(42,68, 14, 17), 1:2])
+
+text(nir.loadings[c(42,68, 14, 17), 1:2], pos = 4,
+     labels = paste(c(903,969,832,840), "nm"))
+```
+
+# Tidymodels way for PCA
+
+I personally prefer this method because the plots can be customised, rather than using the default base R graphics.
+
+```{r}
+# Y
+endpoints.tibble <- endpoints %>% as_tibble(.name_repair = "unique")
+
+# set names for Y
+names(endpoints.tibble) <- c("water", "fat", "protein")
+
+
+# X
+absorp.tibble <- absorp %>% as_tibble(.name_repair = "unique") %>% 
+  clean_names()
+
+# combine both datasets
+data_meat_x <- absorp.tibble
+data_meat_y <- endpoints.tibble
+
+# combine both datasets
+data_meat <- cbind(endpoints.tibble, absorp.tibble) %>% 
+  mutate(id = seq(1:215))
+
+```
+
+#### Checking assumptions for PCA
+
+```{r}
+# Checking assumptions ----
+
+data_meat_x %>% 
+  cor() %>% 
+  KMO() # Overal MSA = 0.97, greater than 0.70
+
+data_meat_x %>% 
+  cor() %>% 
+  cortest.bartlett(., n = 215) # p < 0.05
+
+# all assumptions met, ok to do PCA
+```
+
+#### Model
+
+```{r}
+# tidymodels PCA -----
+
+# recipe
+meat_pca_recipe <- recipe(~ ., data = data_meat) %>% 
+  update_role(id, new_role = "id") %>% 
+  update_role(water, fat, protein, new_role = "outcome") %>% 
+  step_normalize(all_predictors()) %>% 
+  step_pca(all_predictors(), id = "pca")
+
+meat_pca_recipe
+
+# prep
+
+meat_pca_prep <- prep(meat_pca_recipe)
+
+# loadings
+tidy_pca_loadings <- meat_pca_prep %>% 
+  tidy(id = "pca")
+
+tidy_pca_loadings
+
+# bake
+meat_pca_bake <- bake(meat_pca_prep, data_meat)
+meat_pca_bake # PCA LOADING VECTORS
+
+# Check number of PC: ------
+
+# Check number of PCs by eigenvalues
+
+meat_pca_prep$steps[[2]]$res$sdev %>% as_tibble() %>% 
+  filter(value>1) # only 1 PC
+
+# check using scree plots
+
+proportion_scree_plot <- meat_pca_prep %>% 
+  tidy(id = "pca", type = "variance") %>% 
+  filter(terms == "percent variance") %>% 
+  ggplot(aes(component, value, label = value)) +
+  geom_point(size = 2) +
+  geom_line(size = 1) +
+  geom_text(aes(label = round(value, 2)), vjust = -0.2, size = 3) +
+  labs(title = "% Variance explained",
+       y = "% total variance",
+       x = "PC",
+       subtitle = "98.63 % of variance is explained in PC 1",
+       caption = "Source: Tecator Dataset {caret}") +
+  theme_few() +
+  theme(axis.title = element_text(face = "bold", size = 12),
+        axis.text = element_text(size = 10),
+        plot.title = element_text(size = 14, face = "bold"))
+
+proportion_scree_plot
+```
+
+# PLS regression
+
+## Change dataset into a tibble format
+
+Alternatively, another ready-to-use format of date may be imported.
+
+```{r}
+data(meats) # from modeldata package
+meats
+```
+
+## Split into training and testing dataset
+
+Note: preprocessing of data, should be done only for TRAINING and not the whole dataset to ensure independence of training and testing dataset. 
+
+```{r}
+set.seed(20210318)
+
+meat_split <- initial_split(meats, prop = 0.80)
+
+meat_training <- meat_split %>% training()
+
+meat_testing <- meat_split %>% testing()
+
+
+```
+
+
+## EDA
+
+Just to check the data to see preprocessing steps required.
+
+```{r}
+skim(meat_training)
+```
+Checking the correlation between the Y outcomes:
+
+```{r}
+meat_training %>% 
+  select(water:protein) %>% 
+  ggcorr(label = T, label_alpha = T, label_round = 2)
+```
+
+
+From the exploratory data analysis, we can see that:
+
+- number of samples << number of X variables (fat dataset)
+- there are no missing values, so there is no need for missing values imputation
+- Y variables are skewed, would need to normalize data
+- X variables are highly correlated, and it is recommended to only carry out means-centering and not scaling (Ron Wehren's book for Chemometrics)
+- Y variables are also highly correlated with each other 
+
+## PLS2 Modelling
+
+This section below is taken from: <https://www.tidymodels.org/learn/models/pls/>, with some changes to the preprocessing steps. 
+
+This step includes preprocessing, specifying pls model to be used and model tuning.
+
+For spectral data, autoscaling (normalization) is not usually recommended. When every spectral variable is set to the same standard deviation, the noise is blown up to the same size as the signal that contains the actual information. In such cases, only means-centering is required.
+
+### Preprocessing 
+
+```{r}
+
+# Preprocessing only for TRAINING dataset
+
+# recipe
+meat_reciped_pls2 <- recipe(water + fat + protein ~., data = meat_training) %>% 
+  update_role(water, fat, protein, new_role = "outcome") %>% 
+  step_center(all_predictors())
+  
+# set folds for cross-validation
+
+# repeated 10-fold cross validation for tuning model to select optimal number of components, since this is a small dataset
+
+set.seed(202103182)
+
+folds_pls2 <- vfold_cv(meat_training, repeats = 10)
+
+folds_pls2 <- 
+  folds_pls2 %>%
+  mutate(recipes = map(splits, prepper, recipe = meat_reciped_pls2))
+```
+
+### Tuning of model using repeated Cross-validation dataset
+
+To fit the model, we need to:
+
+- format the X and Y into 2 different matrices, one for X and one for Y. THis is the format which the pls package requires. 
+
+- Estimate the Y outcomes
+
+```{r}
+get_var_explained <- function(recipe, ...) {
+  
+  # Extract the predictors and outcomes into their own matrices
+  y_mat <- bake(recipe, new_data = NULL, composition = "matrix", all_outcomes())
+  
+  x_mat <- bake(recipe, new_data = NULL, composition = "matrix", all_predictors())
+  
+  # The pls package prefers the data in a data frame where the outcome
+  # and predictors are in _matrices_. To make sure this is formatted
+  # properly, use the `I()` function to inhibit `data.frame()` from making
+  # all the individual columns. `pls_format` should have two columns.
+  pls_format <- data.frame(
+    endpoints = I(y_mat),
+    measurements = I(x_mat)
+  )
+  # Fit the model
+  mod <- plsr(endpoints ~ measurements, data = pls_format)
+  
+  # Get the proportion of the predictor variance that is explained
+  # by the model for different number of components. 
+  xve <- explvar(mod)/100 
+
+  # To do the same for the outcome, it is more complex. This code 
+  # was extracted from pls:::summary.mvr. 
+  explained <- 
+    drop(pls::R2(mod, estimate = "train", intercept = FALSE)$val) %>% 
+    # transpose so that components are in rows
+    t() %>% 
+    as_tibble() %>%
+    # Add the predictor proportions
+    mutate(predictors = cumsum(xve) %>% as.vector(),
+           components = seq_along(xve)) %>%
+    # Put into a tidy format that is tall
+    pivot_longer(
+      cols = c(-components),
+      names_to = "source",
+      values_to = "proportion"
+    )
+}
+
+# Compute this dataframe for each resample, and save the results in different columns:
+
+folds_pls2 <- 
+  folds_pls2 %>%
+  dplyr::mutate(var = map(recipes, get_var_explained),
+         var = unname(var))
+
+```
+
+### Scree plot
+
+Extract variance data:
+
+```{r}
+variance_data <- 
+  bind_rows(folds_pls2[["var"]]) %>% # select var col in folds dataset
+  filter(components <= 20) %>% # limit components to from 1 to 20
+  group_by(components, source) %>%
+  summarize(proportion = mean(proportion))
+
+ggplot(variance_data, aes(x = components, y = proportion, 
+                          col = source, label = round(proportion,2))) + 
+  geom_line() + 
+  geom_point() +
+  geom_text(nudge_y = 0.05) +
+  labs(title = "Variance captured for different number of components", 
+       subtitle = "Predictors (X) variance is captured very well by a single componenet.\nTo estimate all Y outcomes, one may need 11-13 components.",
+       x = "Number of components",
+       y = "Mean Cumulative Variance",
+       caption = "Source: Code is adapted from https://www.tidymodels.org/learn/models/pls/") +
+  facet_wrap(source ~., ncol = 2, scales = "fixed") +
+  scale_x_continuous(breaks = c(1:20), n.breaks = 19) +
+  theme_few() +
+  theme(legend.position = "none")
+
+```
+
+# PLS 1 modelling - Water
+
+Similar to earlier, to evaluate the PLS model, 10 repeats of the 10-folds cross validation will be used (100 holdout samples) to evaluate the overall model performance (RMSE, MAE, r-sq). However, individual models will be built for water, protein and fat. 
+
+Steps involved:
+
+- split dataset (already carried out)
+- recipe: specify pre-processing steps
+- fit model
+- put into workflow
+
+```{r}
+
+# folds for repeated cross validation
+set.seed(20210325)
+folds_pls1 <- vfold_cv(meat_training, v = 10, repeats = 10)
+
+# recipe
+meat_reciped_water_pls1 <- recipe(water ~., data = meats) %>% 
+  update_role(fat, protein, new_role = "other_y") %>% 
+  step_center(all_predictors())
+
+meat_reciped_water_pls1
+
+
+# fit model
+
+pls_water_model <- plsmod::pls(num_comp = tune()) %>% 
+  set_mode("regression") %>% # can be either classification or regression
+  set_engine("mixOmics") # to specify which package to use
+
+
+# put into workflow
+
+pls_water_workflow <- workflow() %>% 
+  add_recipe(meat_reciped_water_pls1) %>% 
+  add_model(pls_water_model)
+
+# create grid
+
+pls_1_grid <- expand.grid(num_comp = seq(from = 1, to = 20, by = 1))
+
+
+tuned_pls1_water_results <- pls_water_workflow %>% 
+  tune_grid(
+    resamples = folds_pls1,
+    grid = pls_1_grid,
+    metrics = metric_set(rmse, rsq, mae)
+  )
+
+# model results
+
+water_model_results <- tuned_pls1_water_results %>% 
+  collect_metrics()
+
+water_model_results
+
+# best model
+
+tuned_pls1_water_results %>% 
+  select_best(metric = "rmse") # num_comp = 18
+
+tuned_pls1_water_results %>% 
+  select_best(metric = "rsq") # num_comp = 18
+
+tuned_pls1_water_results %>% 
+  select_best(metric = "mae") # num_comp = 18
+
+# visualize
+tuned_pls1_water_results %>% 
+  collect_metrics() %>% 
+  ggplot(aes(num_comp, mean, col = .metric)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(n.breaks = 20) +
+  labs(x = "Number of components",
+       y = "Indicator",
+       title = "Plot of MAE, RMSE and R-SQ vs No. of components for TRAINING dataset, with 10-fold repeated cross validation",
+       subtitle = "Predicting Water Content: Optimal number of components is 18.") +
+ facet_grid(.metric ~.) +
+  theme_few() +
+  theme(legend.position = "none")
+
+# Update model and workflow:
+
+updated_pls_water_model <-   plsmod::pls(num_comp = 18) %>% 
+  set_mode("regression") %>% 
+  set_engine("mixOmics")
+
+updated_pls_water_workflow <- pls_water_workflow %>% 
+  update_model(updated_pls_water_model)
+
+pls_water_fit <- updated_pls_water_workflow %>% 
+  fit(data = meat_training)
+
+# Check the most important X variables for the updated Water Model:
+
+tidy_pls_water <- pls_water_fit %>% 
+  pull_workflow_fit() %>% 
+  tidy()
+
+# Variable importance
+
+tidy_pls_water %>% 
+  filter(term != "Y",
+         component == c(1:18)) %>%
+  group_by(component) %>% 
+  slice_max(abs(value), n = 20) %>% 
+  ungroup() %>% 
+  ggplot(aes(value, fct_reorder(term, value), fill = factor(component))) +
+  geom_col(show.legend = F) +
+  facet_wrap( ~ component, scales = "free_y") +
+  labs( y = NULL) +
+  theme_few()
+
+# Assess
+
+pls_water_fit %>% 
+  predict(new_data = meat_training) %>% 
+  mutate(truth = meat_training$water) %>% 
+  ggplot(aes(truth, .pred)) +
+  geom_point() +
+  geom_abline() +
+  labs(title = "Actual vs Predicted for TRAINING dataset",
+       x = "Actual Water Content",
+       y = "Predicted Water Content") +
+  theme_few()
+
+# for TEST dataset
+  
+pls_water_fit %>% 
+  predict(new_data = meat_testing) %>% 
+  mutate(truth = meat_testing$water) %>% 
+  ggplot(aes(truth, .pred)) +
+  geom_point() +
+  geom_abline() +
+  labs(title = "Actual vs Predicted for TEST dataset",
+       x = "Actual Water Content",
+       y = "Predicted Water Content") +
+  theme_few()
+
+# assessing model on test data
+updated_pls_water_workflow %>% 
+  last_fit(meat_split) %>% 
+  collect_metrics()
+
+```
+From above, it seems that the prediction of moisture content is more accurate for higher water content samples. 
+
+### To predict water content for future data:
+
+pls_water_fit %>% predict(trial_data), where trial_data has the NIR spectrum. 
+
+
+
+# PLS 1 modelling for fat
+
+Repeat the workflow above for fat:
+
+```{r}
+meat_reciped_fat_pls1 <- recipe(fat ~., data = meats) %>% 
+  update_role(water, protein, new_role = "other_y") %>% 
+  step_center(all_predictors())
+
+
+pls_fat_model <- plsmod::pls(num_comp = tune()) %>% 
+  set_mode("regression") %>% # can be either classification or regression
+  set_engine("mixOmics")
+
+pls_fat_workflow <- workflow() %>% 
+  add_recipe(meat_reciped_fat_pls1) %>% 
+  add_model(pls_fat_model)
+
+tuned_pls1_fat_results <- pls_fat_workflow %>% 
+  tune_grid(
+    resamples = folds_pls1,
+    grid = pls_1_grid,
+    metrics = metric_set(rmse, rsq, mae)
+  )
+
+# model results
+
+fat_model_results <- tuned_pls1_fat_results %>% 
+  collect_metrics()
+
+fat_model_results
+
+# best model
+
+tuned_pls1_fat_results %>% 
+  select_best(metric = "rmse") # num_comp = 19
+
+tuned_pls1_fat_results %>% 
+  select_best(metric = "rsq") # num_comp = 18
+
+tuned_pls1_fat_results %>% 
+  select_best(metric = "mae") # num_comp = 19
+
+# visualize
+tuned_pls1_fat_results %>% 
+  collect_metrics() %>% 
+  ggplot(aes(num_comp, mean, col = .metric)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(n.breaks = 20) +
+  labs(x = "Number of components",
+       y = "Indicator",
+       title = "Plot of MAE, RMSE and R-SQ vs No. of components for TRAINING dataset, with 10-fold repeated cross validation",
+       subtitle = "Predicting Fat Content: Optimal number of components is 18.") +
+ facet_grid(.metric ~.) +
+  theme_few() +
+  theme(legend.position = "none")
+
+# Update model and workflow:
+
+updated_pls_fat_model <-   plsmod::pls(num_comp = 18) %>% 
+  set_mode("regression") %>% 
+  set_engine("mixOmics")
+
+updated_pls_fat_workflow <- pls_fat_workflow %>% 
+  update_model(updated_pls_fat_model)
+
+pls_fat_fit <- updated_pls_fat_workflow %>% 
+  fit(data = meat_training)
+
+# Check the most important X variables for the updated Water Model:
+
+tidy_pls_fat <- pls_fat_fit %>% 
+  pull_workflow_fit() %>% 
+  tidy()
+
+# Variable importance
+
+tidy_pls_fat %>% 
+  filter(term != "Y",
+         component == c(1:18)) %>%
+  group_by(component) %>% 
+  slice_max(abs(value), n = 20) %>% 
+  ungroup() %>% 
+  ggplot(aes(value, fct_reorder(term, value), fill = factor(component))) +
+  geom_col(show.legend = F) +
+  facet_wrap( ~ component, scales = "free_y") +
+  labs( y = NULL) +
+  theme_few()
+
+# Assess
+
+pls_fat_fit %>% 
+  predict(new_data = meat_training) %>% 
+  mutate(truth = meat_training$fat) %>% 
+  ggplot(aes(truth, .pred)) +
+  geom_point() +
+  geom_abline() +
+  labs(title = "Actual vs Predicted for TRAINING dataset",
+       x = "Actual Fat Content",
+       y = "Predicted Fat Content") +
+  theme_few()
+
+# for TEST dataset
+  
+pls_fat_fit %>% 
+  predict(new_data = meat_testing) %>% 
+  mutate(truth = meat_testing$fat) %>% 
+  ggplot(aes(truth, .pred)) +
+  geom_point() +
+  geom_abline() +
+  labs(title = "Actual vs Predicted for TEST dataset",
+       x = "Actual Fat Content",
+       y = "Predicted Fat Content") +
+  theme_few()
+
+
+# assessing model on test data
+updated_pls_fat_workflow %>% 
+  last_fit(meat_split) %>% 
+  collect_metrics()
+```
+
+Fat content prediction is less accurate for samples with higher fat content. 
+
+### To predict fat content for future data:
+
+pls_fat_fit %>% predict(trial_data), where trial_data has the NIR spectrum. 
+
+# PLS 1 modelling for protein
+
+```{r}
+
+meat_reciped_protein_pls1 <- recipe(protein ~., data = meats) %>%
+  update_role(water, fat, new_role = "other_y") %>% 
+  step_center(all_predictors())
+
+
+pls_protein_model <- plsmod::pls(num_comp = tune()) %>% 
+  set_mode("regression") %>% # can be either classification or regression
+  set_engine("mixOmics") 
+
+pls_protein_workflow <- workflow() %>% 
+  add_recipe(meat_reciped_protein_pls1) %>% 
+  add_model(pls_protein_model)
+
+tuned_pls1_protein_results <- pls_protein_workflow %>% 
+  tune_grid(
+    resamples = folds_pls1,
+    grid = pls_1_grid,
+    metrics = metric_set(rmse, rsq, mae)
+  )
+
+# model results
+
+protein_model_results <- tuned_pls1_protein_results %>% 
+  collect_metrics()
+
+protein_model_results
+
+# best model
+
+tuned_pls1_protein_results %>% 
+  select_best(metric = "rmse") # num_comp = 14
+
+tuned_pls1_protein_results %>% 
+  select_best(metric = "rsq") # num_comp = 14
+
+tuned_pls1_protein_results %>% 
+  select_best(metric = "mae") # num_comp = 15
+
+# visualize
+tuned_pls1_protein_results %>% 
+  collect_metrics() %>% 
+  ggplot(aes(num_comp, mean, col = .metric)) +
+  geom_point() +
+  geom_line() +
+  scale_x_continuous(n.breaks = 20) +
+  labs(x = "Number of components",
+       y = "Indicator",
+       title = "Plot of MAE, RMSE and R-SQ vs No. of components for TRAINING dataset, with 10-fold repeated cross validation",
+       subtitle = "Predicting protein Content: Optimal number of components is 14.") +
+ facet_grid(.metric ~.) +
+  theme_few() +
+  theme(legend.position = "none")
+
+# Update model and workflow:
+
+updated_pls_protein_model <-   plsmod::pls(num_comp = 14) %>% 
+  set_mode("regression") %>% 
+  set_engine("mixOmics")
+
+updated_pls_protein_workflow <- pls_protein_workflow %>% 
+  update_model(updated_pls_protein_model)
+
+pls_protein_fit <- updated_pls_protein_workflow %>% 
+  fit(data = meat_training)
+
+# Check the most important X variables for the updated Water Model:
+
+tidy_pls_protein <- pls_protein_fit %>% 
+  pull_workflow_fit() %>% 
+  tidy()
+
+# Variable importance
+
+tidy_pls_protein %>% 
+  filter(term != "Y",
+         component == c(1:14)) %>%
+  group_by(component) %>% 
+  slice_max(abs(value), n = 20) %>% 
+  ungroup() %>% 
+  ggplot(aes(value, fct_reorder(term, value), fill = factor(component))) +
+  geom_col(show.legend = F) +
+  facet_wrap( ~ component, scales = "free_y") +
+  labs( y = NULL) +
+  theme_few()
+
+# Assess
+
+pls_protein_fit %>% 
+  predict(new_data = meat_training) %>% 
+  mutate(truth = meat_training$protein) %>% 
+  ggplot(aes(truth, .pred)) +
+  geom_point() +
+  geom_abline() +
+  labs(title = "Actual vs Predicted for TRAINING dataset",
+       x = "Actual protein Content",
+       y = "Predicted protein Content") +
+  theme_few()
+
+# for TEST dataset
+  
+pls_protein_fit %>% 
+  predict(new_data = meat_testing) %>% 
+  mutate(truth = meat_testing$protein) %>% 
+  ggplot(aes(truth, .pred)) +
+  geom_point() +
+  geom_abline() +
+  labs(title = "Actual vs Predicted for TEST dataset",
+       x = "Actual protein Content",
+       y = "Predicted protein Content") +
+  theme_few()
+
+# assessing model on test data
+updated_pls_protein_workflow %>% 
+  last_fit(meat_split) %>% 
+  collect_metrics()
+
+```
+### To predict protein content for future data:
+
+pls_protein_fit %>% predict(trial_data), where trial_data has the NIR spectrum. 
+
+# Learning pointers
+
+Through this exercise, I learnt:
+
+- how to carry out PCA and PLS regression on NIR data. However, I am not very sure whether to carry out both means-centering and scaling on NIR data or not?
+
+- how to efficiently visualize the number of components for PLS regression by following the steps listed on <https://www.tidymodels.org/learn/models/pls/>
+
+- the difference between PLS 1 and PLS 2, although I think tidymodels cannot handle PLS 2 yet. 
+
+- Initially I tried to carry out PLS regression by visual inspection for optimal number of components so that there will be a tradeoff between over-fitting and bias, but I find that the accuracy is really compromised, so I will stick to the optimal number of components by looking at the three different metrics and choosing from there.
+
+I think this is a good practice for real-life datasets, but I would probably need to practice more on other datasets to get the hang of PLS regression. It would also be good practice to work on comparison of different models on test dataset.
+
+# References
+
+<https://mixomicsteam.github.io/Bookdown/pls.html>
+<https://www.tidymodels.org/learn/models/pls/>
+<https://www.tmwr.org/resampling.html>
+<https://rsample.tidymodels.org/articles/Working_with_rsets.html>
+<https://conf20-intro-ml.netlify.app/slides/07-cv.html#1>
+<https://www.sciencedirect.com/science/article/pii/S1878535214000343>
+<https://stackoverflow.com/questions/64582463/how-do-i-specify-a-pls-model-in-tidy-models>
+<https://github.com/tidymodels/workflows/issues/37>
+
+
+
+
+
