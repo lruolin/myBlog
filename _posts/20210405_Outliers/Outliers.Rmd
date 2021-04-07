@@ -1,0 +1,306 @@
+---
+title: "Analytical Chemistry - Comparing Mean, Variance and Detecting Outliers"
+description: |
+  Using Statistical Tests in Analytical Chemistry
+author:
+  - name: lruolin
+date: 04-05-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Background
+
+I was looking at the titration results for our existing titration method today. Our Quality colleagues wanted to minimise variability in lab measurements for a certain analyte, and there was a newly developed method with improved sample preparation steps developed by the lab in another site. We decided to carry out a study locally to check on the variability for the existing method, and also to compare with the improved method.
+
+My two interns gave me a series of 5-6 readings done by each of them, and in total I was looking at 11 readings. Some questions I had were:
+
+- Was there any difference in the readings done by the two interns?
+- Were the readings different from the true value?
+- One of the readings look quite low, was that an outlier?
+- At a later stage, I would want to compare the existing method with the new method. What metrics should I be looking at?
+
+How am I to find out the answers in a statistically sound manner?
+
+# Loading packages
+
+```{r}
+library(pacman)
+p_load(tidyverse, outliers, ggthemes, ggstatsplot, ggpubr, car)
+```
+
+
+# Data:
+
+As I can't put the company data up online, let me use the various worked examples I found on: <http://dpuadweb.depauw.edu/harvey_web/eTextProject/pdfFiles/Chapter14.pdf>. 
+
+All data were sourced from the link above. 
+
+# Comparing Sulfanilamide analysis results done by four different analysts
+
+The data below shows the determination of the percentage purity of a sulfanilamide preparation by four analysts:
+
+```{r}
+a <- c(94.09, 94.64, 95.08, 94.54, 95.38, 93.62)
+b <- c(99.55, 98.24, 101.1, 100.4, 100.1, NA)
+c <- c(95.14, 94.62, 95.28, 94.59, 94.24, NA)
+d <- c(93.88, 94.23, 96.05, 93.89, 94.95, 95.49)
+
+results <- cbind(a,b,c,d) %>% 
+  as_tibble()
+
+glimpse(results)
+```
+
+Let's reshape the data:
+
+```{r}
+reshaped_data <- results %>% 
+  pivot_longer(everything(),
+               names_to = "analyst",
+               values_to = "readings") %>% 
+  mutate(analyst = factor(analyst)) # factor instead of character
+
+glimpse(reshaped_data)
+```
+
+Let's look at the mean and standard deviation for results for each analyst:
+
+```{r}
+reshaped_data %>% 
+  group_by(analyst) %>% 
+  summarise(mean = round(mean(readings, na.rm = T), 3),
+            sd = round(sd(readings, na.rm = T), 3)) # na.rm for working with missing data
+
+reshaped_data %>% 
+  group_by(analyst) %>% 
+  summarise(mean = round(mean(readings, na.rm = T), 3)) %>% 
+  ggplot(aes(x = analyst, y = mean, label = mean)) +
+  geom_col(fill = "deepskyblue4") +
+  geom_text(vjust = -0.2) +
+  labs(title = "% Purity of a Sulfanilamide Preparation by Four Analysts",
+       x = "Analyst",
+       y = "Mean of replicates",
+       caption = "Source: http://dpuadweb.depauw.edu/harvey_web/eTextProject/pdfFiles/Chapter14.pdf") +
+  ggthemes::theme_few()
+```
+
+Let's test if the results differ among the analysts:
+
+```{r}
+glimpse(reshaped_data)
+
+m1 <- aov(readings ~analyst, data = reshaped_data)
+summary(m1)
+
+```
+
+From the p value of 3.05 x 10^-9, there is a significant difference between the mean values for the analysts. To find out which pair is statistically different, we use the Tukey's Honest Significant Difference method.
+
+```{r}
+
+TukeyHSD(m1, which = "analyst", ordered = F)
+
+```
+
+Let's show the results in a visual manner:
+
+```{r}
+plot(TukeyHSD(m1, which = "analyst", cex.axist = 0.5))
+
+```
+
+The plot above shows that the readings for Analyst B is significantly higher than the other analysts. 
+
+I learnt that there is a package in R that can carry out modelling *and* visualization in 1 step, which is the ggstatsplot package.
+
+```{r}
+ggbetweenstats(
+  data = reshaped_data,
+  x = analyst,
+  y = readings,
+  plot.type = "box", 
+  type = "p", # parametric, non-parametric, robust or bayes
+  title = "% Purity of a Sulfanilamide Preparation by Four Analysts",
+  ggtheme = theme_few()
+)
+```
+
+Different statistical tests were used for this package (Games-Howell instead of Tukey HSD). Games-Howell assumes uneven variance for the data. The plot above also shows the individual data points, which is a good practice. 
+
+# Comparing acid-base titration results done by two analysts
+
+What if I wanted to compare the results of two analysts? In that case, t-test should be used in place of ANOVA.
+
+```{r}
+titration_data <- tribble(
+  ~person_a, ~person_b,
+  86.82,      81.01,
+  87.04,      86.15,
+  86.93,      81.73,
+  87.01,      83.19,
+  86.20,      80.27,
+  87.00,      83.94
+)
+
+titration_data
+
+# reshape the data
+
+titration_reshaped <- titration_data %>% 
+  pivot_longer(cols = everything(),
+               names_to = "analyst",
+               values_to = "readings") %>% 
+  mutate(analyst = factor(analyst))
+
+titration_reshaped
+
+titration_reshaped %>% 
+  group_by(analyst) %>% 
+  summarise(mean = mean(readings),
+           sd = sd(readings))
+
+# to compare the means of results by the two analysts:
+
+t.test(readings ~ analyst, data = titration_reshaped)
+```
+
+The mean titration readings obtained by Person B is significantly higher than that of Person A. 
+
+
+```{r}
+ggbetweenstats(
+  data = titration_reshaped,
+  x = analyst, 
+  y = readings,
+  title = "Comparison of titration results for determining the % w/w of sodium bicarbonate in soda ash."
+)
+```
+
+### Comparing Variance
+
+What if I want to compare the variance? This is useful if I want to check if method B reduces the variability of the measure.
+
+
+```{r}
+# Load data that compares the mass of a coin
+
+mtd_a <- c(3.080, 3.094, 3.107, 3.056, 3.112, 3.174, 3.198)
+mtd_b <- c(3.052, 3.141, 3.083, 3.083, 3.048, NA, NA)
+
+coin_data <- cbind(mtd_a, mtd_b) %>% 
+  as_tibble() %>% 
+  pivot_longer(cols = everything(),
+               names_to = "method",
+               values_to = "mass_g")
+
+glimpse(coin_data)
+
+# computing the mean, standard deviation and variance:
+
+coin_data %>% 
+  group_by(method) %>% 
+  summarise(mean = mean(mass_g, na.rm = T),
+            sd = sd(mass_g, na.rm = T),
+            var = var(mass_g, na.rm = T))
+
+# use F-test to compare the variance (assuming normal distribution)
+
+var.test(mass_g ~ method, data = coin_data, alternative = "two.sided")
+
+shapiro.test(coin_data$mass_g) # p>0.05
+
+bartlett.test(mass_g ~ method, data = coin_data) # for more than two groups
+
+# if distribution is not normally distributed, the Levene test may be used:
+
+car::leveneTest(mass_g ~ method, data = coin_data)  # same as above
+
+
+```
+
+At 95% confidence interval, there is no evidence to suggest that there is a difference in precision between the two methods. 
+
+
+# Comparing replicate readings against true, known value
+
+This example is also from the same chapter cited below, in the Reference section.
+
+A sample is known to have 98.76% sodium bicarbonate. Five replicate measurements were taken, and we want to find out if the analysis is giving inaccurate results.
+
+```{r}
+bicarb <- c(98.71, 98.59, 98.62, 98.44, 98.58)
+mean(bicarb)
+sd(bicarb)
+
+# visualize
+shapiro.test(bicarb) # follows normal distribution
+ggqqplot(bicarb) # Q-Q plot
+
+# boxplot
+ggboxplot(bicarb,
+                  ylab = "readings")
+
+t.test(bicarb, mu = 98.76, alternative = "two.sided")
+
+```
+
+The data suggests that the experimental data is significantly different from the known value, and that there is indeed a source of error when conducting the experiments. 
+
+# Outlier Tests
+
+When there are data-points that appear not to be consistent with the other data points, how do you determine if it is an outlier?
+
+One way is by visualizing using the box-plot, and an outlier is defined as a point outside of the inter-quartile range (1.5 x IQR).
+
+There are some significance tests that can be used to identify outliers, which include the Dixon's Q-Test (not recommended by ISO), the Grubb's Test (can be carried out using the *outliers* package) and the Chauvenet's Criterion. I haven't found a package which I can check for outliers using Chauvenet's Criterion, and will only use the Grubb's test below.
+
+### Grubb's test
+
+The Grubbs test is a test used to detect outliers (assuming normally distributed data). 
+
+Using penny weight dataset shown below, it is of interest to test if a penny with a mass of 2.514g is an outlier datapoint.
+
+```{r}
+pennies <- c(3.067, 3.049, 2.514, 3.048, 3.079, 3.094, 3.109, 3.102)
+
+# Boxplot
+
+shapiro.test(pennies) # not normally distributed (p<0.05), use grubb's test with caveat
+
+# Grubbs test
+grubbs.test(pennies, type = 10, two.sided = T)
+
+
+```
+
+The null hypothesis is that there is no outlier, and the alternative hypothesis is that there is an outlier. In this case, as p<0.05, 2.514 is indeed an outlier datapoint. 
+
+Let us check again using a box-plot visualization:
+
+```{r}
+ggboxplot(pennies) +
+  labs(title = "Using the 1.5IQR rule, 2.514g penny is an outlier datapoint.")
+
+```
+
+
+# Learning Points
+
+- All my questions I had at the beginning were answered in statistically sound manner. I got to revise the t-test, ANOVA, learnt how to carry out modelling and visualization in one step. I also deepened my analytical chemistry results interpretation by knowing whether to compare the mean or to comare the variance when assessing usability of newly developed methods. 
+
+- I learnt a new way to detect for outliers, which is the Grubb's test. However, I am on the lookout for ways to test for outlier using the Chauvenet's Criterion. 
+
+# References
+
+<http://dpuadweb.depauw.edu/harvey_web/eTextProject/pdfFiles/Chapter14.pdf>
+
+<http://www.sthda.com/english/wiki/one-sample-t-test-in-r>
+
+<http://www.sthda.com/english/wiki/f-test-compare-two-variances-in-r>
