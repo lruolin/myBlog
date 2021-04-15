@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 05 Apr 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 14 Apr 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Design of Experiment - Full Factorial</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210414_DOE Full Factorial</link>
+      <description>2ˆk Factorial Design - Which factors matter?</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210414_DOE Full Factorial</guid>
+      <pubDate>Wed, 14 Apr 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210414_DOE Full Factorial/DOE-Full-Factorial_files/figure-html5/unnamed-chunk-4-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Analytical Chemistry - Comparing Mean, Variance and Detecting Outliers</title>
       <dc:creator>lruolin</dc:creator>

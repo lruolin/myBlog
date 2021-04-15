@@ -1,0 +1,258 @@
+---
+title: "Design of Experiment - Full Factorial"
+description: |
+  2ˆk Factorial Design - Which factors matter?
+author:
+  - name: lruolin
+date: 04-14-2021
+bibliography: DOE_FF.bib
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introduction
+
+Design of Experiment (DOE) is something I wished I had the chance to learn in university or at my workplace when I was younger, it would have made me a more effective scientist. I took an "Advance Design of Experiment" course with Singapore Quality Institute (SQI) last year, and had a brief introduction to how DOE works. The instructor was using Minitab for his course, and I want to translate it to something that I can do with R.
+
+Experimental design is important for:
+
+- identifying the factors which may affect the result of an experiment
+- designing the experiment such that the effects of uncontrolled factors are minimised
+- using statistical analysis to evaluate the effects of factors involved
+
+([@miller_statistics_2005])
+
+It is important to define clearly the purpose of the experiment before you can choose the type of experimental design. 
+
+- Screening experiments: There may be many factors involved, and in such cases, it is better to go for fractional factorial designs rather than full factorial designs.
+
+- Characterization experiments: The aim of such experiments is to pinpoint the effect of each factor, and to understand if there are any interactions. This is usually done after screening, and there are only 2-3 factors left for consideration. In such cases, the full factorial design may be used.
+
+- Optimization experiments: After identifying the factors and interactions of factors, it is desired to determine the combination of factor levels that will provide the optimum response. For such cases, one would have to look at response surface methodology.
+
+## DOE approach vs One Variable At a Time Approach
+
+The advantages of using a DOE approach as compared to a OVAT approach are outlined below:[@marini_chemometrics_2013]
+
+- DOE approach gives a global view of the factors, whereas OVAT approach only looks at the effect of each factor locally.
+
+- DOE approach gives a higher quality of information.
+
+- DOE approach is more effective and requires less number of experiments.
+
+- DOE approach takes into account the interactions among the variables, whereas OVAT does not. Interactions means that the outcome is not solely dependent on one variable, and more than one variable would affect the outcome. For example, the best cooking time for a cookie depends on the oven temperature and size of dough. If we only looked at one variable and neglect the other, we are not studying the outcome "with a global perspective". 
+
+
+The full factorial designs are the simplest possible designs, and as a start, I will practice with it first.
+
+# Full Factorial Design (2ˆk)
+
+Full factorial design requires 2ˆk number of experiments, where k refers to the number of variables in the study. As such, it is not practical to look at more than three factors as the number of experiments will exponentially increase. This is suitable for characterization of variables, and is usually done after screening of variables. 
+
+## Workflow:
+
+1. Plan the experiments: define the factors, ranges, number of replicates
+2. Perform the experiments in a randomized manner
+3. Analyse the data by modelling and visualization
+
+## Load packages
+
+```{r}
+library(pacman)
+p_load(tidyverse, AlgDesign, ggfortify, jtools, ggstance, interactions,
+       DoE.base, ggthemes, pid)
+```
+
+## Case study
+
+Let me use the worked example in <https://www.itl.nist.gov/div898/handbook/pri/section3/pri3331.htm>
+
+(Y) Outcome: Product uniformity
+(X) Factors: Pressure (X1), Table Speed (X2), Down force (X3)
+No. of replicates: 2
+
+Total number of runs: 2^3 x 2 = 16 runs.
+
+## Generating the design plan
+
+### AlgDesign package 
+
+The gen.factorial() function is easy to understand, but does not allow for creating replicates and randomizing the order.
+
+```{r}
+# from AlgDesign package
+rep_1 <- gen.factorial(c(2,2,2), # number of levels for the variables
+              nVars = 3, # number of variables, in this case it is 3
+              varNames = c("X1_pressure", "X2_table_speed", "X3_down_force"))
+
+rep_1
+
+# to create two sets of replicates
+rep_both <- rbind(rep_1, rep_1) 
+
+rep_both
+
+# to randomize the order of experiments, use the function: sample()
+
+glimpse(rep_both)
+
+# randomize all rows in dataframe and rename created column as "order"
+rep_both$order <- sample(1:16) 
+
+rep_both <- rep_both %>% 
+  as_tibble() %>% 
+  dplyr::select(order, everything())
+
+glimpse(rep_both)
+
+```
+
+## Adding outcome to the dataframe
+
+```{r}
+rep_both$outcome <- c(-3,0,-1,2,-1,2,1,6,
+                      -1,-1,0,3,0,1,1,5)
+
+rep_both
+```
+## Visualization
+
+```{r}
+glimpse(rep_both)
+
+# boxplot for all data
+
+rep_both %>% 
+  dplyr::select(-order) %>% 
+  pivot_longer(cols = c(starts_with("X")),
+               names_to = "X_variables",
+               values_to = "X_values") %>% 
+  ggplot(aes(x = factor(X_values), y = outcome)) +
+  geom_boxplot(aes(x = factor(X_values), y = outcome, fill = X_variables)) +
+  scale_fill_few() +
+  geom_point(col = "darkgrey", alpha = 0.5) +
+  facet_grid(~ X_variables) +
+  labs(x = "",
+       title = "Plot of the main effects showing the outcome for each factor.",
+       caption = "Source: http://www.itl.nist.gov/div898/handbook/") +
+  theme_few() +
+  theme(legend.position = "none")
+
+```
+
+
+
+## Modelling - Multiple Linear Regression
+
+```{r}
+
+glimpse(rep_both)
+
+model <- lm(outcome ~ X1_pressure * X2_table_speed * X3_down_force,
+            data = rep_both)
+
+# checking diagnostic plots for normality using ggfortify
+
+autoplot(model)
+
+```
+
+Taken from: <http://www.sthda.com/english/articles/39-regression-model-diagnostics/161-linear-regression-assumptions-and-diagnostics-in-r-essentials/>
+
+The diagnostic plots show residuals in four different ways:
+
+- Residuals vs Fitted. Used to check the linear relationship assumptions. A horizontal line, without distinct patterns is an indication for a linear relationship, what is good.
+
+- Normal Q-Q. Used to examine whether the residuals are normally distributed. It’s good if residuals points follow the straight dashed line.
+
+- Scale-Location (or Spread-Location). Used to check the homogeneity of variance of the residuals (homoscedasticity). Horizontal line with equally spread points is a good indication of homoscedasticity. This is not the case in our example, where we have a heteroscedasticity problem.
+
+- Residuals vs Leverage. Used to identify influential cases, that is extreme values that might influence the regression results when included or excluded from the analysis.
+
+### Interpretation of model results
+
+```{r}
+summary(model)
+```
+
+Another way to look at model information using jtools package
+
+```{r}
+summ(model)
+```
+
+
+Key points to take note of:
+
+- The adjusted R-squared value is 0.8853, meaning 88.5% of the variability in outcome is explained by the X variables.
+
+- All X variables are significant. This should be the case because for full factorial design, we only want to concentrate on characterization of important variables. If this was a screening exercise, variables that are not significant would not be important variables in the experiment. 
+
+- The estimate shows the effect size. When there is an increase in X1, X2, X3, there will be an increase in Y. When X1 increases by 1 unit, Y will increase by 1.375 unit. When X2 increases by 1 unit, Y will increase by 1.25 unit. When X3 increases by 1 unit, Y also increases by 1 unit.
+
+- The interaction term between X1_pressure and X2_table speed is also significant. 
+
+- A better way to visualize is to look at the main effect plot and interaction plot. 
+
+## Main Effect Plot
+
+```{r}
+plot_summs(model)
+```
+
+Another way of looking at model coefficients using the pid package:
+
+```{r}
+pid::paretoPlot(model)
+```
+
+## Probing interactions
+
+```{r}
+
+i_1 <- interact_plot(model,
+              pred = X1_pressure,
+              modx = X2_table_speed)
+
+i_2 <- interact_plot(model,
+              pred = X1_pressure,
+              modx = X3_down_force)
+
+i_3 <- interact_plot(model,
+              pred = X2_table_speed,
+              modx = X3_down_force)
+
+i_1
+
+i_2
+
+i_3
+```
+
+In this case, there is interaction, but not within the selected range for X1_pressure. When there is an increase in X1 and X2, Y will also increase. 
+
+There is no interaction between X1 and X3, and X2 and X3. 
+
+# Concluding remarks
+
+This exercise allowed me to go through the workflow for planning and analysing the results of a simple full factorial DOE. There are many packages in the R ecosystem that allows for DOE design planning, results interpretation and visualization, and it was fun trying to explore the different functions in various packages.
+
+As a next step, I will try to find a more food science related example to work on, ideally one in which there are interactions between factors. 
+
+
+
+# References
+
+<https://www.r-bloggers.com/2009/12/design-of-experiments-%E2%80%93-full-factorial-designs/>
+
+<https://www.itl.nist.gov/div898/handbook/pri/section3/pri3331.htm>
+
+<https://www.itl.nist.gov/div898/handbook/pri/section4/pri471.htm>
+
