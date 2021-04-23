@@ -1,0 +1,221 @@
+---
+title: "Design of Experiment - Full Factorial"
+description: |
+  2ˆk Factorial Design - Another Example
+author:
+  - name: lruolin
+date: 04-21-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Source
+
+Previously, I worked on a simple example for full factorial design. Let me try to replicate the results on the application of full factorial design from the link:
+<http://pen.ius.edu.ba/index.php/pen/article/viewFile/145/175>
+
+# Packages
+
+```{r}
+library(pacman)
+p_load(tidyverse, AlgDesign, ggthemes, ggfortify, DoE.base, FrF2)
+```
+
+
+# Background
+
+In this example DOE is applied on *injection-molding process* with the aim of improving product quality such as excessive flash. 
+
+Factors considered as affecting for flash formation are: 
+
+- pack pressure (A), 
+- pack time (B), 
+- injection speed (C), 
+- screw RPM (D), 
+
+while clamping pressure, injection pressure and melting temperature were under control. Each factor affecting flash formation is considered at low and high levels. 
+
+# Generating the design matrix
+
+```{r}
+rep_1 <- gen.factorial(c(2,2,2, 2), # number of levels for the variables
+              nVars = 4, # number of variables, in this case it is 3
+              varNames = c("X1_pack_pressure", "X2_table_speed", 
+                           "X3_inject_speed", "X4_screw_rpm"))
+
+rep_1
+```
+The design matrix may be exported out to excel for keying in of results (Y: outcome = flash size in mm, a measure of flash formation)
+
+After carrying out the experiments in randomized order, the outcome may be keyed into the same excel file and imported back into Rstudio for analysis. 
+
+Otherwise, the results can also be keyed in manually.
+
+```{r}
+
+# Adding in of outcome, creating a new column called "Y_flash" 
+
+rep_1$Y_flash <- c(0.22,
+                   6.18,
+                   0,
+                   5.91,
+                   6.6,
+                   6.05,
+                   6.76,
+                   8.65,
+                   0.46,
+                   5.06,
+                   0.55,
+                   4.84,
+                   11.55,
+                   9.9,
+                   9.9,
+                   9.9)
+
+rep_1
+```
+
+# Visualization
+
+Previously, I created the main effect boxplot using ggplot2. The ggplot2 packages gives me more freedom in terms of customization, and also shows the confidence intervals. The plot below would allow me to see more clearly what is the effect of increasing each X variable independently on the outcome. 
+
+```{r}
+rep_1 %>% 
+  pivot_longer(cols = c(starts_with("X")),
+               names_to = "X_variables",
+               values_to = "X_values") %>% 
+  ggplot(aes(x = factor(X_values), y = Y_flash)) +
+  geom_boxplot(aes(x = factor(X_values), y = Y_flash, fill = X_variables)) +
+  scale_fill_few() +
+  geom_point(col = "darkgrey", alpha = 0.8) +
+  facet_grid(~ X_variables) +
+  labs(x = "",
+       title = "Plot of the main effects showing the outcome for each factor.",
+       caption = "http://pen.ius.edu.ba/index.php/pen/article/viewFile/145/175") +
+  theme_few() +
+  theme(legend.position = "none")
+```
+An increase in X1, X3 and X4 will lead to an increase in Y. The greatest increase in Y is due to an increase in X3. 
+
+There is another package, FrF2, which allows me to create the main effect plot and interactions plot easily. However, the input would be a linear model, so let me build the model first. 
+
+
+# Modelling
+
+
+```{r}
+model_interactions <- lm(Y_flash ~ (.)^4, data = rep_1) # use (.) to indicate all X variables
+
+summary(model_interactions) 
+```
+
+There is a lot of NA in the model summary. That is because there is not enough degree of freedom to calculate the p-value. However, we can still use the estimates to plot the Pareto chart. The Pareto chart shows the absolute values of the estimates, from the largest effect to the smallest effect, so that you can pinpoint the factor that has the greatest effect on the outcome at a look.
+
+Let's visualize:
+
+```{r}
+pid::paretoPlot(model_interactions) +
+  theme(legend.position = "bottom")
+```
+From above, X3 has the greatest effect on outcome, so it is critical that X3 is low so that Y will be minimised. 
+
+The Pareto chart shows the descending order of factors with an effect on the outcome. How do we tell if the factors are significant?
+
+An informal way to find out is to use the half normal probability plot. Factors that are significant deviate from the straight line and will be labellled out. 
+
+```{r}
+glimpse(rep_1)
+
+DoE.base::halfnormal(model_interactions) # DoE.base package
+```
+
+From the plot above, X1, X3, X1X3 and X3X4 showed up as significant terms.  
+
+```{r}
+FrF2::MEPlot(model_interactions)
+```
+X2 is not a significant variable in affecting flash size, and can be removed from the model. 
+
+```{r}
+model_three_factors <- lm(Y_flash ~ X1_pack_pressure * X3_inject_speed * X4_screw_rpm, 
+                          data = rep_1)
+
+gvlma::gvlma(model_three_factors) # meets assumptions
+
+DoE.base::halfnormal(model_three_factors) # this is an informal way, and we should rely on the linear regression summary to confirm which are the significant factors. 
+
+
+summary(model_three_factors)
+```
+
+```{r}
+pid::paretoPlot(model_three_factors) # X3 has the greatest effect on Y
+
+FrF2::MEPlot(model_three_factors) # X3 has the greatest effect on outcome
+
+```
+The three main effects that are positive are X1, X3 and X4; indicating that the molding process should be performed at low level for these three variables to minimize flash size (ie have better product quality). 
+
+Let's visualize the interactions
+
+```{r}
+with(rep_1, {
+interaction.plot(x.factor     = X1_pack_pressure,
+                 trace.factor = X3_inject_speed,
+                 response     = Y_flash,
+                 fun = mean,
+                 type="b",
+                 col=c("black","red","green"),  ### Colors for levels of trace var.
+                 pch=c(19, 17, 15),             ### Symbols for levels of trace var.
+                 fixed=TRUE,                    ### Order by factor order in data
+                 leg.bty = "o")
+})
+
+with(rep_1, {
+interaction.plot(x.factor     = X3_inject_speed,
+                 trace.factor = X4_screw_rpm,
+                 response     = Y_flash,
+                 fun = mean,
+                 type="b",
+                 col=c("black","red","green"),  ### Colors for levels of trace var.
+                 pch=c(19, 17, 15),             ### Symbols for levels of trace var.
+                 fixed=TRUE,                    ### Order by factor order in data
+                 leg.bty = "o")
+})
+```
+
+As mentioned earlier, the FrF2 package allows me to visualize the main effect and interactions easily,
+
+
+```{r}
+FrF2::IAPlot(model_three_factors)
+```
+
+
+
+Interaction effects occur when the effect of one variable depends on the value of another variable. It is important to take into interactions when doing linear regression. From the model summary above, X1X3 and X3X4 are significant interaction terms. This means that the outcome, Y, depends on *both* X1 and X3, and X3 and X4, and not just individual factors alone. Y will increase when X3 is increased, but will increase even higher if X4 is also increased.
+
+# Learning points
+
+There are many packages that can be used for DOE in R. I used FrF2 functions this time to create main effect plots and interaction plots. The workflow is more or less similar to the previous post, and I learnt how half normal probability plots can be used as an informal way to gauge which factors are significant. 
+
+
+# References
+
+<http://pen.ius.edu.ba/index.php/pen/article/viewFile/145/175>
+
+
+
+
+
+
+
+
+
