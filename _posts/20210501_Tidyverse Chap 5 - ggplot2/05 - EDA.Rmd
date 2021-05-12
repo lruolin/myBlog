@@ -1,0 +1,418 @@
+---
+title: "Exploratory Data Analysis"
+description: |
+  R4DS 05 - Exploratory Data Analysis
+author:
+  - name: lruolin
+date: 05-01-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 05: Exploratory Data Analysis
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. The main packages used are dplyr and ggplot2. 
+
+```{r}
+library(tidyverse)
+```
+
+
+# EDA
+
+EDA is carried out to generate questions about your data, to search for answers by visualizing, transforming and modelling your data, and to use the insights to further generate new questions.
+
+## Visualizing variation
+
+Visualizing distributions: Categorical - Use Bar Chart
+
+```{r}
+count_cut <- diamonds %>% 
+  count(cut) %>% 
+  arrange(desc(n))
+
+count_cut
+
+diamonds %>% 
+  ggplot(aes(x = cut)) +
+  geom_bar(fill = "coral")  +
+  theme_classic()
+```
+
+
+Visualizing distributions: Numerical - Histogram
+
+```{r}
+diamonds %>% 
+  count(cut_width(carat, 0.5))  # cut_width() makes groups of width width.
+
+diamonds %>% 
+  ggplot(aes(x = carat)) +
+  geom_histogram(binwidth = 0.5, fill = "deepskyblue4", col = "black") +
+  labs(title = "Histogram of carat size distribution in diamonds dataset",
+       subtitle = "Most of the diamonds have a carat value between 0.25 and 0.75") +
+  scale_x_continuous(n.breaks =  20) +
+  theme_classic()
+```
+A histogram divides the x-axis into equally spaced bins and then uses the height of each bar to display the number of observations that fall in each bin. 
+
+To overlay multiple histograms:
+
+```{r}
+diamonds %>% 
+  ggplot(aes(x = carat, color = cut)) +
+  geom_freqpoly(binwidth = 0.1) +
+  theme_classic()
+```
+
+
+Typical Values
+
+```{r}
+diamonds %>% 
+  filter(carat<3) %>% 
+  ggplot(aes(x = carat)) +
+  geom_histogram(binwidth = 0.01, col = "coral") +
+  scale_x_continuous(n.breaks = 20) +
+  labs(title = "Histogram of diamond sizes < 3 carats.",
+        subtitle = "Most diamonds are smaller than 1 carat") +
+  theme_classic()
+```
+
+Unusual Values
+
+```{r}
+diamonds %>% 
+  ggplot(aes(x = y)) +
+  geom_histogram(aes(x = y), binwidth = 0.5, fill = "deepskyblue3") +
+  labs(title = "Histogram for Diamond Carat Sizes",
+       subtitle = "Using coord_cartesian() to reveal outlier values that might otherwise not be obvious.") +
+  scale_x_continuous(n.breaks = 20) +
+  coord_cartesian(ylim = c(0, 20)) +
+  theme_classic()
+```
+### Exercise
+
+Explore the distribution of each of the x, y, z variables in diamonds dataset. 
+
+```{r}
+glimpse(diamonds)
+
+diamonds %>% 
+  select(x,y,z) %>% 
+  summary() # summary statistics
+
+# geom_histogram
+
+hist_x <- diamonds %>% 
+  select(x) %>% 
+  ggplot(aes(x = x)) +
+  geom_histogram(binwidth = 0.01, fill = "deepskyblue4") +
+  labs(title = "Histogram for x",
+       subtitle = "x has a multimodal distribution and is of the range of 0 - 10.74") +
+  scale_x_continuous(n.breaks = 30) +
+  theme_classic()
+
+
+hist_y <- diamonds %>% 
+  select(y) %>% 
+  ggplot(aes(x = y)) +
+  geom_histogram(binwidth = 0.01, fill = "deepskyblue4") +
+  labs(title = "Histogram for y",
+       subtitle = "y has a multimodal distribution and is of the range of 0 - 58.90. There seem to be outliers in this variable.") +
+  scale_x_continuous(n.breaks = 30) +
+  theme_classic()
+
+(hist_z <- diamonds %>% 
+  select(z) %>% 
+  ggplot(aes(x = z)) +
+  geom_histogram(binwidth = 0.01, fill = "deepskyblue4") +
+  labs(title = "Histogram for z",
+       subtitle = "z has a multimodal distribution and is of the range of 0 - 31.8 There seem to be outliers in this variable.") +
+  scale_x_continuous(n.breaks = 30) +
+  theme_classic())
+
+gridExtra::grid.arrange(hist_x, hist_y, hist_z, nrow = 3)
+
+```
+x is likely to be length, y is likely to be breadth and z is likely to be depth.
+
+
+```{r}
+diamonds %>% 
+  ggplot(aes(x, y)) +
+  geom_point() +
+  labs(title = "Scatterplot of x vs y") +
+  theme_classic()
+
+diamonds %>% 
+  ggplot(aes(x, z)) +
+  geom_point() +
+  labs(title = "Scatterplot of x vs z") +
+  theme_classic()
+```
+The plots above make it easier to detect outliers in relation to other variables.
+
+
+Explore the distribution of price
+
+```{r}
+diamonds %>% 
+  select(price) %>% 
+  summary()
+
+diamonds %>% 
+  select(price) %>% 
+  ggplot(aes(x = price)) +
+  geom_histogram(binwidth = 5)
+
+diamonds %>% 
+  select(price) %>% 
+  ggplot(aes(x = price)) +
+  geom_histogram(binwidth = 5) +
+  labs(title = "Histogram for price distribution of diamonds",
+       subtitle = "There is a strange gap between $1000 and $2000") +
+  coord_cartesian(xlim = c(0, 3000)) +
+  theme_classic()
+```
+
+How many diamonds are 0.99 carat?
+How many are 1 carat?
+
+```{r}
+diamonds %>% 
+  filter(carat == 0.99) %>% 
+  count() # 23
+
+diamonds %>% 
+  filter(carat == 1) %>% 
+  count()
+
+# This could be due to the price differences.
+
+
+```
+
+Missing Values
+
+It is recommended to replace outlier values with missing values using mutate() and ifelse().
+
+```{r}
+diamonds_b <- diamonds %>% 
+  mutate(y_edited = ifelse(y<3 | y >20, NA, y))
+
+diamonds_b %>% 
+  ggplot(aes(x, y_edited)) +
+  geom_point(na.rm = T)
+
+```
+
+
+## Visualizing Covariation (behaviour between variables)
+
+Covariation is the tendency for the values of two or more variables to vary together in a related way. The best way to spot covariation is the visualize the relationship between two or more variables.
+
+
+(A) Categorical and Continuous Variable: Boxplot
+
+```{r}
+diamonds %>% 
+  ggplot(aes(x = fct_rev(cut), y = price)) +
+  geom_boxplot() +
+  labs(title = "How price varies for different cuts",
+       subtitle = "Ideal cuts cost lower than fair cuts",
+       x = "Cut",
+       y = "Price") +
+  theme_classic() +
+  coord_flip()
+```
+
+## Exercise
+
+Improve the visualization for departure times of cancelled vs non-cancelled flights
+
+```{r}
+library(nycflights13)
+
+glimpse(flights)
+
+flights %>% 
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min/60
+  ) %>% 
+  ggplot(aes(x = cancelled, y = sched_dep_time)) +
+  geom_boxplot() +
+  labs(title = "Departure times of cancelled vs non-cancelled flights") +
+  theme_classic()
+```
+
+Which variable in the diamonds dataset is the most important for predicting the price of a diamond?
+How is that variable correlated with cut? 
+Why does the combination of those two relationships lead to lower quality diamonds being more expensive?
+
+```{r}
+glimpse(diamonds)
+
+# To investigate the relationship between price and carat
+
+diamonds %>% 
+  select(carat, price) %>% 
+  ggplot(aes(carat, price)) +
+  labs(title = "Relationship between price and carat of diamonds",
+       subtitle = "The larger the diamond, the higher the price of diamonds") +
+  geom_point() +
+  theme_classic()
+```
+```{r}
+# To investigate the relationship between cut and price
+
+diamonds %>% 
+  select(cut, price) %>% 
+  ggplot(aes(x = cut, y = price)) +
+  geom_boxplot(notch = T) +
+  labs(title = "Relationship between cut and price of diamonds",
+       subtitle = "There is a weak negative relationship between cut and price.") +
+  theme_classic()
+```
+
+```{r}
+# Relationship between color and price
+
+diamonds %>% 
+  select(color, price) %>% 
+  ggplot(aes(x = fct_rev(color), y = price)) +
+  geom_boxplot(notch = T) +
+  labs(title = "Relationship between color and price of diamonds",
+       subtitle = "There is a weak negative relationship between cut and price.",
+       caption = "The scale of color goes from D (best) to J (worst)",
+       x = "Color",
+       y = "Price") +
+  theme_classic()
+```
+
+```{r}
+# Relationship between price and clarity
+
+diamonds %>% 
+  select(clarity, price) %>% 
+  ggplot(aes(x = clarity, y = price)) +
+  geom_boxplot(notch = T) +
+  labs(title = "Relationship between clarity and price of diamonds",
+       subtitle = "There is a weak negative relationship between clarity and price.",
+       caption = "The scale of clarity goes from I1 (worst) to IF (best)",
+       x = "Clarity",
+       y = "Price") +
+  theme_classic()
+```
+
+Carat is the best predictor of diamond prices. 
+
+```{r}
+#Comparing carat and cut
+
+diamonds %>% 
+  select(carat, cut) %>% 
+  ggplot(aes(carat, cut)) +
+  geom_boxplot() +
+  labs(title = "Relationship between cut and carat size",
+       subtitle = "Bigger diamonds may not be of the best cut.") +
+  theme_classic()
+```
+
+One problem with boxplots is that they were developed in an era of much smaller datasets and tend to display a prohibitively large number of "outlier values". One approach to remedy this problem is the letter value plot. 
+
+```{r}
+# install.packages("lvplot")
+library(lvplot)
+
+diamonds %>% 
+  ggplot(aes(cut, price)) +
+  geom_lv(col = "deepskyblue4") +
+  theme_classic()
+```
+
+The letter value plots give more insights on how the data is distributed beyond the quantiles. Larger boxes mean that a larger proportion of the data falls within the boxed area. 
+
+-
+Compare and contrast geom_violin() with a faceted geom_histogram() or a colored geom_freqpoly().
+
+```{r}
+diamonds %>% 
+  ggplot(aes(price)) +
+  geom_histogram(col = "black", fill = "deepskyblue4") +
+  labs(title = "Histogram showing price distribution of different cuts of diamonds",
+       subtitle = "Histograms are good for comparing the overall shape of distributions across categories") +
+  facet_wrap( ~cut, ncol = 1, scales = "free_y") +
+  theme_classic()
+
+diamonds %>% 
+  ggplot(aes(cut, price)) +
+  geom_violin(fill = "orange") +
+  labs(title = "Violin plot showing distribution of prices for different cuts of diamonds",
+       subtitle = "Violin plot shows the full distribution of data, and are useful if the distribution is multimodal.") +
+  theme_classic() +
+  coord_flip()
+```
+
+(B) Two Categorical Variables
+
+To visualize the covariation between categorical variables, dplyr can be used to compute the count, and then visualize using geom_tile()
+
+```{r}
+diamonds %>% 
+  count(color, cut)
+
+# visualize
+
+diamonds %>% 
+  count(color, cut) %>%  
+  ggplot(aes(x = color, y = cut)) + # use the variable with longer labels on y axis
+  geom_tile(aes(fill = n)) +
+  scale_fill_gradient(low = "white", high = "deepskyblue4") # manual 
+```
+
+To show the distribution of cut within color, the proportion of each cut within a color can be calculated.
+
+```{r}
+diamonds %>% 
+  count(color, cut) %>% 
+  group_by(cut) %>% 
+  mutate(proportion = n/sum(n)) %>% 
+  ggplot(aes(color, cut)) +
+  geom_tile(aes(fill = proportion)) +
+  scale_fill_gradient(low = "white", high = "deepskyblue4") # manual 
+```
+
+
+(C) Two continuous variables
+
+A scatter plot may be used to visualize the co-variation between two variables. 
+
+If the dataset is too big, one can bin one continuous variable such that it acts like a categorical variable, and then use boxplot or frequency polygon to visualize. 
+
+
+
+
+
+
+
+
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+
+<https://towardsdatascience.com/letter-value-plot-the-easy-to-understand-boxplot-for-large-datasets-12d6c1279c97>

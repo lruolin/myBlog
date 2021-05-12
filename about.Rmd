@@ -24,4 +24,4 @@ What I would like to achieve for this blog, is a self-practice corner to compile
 - Design of experiment: Full factorial design, half factorial design, optimisation. This could be applied to design of chemistry experiments, or even sensory analysis.
 - Modelling: What is the general workflow for different machine learning techniques, PCA, PLS, Clustering, Multivariate linear regression, Discriminant analysis. 
 
-Most of the statistical software are expensive and not readily available to resource-tight individuals in companies or students. R and Python are open-source software with powerful packages and allows customization of graphs, but requires a certain level of coding knowledge. This will be the area I want to specialize in: Chemometric in R.
+Most of the statistical software are expensive and not readily available to resource-tight individuals in companies or students. R and Python are open-source software with powerful packages and allows customization of graphs, but requires a certain level of coding knowledge. This will be the area I want to specialize in: Chemometrics with R.

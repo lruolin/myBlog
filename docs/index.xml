@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 28 Apr 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 01 May 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Exploratory Data Analysis</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210501_Tidyverse Chap 5 - ggplot2</link>
+      <description>R4DS 05 - Exploratory Data Analysis</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210501_Tidyverse Chap 5 - ggplot2</guid>
+      <pubDate>Sat, 01 May 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210501_Tidyverse Chap 5 - ggplot2/05---EDA_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Data transformation</title>
       <dc:creator>lruolin</dc:creator>
