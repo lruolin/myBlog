@@ -1,0 +1,158 @@
+---
+title: "Tibbles"
+description: |
+  R4DS 07 - Tibbles with tibbles
+author:
+  - name: lruolin
+date: 05-12-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 07: Tibbles
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. 
+
+```{r}
+library(tidyverse)
+```
+
+To coerce a data frame into a tibble, use the as_tibble() function:
+
+```{r}
+iris # this is a dataframe
+
+as_tibble(iris) # this is a tibble
+```
+To create a tibble:
+
+```{r}
+tibble(
+  x = 1:5,
+  y = 1, # automatically filled down
+  z = x ^2 + y
+)
+```
+
+To create a transposed tibble, use tribble() :
+
+```{r}
+tribble(
+  ~x, ~y, ~z,
+  # -- # -- # -- 
+  "a", 2, 3.6,
+  "b", 1, 8.5
+)
+
+```
+# Exercise:
+
+To check if an object is a tibble:
+
+```{r}
+str(mtcars) # this is a dataframe
+
+is_tibble(mtcars)
+
+is_tibble(diamonds)
+
+is_tibble(iris)
+
+```
+
+Compare and contrast the following operations on a data.frame and equivalent tibble:
+
+```{r}
+df <- data.frame(abc = 1, 
+                 xyz = "a")
+
+df
+
+df$x
+
+df[ , "xyz"]
+
+df[ , c("abc", "xyz")]
+
+
+tbl <- as_tibble(df)
+tbl
+
+tbl[, "xyz"]
+
+
+tbl[ , c("abc", "xyz")]
+
+```
+Practice referring to nonsyntactic names in the following dataframe:
+
+```{r}
+annoying <- tibble(
+  `1` = 1:10,
+  `2` = `1` * 2 + rnorm(length(`1`))
+)
+
+annoying
+
+# Extract the variable called 1:
+
+annoying$`1`
+
+# Plot a scatterplot of 1 vs 2
+
+annoying %>% 
+  ggplot(aes(x = `1`,
+         y = `2`)) +
+  geom_point() +
+  theme_classic()
+
+
+# Create a new column called 3, which is 2 divided by 1
+
+annoying_new <- annoying %>% 
+  mutate(`3` = `2` / `1`) %>% 
+  dplyr::rename(one = `1`,  # need to specify dplyr:: if not will have conflict with plyr
+                two = `2`,
+                three = `3`)
+
+glimpse(annoying_new)
+```
+
+What does tibble::enframe() do?
+
+enframe() converts named atomic vectors or lists to one- or two-column data frames. For a list, the result will be a nested tibble with a column of type list. For unnamed vectors, the natural sequence is used as name column.
+
+```{r}
+enframe(1:3)
+
+enframe(c(a = 5, b = 7))
+
+enframe(list(one = 1, two = 2:3, three = 4:6))
+
+deframe(tibble(a = as.list(1:3)))
+```
+
+What option controls how many additional column names are printed at the foot of a tibble?
+
+```{r}
+
+print(mtcars)
+
+
+print(mtcars, n_extra = 4)
+```
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+

@@ -7,7 +7,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
   <meta name="generator" content="distill" />
-  <link rel="alternate" type="application/rss+xml" href="https://lruolin.github.io/myBlog/index.xml" />
 
   <style type="text/css">
   /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
@@ -86,635 +85,39 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>pRactice corner: My Blog</title>
+  <title>Tibbles</title>
+
+  <meta property="description" itemprop="description" content="R4DS 07 - Tibbles with tibbles"/>
 
 
-
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2021-05-12"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-05-12"/>
+  <meta name="article:author" content="lruolin"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="pRactice corner: My Blog"/>
+  <meta property="og:title" content="Tibbles"/>
   <meta property="og:type" content="article"/>
+  <meta property="og:description" content="R4DS 07 - Tibbles with tibbles"/>
   <meta property="og:locale" content="en_US"/>
-  <meta property="og:site_name" content="pRactice corner"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="pRactice corner: My Blog"/>
+  <meta property="twitter:title" content="Tibbles"/>
+  <meta property="twitter:description" content="R4DS 07 - Tibbles with tibbles"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","site","listing"]}},"value":[{"type":"character","attributes":{},"value":["My Blog"]},{"type":"character","attributes":{},"value":["distill::distill_website"]},{"type":"character","attributes":{},"value":["posts"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Tibbles"]},{"type":"character","attributes":{},"value":["R4DS 07 - Tibbles with tibbles\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["lruolin"]}]}]},{"type":"character","attributes":{},"value":["05-12-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["07---Tibbles_files/figure-html5/unnamed-chunk-7-1.png"]}
+  </script>
   <!--radix_placeholder_navigation_in_header-->
-  <meta name="distill:offset" content=""/>
-
-  <script type="application/javascript">
-
-    window.headroom_prevent_pin = false;
-
-    window.document.addEventListener("DOMContentLoaded", function (event) {
-
-      // initialize headroom for banner
-      var header = $('header').get(0);
-      var headerHeight = header.offsetHeight;
-      var headroom = new Headroom(header, {
-        tolerance: 5,
-        onPin : function() {
-          if (window.headroom_prevent_pin) {
-            window.headroom_prevent_pin = false;
-            headroom.unpin();
-          }
-        }
-      });
-      headroom.init();
-      if(window.location.hash)
-        headroom.unpin();
-      $(header).addClass('headroom--transition');
-
-      // offset scroll location for banner on hash change
-      // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
-      window.addEventListener("hashchange", function(event) {
-        window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
-      });
-
-      // responsive menu
-      $('.distill-site-header').each(function(i, val) {
-        var topnav = $(this);
-        var toggle = topnav.find('.nav-toggle');
-        toggle.on('click', function() {
-          topnav.toggleClass('responsive');
-        });
-      });
-
-      // nav dropdowns
-      $('.nav-dropbtn').click(function(e) {
-        $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
-        $(this).parent().siblings('.nav-dropdown')
-           .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $("body").click(function(e){
-        $('.nav-dropdown-content').removeClass('nav-dropdown-active');
-      });
-      $(".nav-dropdown").click(function(e){
-        e.stopPropagation();
-      });
-    });
-  </script>
-
-  <style type="text/css">
-
-  /* Theme (user-documented overrideables for nav appearance) */
-
-  .distill-site-nav {
-    color: rgba(255, 255, 255, 0.8);
-    background-color: #0F2E3D;
-    font-size: 15px;
-    font-weight: 300;
-  }
-
-  .distill-site-nav a {
-    color: inherit;
-    text-decoration: none;
-  }
-
-  .distill-site-nav a:hover {
-    color: white;
-  }
-
-  @media print {
-    .distill-site-nav {
-      display: none;
-    }
-  }
-
-  .distill-site-header {
-
-  }
-
-  .distill-site-footer {
-
-  }
-
-
-  /* Site Header */
-
-  .distill-site-header {
-    width: 100%;
-    box-sizing: border-box;
-    z-index: 3;
-  }
-
-  .distill-site-header .nav-left {
-    display: inline-block;
-    margin-left: 8px;
-  }
-
-  @media screen and (max-width: 768px) {
-    .distill-site-header .nav-left {
-      margin-left: 0;
-    }
-  }
-
-
-  .distill-site-header .nav-right {
-    float: right;
-    margin-right: 8px;
-  }
-
-  .distill-site-header a,
-  .distill-site-header .title {
-    display: inline-block;
-    text-align: center;
-    padding: 14px 10px 14px 10px;
-  }
-
-  .distill-site-header .title {
-    font-size: 18px;
-    min-width: 150px;
-  }
-
-  .distill-site-header .logo {
-    padding: 0;
-  }
-
-  .distill-site-header .logo img {
-    display: none;
-    max-height: 20px;
-    width: auto;
-    margin-bottom: -4px;
-  }
-
-  .distill-site-header .nav-image img {
-    max-height: 18px;
-    width: auto;
-    display: inline-block;
-    margin-bottom: -3px;
-  }
-
-
-
-  @media screen and (min-width: 1000px) {
-    .distill-site-header .logo img {
-      display: inline-block;
-    }
-    .distill-site-header .nav-left {
-      margin-left: 20px;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 20px;
-    }
-    .distill-site-header .title {
-      padding-left: 12px;
-    }
-  }
-
-
-  .distill-site-header .nav-toggle {
-    display: none;
-  }
-
-  .nav-dropdown {
-    display: inline-block;
-    position: relative;
-  }
-
-  .nav-dropdown .nav-dropbtn {
-    border: none;
-    outline: none;
-    color: rgba(255, 255, 255, 0.8);
-    padding: 16px 10px;
-    background-color: transparent;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: inherit;
-    margin: 0;
-    margin-top: 1px;
-    z-index: 2;
-  }
-
-  .nav-dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: white;
-    min-width: 200px;
-    border: 1px solid rgba(0,0,0,0.15);
-    border-radius: 4px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
-    z-index: 1;
-    margin-top: 2px;
-    white-space: nowrap;
-    padding-top: 4px;
-    padding-bottom: 4px;
-  }
-
-  .nav-dropdown-content hr {
-    margin-top: 4px;
-    margin-bottom: 4px;
-    border: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  }
-
-  .nav-dropdown-active {
-    display: block;
-  }
-
-  .nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
-    color: black;
-    padding: 6px 24px;
-    text-decoration: none;
-    display: block;
-    text-align: left;
-  }
-
-  .nav-dropdown-content .nav-dropdown-header {
-    display: block;
-    padding: 5px 24px;
-    padding-bottom: 0;
-    text-transform: uppercase;
-    font-size: 14px;
-    color: #999999;
-    white-space: nowrap;
-  }
-
-  .nav-dropdown:hover .nav-dropbtn {
-    color: white;
-  }
-
-  .nav-dropdown-content a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-
-  .nav-right .nav-dropdown-content {
-    margin-left: -45%;
-    right: 0;
-  }
-
-  @media screen and (max-width: 768px) {
-    .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
-    .distill-site-header a.nav-toggle {
-      float: right;
-      display: block;
-    }
-    .distill-site-header .title {
-      margin-left: 0;
-    }
-    .distill-site-header .nav-right {
-      margin-right: 0;
-    }
-    .distill-site-header {
-      overflow: hidden;
-    }
-    .nav-right .nav-dropdown-content {
-      margin-left: 0;
-    }
-  }
-
-
-  @media screen and (max-width: 768px) {
-    .distill-site-header.responsive {position: relative; min-height: 500px; }
-    .distill-site-header.responsive a.nav-toggle {
-      position: absolute;
-      right: 0;
-      top: 0;
-    }
-    .distill-site-header.responsive a,
-    .distill-site-header.responsive .nav-dropdown {
-      display: block;
-      text-align: left;
-    }
-    .distill-site-header.responsive .nav-left,
-    .distill-site-header.responsive .nav-right {
-      width: 100%;
-    }
-    .distill-site-header.responsive .nav-dropdown {float: none;}
-    .distill-site-header.responsive .nav-dropdown-content {position: relative;}
-    .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
-      display: block;
-      width: 100%;
-      text-align: left;
-    }
-  }
-
-  /* Site Footer */
-
-  .distill-site-footer {
-    width: 100%;
-    overflow: hidden;
-    box-sizing: border-box;
-    z-index: 3;
-    margin-top: 30px;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    text-align: center;
-  }
-
-  /* Headroom */
-
-  d-title {
-    padding-top: 6rem;
-  }
-
-  @media print {
-    d-title {
-      padding-top: 4rem;
-    }
-  }
-
-  .headroom {
-    z-index: 1000;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-  }
-
-  .headroom--transition {
-    transition: all .4s ease-in-out;
-  }
-
-  .headroom--unpinned {
-    top: -100px;
-  }
-
-  .headroom--pinned {
-    top: 0;
-  }
-
-  /* adjust viewport for navbar height */
-  /* helps vertically center bootstrap (non-distill) content */
-  .min-vh-100 {
-    min-height: calc(100vh - 100px) !important;
-  }
-
-  </style>
-
-  <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-  <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
-  <link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
-  <script src="site_libs/headroom-0.9.4/headroom.min.js"></script>
-  <script src="site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
-  <script src="site_libs/fuse-6.4.1/fuse.min.js"></script>
-
-  <script type="application/javascript">
-
-  function getMeta(metaName) {
-    var metas = document.getElementsByTagName('meta');
-    for (let i = 0; i < metas.length; i++) {
-      if (metas[i].getAttribute('name') === metaName) {
-        return metas[i].getAttribute('content');
-      }
-    }
-    return '';
-  }
-
-  function offsetURL(url) {
-    var offset = getMeta('distill:offset');
-    return offset ? offset + '/' + url : url;
-  }
-
-  function createFuseIndex() {
-
-    // create fuse index
-    var options = {
-      keys: [
-        { name: 'title', weight: 20 },
-        { name: 'categories', weight: 15 },
-        { name: 'description', weight: 10 },
-        { name: 'contents', weight: 5 },
-      ],
-      ignoreLocation: true,
-      threshold: 0
-    };
-    var fuse = new window.Fuse([], options);
-
-    // fetch the main search.json
-    return fetch(offsetURL('search.json'))
-      .then(function(response) {
-        if (response.status == 200) {
-          return response.json().then(function(json) {
-            // index main articles
-            json.articles.forEach(function(article) {
-              fuse.add(article);
-            });
-            // download collections and index their articles
-            return Promise.all(json.collections.map(function(collection) {
-              return fetch(offsetURL(collection)).then(function(response) {
-                if (response.status === 200) {
-                  return response.json().then(function(articles) {
-                    articles.forEach(function(article) {
-                      fuse.add(article);
-                    });
-                  })
-                } else {
-                  return Promise.reject(
-                    new Error('Unexpected status from search index request: ' +
-                              response.status)
-                  );
-                }
-              });
-            })).then(function() {
-              return fuse;
-            });
-          });
-
-        } else {
-          return Promise.reject(
-            new Error('Unexpected status from search index request: ' +
-                        response.status)
-          );
-        }
-      });
-  }
-
-  window.document.addEventListener("DOMContentLoaded", function (event) {
-
-    // get search element (bail if we don't have one)
-    var searchEl = window.document.getElementById('distill-search');
-    if (!searchEl)
-      return;
-
-    createFuseIndex()
-      .then(function(fuse) {
-
-        // make search box visible
-        searchEl.classList.remove('hidden');
-
-        // initialize autocomplete
-        var options = {
-          autoselect: true,
-          hint: false,
-          minLength: 2,
-        };
-        window.autocomplete(searchEl, options, [{
-          source: function(query, callback) {
-            const searchOptions = {
-              isCaseSensitive: false,
-              shouldSort: true,
-              minMatchCharLength: 2,
-              limit: 10,
-            };
-            var results = fuse.search(query, searchOptions);
-            callback(results
-              .map(function(result) { return result.item; })
-            );
-          },
-          templates: {
-            suggestion: function(suggestion) {
-              var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
-                ? `<img src="${offsetURL(suggestion.preview)}"</img>`
-                : '';
-              var html = `
-                <div class="search-item">
-                  <h3>${suggestion.title}</h3>
-                  <div class="search-item-description">
-                    ${suggestion.description || ''}
-                  </div>
-                  <div class="search-item-preview">
-                    ${img}
-                  </div>
-                </div>
-              `;
-              return html;
-            }
-          }
-        }]).on('autocomplete:selected', function(event, suggestion) {
-          window.location.href = offsetURL(suggestion.path);
-        });
-        // remove inline display style on autocompleter (we want to
-        // manage responsive display via css)
-        $('.algolia-autocomplete').css("display", "");
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
-
-  });
-
-  </script>
-
-  <style type="text/css">
-
-  .nav-search {
-    font-size: x-small;
-  }
-
-  /* Algolioa Autocomplete */
-
-  .algolia-autocomplete {
-    display: inline-block;
-    margin-left: 10px;
-    vertical-align: sub;
-    background-color: white;
-    color: black;
-    padding: 6px;
-    padding-top: 8px;
-    padding-bottom: 0;
-    border-radius: 6px;
-    border: 1px #0F2E3D solid;
-    width: 180px;
-  }
-
-
-  @media screen and (max-width: 768px) {
-    .distill-site-nav .algolia-autocomplete {
-      display: none;
-      visibility: hidden;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete {
-      display: inline-block;
-      visibility: visible;
-    }
-    .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
-      margin-left: 0;
-      width: 400px;
-      max-height: 400px;
-    }
-  }
-
-  .algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
-    width: 90%;
-    outline: none;
-    border: none;
-  }
-
-  .algolia-autocomplete .aa-hint {
-    color: #999;
-  }
-  .algolia-autocomplete .aa-dropdown-menu {
-    width: 550px;
-    max-height: 70vh;
-    overflow-x: visible;
-    overflow-y: scroll;
-    padding: 5px;
-    margin-top: 3px;
-    margin-left: -150px;
-    background-color: #fff;
-    border-radius: 5px;
-    border: 1px solid #999;
-    border-top: none;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
-    cursor: pointer;
-    padding: 5px 4px;
-    border-bottom: 1px solid #eee;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
-    border-bottom: none;
-    margin-bottom: 2px;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
-    overflow: hidden;
-    font-size: 0.8em;
-    line-height: 1.4em;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
-    font-size: 1rem;
-    margin-block-start: 0;
-    margin-block-end: 5px;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
-    display: inline-block;
-    overflow: hidden;
-    height: 2.8em;
-    width: 80%;
-    margin-right: 4%;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
-    display: inline-block;
-    width: 15%;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
-    height: 3em;
-    width: auto;
-    display: none;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
-    display: initial;
-  }
-
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
-    background-color: #eee;
-  }
-  .algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
-    font-weight: bold;
-    font-style: normal;
-  }
-
-  </style>
-
-
   <!--/radix_placeholder_navigation_in_header-->
   <!--radix_placeholder_distill-->
 
@@ -2030,557 +1433,612 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
-  <script src="site_libs/popper-2.6.0/popper.min.js"></script>
-  <link href="site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
-  <link href="site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
-  <script src="site_libs/tippy-6.2.7/tippy.umd.min.js"></script>
-  <script src="site_libs/anchor-4.2.2/anchor.min.js"></script>
-  <script src="site_libs/bowser-1.9.3/bowser.min.js"></script>
-  <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
-  <script src="site_libs/distill-2.2.21/template.v2.js"></script>
+  <script src="07---Tibbles_files/header-attrs-2.7/header-attrs.js"></script>
+  <script src="07---Tibbles_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="07---Tibbles_files/popper-2.6.0/popper.min.js"></script>
+  <link href="07---Tibbles_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="07---Tibbles_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="07---Tibbles_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="07---Tibbles_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="07---Tibbles_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="07---Tibbles_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="07---Tibbles_files/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
   <!--/radix_placeholder_site_in_header-->
 
 
 </head>
 
-<body class="layout-listing">
+<body>
 
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"My Blog","authors":[]}
+{"title":"Tibbles","description":"R4DS 07 - Tibbles with tibbles","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-12T00:00:00.000+00:00","citationText":"lruolin, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
 <!--radix_placeholder_navigation_before_body-->
-<header class="header header--fixed" role="banner">
-<nav class="distill-site-nav distill-site-header">
-<div class="nav-left">
-<a href="index.html" class="title">pRactice corner</a>
-<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
-</div>
-<div class="nav-right">
-<a href="index.html">Home</a>
-<a href="about.html">About</a>
-<a href="usefullinks.html">Useful Links</a>
-<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
-</div>
-</nav>
-</header>
 <!--/radix_placeholder_navigation_before_body-->
 <!--radix_placeholder_site_before_body-->
 <!--/radix_placeholder_site_before_body-->
-<!--radix_placeholder_article_listing-->
-
-
-<script type="application/javascript">
-
-function init_posts_list() {
-
-  function load_image(img) {
-    var src = $(img).attr('data-src');
-    if (src) {
-      $(img).attr('src', src);
-      $(img).load(function() {
-        img.removeAttribute('data-src');
-      });
-    }
-  }
-
-  function set_posts_visible(posts, visible) {
-    if (visible) {
-
-      // show bottom border by default
-      $(posts).removeClass('post-preview-last');
-
-      // apply limits if need be
-      var max_posts = 25;
-      var apply_limits = $('.posts-container').hasClass('posts-apply-limit');
-      if (apply_limits && posts.length > max_posts) {
-        posts = $(posts).slice(0, max_posts);
-      } else {
-        $('.posts-more a').addClass('hidden');
-      }
-
-      // apply last style
-      $(posts.slice(-1)[0]).addClass('post-preview-last');
-
-      $(posts).removeClass('hidden');
-      $(posts).find('img[data-src]').each(function(i, img) {
-        load_image(img);
-      });
-    } else {
-      $(posts).addClass('hidden');
-    }
-  }
-
-  function apply_hash_filter() {
-
-    // clear active state
-    $('.categories .active').removeClass('active');
-
-    // mark all posts invisible to start
-    set_posts_visible($('.posts-list').children('a'), false);
-
-    // if we have a hash filter
-    if (window.location.hash && window.location.hash.startsWith("#category:")) {
-
-      // mark posts that match the category visible
-      var page_category = window.location.hash.replace(/^#category:/, "");
-      var posts = $('.post-metadata').map(function(idx, script) {
-        var metadata = $.parseJSON($(script).html());
-        var post = null;
-        $.each(metadata.categories, function(idx, category) {
-          category = category.replace(/ /g,"_");
-          if ((page_category || '').toLowerCase() === "articles" || category === page_category) {
-            post = $(script).parent().get();
-            return false;
-          }
-        });
-        return post;
-      });
-      set_posts_visible(posts, true);
-
-      // mark the hash active
-      $('.categories li>a[href="' + window.location.hash + '"]').addClass('active');
-
-      // update the list_caption
-      var list_caption = $('.posts-list-caption');
-      var caption = (page_category || '').toLowerCase() === "articles"
-        ? list_caption.attr('data-caption')
-        : ('Category: ' + page_category.replace(/_/g," "));
-      list_caption.text(caption);
-
-    } else {
-
-      // no hash filter, make all posts visible (subject to max display)
-      set_posts_visible($('.posts-list').children(), true);
-
-      // reset list caption
-      var list_caption = $('.posts-list-caption');
-      list_caption.text(list_caption.attr('data-caption'));
-
-
-    }
-  }
-
-  // more articles
-  function apply_post_limits(apply) {
-    if (apply) {
-      $('.posts-container').addClass('posts-apply-limit');
-      $('.posts-more a').removeClass('hidden');
-    } else {
-      $('.posts-container').removeClass('posts-apply-limit');
-      $('.posts-more a').addClass('hidden');
-    }
-  }
-
-  // click handling for tags
-  $('.dt-tag').click(function(ev) {
-    window.location.hash = '#category:' + $(this).text().replace(/ /g, "_");
-    return false;
-  })
-
-  // hash filter handling
-  apply_hash_filter();
-  $(window).on('hashchange',function() {
-    apply_post_limits(true);
-    apply_hash_filter();
-  });
-
-  // more articles link
-  $('.posts-more a').click(function(e) {
-    e.preventDefault();
-    apply_post_limits(false);
-    apply_hash_filter();
-    return false;
-  });
-
-}
-
-</script>
-
-
-
-<div class="posts-container posts-apply-limit l-page">
-<div class="posts-list">
-<h1 class="posts-list-caption" data-caption="My Blog">My Blog</h1>
-<a href="posts/20210512_Tidyverse Chap 7 - Tibbles/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">May 12, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/20210512_Tidyverse Chap 7 - Tibbles/07---Tibbles_files/figure-html5/unnamed-chunk-7-1.png"/>
-</div>
-<div class="description">
-<h2>Tibbles</h2>
-<div class="dt-tags"></div>
-<p>R4DS 07 - Tibbles with tibbles</p>
-</div>
-</a>
-<a href="posts/20210501_Tidyverse Chap 5 - ggplot2/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">May 1, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/20210501_Tidyverse Chap 5 - ggplot2/05---EDA_files/figure-html5/unnamed-chunk-2-1.png"/>
-</div>
-<div class="description">
-<h2>Exploratory Data Analysis</h2>
-<div class="dt-tags"></div>
-<p>R4DS 05 - Exploratory Data Analysis</p>
-</div>
-</a>
-<a href="posts/20210424_Tidyverse Chap 1 - Data visualization/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">April 28, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/20210424_Tidyverse Chap 1 - Data visualization/01---Data-visualization_files/figure-html5/unnamed-chunk-26-1.png"/>
-</div>
-<div class="description">
-<h2>Data transformation</h2>
-<div class="dt-tags"></div>
-<p>R4DS 03 - Data transformation with dplyr</p>
-</div>
-</a>
-<a href="posts/20210421_DOE Full Factorial Another Example/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">April 21, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/20210421_DOE Full Factorial Another Example/DOE-Full-Factorial---Another-Example_files/figure-html5/unnamed-chunk-4-1.png"/>
-</div>
-<div class="description">
-<h2>Design of Experiment - Full Factorial</h2>
-<div class="dt-tags"></div>
-<p>2ˆk Factorial Design - Another Example</p>
-</div>
-</a>
-<a href="posts/20210414_DOE Full Factorial/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">April 14, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img src="posts/20210414_DOE Full Factorial/DOE-Full-Factorial_files/figure-html5/unnamed-chunk-4-1.png"/>
-</div>
-<div class="description">
-<h2>Design of Experiment - Full Factorial</h2>
-<div class="dt-tags"></div>
-<p>2ˆk Factorial Design - Which factors matter?</p>
-</div>
-</a>
-<a href="posts/20210405_Outliers/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">April 5, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210405_Outliers/Outliers_files/figure-html5/unnamed-chunk-4-1.png"/>
-</div>
-<div class="description">
-<h2>Analytical Chemistry - Comparing Mean, Variance and Detecting Outliers</h2>
-<div class="dt-tags"></div>
-<p>Using Statistical Tests in Analytical Chemistry</p>
-</div>
-</a>
-<a href="posts/20210328_NIR Meat Data (PLS-regression)/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">March 18, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210328_NIR Meat Data (PLS-regression)/Meat-NIR-PLS-regression_files/figure-html5/unnamed-chunk-3-1.png"/>
-</div>
-<div class="description">
-<h2>Meat NIR data</h2>
-<div class="dt-tags"></div>
-<p>PLS regression on Meat NIR data</p>
-</div>
-</a>
-<a href="posts/20210311_notes on resampling/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">March 11, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Notes - Resampling</h2>
-<div class="dt-tags"></div>
-<p>Types of resampling techniqes and considerations on which to choose</p>
-</div>
-</a>
-<a href="posts/20210309_tidy models plsr gasoline/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">March 9, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210309_tidy models plsr gasoline/Tidy-Models---Partial-Least-Squares-Regression---gasoline_files/figure-html5/unnamed-chunk-3-1.png"/>
-</div>
-<div class="description">
-<h2>Tidy Models - Regression</h2>
-<div class="dt-tags"></div>
-<p>Predicting numerical outcomes using partial least squares on gasoline dataset</p>
-</div>
-</a>
-<a href="posts/20210301_tidy models regression 1/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">March 1, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210301_tidy models regression 1/Tidy-Models---Regression-v2_files/figure-html5/unnamed-chunk-3-1.png"/>
-</div>
-<div class="description">
-<h2>Tidy Models - Regression</h2>
-<div class="dt-tags"></div>
-<p>Predicting numerical outcomes using linear regression and random forest</p>
-</div>
-</a>
-<a href="posts/20210219_color calculations (juice)/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Feb. 19, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210219_color calculations (juice)/Color-analysis-for-Juices_files/figure-html5/unnamed-chunk-11-1.png"/>
-</div>
-<div class="description">
-<h2>Color Analysis in Juices</h2>
-<div class="dt-tags"></div>
-<p>Using R for color calculations and data visualization</p>
-</div>
-</a>
-<a href="posts/20210216_durian volatiles/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Feb. 16, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210216_durian volatiles/Durian-Volatiles_files/figure-html5/unnamed-chunk-3-1.png"/>
-</div>
-<div class="description">
-<h2>Comparison of volatiles in Durians</h2>
-<div class="dt-tags"></div>
-<p>Data visualization for volatiles in different durian varieties</p>
-</div>
-</a>
-<a href="posts/20210209_tidy_tuesday_coffee_ratings/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Feb. 9, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210209_tidy_tuesday_coffee_ratings/Tidy-Tuesday---Coffee-Ratings_files/figure-html5/unnamed-chunk-4-1.png"/>
-</div>
-<div class="description">
-<h2>Tidy Tuesday on Coffee Ratings Dataset</h2>
-<div class="dt-tags"></div>
-<p>Exploratory Data Analysis on Coffee Ratings</p>
-</div>
-</a>
-<a href="posts/20210202_Clustering wine/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Feb. 2, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210202_Clustering wine/Clustering-wine_files/figure-html5/unnamed-chunk-6-1.png"/>
-</div>
-<div class="description">
-<h2>Clustering Analysis on Wine Dataset</h2>
-<div class="dt-tags"></div>
-<p>A continuation from PCA analysis of wine dataset: k-means clustering and hierarchical clustering</p>
-</div>
-</a>
-<a href="posts/20210130_Volatiles_tomato/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Feb. 1, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210130_Volatiles_tomato/Volatiles_tomatoes_files/figure-html5/unnamed-chunk-6-1.png"/>
-</div>
-<div class="description">
-<h2>Volatile Compounds in Tomato and Tomato Products</h2>
-<div class="dt-tags"></div>
-<p>Scraping information from journal article</p>
-</div>
-</a>
-<a href="posts/20210123_PCA wine/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 23, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210123_PCA wine/PCA-wine_files/figure-html5/unnamed-chunk-4-1.png"/>
-</div>
-<div class="description">
-<h2>PCA Wine</h2>
-<div class="dt-tags"></div>
-<p>PCA (using tidymodels) with wine dataset</p>
-</div>
-</a>
-<a href="posts/20210120_statistical concepts/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 20, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Statistical Concepts</h2>
-<div class="dt-tags"></div>
-<p>Definition of terms</p>
-</div>
-</a>
-<a href="posts/20210115_kovats/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 15, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Kovats Index</h2>
-<div class="dt-tags"></div>
-<p>R script for calculating Kovats Index</p>
-</div>
-</a>
-<a href="posts/20210118_calibration curves/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 15, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img data-src="posts/20210118_calibration curves/calibration-curves_files/figure-html5/unnamed-chunk-3-1.png"/>
-</div>
-<div class="description">
-<h2>Calibration Curves Data</h2>
-<div class="dt-tags"></div>
-<p>R script for calculating Limit of Detection and Limit of Quantification</p>
-</div>
-</a>
-<a href="posts/20210114_motivations/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 14, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>Motivations</h2>
-<div class="dt-tags"></div>
-<p>why R?</p>
-</div>
-</a>
-<a href="posts/welcome/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":[]}</script>
-<div class="metadata">
-<div class="publishedDate">Jan. 14, 2021</div>
-<div class="dt-authors">
-<div class="dt-author">lruolin</div>
-</div>
-</div>
-<div class="thumbnail">
-<img/>
-</div>
-<div class="description">
-<h2>My first post: Learning goals for 2021</h2>
-<div class="dt-tags"></div>
-<p>pRactice corner for coding in R</p>
-</div>
-</a>
-</div>
-<div class="posts-more">
-<a href="#">More articles &raquo;</a>
-</div>
-</div>
-<!--/radix_placeholder_article_listing-->
 
 <div class="d-title">
-<h1>My Blog</h1>
+<h1>Tibbles</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-
+<p><p>R4DS 07 - Tibbles with tibbles</p></p>
 </div>
 
+<div class="d-byline">
+  lruolin  
+  
+<br/>05-12-2021
+</div>
 
 <div class="d-article">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h1 id="r4ds-practice-07-tibbles">R4DS Practice 07: Tibbles</h1>
+<p>The codes below are from the practice exercises in <a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a>, and are taken with reference from: <a href="https://jrnold.github.io/r4ds-exercise-solutions/" class="uri">https://jrnold.github.io/r4ds-exercise-solutions/</a></p>
+<h1 id="lets-begin-now">Let’s begin now</h1>
+<p>Loading tidyverse package.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>To coerce a data frame into a tibble, use the as_tibble() function:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>iris</span> <span class='co'># this is a dataframe</span>
+</code></pre>
+</div>
+<pre><code>    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+1            5.1         3.5          1.4         0.2     setosa
+2            4.9         3.0          1.4         0.2     setosa
+3            4.7         3.2          1.3         0.2     setosa
+4            4.6         3.1          1.5         0.2     setosa
+5            5.0         3.6          1.4         0.2     setosa
+6            5.4         3.9          1.7         0.4     setosa
+7            4.6         3.4          1.4         0.3     setosa
+8            5.0         3.4          1.5         0.2     setosa
+9            4.4         2.9          1.4         0.2     setosa
+10           4.9         3.1          1.5         0.1     setosa
+11           5.4         3.7          1.5         0.2     setosa
+12           4.8         3.4          1.6         0.2     setosa
+13           4.8         3.0          1.4         0.1     setosa
+14           4.3         3.0          1.1         0.1     setosa
+15           5.8         4.0          1.2         0.2     setosa
+16           5.7         4.4          1.5         0.4     setosa
+17           5.4         3.9          1.3         0.4     setosa
+18           5.1         3.5          1.4         0.3     setosa
+19           5.7         3.8          1.7         0.3     setosa
+20           5.1         3.8          1.5         0.3     setosa
+21           5.4         3.4          1.7         0.2     setosa
+22           5.1         3.7          1.5         0.4     setosa
+23           4.6         3.6          1.0         0.2     setosa
+24           5.1         3.3          1.7         0.5     setosa
+25           4.8         3.4          1.9         0.2     setosa
+26           5.0         3.0          1.6         0.2     setosa
+27           5.0         3.4          1.6         0.4     setosa
+28           5.2         3.5          1.5         0.2     setosa
+29           5.2         3.4          1.4         0.2     setosa
+30           4.7         3.2          1.6         0.2     setosa
+31           4.8         3.1          1.6         0.2     setosa
+32           5.4         3.4          1.5         0.4     setosa
+33           5.2         4.1          1.5         0.1     setosa
+34           5.5         4.2          1.4         0.2     setosa
+35           4.9         3.1          1.5         0.2     setosa
+36           5.0         3.2          1.2         0.2     setosa
+37           5.5         3.5          1.3         0.2     setosa
+38           4.9         3.6          1.4         0.1     setosa
+39           4.4         3.0          1.3         0.2     setosa
+40           5.1         3.4          1.5         0.2     setosa
+41           5.0         3.5          1.3         0.3     setosa
+42           4.5         2.3          1.3         0.3     setosa
+43           4.4         3.2          1.3         0.2     setosa
+44           5.0         3.5          1.6         0.6     setosa
+45           5.1         3.8          1.9         0.4     setosa
+46           4.8         3.0          1.4         0.3     setosa
+47           5.1         3.8          1.6         0.2     setosa
+48           4.6         3.2          1.4         0.2     setosa
+49           5.3         3.7          1.5         0.2     setosa
+50           5.0         3.3          1.4         0.2     setosa
+51           7.0         3.2          4.7         1.4 versicolor
+52           6.4         3.2          4.5         1.5 versicolor
+53           6.9         3.1          4.9         1.5 versicolor
+54           5.5         2.3          4.0         1.3 versicolor
+55           6.5         2.8          4.6         1.5 versicolor
+56           5.7         2.8          4.5         1.3 versicolor
+57           6.3         3.3          4.7         1.6 versicolor
+58           4.9         2.4          3.3         1.0 versicolor
+59           6.6         2.9          4.6         1.3 versicolor
+60           5.2         2.7          3.9         1.4 versicolor
+61           5.0         2.0          3.5         1.0 versicolor
+62           5.9         3.0          4.2         1.5 versicolor
+63           6.0         2.2          4.0         1.0 versicolor
+64           6.1         2.9          4.7         1.4 versicolor
+65           5.6         2.9          3.6         1.3 versicolor
+66           6.7         3.1          4.4         1.4 versicolor
+67           5.6         3.0          4.5         1.5 versicolor
+68           5.8         2.7          4.1         1.0 versicolor
+69           6.2         2.2          4.5         1.5 versicolor
+70           5.6         2.5          3.9         1.1 versicolor
+71           5.9         3.2          4.8         1.8 versicolor
+72           6.1         2.8          4.0         1.3 versicolor
+73           6.3         2.5          4.9         1.5 versicolor
+74           6.1         2.8          4.7         1.2 versicolor
+75           6.4         2.9          4.3         1.3 versicolor
+76           6.6         3.0          4.4         1.4 versicolor
+77           6.8         2.8          4.8         1.4 versicolor
+78           6.7         3.0          5.0         1.7 versicolor
+79           6.0         2.9          4.5         1.5 versicolor
+80           5.7         2.6          3.5         1.0 versicolor
+81           5.5         2.4          3.8         1.1 versicolor
+82           5.5         2.4          3.7         1.0 versicolor
+83           5.8         2.7          3.9         1.2 versicolor
+84           6.0         2.7          5.1         1.6 versicolor
+85           5.4         3.0          4.5         1.5 versicolor
+86           6.0         3.4          4.5         1.6 versicolor
+87           6.7         3.1          4.7         1.5 versicolor
+88           6.3         2.3          4.4         1.3 versicolor
+89           5.6         3.0          4.1         1.3 versicolor
+90           5.5         2.5          4.0         1.3 versicolor
+91           5.5         2.6          4.4         1.2 versicolor
+92           6.1         3.0          4.6         1.4 versicolor
+93           5.8         2.6          4.0         1.2 versicolor
+94           5.0         2.3          3.3         1.0 versicolor
+95           5.6         2.7          4.2         1.3 versicolor
+96           5.7         3.0          4.2         1.2 versicolor
+97           5.7         2.9          4.2         1.3 versicolor
+98           6.2         2.9          4.3         1.3 versicolor
+99           5.1         2.5          3.0         1.1 versicolor
+100          5.7         2.8          4.1         1.3 versicolor
+101          6.3         3.3          6.0         2.5  virginica
+102          5.8         2.7          5.1         1.9  virginica
+103          7.1         3.0          5.9         2.1  virginica
+104          6.3         2.9          5.6         1.8  virginica
+105          6.5         3.0          5.8         2.2  virginica
+106          7.6         3.0          6.6         2.1  virginica
+107          4.9         2.5          4.5         1.7  virginica
+108          7.3         2.9          6.3         1.8  virginica
+109          6.7         2.5          5.8         1.8  virginica
+110          7.2         3.6          6.1         2.5  virginica
+111          6.5         3.2          5.1         2.0  virginica
+112          6.4         2.7          5.3         1.9  virginica
+113          6.8         3.0          5.5         2.1  virginica
+114          5.7         2.5          5.0         2.0  virginica
+115          5.8         2.8          5.1         2.4  virginica
+116          6.4         3.2          5.3         2.3  virginica
+117          6.5         3.0          5.5         1.8  virginica
+118          7.7         3.8          6.7         2.2  virginica
+119          7.7         2.6          6.9         2.3  virginica
+120          6.0         2.2          5.0         1.5  virginica
+121          6.9         3.2          5.7         2.3  virginica
+122          5.6         2.8          4.9         2.0  virginica
+123          7.7         2.8          6.7         2.0  virginica
+124          6.3         2.7          4.9         1.8  virginica
+125          6.7         3.3          5.7         2.1  virginica
+126          7.2         3.2          6.0         1.8  virginica
+127          6.2         2.8          4.8         1.8  virginica
+128          6.1         3.0          4.9         1.8  virginica
+129          6.4         2.8          5.6         2.1  virginica
+130          7.2         3.0          5.8         1.6  virginica
+131          7.4         2.8          6.1         1.9  virginica
+132          7.9         3.8          6.4         2.0  virginica
+133          6.4         2.8          5.6         2.2  virginica
+134          6.3         2.8          5.1         1.5  virginica
+135          6.1         2.6          5.6         1.4  virginica
+136          7.7         3.0          6.1         2.3  virginica
+137          6.3         3.4          5.6         2.4  virginica
+138          6.4         3.1          5.5         1.8  virginica
+139          6.0         3.0          4.8         1.8  virginica
+140          6.9         3.1          5.4         2.1  virginica
+141          6.7         3.1          5.6         2.4  virginica
+142          6.9         3.1          5.1         2.3  virginica
+143          5.8         2.7          5.1         1.9  virginica
+144          6.8         3.2          5.9         2.3  virginica
+145          6.7         3.3          5.7         2.5  virginica
+146          6.7         3.0          5.2         2.3  virginica
+147          6.3         2.5          5.0         1.9  virginica
+148          6.5         3.0          5.2         2.0  virginica
+149          6.2         3.4          5.4         2.3  virginica
+150          5.9         3.0          5.1         1.8  virginica</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>as_tibble</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span> <span class='co'># this is a tibble</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 150 x 5
+   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+          &lt;dbl&gt;       &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt; &lt;fct&gt;  
+ 1          5.1         3.5          1.4         0.2 setosa 
+ 2          4.9         3            1.4         0.2 setosa 
+ 3          4.7         3.2          1.3         0.2 setosa 
+ 4          4.6         3.1          1.5         0.2 setosa 
+ 5          5           3.6          1.4         0.2 setosa 
+ 6          5.4         3.9          1.7         0.4 setosa 
+ 7          4.6         3.4          1.4         0.3 setosa 
+ 8          5           3.4          1.5         0.2 setosa 
+ 9          4.4         2.9          1.4         0.2 setosa 
+10          4.9         3.1          1.5         0.1 setosa 
+# … with 140 more rows</code></pre>
+</div>
+<p>To create a tibble:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tibble</span><span class='op'>(</span>
+  x <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,
+  y <span class='op'>=</span> <span class='fl'>1</span>, <span class='co'># automatically filled down</span>
+  z <span class='op'>=</span> <span class='va'>x</span> <span class='op'>^</span><span class='fl'>2</span> <span class='op'>+</span> <span class='va'>y</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 3
+      x     y     z
+  &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     1     1     2
+2     2     1     5
+3     3     1    10
+4     4     1    17
+5     5     1    26</code></pre>
+</div>
+<p>To create a transposed tibble, use tribble() :</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tribble</span><span class='op'>(</span>
+  <span class='op'>~</span><span class='va'>x</span>, <span class='op'>~</span><span class='va'>y</span>, <span class='op'>~</span><span class='va'>z</span>,
+  <span class='co'># -- # -- # -- </span>
+  <span class='st'>"a"</span>, <span class='fl'>2</span>, <span class='fl'>3.6</span>,
+  <span class='st'>"b"</span>, <span class='fl'>1</span>, <span class='fl'>8.5</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 x 3
+  x         y     z
+  &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 a         2   3.6
+2 b         1   8.5</code></pre>
+</div>
+<h1 id="exercise">Exercise:</h1>
+<p>To check if an object is a tibble:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span> <span class='co'># this is a dataframe</span>
+</code></pre>
+</div>
+<pre><code>&#39;data.frame&#39;:   32 obs. of  11 variables:
+ $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+ $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
+ $ disp: num  160 160 108 258 360 ...
+ $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+ $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+ $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+ $ qsec: num  16.5 17 18.6 19.4 17 ...
+ $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
+ $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+ $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+ $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>is_tibble</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] FALSE</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>is_tibble</span><span class='op'>(</span><span class='va'>diamonds</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] TRUE</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>is_tibble</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] FALSE</code></pre>
+</div>
+<p>Compare and contrast the following operations on a data.frame and equivalent tibble:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>abc <span class='op'>=</span> <span class='fl'>1</span>, 
+                 xyz <span class='op'>=</span> <span class='st'>"a"</span><span class='op'>)</span>
+
+<span class='va'>df</span>
+</code></pre>
+</div>
+<pre><code>  abc xyz
+1   1   a</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span><span class='op'>$</span><span class='va'>x</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;a&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span><span class='op'>[</span> , <span class='st'>"xyz"</span><span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;a&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span><span class='op'>[</span> , <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"abc"</span>, <span class='st'>"xyz"</span><span class='op'>)</span><span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code>  abc xyz
+1   1   a</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tbl</span> <span class='op'>&lt;-</span> <span class='fu'>as_tibble</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
+<span class='va'>tbl</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 2
+    abc xyz  
+  &lt;dbl&gt; &lt;chr&gt;
+1     1 a    </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tbl</span><span class='op'>[</span>, <span class='st'>"xyz"</span><span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 1
+  xyz  
+  &lt;chr&gt;
+1 a    </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tbl</span><span class='op'>[</span> , <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"abc"</span>, <span class='st'>"xyz"</span><span class='op'>)</span><span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 2
+    abc xyz  
+  &lt;dbl&gt; &lt;chr&gt;
+1     1 a    </code></pre>
+</div>
+<p>Practice referring to nonsyntactic names in the following dataframe:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>annoying</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>
+  `1` <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,
+  `2` <span class='op'>=</span> <span class='va'>`1`</span> <span class='op'>*</span> <span class='fl'>2</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>`1`</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='va'>annoying</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 10 x 2
+     `1`   `2`
+   &lt;int&gt; &lt;dbl&gt;
+ 1     1  2.32
+ 2     2  5.14
+ 3     3  5.74
+ 4     4  8.48
+ 5     5 10.4 
+ 6     6 10.1 
+ 7     7 14.5 
+ 8     8 15.9 
+ 9     9 17.7 
+10    10 20.9 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Extract the variable called 1:</span>
+
+<span class='va'>annoying</span><span class='op'>$</span><span class='va'>`1`</span>
+</code></pre>
+</div>
+<pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Plot a scatterplot of 1 vs 2</span>
+
+<span class='va'>annoying</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>`1`</span>,
+         y <span class='op'>=</span> <span class='va'>`2`</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<img src="07---Tibbles_files/figure-html5/unnamed-chunk-7-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Create a new column called 3, which is 2 divided by 1</span>
+
+<span class='va'>annoying_new</span> <span class='op'>&lt;-</span> <span class='va'>annoying</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>`3` <span class='op'>=</span> <span class='va'>`2`</span> <span class='op'>/</span> <span class='va'>`1`</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/rename.html'>rename</a></span><span class='op'>(</span>one <span class='op'>=</span> <span class='va'>`1`</span>,  <span class='co'># need to specify dplyr:: if not will have conflict with plyr</span>
+                two <span class='op'>=</span> <span class='va'>`2`</span>,
+                three <span class='op'>=</span> <span class='va'>`3`</span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>annoying_new</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 10
+Columns: 3
+$ one   &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+$ two   &lt;dbl&gt; 2.316899, 5.142626, 5.739018, 8.478457, 10.431323, 10.…
+$ three &lt;dbl&gt; 2.316899, 2.571313, 1.913006, 2.119614, 2.086265, 1.68…</code></pre>
+</div>
+<p>What does tibble::enframe() do?</p>
+<p>enframe() converts named atomic vectors or lists to one- or two-column data frames. For a list, the result will be a nested tibble with a column of type list. For unnamed vectors, the natural sequence is used as name column.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>enframe</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 3 x 2
+   name value
+  &lt;int&gt; &lt;int&gt;
+1     1     1
+2     2     2
+3     3     3</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>enframe</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>5</span>, b <span class='op'>=</span> <span class='fl'>7</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 x 2
+  name  value
+  &lt;chr&gt; &lt;dbl&gt;
+1 a         5
+2 b         7</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>enframe</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>one <span class='op'>=</span> <span class='fl'>1</span>, two <span class='op'>=</span> <span class='fl'>2</span><span class='op'>:</span><span class='fl'>3</span>, three <span class='op'>=</span> <span class='fl'>4</span><span class='op'>:</span><span class='fl'>6</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 3 x 2
+  name  value    
+  &lt;chr&gt; &lt;list&gt;   
+1 one   &lt;dbl [1]&gt;
+2 two   &lt;int [2]&gt;
+3 three &lt;int [3]&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>deframe</span><span class='op'>(</span><span class='fu'>tibble</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[[1]]
+[1] 1
+
+[[2]]
+[1] 2
+
+[[3]]
+[1] 3</code></pre>
+</div>
+<p>What option controls how many additional column names are printed at the foot of a tibble?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                     mpg cyl  disp  hp drat    wt  qsec vs am gear
+Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4
+Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4
+Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4
+Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4
+Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3
+Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4
+Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5
+Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5
+Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5
+Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4
+                    carb
+Mazda RX4              4
+Mazda RX4 Wag          4
+Datsun 710             1
+Hornet 4 Drive         1
+Hornet Sportabout      2
+Valiant                1
+Duster 360             4
+Merc 240D              2
+Merc 230               2
+Merc 280               4
+Merc 280C              4
+Merc 450SE             3
+Merc 450SL             3
+Merc 450SLC            3
+Cadillac Fleetwood     4
+Lincoln Continental    4
+Chrysler Imperial      4
+Fiat 128               1
+Honda Civic            2
+Toyota Corolla         1
+Toyota Corona          1
+Dodge Challenger       2
+AMC Javelin            2
+Camaro Z28             4
+Pontiac Firebird       2
+Fiat X1-9              1
+Porsche 914-2          2
+Lotus Europa           2
+Ford Pantera L         4
+Ferrari Dino           6
+Maserati Bora          8
+Volvo 142E             2</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>mtcars</span>, n_extra <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>                     mpg cyl  disp  hp drat    wt  qsec vs am gear
+Mazda RX4           21.0   6 160.0 110 3.90 2.620 16.46  0  1    4
+Mazda RX4 Wag       21.0   6 160.0 110 3.90 2.875 17.02  0  1    4
+Datsun 710          22.8   4 108.0  93 3.85 2.320 18.61  1  1    4
+Hornet 4 Drive      21.4   6 258.0 110 3.08 3.215 19.44  1  0    3
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3
+Valiant             18.1   6 225.0 105 2.76 3.460 20.22  1  0    3
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3
+Merc 240D           24.4   4 146.7  62 3.69 3.190 20.00  1  0    4
+Merc 230            22.8   4 140.8  95 3.92 3.150 22.90  1  0    4
+Merc 280            19.2   6 167.6 123 3.92 3.440 18.30  1  0    4
+Merc 280C           17.8   6 167.6 123 3.92 3.440 18.90  1  0    4
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3
+Fiat 128            32.4   4  78.7  66 4.08 2.200 19.47  1  1    4
+Honda Civic         30.4   4  75.7  52 4.93 1.615 18.52  1  1    4
+Toyota Corolla      33.9   4  71.1  65 4.22 1.835 19.90  1  1    4
+Toyota Corona       21.5   4 120.1  97 3.70 2.465 20.01  1  0    3
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3
+Fiat X1-9           27.3   4  79.0  66 4.08 1.935 18.90  1  1    4
+Porsche 914-2       26.0   4 120.3  91 4.43 2.140 16.70  0  1    5
+Lotus Europa        30.4   4  95.1 113 3.77 1.513 16.90  1  1    5
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5
+Ferrari Dino        19.7   6 145.0 175 3.62 2.770 15.50  0  1    5
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5
+Volvo 142E          21.4   4 121.0 109 4.11 2.780 18.60  1  1    4
+                    carb
+Mazda RX4              4
+Mazda RX4 Wag          4
+Datsun 710             1
+Hornet 4 Drive         1
+Hornet Sportabout      2
+Valiant                1
+Duster 360             4
+Merc 240D              2
+Merc 230               2
+Merc 280               4
+Merc 280C              4
+Merc 450SE             3
+Merc 450SL             3
+Merc 450SLC            3
+Cadillac Fleetwood     4
+Lincoln Continental    4
+Chrysler Imperial      4
+Fiat 128               1
+Honda Civic            2
+Toyota Corolla         1
+Toyota Corona          1
+Dodge Challenger       2
+AMC Javelin            2
+Camaro Z28             4
+Pontiac Firebird       2
+Fiat X1-9              1
+Porsche 914-2          2
+Lotus Europa           2
+Ford Pantera L         4
+Ferrari Dino           6
+Maserati Bora          8
+Volvo 142E             2</code></pre>
+</div>
+<h1 id="reference">Reference</h1>
+<p><a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a></p>
+<p><a href="https://jrnold.github.io/r4ds-exercise-solutions/" class="uri">https://jrnold.github.io/r4ds-exercise-solutions/</a></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
