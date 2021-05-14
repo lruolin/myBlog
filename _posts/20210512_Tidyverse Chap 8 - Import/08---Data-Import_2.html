@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["07---Tibbles_files/anchor-4.2.2/anchor.min.js","07---Tibbles_files/bowser-1.9.3/bowser.min.js","07---Tibbles_files/distill-2.2.21/template.v2.js","07---Tibbles_files/figure-html5/unnamed-chunk-7-1.png","07---Tibbles_files/header-attrs-2.7/header-attrs.js","07---Tibbles_files/jquery-1.11.3/jquery.min.js","07---Tibbles_files/popper-2.6.0/popper.min.js","07---Tibbles_files/tippy-6.2.7/tippy-bundle.umd.min.js","07---Tibbles_files/tippy-6.2.7/tippy-light-border.css","07---Tibbles_files/tippy-6.2.7/tippy.css","07---Tibbles_files/tippy-6.2.7/tippy.umd.min.js","07---Tibbles_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["08---Data-Import_2_files/anchor-4.2.2/anchor.min.js","08---Data-Import_2_files/bowser-1.9.3/bowser.min.js","08---Data-Import_2_files/distill-2.2.21/template.v2.js","08---Data-Import_2_files/figure-html5/unnamed-chunk-10-1.png","08---Data-Import_2_files/header-attrs-2.7/header-attrs.js","08---Data-Import_2_files/jquery-1.11.3/jquery.min.js","08---Data-Import_2_files/popper-2.6.0/popper.min.js","08---Data-Import_2_files/tippy-6.2.7/tippy-bundle.umd.min.js","08---Data-Import_2_files/tippy-6.2.7/tippy-light-border.css","08---Data-Import_2_files/tippy-6.2.7/tippy.css","08---Data-Import_2_files/tippy-6.2.7/tippy.umd.min.js","08---Data-Import_2_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1433,16 +1433,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="07---Tibbles_files/header-attrs-2.7/header-attrs.js"></script>
-  <script src="07---Tibbles_files/jquery-1.11.3/jquery.min.js"></script>
-  <script src="07---Tibbles_files/popper-2.6.0/popper.min.js"></script>
-  <link href="07---Tibbles_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
-  <link href="07---Tibbles_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
-  <script src="07---Tibbles_files/tippy-6.2.7/tippy.umd.min.js"></script>
-  <script src="07---Tibbles_files/anchor-4.2.2/anchor.min.js"></script>
-  <script src="07---Tibbles_files/bowser-1.9.3/bowser.min.js"></script>
-  <script src="07---Tibbles_files/webcomponents-2.0.0/webcomponents.js"></script>
-  <script src="07---Tibbles_files/distill-2.2.21/template.v2.js"></script>
+  <script src="08---Data-Import_2_files/header-attrs-2.7/header-attrs.js"></script>
+  <script src="08---Data-Import_2_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="08---Data-Import_2_files/popper-2.6.0/popper.min.js"></script>
+  <link href="08---Data-Import_2_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="08---Data-Import_2_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="08---Data-Import_2_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="08---Data-Import_2_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="08---Data-Import_2_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="08---Data-Import_2_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="08---Data-Import_2_files/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
   <!--/radix_placeholder_site_in_header-->
 
@@ -1685,11 +1685,60 @@ Default encoding. This only affects how the file is read - readr always converts
 <pre><code>23:15:10.12</code></pre>
 </div>
 <h1 id="datapasta">datapasta</h1>
+<p>I learnt about this package called <strong>datapaste</strong>, which allows you to copy and paste data from excel, Wikipedia, directy into R without saving as a separate excel file. <a href="https://www.r-bloggers.com/2021/04/webscraping-tables-in-r-datapasta-copy-and-paster/">This website</a> gives a good summary on the functions. In short, you just have to select the text, and paste into R. Lovely!</p>
+<p>I copied the data below from the <a href="https://www.sfa.gov.sg/docs/default-source/tools-and-resources/yearly-statistics/per-capita-consumption.pdf">SFA website</a> using the datapaste package, but I had to modify some of the text arrangement as commar was used as a separator for ’000; and added Y to the years so that they will be recognized as text.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/milesmcbain/datapasta'>datapasta</a></span><span class='op'>)</span>
+
+<span class='va'>chicken_consumption</span> <span class='op'>&lt;-</span> <span class='fu'>tribble</span><span class='op'>(</span>
+  <span class='op'>~</span><span class='va'>Item</span>, <span class='op'>~</span><span class='va'>Y2010</span>, <span class='op'>~</span><span class='va'>Y2011</span>, <span class='op'>~</span><span class='va'>Y2012</span>, <span class='op'>~</span><span class='va'>Y2013</span>, <span class='op'>~</span><span class='va'>Y2014</span>, <span class='op'>~</span><span class='va'>Y2015</span>, <span class='op'>~</span><span class='va'>Y2016</span>, <span class='op'>~</span><span class='va'>Y2017</span>, <span class='op'>~</span><span class='va'>Y2018</span>, <span class='op'>~</span><span class='va'>Y2019</span>,
+  <span class='co'>## -- ## </span>
+  <span class='st'>"Chicken Consumption (tonnes)"</span>, <span class='fl'>161460</span>, <span class='fl'>170315</span>, <span class='fl'>173521</span>, <span class='fl'>172054</span>, <span class='fl'>170926</span>, <span class='fl'>179122</span>, <span class='fl'>195290</span>, <span class='fl'>167588</span>, <span class='fl'>193142</span>, <span class='fl'>193903</span>
+  
+  <span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>chicken_consumption</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 1
+Columns: 11
+$ Item  &lt;chr&gt; &quot;Chicken Consumption (tonnes)&quot;
+$ Y2010 &lt;dbl&gt; 161460
+$ Y2011 &lt;dbl&gt; 170315
+$ Y2012 &lt;dbl&gt; 173521
+$ Y2013 &lt;dbl&gt; 172054
+$ Y2014 &lt;dbl&gt; 170926
+$ Y2015 &lt;dbl&gt; 179122
+$ Y2016 &lt;dbl&gt; 195290
+$ Y2017 &lt;dbl&gt; 167588
+$ Y2018 &lt;dbl&gt; 193142
+$ Y2019 &lt;dbl&gt; 193903</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>chicken_consumption</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'>starts_with</span><span class='op'>(</span><span class='st'>"Y"</span><span class='op'>)</span>,
+               names_to <span class='op'>=</span> <span class='st'>"Year"</span>,
+               values_to <span class='op'>=</span> <span class='st'>"Tonnes"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>Year</span>, <span class='va'>Tonnes</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>year_number <span class='op'>=</span> <span class='op'>(</span><span class='fu'>parse_number</span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>year_number</span>, y <span class='op'>=</span> <span class='va'>Tonnes</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_line</span><span class='op'>(</span>col <span class='op'>=</span> <span class='st'>"brown"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>3</span>, col <span class='op'>=</span> <span class='st'>"brown"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span> title <span class='op'>=</span> <span class='st'>"Chicken Consumption(tonnes) in Singapore"</span>,
+        subtitle <span class='op'>=</span> <span class='st'>"Chicken consumption had increased in general, except for 2017."</span>,
+        caption <span class='op'>=</span> <span class='st'>"Source: Singapore Food Agency"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_x_continuous</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2010</span>, <span class='fl'>2019</span><span class='op'>)</span>, n.breaks <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="08---Data-Import_2_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+</div>
+<p>What could have resulted in the drop in chicken consumption in 2017? It could be due to the avian flu outbreak as reported in <a href="https://www.todayonline.com/singapore/travellers-divided-over-ban-poultry-countries-avian-flu-risk">Today</a>.</p>
 <h1 id="reference">Reference</h1>
 <p><a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a></p>
 <p><a href="https://jrnold.github.io/r4ds-exercise-solutions/" class="uri">https://jrnold.github.io/r4ds-exercise-solutions/</a></p>
 <p><a href="https://rpubs.com/LaurynKeller/662242" class="uri">https://rpubs.com/LaurynKeller/662242</a></p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

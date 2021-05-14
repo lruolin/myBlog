@@ -167,8 +167,43 @@ parse_time(t2, "%H:%M:%OS %p")
 ```
 
 
-
 # datapasta
+
+I learnt about this package called **datapaste**, which allows you to copy and paste data from excel, Wikipedia, directy into R without saving as a separate excel file. [This website](https://www.r-bloggers.com/2021/04/webscraping-tables-in-r-datapasta-copy-and-paster/) gives a good summary on the functions. In short, you just have to select the text, and paste into R. Lovely!
+
+I copied the data below from the [SFA website](https://www.sfa.gov.sg/docs/default-source/tools-and-resources/yearly-statistics/per-capita-consumption.pdf) using the datapaste package, but I had to modify some of the text arrangement as commar was used as a separator for '000; and added Y to the years so that they will be recognized as text.
+
+```{r}
+library(datapasta)
+
+chicken_consumption <- tribble(
+  ~Item, ~Y2010, ~Y2011, ~Y2012, ~Y2013, ~Y2014, ~Y2015, ~Y2016, ~Y2017, ~Y2018, ~Y2019,
+  ## -- ## 
+  "Chicken Consumption (tonnes)", 161460, 170315, 173521, 172054, 170926, 179122, 195290, 167588, 193142, 193903
+  
+  )
+
+glimpse(chicken_consumption)
+
+chicken_consumption %>% 
+  pivot_longer(cols = starts_with("Y"),
+               names_to = "Year",
+               values_to = "Tonnes") %>% 
+  select(Year, Tonnes) %>% 
+  mutate(year_number = (parse_number(Year))) %>% 
+  ggplot(aes(x = year_number, y = Tonnes)) +
+  geom_line(col = "brown") +
+  geom_point(size = 3, col = "brown") +
+  labs( title = "Chicken Consumption(tonnes) in Singapore",
+        subtitle = "Chicken consumption had increased in general, except for 2017.",
+        caption = "Source: Singapore Food Agency") +
+  scale_x_continuous(limits = c(2010, 2019), n.breaks = 10) +
+  theme_classic()
+
+```
+
+What could have resulted in the drop in chicken consumption in 2017? It could be due to the avian flu outbreak as reported in [Today](https://www.todayonline.com/singapore/travellers-divided-over-ban-poultry-countries-avian-flu-risk).
+
 
 # Reference
 <https://r4ds.had.co.nz/>
