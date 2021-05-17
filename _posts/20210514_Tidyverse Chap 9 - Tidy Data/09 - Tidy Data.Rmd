@@ -1,10 +1,10 @@
 ---
-title: "Tibbles"
+title: "Tidy Data"
 description: |
-  R4DS 07 - Tibbles with tibbles
+  R4DS 09 - Tidy Data with tidyr
 author:
   - name: lruolin
-date: 05-12-2021
+date: 05-17-2021
 output:
   distill::distill_article:
     self_contained: false
@@ -15,7 +15,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# R4DS Practice 07: Tibbles
+# R4DS Practice 09: Tidyr
 
 The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
 
@@ -27,130 +27,250 @@ Loading tidyverse package.
 library(tidyverse)
 ```
 
-To coerce a data frame into a tibble, use the as_tibble() function:
+
+Compute the rate for table two.
 
 ```{r}
-iris # this is a dataframe
+table2
 
-as_tibble(iris) # this is a tibble
-```
-To create a tibble:
+# Extract the number of TB cases per country per year.
 
-```{r}
-tibble(
-  x = 1:5,
-  y = 1, # automatically filled down
-  z = x ^2 + y
-)
-```
+table2_cases <- table2 %>% 
+  filter(type == "cases") %>% 
+  dplyr::rename(cases = count) %>% 
+  arrange(country, year)
 
-To create a transposed tibble, use tribble() :
+table2_population <- table2 %>% 
+  filter(type == "population") %>% 
+  dplyr::rename(population = count) %>% 
+  arrange(country, year)
 
-```{r}
-tribble(
-  ~x, ~y, ~z,
-  # -- # -- # -- 
-  "a", 2, 3.6,
-  "b", 1, 8.5
-)
+# create a new dataframe with the population and cases columns and calculate the cases per capita
 
-```
-# Exercise:
+t2_cases_per_cap <- tibble(
+  year = table2_cases$year,
+  country = table2_cases$country,
+  cases = table2_cases$cases,
+  population = table2_population$population
+) %>% 
+  mutate(cases_per_cap = cases/population* 10000) %>% 
+  select(country, year, cases_per_cap) %>% 
+  mutate(type = "cases_per_cap") %>% 
+  dplyr::rename(count = cases_per_cap)
 
-To check if an object is a tibble:
+t2_cases_per_cap
 
-```{r}
-str(mtcars) # this is a dataframe
-
-is_tibble(mtcars)
-
-is_tibble(diamonds)
-
-is_tibble(iris)
-
+bind_rows(table2, t2_cases_per_cap) %>% 
+  arrange(country, year, type, count)
 ```
 
-Compare and contrast the following operations on a data.frame and equivalent tibble:
+Repeat for table4a and table 4b
 
 ```{r}
-df <- data.frame(abc = 1, 
-                 xyz = "a")
+table4a
 
-df
-
-df$x
-
-df[ , "xyz"]
-
-df[ , c("abc", "xyz")]
+table4b
 
 
-tbl <- as_tibble(df)
-tbl
-
-tbl[, "xyz"]
-
-
-tbl[ , c("abc", "xyz")]
-
-```
-Practice referring to nonsyntactic names in the following dataframe:
-
-```{r}
-annoying <- tibble(
-  `1` = 1:10,
-  `2` = `1` * 2 + rnorm(length(`1`))
+table4c <- tibble(
+  country = table4a$country,
+  `1999` = table4a$`1999`/table4b$`1999`*10000,
+  `2000` = table4a$`2000`/table4b$`2000`*10000
+  
 )
 
-annoying
+table4c
 
-# Extract the variable called 1:
+```
+Plot the number of cases for different years for different countries using table 2.
 
-annoying$`1`
-
-# Plot a scatterplot of 1 vs 2
-
-annoying %>% 
-  ggplot(aes(x = `1`,
-         y = `2`)) +
-  geom_point() +
+```{r}
+table2 %>% 
+  dplyr::filter(type == "cases") %>% 
+  ggplot(aes(year, count, group = country)) +
+  geom_line(aes(group = country)) +
+  geom_point(aes(group = country, col = country)) +
+  labs(x = "year", y = "cases") +
+  scale_x_continuous(breaks = unique(table2$year)) +
   theme_classic()
-
-
-# Create a new column called 3, which is 2 divided by 1
-
-annoying_new <- annoying %>% 
-  mutate(`3` = `2` / `1`) %>% 
-  dplyr::rename(one = `1`,  # need to specify dplyr:: if not will have conflict with plyr
-                two = `2`,
-                three = `3`)
-
-glimpse(annoying_new)
 ```
 
-What does tibble::enframe() do?
-
-enframe() converts named atomic vectors or lists to one- or two-column data frames. For a list, the result will be a nested tibble with a column of type list. For unnamed vectors, the natural sequence is used as name column.
+# Pivoting
 
 ```{r}
-enframe(1:3)
+table4a
 
-enframe(c(a = 5, b = 7))
+tidy4a <- table4a %>% 
+  pivot_longer(c(`1999`, `2000`),
+               names_to = "year",
+               values_to = "cases")
+tidy4a
 
-enframe(list(one = 1, two = 2:3, three = 4:6))
+table4b
 
-deframe(tibble(a = as.list(1:3)))
+tidy4b <- table4b %>% 
+  pivot_longer(c(`1999`, `2000`),
+               names_to = "year",
+               values_to = "population"
+              )
+tidy4b
+
 ```
 
-What option controls how many additional column names are printed at the foot of a tibble?
+Why are pivot_longer() and pivot_wider() not perfectly symmetrical?
 
 ```{r}
+stocks <- tibble(
+  year = c(2015, 2015, 2016, 2016),
+  half = c( 1, 2, 1, 2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+)
 
-print(mtcars)
+stocks
+
+stocks %>% 
+  pivot_wider(names_from = year,
+              values_from = return) %>% 
+  pivot_longer(`2015`: `2016`,
+               names_to = "year",
+               values_to = "return")
 
 
-print(mtcars, n_extra = 4)
 ```
+Year became a character column instead of dbl. When the data frame is converted from wide to long, the column type information is lost. 
+
+```{r}
+stocks %>% 
+  pivot_wider(names_from = year,
+              values_from = return) %>% 
+  pivot_longer(`2015`: `2016`,
+               names_to = "year",
+               values_to = "return",
+               names_transform = list(year = as.numeric))
+```
+
+Why does widening the table below fail? How would you add a new column to uniquely identify each value?
+
+```{r}
+people <- tribble(
+  
+  ~name,    ~key,    ~value,
+  # # # # # # # # # # # # # 
+  "Phillip", "age", 45,
+  "Phillip", "height", 186,
+  "Phillip", "age", 50,
+  "Jessica", "age", 37,
+  "Jessica", "height",156
+)
+
+people %>% 
+  group_by(name, key) %>% 
+  mutate(obs = row_number()) %>% 
+  pivot_wider(names_from = "name",
+              values_from = "value")
+```
+
+Tidy the tibble below:
+
+```{r}
+preg <- tribble(
+  ~pregnant, ~male, ~female,
+  ###
+  "yes", NA, 10,
+  "no", 20, 12
+)
+
+preg %>% 
+  pivot_longer(cols = c(male, female),
+               names_to = "sex",
+               values_to = "count",
+               values_drop_na = T)
+
+```
+
+# Separate 
+
+```{r}
+table3
+
+table3 %>% 
+  separate(rate, into = c("cases", "population"),
+           convert = T)
+```
+
+What do extra and fill arguments do in separate()?
+
+```{r}
+# separate
+tibble(x = c("a,b,c",  "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("one" , "two", "three"),
+           extra = "drop") # remove extra g
+
+
+tibble(x = c("a,b,c",  "d,e,f,g", "h,i,j")) %>% 
+  separate(x, c("one" , "two", "three"),
+           extra = "merge") # merge g to f
+```
+
+```{r}
+# fill
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("one", "two", "three"),
+                fill = "right") # fill to right
+
+tibble(x = c("a,b,c", "d,e", "f,g,i")) %>% 
+  separate(x, c("one", "two", "three"),
+                fill = "left") # fill to left
+```
+
+# Missing Values
+
+```{r}
+stocks <- tibble(
+  year = c(2015, 2015, 2015, 2015, 2016, 2016, 2016),
+  qtr = c( 1,2,3,4,2,3,4),
+  return = c(1.88, 0.59, 0.35,NA, 0.92, 0.17, 2.66)
+)
+
+stocks
+
+
+stocks %>% 
+  pivot_wider(names_from = year,
+              values_from = return,
+              values_fill = 0)
+
+
+# replace the missing values with 0 using complete()
+stocks %>% 
+  complete(year, qtr, fill = list(return = 0))
+
+
+```
+
+# Case study
+
+```{r}
+# TB dataset broken down by year, country, age, gender , diagnosis method.
+who
+
+# make the dataset into a long shape
+
+who1 <- who %>% 
+  pivot_longer(cols = new_sp_m014:newrel_f65,
+               names_to = "key",
+               values_to = "cases",
+               values_drop_na = T) %>% 
+  mutate(names_from = str_replace(key, "newrel", "new_rel")) %>% 
+  separate(key, c("new", "type", "sexage"), sep = "_") %>% 
+  select(-new, -iso2, -iso3) %>% 
+  separate(sexage, c("sex", "age"), sep =1)
+
+glimpse(who1)
+```
+
+
+
 # Reference
 <https://r4ds.had.co.nz/>
 
