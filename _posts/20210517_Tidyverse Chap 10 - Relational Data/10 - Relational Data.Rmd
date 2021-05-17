@@ -1,0 +1,242 @@
+---
+title: "Relational Data"
+description: |
+  R4DS 09 - Relational Data with dplyr
+author:
+  - name: lruolin
+date: 05-17-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 10: dplyr
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. 
+
+```{r}
+library(tidyverse)
+library(nycflights13)
+```
+
+# Relational data
+
+Typically, there are many tables of data, and you must combine them to answer the questions you are interested in. Collectively, mutiple tables of data are called relational data, becase you are interested in the relations and not just the individual datasets. 
+
+
+# nycflights13
+
+airlines: look up the full carrier name from its abbreviated code
+
+```{r}
+airlines
+```
+
+airports: gives information about each airport, identified by the faa airport code
+
+```{r}
+airports
+```
+
+planes: gives information about each plane, identified by its tail number
+
+```{r}
+planes
+```
+weather: gives the weather at each NYC airport for each hour
+
+```{r}
+weather
+```
+
+Imagine that you want to draw the route each plane flies from its origin to its destination. What variables would you need? What tables would you need to combine?
+
+```{r}
+# require the latitude and longitude of the origin and destination airports of each flight. 
+
+glimpse(flights)
+glimpse(airports) # has lat, lon
+
+flights_latlon <- flights %>% 
+  inner_join(select(airports, origin = faa,
+                    origin_lat = lat,
+                    origin_lon = lon),
+             by = "origin") %>% 
+  inner_join(select(airports, dest = faa,
+                    dest_lat = lat,
+                    dest_lon = lon),
+             by = "dest") 
+
+glimpse(flights_latlon)
+
+# first 100 flights
+
+flights_latlon %>% 
+  slice(1:100) %>% 
+  ggplot(aes(
+    x = origin_lon, xend = dest_lon,
+    y = origin_lat, yend = dest_lat
+  )) +
+  borders("state") +
+  geom_segment(arrow = arrow(length = unit(0.1, "cm"))) +
+  coord_quickmap() +
+  labs( y = "Lat",
+        x = "Lon")
+  
+```
+
+# Keys
+
+Add a surrogate key to flights
+
+```{r}
+flights
+
+flights %>% 
+  mutate(flight_id = row_number()) %>% 
+  glimpse()
+```
+
+# Mutating Joins
+
+Compute the average delay by destination, then join on the airports data frame so that you can show the spatial distribution of delays.
+
+```{r}
+avg_dest_delays <- flights %>% 
+  group_by(dest) %>% 
+  summarise(delay = mean(arr_delay, na.rm = T)) %>% 
+  inner_join(airports, by = c(dest = "faa")) %>% 
+  ggplot(aes(lon, lat, col = delay)) +
+  borders("state") +
+  geom_point() +
+  coord_quickmap() +
+  scale_color_viridis_c() +
+  theme_classic()
+
+avg_dest_delays 
+
+```
+
+Add the location of the origin and destination to flights
+
+```{r}
+airport_locations <- airports %>% 
+  select(faa, lat, lon)
+
+flights %>% 
+  select(year:day, hour, origin, dest) %>% 
+  left_join(airport_locations, by = c("origin" = "faa")) %>% 
+  left_join(airport_locations, by = c("dest" = "faa"),
+            suffix = c("_origin", "_dest"))
+
+```
+
+Is there a relationship between the age of a plane and its delays?
+
+```{r}
+# merge flights with planes (which contains plane years)
+# calculate the average departure delay for each age of flight
+
+plane_cohorts_dep <- inner_join(flights,
+                            select(planes, tailnum, plane_year = year),
+                            by = "tailnum") %>%
+  mutate(age = year - plane_year) %>% 
+  filter(!is.na(age)) %>% 
+  mutate(age = if_else(age>25, 25L, age)) %>% 
+  group_by(age) %>% 
+  summarise(dep_delay_mean = mean(dep_delay, na.rm = T),
+            dep_delay_sd = sd(dep_delay, na.rm = T),
+            n_dep_delay = sum(!is.na(dep_delay))) %>% 
+  ggplot(aes(x = age, y = dep_delay_mean)) +
+  geom_point() +
+  scale_x_continuous("Age of plane(years)", breaks = seq(0,30, by = 10)) +
+  scale_y_continuous("Mean Dep Delays (min)") +
+  labs(subtitle = "Departure delay increases with age of plane until 10 years, then it declines and flattens out.",
+       title = "Relationship between Departure Delay and Age of Plane") +
+  theme_classic()
+
+
+
+plane_cohorts_arr <- inner_join(flights,
+                            select(planes, tailnum, plane_year = year),
+                            by = "tailnum") %>%
+  mutate(age = year - plane_year) %>% 
+  filter(!is.na(age)) %>% 
+  mutate(age = if_else(age>25, 25L, age)) %>% 
+  group_by(age) %>% 
+  summarise(
+            arr_delay_mean = mean(arr_delay, na.rm = T),
+            arr_delay_sd = sd(arr_delay, na.rm = T),
+            n_arr_delay = sum(!is.na(arr_delay))) %>% 
+  ggplot(aes(x = age, y = arr_delay_mean)) +
+  geom_point() +
+  scale_x_continuous("Age of plane(years)", breaks = seq(0,30, by = 10)) +
+  scale_y_continuous("Mean Arr Delays (min)") +
+  labs(subtitle = "Arr delay increases with age of plane until 10 years, then it declines and flattens out.",
+       title = "Relationship between Arr Delay and Age of Plane") +
+  theme_classic()
+
+gridExtra::grid.arrange(plane_cohorts_dep, plane_cohorts_arr, nrow = 2) 
+```
+
+What weather conditions make it more likely to see a delay?
+
+```{r}
+flight_weather <- flights %>% 
+  inner_join(weather, by = c(
+    "origin" = "origin",
+    "year" = "year",
+    "month" = "month",
+    "day" = "day", 
+    "hour" = "hour"
+  ))
+
+flight_weather %>% 
+  mutate(visib_cat = cut_interval(visib, n = 10)) %>% 
+  group_by(visib_cat) %>% 
+  summarise(dep_delay = mean(dep_delay, na.rm = T)) %>% 
+  ggplot(aes(x = visib_cat, y = dep_delay)) +
+  geom_point() +
+  labs(title = "Relationship beween visibility and delay times",
+       subtitle = "A decrease in visibility increases delay timings") +
+  theme_classic()
+```
+# Filtering Joins
+
+Filter flights to only show flights with planes that have flown at least 100 flights.
+
+```{r}
+flights_gte100 <- flights %>% 
+  filter(!is.na(tailnum)) %>% 
+  group_by(tailnum) %>% 
+  count() %>% 
+  filter(n >=100)
+
+flights %>% 
+  semi_join(flights_gte100, by = "tailnum")
+
+```
+Combine fueleconomy::vehicles and fueleconomy::common to find only records for the most common models
+
+```{r}
+fueleconomy::vehicles %>% 
+  semi_join(fueleconomy::common, by = c("make", "model"))
+```
+
+
+
+
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+

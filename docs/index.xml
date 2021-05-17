@@ -18,6 +18,15 @@
       <media:content url="https://lruolin.github.io/myBlog/posts/20210514_Tidyverse Chap 9 - Tidy Data/09---Tidy-Data_files/figure-html5/unnamed-chunk-4-1.png" medium="image" type="image/png" width="1248" height="768"/>
     </item>
     <item>
+      <title>Relational Data</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210517_Tidyverse Chap 10 - Relational Data</link>
+      <description>R4DS 09 - Relational Data with dplyr</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210517_Tidyverse Chap 10 - Relational Data</guid>
+      <pubDate>Mon, 17 May 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210517_Tidyverse Chap 10 - Relational Data/10---Relational-Data_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
       <title>Data Import</title>
       <dc:creator>lruolin</dc:creator>
       <link>https://lruolin.github.io/myBlog/posts/20210512_Tidyverse Chap 8 - Import</link>
