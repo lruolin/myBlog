@@ -7,7 +7,31 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 17 May 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 25 May 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Cheatsheets</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210525_cheatsheet</link>
+      <description>The package to download all cheatsheets</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210525_cheatsheet</guid>
+      <pubDate>Tue, 25 May 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Functions</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210525_Tidyverse Chap 15 - Functions</link>
+      <description>R4DS 15 - Functions</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210525_Tidyverse Chap 15 - Functions</guid>
+      <pubDate>Tue, 25 May 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Date and Time in R</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210524_Tidyverse Chap 13 - Lubridate</link>
+      <description>R4DS 13 - Lubridate</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210524_Tidyverse Chap 13 - Lubridate</guid>
+      <pubDate>Mon, 24 May 2021 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Tidy Data</title>
       <dc:creator>lruolin</dc:creator>

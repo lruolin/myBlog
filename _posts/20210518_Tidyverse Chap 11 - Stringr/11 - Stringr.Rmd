@@ -1,0 +1,163 @@
+---
+title: "String Manipulation in R"
+description: |
+  R4DS 11 - Strings with stringr
+author:
+  - name: lruolin
+date: 05-18-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 11: stringr
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. 
+
+```{r}
+library(tidyverse)
+library(stringr)
+
+```
+
+# String Length
+
+```{r}
+# to check the number of characters in a string
+str_length(c("a", "R for data science", NA))
+
+```
+
+# Combining strings
+
+```{r}
+# To combine strings, use str_c
+
+str_c("x", "y")
+
+# use sep to control how they are separated
+
+str_c("x", "y", sep = ",")
+
+# to collapse a vecor of strings into a single string, use collapse
+
+str_c(c("x", "y", "z"), collapse = ", ")
+
+```
+
+# Subsetting strings
+
+```{r}
+
+# to extract parts of a string, use str_sub
+x <- c("Apple", "Banana", "Pear")
+x
+
+str_sub(x, 1, 3) # start and end position, inclusive
+
+str_sub(x, 1, 1) <- str_to_lower(str_sub(x,1,1))
+x
+
+```
+
+In code which doesn't use stringr, you will often see paste() and paste0(). 
+
+paste() separates strings by spaces by default.
+paste0() does not separate strings with spaces by default.
+
+```{r}
+paste("has", "space")
+
+paste0("no", "space")
+
+str_c("this", "is", "similar", "to", "paste", "no", "space")
+```
+
+Use str_length() and str_sub() to extract the middle character from  a string. 
+
+```{r}
+y <- c("abc", "abcd", "abcde", "abcdef")
+
+length <- str_length(y)
+length
+
+middle <- ceiling(length/2) # ceiling takes a single numeric argument and returns a numeric vector containing the smallest integers not less than the corresponding elements of x
+
+middle
+
+# substitute
+str_sub(y, middle, middle)
+
+```
+
+What does str_wrap do?
+
+```{r}
+# str_wrap wraps text so that it fits within a certain width. This is useful for wrapping long strings of text to be typeset. 
+
+thanks_path <- file.path(R.home("doc"), "THANKS")
+thanks <- str_c(readLines(thanks_path), collapse = "\n")
+thanks <- word(thanks, 1, 3, fixed("\n\n"))
+cat(str_wrap(thanks), "\n")
+cat(str_wrap(thanks, width = 40), "\n")
+cat(str_wrap(thanks, width = 60, indent = 2), "\n")
+cat(str_wrap(thanks, width = 60, exdent = 2), "\n")
+cat(str_wrap(thanks, width = 0, exdent = 2), "\n")
+```
+What does str_trim do?
+
+```{r}
+# str_trim trims whitespace from a string.
+
+str_trim(" abcde   ")
+
+# the opposite of str_trim is str_pad:
+
+str_pad("abc", 5, side = "both")
+
+
+```
+
+# RegEx - Basic Matches
+
+```{r}
+x <- c("apple", "banana", "pear")
+str_view(x, "an")
+
+str_view(x, ".a.")
+
+```
+# RegEx - Anchors
+
+```{r}
+# ^ to match start of the string
+# $ to match end of the string
+
+fruits <- c("apple", "banana", "pear")
+str_view(fruits, "^a") # starts with a
+
+str_view(fruits, "a$") # ends with a
+
+# to match only a complete string, anchor it with both ^ and $
+
+apple <- c("apple pie", "apple", "apple cake")
+str_view(apple, "^apple$")
+
+```
+
+
+
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+

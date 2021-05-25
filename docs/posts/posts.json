@@ -1,5 +1,56 @@
 [
   {
+    "path": "posts/20210525_cheatsheet/",
+    "title": "Cheatsheets",
+    "description": "The package to download all cheatsheets",
+    "author": [
+      {
+        "name": "lruolin",
+        "url": {}
+      }
+    ],
+    "date": "2021-05-25",
+    "categories": [],
+    "contents": "\nThis article was first read from [https://technistema.com/posts/announcing-the-cheatsheet-package/]\nThe package\nThere is this cheatsheet package that allows you to download all the cheatsheets with one single command.\n\n\nlibrary(cheatsheet)\n\n\n\nSet your working directory and download into the folder\n\n\nget_all_cheatsheets(local_path = \"~/Desktop/cheatsheets\", tidyverse_only = TRUE) # can also set to FALSE\n\n\n\nReference\nhttps://technistema.com/posts/announcing-the-cheatsheet-package/\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-25T21:38:32+08:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/20210525_Tidyverse Chap 15 - Functions/",
+    "title": "Functions",
+    "description": "R4DS 15 - Functions",
+    "author": [
+      {
+        "name": "lruolin",
+        "url": {}
+      }
+    ],
+    "date": "2021-05-25",
+    "categories": [],
+    "contents": "\nR4DS Practice 15: Functions\nThe codes below are from the practice exercises in https://r4ds.had.co.nz/, and are taken with reference from: https://jrnold.github.io/r4ds-exercise-solutions/\nLet’s begin now\nLoading tidyverse package.\n\n\nlibrary(tidyverse)\nlibrary(tibble)\n\n\n\nIntroduction\nWhy are functions important?\nThey help to automate common tasks, rather than copying and pasting, thus minimising human error.\nWhen should you write a function?\nWhen you need to copy and paste anything more than … twice..\n\n\n# rnorm - random generation for normal distribution\n\ndf <- tibble(\n  a = rnorm(10),\n  b = rnorm(10),\n  c = rnorm(10),\n  d = rnorm(10)\n)\n\ndf\n\n\n# A tibble: 10 x 4\n        a      b       c       d\n    <dbl>  <dbl>   <dbl>   <dbl>\n 1  2.33  -0.557  0.889  -1.45  \n 2 -0.650  0.272 -1.92   -0.0814\n 3 -0.647  0.299  1.10    0.243 \n 4  0.586  0.373  0.175   0.845 \n 5 -0.953 -1.04  -0.410  -1.86  \n 6 -0.293 -1.52   0.888  -1.29  \n 7  0.654  0.169 -0.766  -0.775 \n 8  0.980 -0.423 -0.280   0.292 \n 9 -1.96   0.162  0.0332  1.08  \n10 -0.182 -0.454 -0.667   0.753 \n\n# Manual coding\n\ndf$a <- (df$a - min(df$a, na.rm = T)/\n           (max(df$a, na.rm = T)) - min(df$a, na.rm = T))\ndf$b <- (df$b - min(df$b, na.rm = T)/\n           (max(df$b, na.rm = T)) - min(df$b, na.rm = T))\ndf$c <- (df$c - min(df$c, na.rm = T)/\n           (max(df$c, na.rm = T)) - min(df$c, na.rm = T))\ndf$d <- (df$d - min(df$d, na.rm = T)/\n           (max(df$d, na.rm = T)) - min(df$d, na.rm = T))\n\n# How to reduce copying, pasting, and manual replacing?\n\n# Identify the number of inputs:\n\n# - 1 variable: a numeric vector\n\nx <- df$a\n(x-min(x, na.rm = T)/(max(x, na.rm = T) - min(x, na.rm = T)))\n\n\n [1] 4.9317569 1.9547736 1.9578164 3.1905751 1.6515770 2.3117706\n [7] 3.2592569 3.5847952 0.6455328 2.4224042\n\nrange <- range(x, na.rm = T)\nrange # good practice to give names to intermediate calculations\n\n\n[1] 0.8419688 5.1281929\n\n# After trying out with a simple input, \n# Now you can turn it into a function:\n\n# a. identify the name of the function\n\n# b. list the inputs: function (input variable)\n\n# c: place the code into the body of the function\n\nrescale01 <- function(x) {\n  range <- range(x, na.rm = T)\n  (x - range[1])/(range[2] - range[1])\n}\n\nrescale01(c(0,5,10))\n\n\n[1] 0.0 0.5 1.0\n\n# What if there are Inf values?\n\nx <- c(1:10, Inf)\nx\n\n\n [1]   1   2   3   4   5   6   7   8   9  10 Inf\n\nrescale01(x) # error: NaN\n\n\n [1]   0   0   0   0   0   0   0   0   0   0 NaN\n\n# Let's fix the function\nrescale01_inf <- function(x) {\n  range <- range(x, na.rm = T, finite = T)\n  (x - range[1])/(range[2] - range[1])\n}\n\nrescale01_inf(x)\n\n\n [1] 0.0000000 0.1111111 0.2222222 0.3333333 0.4444444 0.5555556\n [7] 0.6666667 0.7777778 0.8888889 1.0000000       Inf\n\n# What if you want to map -Inf to 0, and Inf to 1?\n\n  range <- range(x, na.rm = T, finite = T)\n  y <- (x - range[1])/(range[2] - range[1])\n  y[y ==-Inf] <- 0\n  y[y ==Inf] <- 1\n  y\n\n\n [1] 0.0000000 0.1111111 0.2222222 0.3333333 0.4444444 0.5555556\n [7] 0.6666667 0.7777778 0.8888889 1.0000000 1.0000000\n\n# put into function\nrescale01_inf_b <- function(x) {\n  range <- range(x, na.rm = T, finite = T)\n  y <- (x - range[1])/(range[2] - range[1])\n  y[y==-Inf] <- 0\n  y[y==Inf] <- 1\n  y\n}\n\nrescale01_inf(x)\n\n\n [1] 0.0000000 0.1111111 0.2222222 0.3333333 0.4444444 0.5555556\n [7] 0.6666667 0.7777778 0.8888889 1.0000000       Inf\n\nrescale01_inf_b(x)\n\n\n [1] 0.0000000 0.1111111 0.2222222 0.3333333 0.4444444 0.5555556\n [7] 0.6666667 0.7777778 0.8888889 1.0000000 1.0000000\n\nPractice turning the following code snippets into functions\n\n\n# to calculate the proportion of na values\n\nx <- c(0, 1, 2, NA, 4, NA)\n\nmean(is.na(x)) # number of NA as proportion\n\n\n[1] 0.3333333\n\n# write the function\nprop_na <- function(x) {\n  mean(is.na(x))\n  \n}\n\nprop_na(x)\n\n\n[1] 0.3333333\n\n# to standardize the vector so that it sums to 1\nx/sum(x, na.rm = T)\n\n\n[1] 0.0000000 0.1428571 0.2857143        NA 0.5714286        NA\n\n# write the function\n\nsum_to_one <- function(x, na.rm = F){\n  x/sum(x, na.rm = na.rm)\n  \n}\n\nsum_to_one(1:5)\n\n\n[1] 0.06666667 0.13333333 0.20000000 0.26666667 0.33333333\n\nsum_to_one(c(1:5, NA))\n\n\n[1] NA NA NA NA NA NA\n\nsum_to_one(c(1:5, NA), na.rm = T)\n\n\n[1] 0.06666667 0.13333333 0.20000000 0.26666667 0.33333333         NA\n\n# to calculate the coefficient of variation\n\nsd(x, na.rm = T)/mean(x, na.rm = T)\n\n\n[1] 0.9759001\n\ncalc_coefficent_variation <- function(x, na.rm = F){\n  sd(x, na.rm = na.rm)/ mean(x,na.rm = na.rm)\n  \n}\n\ncalc_coefficent_variation(1:5)\n\n\n[1] 0.5270463\n\nCompute the sample variance\n\n\nvariance <- function(x, na.rm = T){\n  \n  n <- length(x)\n  m <- mean(x, na.rm = T)\n  sq_err = (x - m)^2\n  sum(sq_err)/n-1\n\n}\n\nvar(1:10)\n\n\n[1] 9.166667\n\nCompute the skewness\n\n\nskewness <- function(x, na.rm = F) {\n  n <- length(x)\n  m <- mean(x, na.rm = na.rm)\n  v <- var(x, na.rm = na.rm)\n  sum((x-m)^3 / (n-2)) / v^(3/2)\n  \n}\n\nskewness(c(1,2,5,100))\n\n\n[1] 1.494554\n\nWrite a function: both_na(), that takes two vectors of the same length and returns the number of positions that have an NA in both vectors.\n\n\nx <- c(1:10, NA)\nx\n\n\n [1]  1  2  3  4  5  6  7  8  9 10 NA\n\ny <- c(1:10, NA)\ny\n\n\n [1]  1  2  3  4  5  6  7  8  9 10 NA\n\nsum(is.na(x) & is.na(y))\n\n\n[1] 1\n\n# write the function\n\nboth_na <- function(x, y) {\n  sum(is.na(x) & is.na(y))\n}\n\nboth_na(\n  c(NA, 1,2,4),\n  c(NA, NA, 1, 4)\n)\n\n\n[1] 1\n\nLearning points\nFunctions aren’t as daunting as I thought. It can be simplified into a step-by-step manner. First, know what you want to automate from the function Identify the input variables Try out a code Write a function for the code and give it a proper name Even better, compile it into a package for your future use.\nReference\nhttps://r4ds.had.co.nz/\nhttps://jrnold.github.io/r4ds-exercise-solutions/\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-25T21:39:29+08:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/20210524_Tidyverse Chap 13 - Lubridate/",
+    "title": "Date and Time in R",
+    "description": "R4DS 13 - Lubridate",
+    "author": [
+      {
+        "name": "lruolin",
+        "url": {}
+      }
+    ],
+    "date": "2021-05-24",
+    "categories": [],
+    "contents": "\nR4DS Practice 13: lubridate\nThe codes below are from the practice exercises in https://r4ds.had.co.nz/, and are taken with reference from: https://jrnold.github.io/r4ds-exercise-solutions/\nLet’s begin now\nLoading tidyverse package.\n\n\nlibrary(tidyverse)\nlibrary(lubridate)\nlibrary(nycflights13)\n\n\n\nCreating Date/Times from Strings\nIdentify the order in which the year, month and day appear in your dates, then arrange y, m , d in the same order.\n\n\nymd(\"2021-05-24\")\n\n\n[1] \"2021-05-24\"\n\n# you can also use unquoted numbers\n\nymd(20210524)\n\n\n[1] \"2021-05-24\"\n\n# you can also add time using h, m, s\n\nymd_hms (\"2021-05-24 20:11:09\", tz = \"Singapore\")\n\n\n[1] \"2021-05-24 20:11:09 +08\"\n\n# Use OlsonNames() to display timezone names\n\n\n\nCreating Dates from Individual Components\nSometimes, you have the individual components instead of teh date-time spread across multiple columns.\n\n\nflights %>% \n  select(year, month, day, hour, minute)\n\n\n# A tibble: 336,776 x 5\n    year month   day  hour minute\n   <int> <int> <int> <dbl>  <dbl>\n 1  2013     1     1     5     15\n 2  2013     1     1     5     29\n 3  2013     1     1     5     40\n 4  2013     1     1     5     45\n 5  2013     1     1     6      0\n 6  2013     1     1     5     58\n 7  2013     1     1     6      0\n 8  2013     1     1     6      0\n 9  2013     1     1     6      0\n10  2013     1     1     6      0\n# … with 336,766 more rows\n\n# To create date/time:\n# use make_date()\n# or make_datetime()\n\nflights %>% \n  select(year, month, day, hour, minute) %>% \n  mutate(departure = make_datetime(year, month, day, hour, minute))\n\n\n# A tibble: 336,776 x 6\n    year month   day  hour minute departure          \n   <int> <int> <int> <dbl>  <dbl> <dttm>             \n 1  2013     1     1     5     15 2013-01-01 05:15:00\n 2  2013     1     1     5     29 2013-01-01 05:29:00\n 3  2013     1     1     5     40 2013-01-01 05:40:00\n 4  2013     1     1     5     45 2013-01-01 05:45:00\n 5  2013     1     1     6      0 2013-01-01 06:00:00\n 6  2013     1     1     5     58 2013-01-01 05:58:00\n 7  2013     1     1     6      0 2013-01-01 06:00:00\n 8  2013     1     1     6      0 2013-01-01 06:00:00\n 9  2013     1     1     6      0 2013-01-01 06:00:00\n10  2013     1     1     6      0 2013-01-01 06:00:00\n# … with 336,766 more rows\n\nUse the appropriate lubridate function to parse each of the following dates:\n\n\nd1 <- \"January 1, 2010\"\nmdy(d1)\n\n\n[1] \"2010-01-01\"\n\nd2 <- \"2015-Mar-07\"\nymd(d2)\n\n\n[1] \"2015-03-07\"\n\nd3 <- \"06-Jun-2017\"\ndmy(d3)\n\n\n[1] \"2017-06-06\"\n\nd4 <- c(\"August 19 (2015)\", \"July 1 (2015)\")\nmdy(d4)\n\n\n[1] \"2015-08-19\" \"2015-07-01\"\n\nd5 <- c(\"12/30/14\") # Dec 30, 2014\nmdy(d5)\n\n\n[1] \"2014-12-30\"\n\nReference\nhttps://r4ds.had.co.nz/\nhttps://jrnold.github.io/r4ds-exercise-solutions/\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-25T19:51:52+08:00",
+    "input_file": {}
+  },
+  {
     "path": "posts/20210514_Tidyverse Chap 9 - Tidy Data/",
     "title": "Tidy Data",
     "description": "R4DS 09 - Tidy Data with tidyr",

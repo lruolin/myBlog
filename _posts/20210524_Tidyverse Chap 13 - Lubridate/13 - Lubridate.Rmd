@@ -1,0 +1,95 @@
+---
+title: "Date and Time in R"
+description: |
+  R4DS 13 - Lubridate
+author:
+  - name: lruolin
+date: 05-24-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 13: lubridate
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. 
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(nycflights13)
+```
+
+# Creating Date/Times from Strings
+
+Identify the order in which the year, month and day appear in your dates, then arrange y, m , d in the same order. 
+
+```{r}
+ymd("2021-05-24")
+
+# you can also use unquoted numbers
+
+ymd(20210524)
+
+# you can also add time using h, m, s
+
+ymd_hms ("2021-05-24 20:11:09", tz = "Singapore")
+
+# Use OlsonNames() to display timezone names
+
+```
+
+# Creating Dates from Individual Components
+
+Sometimes, you have the individual components instead of teh date-time spread across multiple columns.
+
+```{r}
+flights %>% 
+  select(year, month, day, hour, minute)
+
+# To create date/time:
+# use make_date()
+# or make_datetime()
+
+flights %>% 
+  select(year, month, day, hour, minute) %>% 
+  mutate(departure = make_datetime(year, month, day, hour, minute))
+```
+Use the appropriate lubridate function to parse each of the following dates:
+
+```{r}
+d1 <- "January 1, 2010"
+mdy(d1)
+
+d2 <- "2015-Mar-07"
+ymd(d2)
+
+d3 <- "06-Jun-2017"
+dmy(d3)
+
+d4 <- c("August 19 (2015)", "July 1 (2015)")
+mdy(d4)
+
+d5 <- c("12/30/14") # Dec 30, 2014
+mdy(d5)
+
+
+```
+
+
+
+
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+

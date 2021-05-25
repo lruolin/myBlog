@@ -1,0 +1,246 @@
+---
+title: "Functions"
+description: |
+  R4DS 15 - Functions
+author:
+  - name: lruolin
+date: 05-25-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 15: Functions
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. 
+
+```{r}
+library(tidyverse)
+library(tibble)
+
+```
+
+# Introduction
+
+Why are functions important?
+
+- They help to automate common tasks, rather than copying and pasting, thus minimising human error.
+
+# When should you write a function?
+
+- When you need to copy and paste anything more than ... twice..
+
+```{r}
+# rnorm - random generation for normal distribution
+
+df <- tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+df
+
+# Manual coding
+
+df$a <- (df$a - min(df$a, na.rm = T)/
+           (max(df$a, na.rm = T)) - min(df$a, na.rm = T))
+df$b <- (df$b - min(df$b, na.rm = T)/
+           (max(df$b, na.rm = T)) - min(df$b, na.rm = T))
+df$c <- (df$c - min(df$c, na.rm = T)/
+           (max(df$c, na.rm = T)) - min(df$c, na.rm = T))
+df$d <- (df$d - min(df$d, na.rm = T)/
+           (max(df$d, na.rm = T)) - min(df$d, na.rm = T))
+
+# How to reduce copying, pasting, and manual replacing?
+
+# Identify the number of inputs:
+
+# - 1 variable: a numeric vector
+
+x <- df$a
+(x-min(x, na.rm = T)/(max(x, na.rm = T) - min(x, na.rm = T)))
+
+range <- range(x, na.rm = T)
+range # good practice to give names to intermediate calculations
+
+# After trying out with a simple input, 
+# Now you can turn it into a function:
+
+# a. identify the name of the function
+
+# b. list the inputs: function (input variable)
+
+# c: place the code into the body of the function
+
+rescale01 <- function(x) {
+  range <- range(x, na.rm = T)
+  (x - range[1])/(range[2] - range[1])
+}
+
+rescale01(c(0,5,10))
+
+# What if there are Inf values?
+
+x <- c(1:10, Inf)
+x
+
+rescale01(x) # error: NaN
+
+# Let's fix the function
+rescale01_inf <- function(x) {
+  range <- range(x, na.rm = T, finite = T)
+  (x - range[1])/(range[2] - range[1])
+}
+
+rescale01_inf(x)
+
+# What if you want to map -Inf to 0, and Inf to 1?
+
+  range <- range(x, na.rm = T, finite = T)
+  y <- (x - range[1])/(range[2] - range[1])
+  y[y ==-Inf] <- 0
+  y[y ==Inf] <- 1
+  y
+
+# put into function
+rescale01_inf_b <- function(x) {
+  range <- range(x, na.rm = T, finite = T)
+  y <- (x - range[1])/(range[2] - range[1])
+  y[y==-Inf] <- 0
+  y[y==Inf] <- 1
+  y
+}
+
+rescale01_inf(x)
+
+rescale01_inf_b(x)
+
+```
+
+Practice turning the following code snippets into functions
+
+```{r}
+
+# to calculate the proportion of na values
+
+x <- c(0, 1, 2, NA, 4, NA)
+
+mean(is.na(x)) # number of NA as proportion
+
+# write the function
+prop_na <- function(x) {
+  mean(is.na(x))
+  
+}
+
+prop_na(x)
+
+# to standardize the vector so that it sums to 1
+x/sum(x, na.rm = T)
+
+# write the function
+
+sum_to_one <- function(x, na.rm = F){
+  x/sum(x, na.rm = na.rm)
+  
+}
+
+sum_to_one(1:5)
+
+sum_to_one(c(1:5, NA))
+
+sum_to_one(c(1:5, NA), na.rm = T)
+
+# to calculate the coefficient of variation
+
+sd(x, na.rm = T)/mean(x, na.rm = T)
+
+calc_coefficent_variation <- function(x, na.rm = F){
+  sd(x, na.rm = na.rm)/ mean(x,na.rm = na.rm)
+  
+}
+
+calc_coefficent_variation(1:5)
+
+```
+
+Compute the sample variance
+
+```{r}
+variance <- function(x, na.rm = T){
+  
+  n <- length(x)
+  m <- mean(x, na.rm = T)
+  sq_err = (x - m)^2
+  sum(sq_err)/n-1
+
+}
+
+var(1:10)
+
+```
+
+Compute the skewness
+
+```{r}
+skewness <- function(x, na.rm = F) {
+  n <- length(x)
+  m <- mean(x, na.rm = na.rm)
+  v <- var(x, na.rm = na.rm)
+  sum((x-m)^3 / (n-2)) / v^(3/2)
+  
+}
+
+skewness(c(1,2,5,100))
+```
+
+Write a function: both_na(), that takes two vectors of the same length and returns the number of positions that have an NA in both vectors. 
+
+```{r}
+x <- c(1:10, NA)
+x
+
+y <- c(1:10, NA)
+y
+
+sum(is.na(x) & is.na(y))
+
+# write the function
+
+both_na <- function(x, y) {
+  sum(is.na(x) & is.na(y))
+}
+
+both_na(
+  c(NA, 1,2,4),
+  c(NA, NA, 1, 4)
+)
+```
+
+
+# Learning points
+
+Functions aren't as daunting as I thought. 
+It can be simplified into a step-by-step manner. 
+First, know what you want to automate from the function
+Identify the input variables
+Try out a code
+Write a function for the code and give it a proper name
+Even better, compile it into a package for your future use. 
+
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+

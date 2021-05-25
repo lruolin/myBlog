@@ -1,0 +1,41 @@
+---
+title: "Cheatsheets"
+description: |
+  The package to download all cheatsheets
+author:
+  - name: lruolin
+date: 05-25-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This article was first read from [https://technistema.com/posts/announcing-the-cheatsheet-package/]
+
+# The package
+
+There is this **cheatsheet** package that allows you to download all the cheatsheets with one single command.
+
+```{r, eval = FALSE}
+library(cheatsheet)
+```
+
+Set your working directory and download into the folder
+
+```{r,eval=FALSE}
+
+get_all_cheatsheets(local_path = "~/Desktop/cheatsheets", tidyverse_only = TRUE) # can also set to FALSE
+
+```
+
+
+
+# Reference
+<https://technistema.com/posts/announcing-the-cheatsheet-package/>
+
+
