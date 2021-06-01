@@ -7,7 +7,49 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 25 May 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Jun 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Tidy Tuesday Series</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major</link>
+      <description>2018 Week 29 - College Major</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major</guid>
+      <pubDate>Tue, 01 Jun 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-4-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Practice questions</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210526_Practicing</link>
+      <description>Practice questions for R Studio Exams</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210526_Practicing</guid>
+      <pubDate>Thu, 27 May 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210526_Practicing/Practicing-for-Exam_files/figure-html5/unnamed-chunk-8-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Iteration with purrr</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210526_Tidyverse Chap 17 - Iteration with purrr</link>
+      <description>R4DS 17 - purrr</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210526_Tidyverse Chap 17 - Iteration with purrr</guid>
+      <pubDate>Thu, 27 May 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Packages I use and books I read</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210526_packages </link>
+      <description>The packages I use often and useful reference books</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210526_packages </guid>
+      <pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Vectors</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210526_Tidyverse Chap 16 - Vectors</link>
+      <description>R4DS 16 - Vectors</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210526_Tidyverse Chap 16 - Vectors</guid>
+      <pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Cheatsheets</title>
       <dc:creator>lruolin</dc:creator>

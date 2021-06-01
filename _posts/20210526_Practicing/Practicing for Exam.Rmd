@@ -1,0 +1,311 @@
+---
+title: "Practice questions"
+description: |
+  Practice questions for R Studio Exams
+author:
+  - name: lruolin
+date: 05-27-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The codes below are all taken from websites listed in the Reference Section.
+This post is to let me practice on the past exam questions.
+
+# Load required packages
+
+```{r}
+library(tidyverse)
+
+```
+
+
+# Brendan Cullen's website
+
+<https://tidyverse-exam-v2-solutions.netlify.app/>
+
+## Basic Operations
+
+```{r}
+# Read in person.csv and store result in a tibble called person
+
+person <- read_csv("https://tidyverse-exam-v2-solutions.netlify.app/person.csv") 
+
+person
+
+# Create a tibble containing only family name and personal names.
+
+person %>% 
+  select(family_name, personal_name)
+
+# Create a new tibble containing only the rows in which family names come before the letter M. 
+
+person %>% 
+  filter(family_name < "M")
+
+# Display all the rows in person sorted by family name length with the longest name first
+
+person
+
+person %>% 
+  arrange(desc(str_length(family_name)))
+```
+
+
+## Cleaning and counting
+
+```{r}
+# Read the file measurement.csv to create a tibble called measurements
+
+measurements <- read_csv("https://tidyverse-exam-v2-solutions.netlify.app/measurements.csv")
+
+glimpse(measurements)
+
+# Create a tibble containing only rows where none of the values are NA and save in a tibble called cleaned
+
+cleaned <- measurements %>% 
+  drop_na()
+
+cleaned
+
+# Count the number of measurements of each type of quantity in cleaned. Your result should have one row for each quantity "rad", "sal", "temp"
+
+cleaned %>% 
+  group_by(quantity) %>% 
+  summarise(n = n())
+
+# Display the minimum and maximum value or reading separately for each quantity in cleaned
+
+cleaned %>% 
+  group_by(quantity) %>% 
+  summarise(min_reading = min(reading),
+            max_reading = max(reading))
+
+# Create a tibble in which all salinity readings greater than 1 are divided by 100.
+
+cleaned %>% 
+  mutate(reading = case_when(
+    quantity == "sal" & reading > 1 ~ reading/100,
+    T ~ reading
+  ))
+
+
+
+```
+
+
+## Combining Data
+
+```{r}
+
+# Read visited.csv and drop rows containing any NAs, assigning the results to a new tibble called visited
+
+visited <- read_csv("https://tidyverse-exam-v2-solutions.netlify.app/visited.csv") %>% 
+  drop_na()
+
+visited
+
+# Use an innerjoin to combine visited with cleaned using visit_id for match
+cleaned
+
+combined <- visited %>% 
+  inner_join(cleaned, by = "visit_id")
+
+combined
+
+# find the highest rad reading at each site. 
+
+max_rad <- combined %>% 
+  filter(quantity == "rad") %>% 
+  group_by(site_id) %>% 
+  summarise(max_rad = max(reading))
+
+# Find the date of the highest radiation reading at each site
+
+combined %>% 
+  filter(quantity == "rad") %>% 
+  group_by(site_id, visit_date) %>% 
+  summarize(max_rad = max(reading)) %>% 
+  semi_join(max_rad) %>%  # returns all rows from x with a match in y
+  select(visit_date, everything())
+  
+```
+
+
+
+## Functional Programming
+
+```{r}
+# Write a function called summarize_table that takes a title string and a tibble as input and returns a string that says something like "title has n rows and n columns
+
+summarize_table <- function(title, df) {
+  nrow <- nrow(df)
+  ncol <- ncol(df)
+  
+  glue::glue("{title} has {nrow} rows and {ncol} columns." )
+}
+
+summarize_table("mtcars", mtcars)
+
+# Write another function called show_columns that takes a string and a tibble as input and returns a string that says something like, “table has columns name, name, name”. For example, show_columns('person', person) should return the string "person has columns person_id, personal_name, family_name".
+
+show_columns <- function(title, df) { 
+  col_names <- names(df) %>% 
+    str_c(collapse = ", ")
+
+glue::glue("{title} has columns {col_names}")
+}
+
+show_columns('person', person)
+
+# The function long_name checks whether a string is longer than 4 characters. Use this function and a function from purrr to create a logical vector that contains the value TRUE where family names in the tibble person are longer than 4 characters, and FALSE where they are 4 characters or less.
+
+
+long_name <- function(name) {
+      stringr::str_length(name) > 4
+}
+
+person %>% 
+  mutate(long_family_name = map_lgl(family_name, long_name))
+```
+
+
+# Marly Gotti's website
+
+<https://marlycormar.github.io/tidyverse_sample_exam/sample_exam_sols/sols.html>
+
+## Q1
+The file at_health_facilities.csv contains a tidy dataset with four columns:
+
+The ISO3 code of the country that reported data.
+The year for which data was reported.
+The percentage of HIV-positive children born to HIV-positive mothers age 15–17.
+The percentage of HIV-positive children born to HIV-positive mothers age 20–34.
+Please answer the following questions:
+
+How many countries reported data?
+What is the difference between the minimum and maximum year with valid data for each country?
+How many countries reported data in 3 or more years?
+Which countries reported 100% incidence for at least one year in either age group?
+
+```{r}
+
+hiv <- read_csv("https://education.rstudio.com/blog/2020/02/instructor-certification-exams/at_health_facilities.csv") %>% 
+  janitor::clean_names()
+
+glimpse(hiv)
+
+# how many countries reported data?
+
+hiv %>% 
+  select(iso3) %>% 
+  unique() %>% # 100 countries
+  nrow()
+
+# what is the difference between min and max year with valid data for each country?
+
+# age 20-34 has some dashes to be filtered out
+
+hiv %>% 
+  filter(age_20_34 != "-") %>% 
+  group_by(iso3) %>% 
+  summarise(diff = max(year) - min(year)) 
+
+# how many countries reported data in 3 or more years?
+
+hiv %>% 
+  group_by(iso3) %>% 
+  summarise(years_count = n_distinct(year)) %>% 
+  filter(years_count >=3) # 34 countries
+
+# which countries reported 100% incidence rate for at least one year in either age group?
+
+hiv %>% 
+  filter(age_15_17 == 100 | age_20_34 == 100) %>% 
+  distinct(iso3) # 18 countries
+
+```
+
+## Q2
+
+A student has sent you the file rmd-country-profile.Rmd, which is an R Markdown document analyzing the data in at_health_facilities.csv for Bangladesh. They could not knit the file, and are providing you with the raw .Rmd file instead of a rendered file.
+
+Go through the file, fixing things that are preventing it from knitting cleanly.
+Change the two lines of bold text to H2-level headers to organize the document, and add a table of contents.
+Convert this R Markdown report for Bangladesh into a parameterized report with the country’s iso3 code as its parameter. Knit a new country profile for Egypt (ISO3 code “EGY”).
+
+
+## Q3
+
+```{r}
+infant_hiv <- read_csv("https://education.rstudio.com/blog/2020/02/instructor-certification-exams/infant_hiv.csv")
+
+# tidy the data into 3 col: iso3, year, state, number
+
+tidy <- infant_hiv %>% 
+  pivot_longer(!ISO3,
+               names_to = c("year", "state"),
+               names_pattern = "(.*) (.*)") %>% 
+  mutate(value = case_when(
+    value == "-" | value == ">95%" ~NA_character_,
+    TRUE ~ str_replace(value, pattern = "%", replacement = "")
+  ))
+
+tidy
+
+# write the function
+
+tidy_data <- function(file) {
+  
+  # Import data
+  raw_data <- read_csv(file)
+  
+  # Tidy data
+  tidy <- raw_data %>% 
+  pivot_longer(!ISO3,
+               names_to = c("year", "state"),
+               names_pattern = "(.*) (.*)") %>% 
+  mutate(value = case_when(
+    value == "-" | value == ">95%" ~NA_character_,
+    TRUE ~ str_replace(value, pattern = "%", replacement = "")
+  ))
+
+tidy
+}
+
+tidy_data("https://education.rstudio.com/blog/2020/02/instructor-certification-exams/infant_hiv.csv")
+```
+
+## Q4
+
+```{r}
+ranking <- read_csv("https://education.rstudio.com/blog/2020/02/instructor-certification-exams/ranking.csv")
+
+ranking %>% 
+  group_by(item) %>% 
+  count(rank) %>% 
+  pivot_wider(names_from = rank,
+              values_from = n) %>% 
+  mutate(num = sum(positive, negative, indifferent, na.rm = T)) %>% 
+  mutate_at(vars(-item, -num), .funs = list(~ round(./num, digits = 2))) %>% 
+  ggplot(aes(negative, positive, size = num)) +
+  geom_point(aes(alpha = 0.25)) +
+  geom_smooth(method = "lm")
+
+
+```
+
+
+
+
+
+
+# References
+
+<https://tidyverse-exam-v2-solutions.netlify.app/>

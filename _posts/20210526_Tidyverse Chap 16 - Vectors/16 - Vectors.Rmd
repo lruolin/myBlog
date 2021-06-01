@@ -1,0 +1,165 @@
+---
+title: "Vectors"
+description: |
+  R4DS 16 - Vectors
+author:
+  - name: lruolin
+date: 05-26-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 16: Vectors
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. 
+
+```{r}
+library(tidyverse)
+
+```
+
+# Vector Basics
+
+There are two types of vectors:
+
+- atomic vectors - logical, integer, double, character, complex, raw
+- lists, also known as recursive vectors because lists can contain other lists
+
+# Naming vectors, so that they can be used for subsetting:
+
+```{r}
+# use the set_names function
+purrr::set_names(1:3, nm = letters[1:3])
+
+```
+
+dplyr::filter() only works for tibbles. 
+
+# Subsetting
+
+```{r}
+x <- c("one", "two", "three", "four", "five")
+
+# subset with square brackets
+x[c(3,2,5)]
+
+x[c(2,2,4,4,5)]
+
+# subsetting with named vectors
+
+a <- set_names(1:10, # vectors 
+               letters[1:10]) # names
+a
+
+# specify what to be subsetted
+a[c("d", "e", "j")]
+```
+
+Create a function that takes a vector as input and returns the last value.
+
+```{r}
+# try first
+
+x <- c(seq(from = 1, to = 10, by = 2))
+x
+
+length(x) # 5
+x[[length(x)]] # returns the last value by subsetting it out as single element
+
+
+# put as function
+last_value <- function(x) {
+  
+  # check for case with no length
+  if(length(x)) {
+    
+    x[[length(x)]]
+  }
+  
+  else {
+    x
+  }
+}
+
+
+last_value(x)
+```
+
+Create a function that take a vector as input and returns the elements at even numbered positions
+
+```{r}
+x
+
+# put as function
+even_indices <- function(x) {
+  
+  # check for case with no length
+  if(length(x)) {
+    
+    x[seq_along(x) %% 2 == 0]
+  }
+  
+  else {
+    x
+  }
+}
+
+
+even_indices(x)
+
+
+```
+
+# Lists
+
+Lists can contain other lists. 
+Lists can contain a mixture of objects.
+
+# Subsetting lists
+
+```{r}
+# Create a list
+
+a <- list(a = 1:3,
+          b = "a string", 
+          c = pi,
+          d  = list(-1, -5))
+
+a
+
+# subset a list using [ ]
+
+a[1:2] # first two items of the list
+
+# subset a single component of the list using [[ ]]
+
+str(a[[4]])  # goes into the list item 4
+
+a[[4]][1]  # list item 4, first number
+
+
+# using $ to extract names elements of the list
+
+a$a
+```
+
+
+# Learning points
+
+The main takeaway that I had from this chapter is how to name vectors to subset them (using [ ]), and how to use different ways to subset lists (using [ ], [[ ]],  $)
+
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+

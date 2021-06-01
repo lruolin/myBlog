@@ -1,0 +1,490 @@
+---
+title: "Iteration with purrr"
+description: |
+  R4DS 17 - purrr
+author:
+  - name: lruolin
+date: 05-27-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R4DS Practice 17: Iteration with purrr
+
+The codes below are from the practice exercises in <https://r4ds.had.co.nz/>, and are taken with reference from: <https://jrnold.github.io/r4ds-exercise-solutions/>
+
+# Let's begin now
+
+Loading tidyverse package. 
+
+```{r}
+library(tidyverse)
+
+```
+
+# For Loops
+
+```{r}
+df <- tibble(
+  a = rnorm(10),
+  b = rnorm(10),
+  c = rnorm(10),
+  d = rnorm(10)
+)
+
+# to compute the median of each column:
+
+median(df$a)
+median(df$b)
+
+# use a for loop:
+
+output <- vector("double", ncol(df))
+
+  for(i in seq_along(df)) {  # df[[1]] , df[[2]], df[[3]], df[[4]]
+  
+  output[[i]] <-  median(df[[i]])
+  
+}
+
+output
+```
+
+Write for loops to compute the mean of every column in mtcars
+
+```{r}
+# to compute the mean for every column in mtcars:
+
+glimpse(mtcars)
+
+mtcars[[1]] # first column
+mtcars[[2]] # second column
+
+mean(mtcars[[1]]) # mean  = 20.09062
+
+# for loop
+
+output <-  vector("double", ncol(mtcars))
+
+for (i in seq_along(mtcars))
+  output[[i]] <-  mean(mtcars[[i]])
+
+output
+
+
+output <- vector("double", ncol(mtcars))
+names(output) <- names(mtcars)
+for (i in names(mtcars)) {
+  output[i] <- mean(mtcars[[i]])
+}
+output
+```
+
+Write for loops to determine the type of each column in nycflights13::flights
+
+```{r}
+library(nycflights13)
+glimpse(flights)
+
+
+# to find out the class of column:
+class(flights$year)
+class(flights[[1]]) # integer
+
+output <- vector("list", ncol(flights)) # output is a list
+
+names(output) <- names(flights) # set name of output
+
+for (i in names(flights)) {
+  output[[i]] <- class(flights[[i]])
+}
+output
+
+```
+
+Compute the number of unique values in each column of iris
+
+```{r}
+glimpse(iris)
+
+iris[[1]] # first col of iris: sepal.length
+n_distinct(iris[[1]]) # number of unique values
+
+iris_unique <- vector("double", ncol(iris)) # vector produces a vector of the given length and mode
+names(iris_unique) <-  names(iris) # set the name of vector according to the iris dataset
+
+for(i in names(iris)) {
+  iris_unique[i] <- n_distinct(iris[[i]])
+}
+
+iris_unique
+
+```
+
+Generate 10 random normals for each of miu = -10, 0, 10 and 100
+
+```{r}
+
+# generate 10 numbers
+n <- 10
+
+# pre-set values for mean
+
+mu <- c(-10, 0, 10, 100)
+
+
+# write the forloop
+
+normals <- vector("list", length(mu))
+for (i in seq_along(normals)) {
+  
+  normals[[i]] <- rnorm(n, mean = mu[[i]])
+}
+
+# this example requires me to create the list myself
+
+```
+
+# For Loop Variations - Modifying an Existing Object
+
+```{r}
+df
+
+# rescale function
+
+rescale01 <- function(x){
+  range <- range(x, na.rm = T)
+  (x-range[1] / (range[2] - range[1]))
+  
+}
+
+rescale01(df$a)
+rescale01(df$b)
+
+# to solve this with a for loop,
+
+# output: same as input
+# sequence: seq_along(df)
+# body: apply rescale01
+
+seq_along(df) # generate sequences
+
+for(i in seq_along(df)) {
+  df[[i]] <- rescale01(df[[i]]) # use double square brackets
+}
+
+df
+```
+
+# For Loops vs Functionals
+
+R is a functional programming language, meaning it is possible to wrap up for loops in a function, and call that function instead of using for loop directly.
+
+Solutions that make use of loops are less efficient than vectorized solutions that make use of apply functions, such as lapply and sapply. 
+
+There is also more clarity with using map() in purrr, rather than using for loops.
+
+```{r}
+x <- list(a = 1:10,
+          beta = exp(-3:3),
+          logic = c(T, F, F, T))
+x
+
+# lapply returns a list of the same length as x
+lapply(x, mean)  # variable, function
+
+# sapply returns a vector by default
+sapply(x, quantile)
+
+# use sapply to find missing values
+sapply(x, function(x) sum(is.na(x))) # creating an anonymous function
+
+```
+
+# Map Functions
+
+The focus is on the operation being performed, not the steps/codes to loop over which element and store as which output. The first argument is always the data object you want to map over, and the second argument is the **function** that you want to apply. 
+
+```{r}
+df
+
+# calculate mean for each column in df
+map_dbl(df, mean) # df, function
+map(df, mean) # returns a list
+
+# calculate median for each column in df
+map_dbl(df, median)
+
+df %>% 
+  map_dbl(mean) # calculate mean for each col in df
+
+```
+
+To apply a linear model to each group in a dataset:
+
+```{r}
+
+models <- mtcars %>% 
+  split(.$cyl) %>% # divides the data in the vector into groups
+  map( ~lm(mpg ~wt, data = .))
+
+models  
+
+# to extract model summary:
+
+models %>% 
+  map(summary) %>% 
+  map_dbl("r.squared") # provide the name of the element to extract
+```
+
+Compute the mean of every column in mtcars
+
+```{r}
+glimpse(mtcars)
+
+mtcars %>% 
+  map_dbl(mean)
+
+```
+
+Determine the type of column in flights dataset
+
+```{r}
+glimpse(flights)
+
+# find a function to determine type of column
+
+typeof(flights$year)
+
+flights %>% 
+  map_chr(typeof)
+```
+
+Compute the number of unique values in each column of iris
+
+```{r}
+glimpse(iris)
+
+iris %>% 
+  map_int(n_distinct)
+
+```
+
+Generate 10 random normals for each of miu = -10, 0, 10 and 100.
+
+```{r}
+
+map(c(-10, 0, 10, 100), ~rnorm(n = 10, mean = .))
+
+```
+
+How can you create a single vector that for each column in a data frame indicates whether or not it is a factor?
+
+```{r}
+# function:
+diamonds 
+
+is.factor(diamonds$color)
+
+# to check if all the columns are factors:
+
+diamonds %>% 
+  map_lgl(is.factor)
+```
+
+# Mapping over Multiple Arguments
+
+use map2() or pmap()
+
+
+# Replicating worked example on Rebecca Barter's website
+
+Let me try to practice more using worked examples from <http://www.rebeccabarter.com/blog/2019-08-19_purrr/>.
+
+```{r}
+# Create a function to add ten
+
+add_ten <- function(x) {
+  return(x + 10)
+}
+
+add_ten(10)
+
+# Use it for map
+
+numbers <- c(5,15,25)
+
+numbers %>% 
+  map_dbl(add_ten)
+
+# if you want the object returned to be the same as the input:
+
+numbers %>% 
+  modify(add_ten)
+```
+
+## Gapminder dataset
+
+```{r}
+library(gapminder)
+
+glimpse(gapminder)
+
+# To identify the class of each column:
+
+gapminder %>% 
+  map_chr(class)
+
+# To identify the number of distinct values in the columnn:
+
+gapminder %>% 
+  map_dbl(n_distinct)
+```
+
+## Tip:
+
+First figure out what code to use for single element of the data frame. Then paste it into map_df()
+
+```{r}
+# Extract single element (.x)
+.x <- gapminder %>% 
+  pluck(1) %>%  # to take first element of list ie country
+  head()
+
+.x
+
+# Create code (.f)
+data.frame(n_distinct(.x),
+           class(.x))
+
+# Paste into code for map
+
+gapminder %>% 
+  map_df(~data.frame(n_distinct(.x),
+           class(.x)),
+         .id = "variable")
+```
+
+## Maps with multiple input objects
+
+map2(.x = object1,
+     .y = object2,
+     .f = function)
+
+
+## List columns and Nested Data Frames
+
+```{r}
+gapminder_nested <- gapminder %>% 
+  group_by(continent) %>% 
+  nest()
+
+gapminder_nested
+
+gapminder_nested %>% pluck("data", 1)
+
+# Calculate the average life expectancy within each continent and add it as a new column using mutate( ).
+
+.x <- gapminder_nested %>% 
+  pluck("data", 1)
+
+.f <- mean(.x$lifeExp)
+.f
+
+# put into map
+
+gapminder_nested %>% 
+  mutate(av_life_exp = map_dbl(data, 
+                               ~mean(.x$lifeExp)))
+```
+
+## Fitting a linear model separately for each continent
+
+```{r}
+gapminder_nested <- gapminder_nested %>% 
+  mutate(lm_obj = map(data, ~lm(lifeExp ~ pop + gdpPercap + year, data = .x)))
+
+gapminder_nested
+
+gapminder_nested %>% pluck("lm_obj", 1)
+
+# predict the response for each continent
+
+gapminder_nested <- gapminder_nested %>% 
+  mutate(pred = map2(lm_obj,
+                     data,
+                     function(.lm, .data) predict(.lm, .data)))
+
+gapminder_nested
+
+# then calculate the correlation between observed and predicted response for each continent
+
+gapminder_nested <- gapminder_nested %>% 
+  mutate(cor = map2_dbl(pred,
+                        data,
+                        function(.pred, .data) cor(.pred, .data$lifeExp)))
+
+
+gapminder_nested
+
+# advanced exercise
+
+gapminder %>% 
+  group_by(continent) %>% 
+  nest() %>% 
+  mutate(lm_obj = map(data, ~lm(lifeExp ~ pop + year + gdpPercap, data = .))) %>% 
+  mutate(lm_tidy = map(lm_obj, broom::tidy)) %>% 
+  ungroup() %>% 
+  transmute(continent, lm_tidy) %>%  # create new columns and dropping old
+  unnest(cols = c(lm_tidy))
+
+                       
+```
+# Another tutorial from Jenny Bryan 
+
+The worked examples below are from: <https://jennybc.github.io/purrr-tutorial/>
+
+```{r}
+library(purrr)
+library(repurrrsive)
+library(listviewer)
+
+# this is a list
+str(wesanderson)
+
+# use listviewer to view the list
+jsonedit(wesanderson)
+
+# list for Game of Thrones dataset
+str(got_chars)
+
+jsonedit(got_chars)
+
+# Who are the GoT characters?
+
+got_chars %>% 
+  map_chr("name") # to retrieve the elements with name
+```
+
+# Learning points
+
+I think I am still swimming in this package..
+The basic idea of using the map functions is to try it on one element and then map it, but I think I need more practice...
+
+
+# Reference
+<https://r4ds.had.co.nz/>
+
+<https://jrnold.github.io/r4ds-exercise-solutions/>
+
+<https://www.r-bloggers.com/2015/12/how-to-write-the-first-for-loop-in-r/>
+
+<http://www.rebeccabarter.com/blog/2019-08-19_purrr/>
+
+<https://jennybc.github.io/purrr-tutorial/>

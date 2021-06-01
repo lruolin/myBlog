@@ -1,0 +1,527 @@
+---
+title: "Tidy Tuesday Series"
+description: |
+  2018 Week 29 - College Major
+author:
+  - name: lruolin
+date: 06-01-2021
+output:
+  distill::distill_article:
+    self_contained: false
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, eval=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load packages
+library(tidytuesdayR)
+library(tidyverse)
+
+# to download data
+tt_data <- tt_load(2018, week = 29)
+tt_data$`recent-grads`
+
+# to view readme
+readme(tt_data)
+
+# to see available datasets:
+print(tt_data) # recent-grads
+
+recent_grads <- tt_data$`recent-grads`
+
+
+```
+
+# Load Packages
+
+```{r}
+library(tidyverse)
+library(tidytuesdayR)
+library(ggthemes)
+library(ggrepel)
+library(broom)
+library(plotly)
+
+```
+
+
+# Load Data from tidytuesdayR package
+
+```{r, eval = F}
+
+# to download data
+tt_data <- tt_load(2018, week = 29)
+tt_data$`recent-grads`
+
+# to view readme
+readme(tt_data)
+
+recent_grads <- tt_data$`recent-grads`
+```
+
+```{r include = F}
+recent_grads <- read_csv("~/Desktop/r-tidyverse/recent_grads.csv")
+```
+
+
+# Explore Dataset
+
+```{r data cleaning}
+
+grads_processed <- recent_grads %>% 
+  janitor::clean_names() %>% 
+  mutate(major = str_to_title(major))
+
+# check for na values
+sum(is.na(grads_processed))
+
+# identify location
+which(is.na(grads_processed))
+
+grads_processed[541,]
+grads_processed[714,]
+grads_processed[887,]
+grads_processed[1233, ]
+
+# remove NA
+grads_processed_2 <- grads_processed %>% 
+  drop_na()
+
+sum(is.na(grads_processed_2))
+
+```
+
+Note:
+
+- change CAPS to title for Major
+- check for missing values
+- remove NA values
+
+# Exploratory questions
+
+- Which majors make the most money?
+- Which majors are the most popular?
+- Breakdown of popular majors by gender?
+- How does gender breakdown relate to typical earnings?
+
+Simplify the dataset again:
+
+```{r data cleaned}
+cleaned_data <- grads_processed_2 %>% 
+  select(rank, major_category, major, total, men, women, share_women, sample_size, median, p25th, p75th ) %>% 
+  mutate(pct_sample = sample_size/total*100)
+
+glimpse(cleaned_data)
+
+# 16 types of major category
+cleaned_data %>% 
+  select(major_category) %>% 
+  group_by(major_category) %>% 
+  summarise(n = n())
+
+# 172 types of major
+cleaned_data %>% 
+  select(major) %>% 
+  group_by(major) %>% 
+  summarise(n = n())
+
+# see unique values for character columns
+cleaned_data %>% 
+  select_if(is_character) %>% 
+  lapply(., function(x) unique(x))
+
+# see summary statistics for dbl columns
+cleaned_data %>% 
+  select_if(is.numeric) %>% 
+  lapply(., function(x) broom::tidy(summary(x)))
+```
+
+## Checking Sample Size
+
+Which of the survey results had higher sample size?
+
+Plot sample size (x) and median (x), label major
+
+```{r, warning=FALSE}
+cleaned_data %>% 
+  ggplot(aes(sample_size, median, label = major)) +
+  geom_point() +
+  geom_text_repel(aes(label = major)) +
+  scale_x_log10()
+
+```
+
+A larger sample size would mean that the survey results were more credible. 
+
+## Which categories of major make the most money?
+
+Rank median salary in descending order and fct_reorder, ggplot
+
+```{r}
+theme_set(theme_few())
+
+cleaned_data %>% 
+  select(major_category, median) %>% 
+  group_by(major_category) %>% 
+  summarise(median = median(median)) %>% 
+  arrange(desc(median))
+
+
+cleaned_data %>% 
+  ggplot(aes(fct_reorder(major_category, median), median)) +
+  geom_boxplot() +
+  labs(title = "Distribution of median salary for different major categories",
+       caption = "Source: American Community Survey 2010-2012",
+       x = "",
+       y = "Median Salary") +
+  scale_y_continuous(labels = scales::comma) +
+  expand_limits(y = 0) +
+  coord_flip()
+```
+
+## What are the highest earning mojors?
+
+```{r}
+cleaned_data %>% 
+  filter(sample_size>100) %>% 
+  arrange(desc(median)) %>% 
+  slice_head(n=20) %>% 
+  ggplot(aes(fct_reorder(major, median), median, col = major_category)) +
+  geom_point(size = 2) +
+  geom_errorbar(aes(ymin = p25th, ymax = p75th)) +
+  scale_y_continuous(labels = scales::comma) +
+  expand_limits(y = 0) +
+  labs(title = "Top 20 Majors by Median Income, with at least 100 people surveyed",
+       subtitle = "Error bars represent 25th and 75th percentile",
+       col = "Major Categories",
+       x = "",
+       y = "Median Salary",
+       caption = "Source: Americal Community Survey 2010-2012") +
+  coord_flip()
+```
+
+
+## Which majors are the most popular?
+
+```{r}
+cleaned_data %>% 
+  count(major, wt = total, sort = T) %>% 
+  slice_head(n = 20) %>% 
+  ggplot(aes(fct_reorder(major, n), n)) +
+  geom_col(fill = "forestgreen") +
+  coord_flip()
+
+```
+
+
+## Breakdown of popular majors by gender?
+
+```{r}
+cleaned_data %>% 
+  pivot_longer(cols = c("men", "women"),
+               names_to = "gender",
+               values_to = "number") %>% 
+  arrange(desc(total)) %>% 
+  head(20) %>% 
+  ggplot(aes(major, number, fill = gender)) +
+  geom_col(position = "stack") +
+  coord_flip()
+```
+
+
+## How does gender breakdown relate to typical earnings?
+
+x - share women
+y - median
+
+
+```{r}
+cleaned_data %>% 
+  ggplot(aes(x = share_women, y = median, label = major,
+             col = major_category, size = sample_size)) +
+  geom_point() +
+  geom_smooth(aes(group = 1), method = "lm") +
+  geom_text_repel(aes(label = major, force = 0.2)) +
+  theme(legend.position = "bottom")
+  
+```
+
+# SINGAPORE 2018 GRADUATE SURVEY
+
+Import Singapore's data, downloaded from Data.gov.sg
+
+```{r, includel=FALSE}
+
+sg <- read_csv("~/Desktop/r-tidyverse/graduate-employment-survey-ntu-nus-sit-smu-suss-sutd.csv")
+
+```
+
+```{r, eval = F}
+sg <- read_csv("~/Desktop/r-tidyverse/graduate-employment-survey-ntu-nus-sit-smu-suss-sutd.csv")
+```
+
+
+Explore the dataset
+
+```{r}
+glimpse(sg)
+
+sum(is.na(sg)) # no missing data
+
+# convert to numeric
+sg_cleaned <- sg
+
+sg_cleaned <- sg_cleaned %>% 
+  mutate(across(c(7:12), as.numeric))
+
+glimpse(sg_cleaned)
+
+max(sg_cleaned$year) # 2018
+```
+
+Transform:
+
+- Filter to see year 2018
+
+- Need to remove any missing values
+
+- Need to recode the degree into smaller number of categories using fct_collapse
+
+- Need to remove *, # and ^ using str_replace_all
+
+- Need to change to lower case for easier typing using str_to_lower
+
+- Need to remove white space in case there are any using trim_ws or str_trim
+
+```{r}
+sg_2018 <- sg_cleaned %>% 
+  filter(year == 2018) %>% 
+  drop_na() %>% 
+  arrange(desc(basic_monthly_median)) %>% 
+  mutate(school = str_replace_all(school, "\\*", ""),
+         degree = str_replace_all(degree, "\\#", ""),
+         degree = str_replace_all(degree, "\\^", "")) %>% 
+  mutate(degree = str_to_lower(degree),
+         degree = trimws(degree)) %>% 
+  mutate(degree_recode = fct_collapse(degree,
+                                      
+                  accountancy = c("accountancy",
+                                  "accountancy (cum laude and above)",
+                                  "accountancy and business",
+                                  "bachelor of accountancy",
+                                  "bachelor of accountancy with honours",
+                                  "bachelor of business administration (accountancy)",
+                                  "bachelor of business administration (accountancy) (hons)"),
+                  
+                   arts = c("art, design & media",
+                           "arts (with education)",
+                           "bachelor of arts",
+                           "bachelor of arts (hons)",
+                           "bachelor of arts (industrial design)",
+                           "bachelor of arts in game design",
+                           "bachelor of arts with honours",
+                           "bachelor of arts with honours in communication design",
+                           "bachelor of arts with honours in interior design",
+                           "bachelor of fine arts in digital art and animation",
+                           "history",
+                           "philosophy"),
+                  
+                  bizad = c("bachelor of business administration",
+                            "bachelor of business administration (hons)",
+                            "bachelor of business administration in food business management",
+                            "bachelor of hospitality business with honours",
+                            "bachelor of science in finance",
+                            "bachelor of science in marketing",
+                            "business",
+                            "business and computing",
+                            "business management",
+                            "business management (cum laude and above)",
+                            "sport science and management"),
+                  
+                   building_real_estate = c("bachelor of science (project and facilities management)",
+                                           "bachelor of science (real estate)"),
+                  
+                  comsci = c("bachelor of computing (computer science)",
+                             "bachelor of computing (information systems)",
+                             "bachelor of computing (information systems)",
+                             "bachelor of science in computer science and game design",
+                             "bachelor of science in computer science in real-time interactive simulation",
+                             "bachelor of science with honours in computing science",
+                             "computer science"),
+                  
+                  communications = c("communication studies"),
+                  
+                  early_childhood = c("bachelor of science in early childhood education"),
+                  
+                  engineering = c("aerospace engineering",
+                                  "bachelor of engineering (biomedical engineering)",
+                                  "bachelor of engineering (chemical engineering)",
+                                  "bachelor of engineering (civil engineering)",
+                                  "bachelor of engineering (computer engineering)",
+                                  "bachelor of engineering (electrical engineering)",
+                                  "bachelor of engineering (environmental engineering)",
+                                  "bachelor of engineering (industrial and systems engineering)",
+                                  "bachelor of engineering (materials science and engineering)",
+                                  "bachelor of engineering (mechanical engineering)",
+                                  "bachelor of engineering with honours in aeronautical engineering",
+                                  "bachelor of engineering with honours in aerospace systems",
+                                  "bachelor of engineering with honours in chemical engineering",
+                                  "bachelor of engineering with honours in electrical power engineering",
+                                  "bachelor of engineering with honours in information & communications technology (information security)",
+                                  "bachelor of engineering with honours in information & communications technology (software engineering)",
+                                  "bachelor of engineering with honours in marine engineering",
+                                  "bachelor of engineering with honours in mechanical design and manufacturing engineering",
+                                  "bachelor of engineering with honours in mechanical design engineering",
+                                  "bachelor of engineering with honours in mechatronics",
+                                  "bachelor of engineering with honours in naval architecture",
+                                  "bachelor of engineering with honours in offshore engineering",
+                                  "bachelor of engineering with honours in sustainable infrastructure engineering (land)",
+                                  "bachelor of science in chemical engineering",
+                                  "bachelor of science in electrical engineering & information technology",
+                                  "bioengineering",
+                                  "chemical & biomolecular engineering",
+                                  "civil engineering",
+                                  "computer engineering",
+                                  "electrical & electronic engineering",
+                                  "environmental engineering",
+                                  "materials engineering",
+                                  "mechanical engineering"),
+                  
+                  healthsci = c("bachelor in science (diagnostic radiography)",
+                                "bachelor in science (occupational therapy)",
+                                "bachelor in science (physiotherapy)",
+                                "bachelor of science (nursing)",
+                                "bachelor of science (nursing) (hons)",
+                                "bachelor of science (pharmacy)",
+                                "bachelor of science with honours in nursing",
+                                "bachelor of dental surgery"),
+                  
+                  info_sys = c("information systems",
+                              "information engineering & media",
+                              "information systems (cum laude and above)"),
+                  
+                  languages = c("english",
+                                "chinese",
+                                "linguistics & multilingual studies"),
+                  
+                  law = c("bachelor of laws",
+                          "law",
+                          "law (cum laude and above)"),
+                  
+                  music = c("bachelor of music"),
+                  
+                   science = c("bachelor of environmental studies",
+                              "bachelor of science",
+                              "bachelor of science (business analytics)",
+                              "bachelor of science (hons)",
+                              "bachelor of science with honours",
+                              "bachelor of science with honours in food and human nutrition",
+                              "biological sciences",
+                              "biomedical sciences & chinese medicine",
+                              "chemistry & biological chemistry",
+                              "environmental earth systems science",
+                              "mathematical sciences",
+                              "physics & applied physics",
+                              "maritime studies",
+                              "science (with education)"),
+                  
+                 
+                  social_science = c("bachelor of social sciences",
+                                     "bachelor of arts with honours in criminology and security",
+                                     "economics",
+                                     "economics (cum laude and above)",
+                                     "mathematics & economics",
+                                     "psychology",
+                                     "public policy and global affairs",
+                                     "social sciences",
+                                     "social sciences (cum laude and above)",
+                                     "sociology")
+
+                  )) %>% 
+  select(year, university, school, degree, degree_recode, employment_rate_ft_perm, 
+         gross_monthly_median, gross_mthly_25_percentile, gross_mthly_75_percentile)
+
+# degree <- sg_2018 %>% 
+ # count(degree)
+
+# print(degree, n = 115)
+
+
+sg_2018
+sg_2018$employment_rate_ft_perm <- as.numeric(sg_2018$employment_rate_ft_perm)
+
+glimpse(sg_2018)
+
+```
+
+Plot
+
+x - median
+error - 25, 75
+y - degree_code
+fill = school
+
+```{r, layout="l-body-outset", fig.width=16}
+glimpse(sg_2018)
+
+sg_2018 %>% 
+  arrange(desc(gross_monthly_median)) %>% 
+  slice_head(n=20) %>% 
+  group_by(degree_recode) %>% 
+  summarise(median = median(gross_monthly_median),
+            minp25 = min(gross_mthly_25_percentile),
+            maxp25 = max(gross_mthly_75_percentile)) %>% 
+  
+  ggplot(aes(x = fct_reorder(str_to_title(degree_recode), median),
+             y = median)) +
+  geom_point(size = 1) +
+  geom_errorbar(aes(ymin = minp25,
+                    ymax = maxp25)) +
+  coord_flip() +
+  scale_y_continuous(labels = scales::dollar, 
+                     n.breaks = 20) +
+  expand_limits(y = 0, x = 0) +
+  labs(x = "",
+       y = "",
+       title = "Median Gross Monthly Salary for different Degree Majors",
+       subtitle = "Error bars represent minimum 25th and maximum 75th percentile",
+       caption = "Source: Data.gov.sg - Graduate Employment Survey") +
+  theme(legend.position = "none")
+```
+
+```{r, layout = "1-page", fig.width=16}
+library(plotly)
+
+p <- sg_2018 %>% 
+  ggplot(aes(x = fct_reorder(str_to_title(degree_recode), gross_monthly_median),
+             y = gross_monthly_median ,
+             label = degree_recode,
+             col = university)) +
+  geom_point(aes(text = degree), size = 5) +
+  labs(title = "Median Gross Monthly Salary for Different Majors for Year 2018 Graduates (with min 25th and max 75th percentile)",
+       subtitle = "There are differences among majors and among schools",
+       x = "",
+       y = "",
+       caption = "Source: Data.gov.sg - Graduate Employment Survey") +
+  coord_flip() +
+  scale_y_continuous(labels = scales::dollar, n.breaks = 10,
+                     limits = c(1000, 6000)) +
+  theme(legend.position = "none")
+
+ggplotly(p)
+```
+
+How should a 18 year old, or 20 year old, choose a major?
+Should it be by salary, or by interest?
+
+It would be great if you land a job you are passionate about, and also pays you well... but I think it is more important to find a job in an industry that you have interest in, and slowly work your way to have higher salary, if that is a very deal-breaker/deal-maker for you.
+
+# References
+
+<https://www.youtube.com/watch?v=nx5yhXAQLxw&list=PL19ev-r1GBwkuyiwnxoHTRC8TTqP8OEi8&index=81> 
+
+<https://data.gov.sg/dataset/graduate-employment-survey-ntu-nus-sit-smu-suss-sutd?resource_id=9326ca53-9153-4a9c-b93f-8ae032637b70>
+

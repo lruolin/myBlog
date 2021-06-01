@@ -1,0 +1,3110 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #20794d; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #20794d; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Iteration with purrr</title>
+
+  <meta property="description" itemprop="description" content="R4DS 17 - purrr"/>
+
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2021-05-27"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-05-27"/>
+  <meta name="article:author" content="lruolin"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Iteration with purrr"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="R4DS 17 - purrr"/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Iteration with purrr"/>
+  <meta property="twitter:description" content="R4DS 17 - purrr"/>
+
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Iteration with purrr"]},{"type":"character","attributes":{},"value":["R4DS 17 - purrr\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["lruolin"]}]}]},{"type":"character","attributes":{},"value":["05-27-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"NULL"}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure img {
+    width: 100%;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme
+    $('code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="17---purrr_files/header-attrs-2.8/header-attrs.js"></script>
+  <script src="17---purrr_files/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+  <link href="17---purrr_files/jsoneditor-5.25.6/jsoneditor.min.css" rel="stylesheet" />
+  <script src="17---purrr_files/jsoneditor-5.25.6/jsoneditor.min.js"></script>
+  <script src="17---purrr_files/jsonedit-binding-3.0.0/jsonedit.js"></script>
+  <script src="17---purrr_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="17---purrr_files/popper-2.6.0/popper.min.js"></script>
+  <link href="17---purrr_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="17---purrr_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="17---purrr_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="17---purrr_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="17---purrr_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="17---purrr_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="17---purrr_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Iteration with purrr","description":"R4DS 17 - purrr","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-27T00:00:00.000+00:00","citationText":"lruolin, 2021"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Iteration with purrr</h1>
+<!--radix_placeholder_categories-->
+<!--/radix_placeholder_categories-->
+<p><p>R4DS 17 - purrr</p></p>
+</div>
+
+<div class="d-byline">
+  lruolin  
+  
+<br/>05-27-2021
+</div>
+
+<div class="d-article">
+<h1 id="r4ds-practice-17-iteration-with-purrr">R4DS Practice 17: Iteration with purrr</h1>
+<p>The codes below are from the practice exercises in <a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a>, and are taken with reference from: <a href="https://jrnold.github.io/r4ds-exercise-solutions/" class="uri">https://jrnold.github.io/r4ds-exercise-solutions/</a></p>
+<h1 id="lets-begin-now">Let’s begin now</h1>
+<p>Loading tidyverse package.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h1 id="for-loops">For Loops</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span> <span class='op'>&lt;-</span> <span class='fu'>tibble</span><span class='op'>(</span>
+  a <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,
+  b <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,
+  c <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>,
+  d <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
+<span class='op'>)</span>
+
+<span class='co'># to compute the median of each column:</span>
+
+<span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 0.2939953</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] -0.6834013</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># use a for loop:</span>
+
+<span class='va'>output</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span><span class='st'>"double"</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>  <span class='co'># df[[1]] , df[[2]], df[[3]], df[[4]]</span>
+  
+  <span class='va'>output</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+  
+<span class='op'>}</span>
+
+<span class='va'>output</span>
+</code></pre>
+</div>
+<pre><code>[1]  0.2939953 -0.6834013 -0.3643358  0.3220519</code></pre>
+</div>
+<p>Write for loops to compute the mean of every column in mtcars</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># to compute the mean for every column in mtcars:</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 32
+Columns: 11
+$ mpg  &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 1…
+$ cyl  &lt;dbl&gt; 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4…
+$ disp &lt;dbl&gt; 160.0, 160.0, 108.0, 258.0, 360.0, 225.0, 360.0, 146.7,…
+$ hp   &lt;dbl&gt; 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180…
+$ drat &lt;dbl&gt; 3.90, 3.90, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3…
+$ wt   &lt;dbl&gt; 2.620, 2.875, 2.320, 3.215, 3.440, 3.460, 3.570, 3.190,…
+$ qsec &lt;dbl&gt; 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20.00,…
+$ vs   &lt;dbl&gt; 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1…
+$ am   &lt;dbl&gt; 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1…
+$ gear &lt;dbl&gt; 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4…
+$ carb &lt;dbl&gt; 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mtcars</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='co'># first column</span>
+</code></pre>
+</div>
+<pre><code> [1] 21.0 21.0 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 17.8 16.4 17.3
+[14] 15.2 10.4 10.4 14.7 32.4 30.4 33.9 21.5 15.5 15.2 13.3 19.2 27.3
+[27] 26.0 30.4 15.8 19.7 15.0 21.4</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mtcars</span><span class='op'>[[</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>]</span> <span class='co'># second column</span>
+</code></pre>
+</div>
+<pre><code> [1] 6 6 4 6 8 6 8 4 4 6 6 8 8 8 8 8 8 4 4 4 4 8 8 8 8 4 4 4 8 6 8 4</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='co'># mean  = 20.09062</span>
+</code></pre>
+</div>
+<pre><code>[1] 20.09062</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># for loop</span>
+
+<span class='va'>output</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span><span class='st'>"double"</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>output</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+
+<span class='va'>output</span>
+</code></pre>
+</div>
+<pre><code> [1]  20.090625   6.187500 230.721875 146.687500   3.596563   3.217250
+ [7]  17.848750   0.437500   0.406250   3.687500   2.812500</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>output</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span><span class='st'>"double"</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>output</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>output</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='va'>output</span>
+</code></pre>
+</div>
+<pre><code>       mpg        cyl       disp         hp       drat         wt 
+ 20.090625   6.187500 230.721875 146.687500   3.596563   3.217250 
+      qsec         vs         am       gear       carb 
+ 17.848750   0.437500   0.406250   3.687500   2.812500 </code></pre>
+</div>
+<p>Write for loops to determine the type of each column in nycflights13::flights</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/hadley/nycflights13'>nycflights13</a></span><span class='op'>)</span>
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>flights</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 336,776
+Columns: 19
+$ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 201…
+$ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, …
+$ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, …
+$ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, …
+$ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838,…
+$ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846,…
+$ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2,…
+$ carrier        &lt;chr&gt; &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;UA&quot;, &quot;B6&quot;, &quot;EV…
+$ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, …
+$ tailnum        &lt;chr&gt; &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N804JB&quot;, &quot;N668…
+$ origin         &lt;chr&gt; &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA&quot;, &quot;EWR&quot;, &quot;EW…
+$ dest           &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL&quot;, &quot;ORD&quot;, &quot;FL…
+$ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 1…
+$ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, …
+$ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, …
+$ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0…
+$ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 20…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># to find out the class of column:</span>
+<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>flights</span><span class='op'>$</span><span class='va'>year</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;integer&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>flights</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='co'># integer</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;integer&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>output</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span><span class='st'>"list"</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>flights</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># output is a list</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>output</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>flights</span><span class='op'>)</span> <span class='co'># set name of output</span>
+
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>flights</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>output</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>flights</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='va'>output</span>
+</code></pre>
+</div>
+<pre><code>$year
+[1] &quot;integer&quot;
+
+$month
+[1] &quot;integer&quot;
+
+$day
+[1] &quot;integer&quot;
+
+$dep_time
+[1] &quot;integer&quot;
+
+$sched_dep_time
+[1] &quot;integer&quot;
+
+$dep_delay
+[1] &quot;numeric&quot;
+
+$arr_time
+[1] &quot;integer&quot;
+
+$sched_arr_time
+[1] &quot;integer&quot;
+
+$arr_delay
+[1] &quot;numeric&quot;
+
+$carrier
+[1] &quot;character&quot;
+
+$flight
+[1] &quot;integer&quot;
+
+$tailnum
+[1] &quot;character&quot;
+
+$origin
+[1] &quot;character&quot;
+
+$dest
+[1] &quot;character&quot;
+
+$air_time
+[1] &quot;numeric&quot;
+
+$distance
+[1] &quot;numeric&quot;
+
+$hour
+[1] &quot;numeric&quot;
+
+$minute
+[1] &quot;numeric&quot;
+
+$time_hour
+[1] &quot;POSIXct&quot; &quot;POSIXt&quot; </code></pre>
+</div>
+<p>Compute the number of unique values in each column of iris</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 150
+Columns: 5
+$ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.…
+$ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.…
+$ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.…
+$ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.…
+$ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa,…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>iris</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span> <span class='co'># first col of iris: sepal.length</span>
+</code></pre>
+</div>
+<pre><code>  [1] 5.1 4.9 4.7 4.6 5.0 5.4 4.6 5.0 4.4 4.9 5.4 4.8 4.8 4.3 5.8 5.7
+ [17] 5.4 5.1 5.7 5.1 5.4 5.1 4.6 5.1 4.8 5.0 5.0 5.2 5.2 4.7 4.8 5.4
+ [33] 5.2 5.5 4.9 5.0 5.5 4.9 4.4 5.1 5.0 4.5 4.4 5.0 5.1 4.8 5.1 4.6
+ [49] 5.3 5.0 7.0 6.4 6.9 5.5 6.5 5.7 6.3 4.9 6.6 5.2 5.0 5.9 6.0 6.1
+ [65] 5.6 6.7 5.6 5.8 6.2 5.6 5.9 6.1 6.3 6.1 6.4 6.6 6.8 6.7 6.0 5.7
+ [81] 5.5 5.5 5.8 6.0 5.4 6.0 6.7 6.3 5.6 5.5 5.5 6.1 5.8 5.0 5.6 5.7
+ [97] 5.7 6.2 5.1 5.7 6.3 5.8 7.1 6.3 6.5 7.6 4.9 7.3 6.7 7.2 6.5 6.4
+[113] 6.8 5.7 5.8 6.4 6.5 7.7 7.7 6.0 6.9 5.6 7.7 6.3 6.7 7.2 6.2 6.1
+[129] 6.4 7.2 7.4 7.9 6.4 6.3 6.1 7.7 6.3 6.4 6.0 6.9 6.7 6.9 5.8 6.8
+[145] 6.7 6.7 6.3 6.5 6.2 5.9</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>n_distinct</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='co'># number of unique values</span>
+</code></pre>
+</div>
+<pre><code>[1] 35</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>iris_unique</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span><span class='st'>"double"</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># vector produces a vector of the given length and mode</span>
+<span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>iris_unique</span><span class='op'>)</span> <span class='op'>&lt;-</span>  <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span> <span class='co'># set the name of vector according to the iris dataset</span>
+
+<span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>iris_unique</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'>n_distinct</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='va'>iris_unique</span>
+</code></pre>
+</div>
+<pre><code>Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species 
+          35           23           43           22            3 </code></pre>
+</div>
+<p>Generate 10 random normals for each of miu = -10, 0, 10 and 100</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># generate 10 numbers</span>
+<span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fl'>10</span>
+
+<span class='co'># pre-set values for mean</span>
+
+<span class='va'>mu</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>100</span><span class='op'>)</span>
+
+
+<span class='co'># write the forloop</span>
+
+<span class='va'>normals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/vector.html'>vector</a></span><span class='op'>(</span><span class='st'>"list"</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mu</span><span class='op'>)</span><span class='op'>)</span>
+<span class='kw'>for</span> <span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>normals</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  
+  <span class='va'>normals</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, mean <span class='op'>=</span> <span class='va'>mu</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='co'># this example requires me to create the list myself</span>
+</code></pre>
+</div>
+</div>
+<h1 id="for-loop-variations---modifying-an-existing-object">For Loop Variations - Modifying an Existing Object</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 10 x 4
+        a      b       c      d
+    &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1 -0.148 -0.623 -0.767   0.707
+ 2  1.10  -1.62   0.569   1.27 
+ 3  2.14  -1.47  -1.03    0.137
+ 4  0.256  0.193  0.389  -2.11 
+ 5  1.59  -0.792 -2.03    0.542
+ 6 -1.41   1.00  -0.628   0.385
+ 7  0.331 -0.751  0.0282  1.41 
+ 8 -1.30  -0.744 -1.86    0.259
+ 9  0.422  0.683 -0.101  -0.325
+10  0.257 -0.359  0.692  -0.741</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># rescale function</span>
+
+<span class='va'>rescale01</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span>
+  <span class='va'>range</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='op'>(</span><span class='va'>x</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>
+  <span class='op'>(</span><span class='va'>x</span><span class='op'>-</span><span class='va'>range</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span> <span class='op'>/</span> <span class='op'>(</span><span class='va'>range</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span> <span class='op'>-</span> <span class='va'>range</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
+  
+<span class='op'>}</span>
+
+<span class='fu'>rescale01</span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>a</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1]  0.2491601  1.4979938  2.5344229  0.6530507  1.9901675 -1.0088461
+ [7]  0.7271936 -0.9065514  0.8184003  0.6541429</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>rescale01</span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>b</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1] -0.005368567 -0.997429229 -0.855877454  0.810609489 -0.173857050
+ [6]  1.617268846 -0.133204444 -0.125996565  1.300225157  0.258333590</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># to solve this with a for loop,</span>
+
+<span class='co'># output: same as input</span>
+<span class='co'># sequence: seq_along(df)</span>
+<span class='co'># body: apply rescale01</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='co'># generate sequences</span>
+</code></pre>
+</div>
+<pre><code>[1] 1 2 3 4</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq_along</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>df</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='fu'>rescale01</span><span class='op'>(</span><span class='va'>df</span><span class='op'>[[</span><span class='va'>i</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='co'># use double square brackets</span>
+<span class='op'>}</span>
+
+<span class='va'>df</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 10 x 4
+        a        b       c      d
+    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1  0.249 -0.00537 -0.0211  1.31 
+ 2  1.50  -0.997    1.31    1.87 
+ 3  2.53  -0.856   -0.282   0.737
+ 4  0.653  0.811    1.14   -1.51 
+ 5  1.99  -0.174   -1.29    1.14 
+ 6 -1.01   1.62     0.118   0.984
+ 7  0.727 -0.133    0.774   2.01 
+ 8 -0.907 -0.126   -1.11    0.859
+ 9  0.818  1.30     0.645   0.275
+10  0.654  0.258    1.44   -0.141</code></pre>
+</div>
+<h1 id="for-loops-vs-functionals">For Loops vs Functionals</h1>
+<p>R is a functional programming language, meaning it is possible to wrap up for loops in a function, and call that function instead of using for loop directly.</p>
+<p>Solutions that make use of loops are less efficient than vectorized solutions that make use of apply functions, such as lapply and sapply.</p>
+<p>There is also more clarity with using map() in purrr, rather than using for loops.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,
+          beta <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>3</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>,
+          logic <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>T</span>, <span class='cn'>F</span>, <span class='cn'>F</span>, <span class='cn'>T</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>x</span>
+</code></pre>
+</div>
+<pre><code>$a
+ [1]  1  2  3  4  5  6  7  8  9 10
+
+$beta
+[1]  0.04978707  0.13533528  0.36787944  1.00000000  2.71828183
+[6]  7.38905610 20.08553692
+
+$logic
+[1]  TRUE FALSE FALSE  TRUE</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># lapply returns a list of the same length as x</span>
+<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>mean</span><span class='op'>)</span>  <span class='co'># variable, function</span>
+</code></pre>
+</div>
+<pre><code>$a
+[1] 5.5
+
+$beta
+[1] 4.535125
+
+$logic
+[1] 0.5</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># sapply returns a vector by default</span>
+<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>quantile</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>         a        beta logic
+0%    1.00  0.04978707   0.0
+25%   3.25  0.25160736   0.0
+50%   5.50  1.00000000   0.5
+75%   7.75  5.05366896   1.0
+100% 10.00 20.08553692   1.0</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># use sapply to find missing values</span>
+<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># creating an anonymous function</span>
+</code></pre>
+</div>
+<pre><code>    a  beta logic 
+    0     0     0 </code></pre>
+</div>
+<h1 id="map-functions">Map Functions</h1>
+<p>The focus is on the operation being performed, not the steps/codes to loop over which element and store as which output. The first argument is always the data object you want to map over, and the second argument is the <strong>function</strong> that you want to apply.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 10 x 4
+        a        b       c      d
+    &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
+ 1  0.249 -0.00537 -0.0211  1.31 
+ 2  1.50  -0.997    1.31    1.87 
+ 3  2.53  -0.856   -0.282   0.737
+ 4  0.653  0.811    1.14   -1.51 
+ 5  1.99  -0.174   -1.29    1.14 
+ 6 -1.01   1.62     0.118   0.984
+ 7  0.727 -0.133    0.774   2.01 
+ 8 -0.907 -0.126   -1.11    0.859
+ 9  0.818  1.30     0.645   0.275
+10  0.654  0.258    1.44   -0.141</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># calculate mean for each column in df</span>
+<span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>mean</span><span class='op'>)</span> <span class='co'># df, function</span>
+</code></pre>
+</div>
+<pre><code>        a         b         c         d 
+0.7209134 0.1694704 0.2723914 0.7529901 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>mean</span><span class='op'>)</span> <span class='co'># returns a list</span>
+</code></pre>
+</div>
+<pre><code>$a
+[1] 0.7209134
+
+$b
+[1] 0.1694704
+
+$c
+[1] 0.2723914
+
+$d
+[1] 0.7529901</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># calculate median for each column in df</span>
+<span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>median</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>          a           b           c           d 
+ 0.69066825 -0.06568257  0.38151973  0.92170995 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>df</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span> <span class='co'># calculate mean for each col in df</span>
+</code></pre>
+</div>
+<pre><code>        a         b         c         d 
+0.7209134 0.1694704 0.2723914 0.7529901 </code></pre>
+</div>
+<p>To apply a linear model to each group in a dataset:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>models</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/base/split.html'>split</a></span><span class='op'>(</span><span class='va'>.</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># divides the data in the vector into groups</span>
+  <span class='fu'>map</span><span class='op'>(</span> <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span><span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>models</span>  
+</code></pre>
+</div>
+<pre><code>$`4`
+
+Call:
+lm(formula = mpg ~ wt, data = .)
+
+Coefficients:
+(Intercept)           wt  
+     39.571       -5.647  
+
+
+$`6`
+
+Call:
+lm(formula = mpg ~ wt, data = .)
+
+Coefficients:
+(Intercept)           wt  
+      28.41        -2.78  
+
+
+$`8`
+
+Call:
+lm(formula = mpg ~ wt, data = .)
+
+Coefficients:
+(Intercept)           wt  
+     23.868       -2.192  </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># to extract model summary:</span>
+
+<span class='va'>models</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map</span><span class='op'>(</span><span class='va'>summary</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_dbl</span><span class='op'>(</span><span class='st'>"r.squared"</span><span class='op'>)</span> <span class='co'># provide the name of the element to extract</span>
+</code></pre>
+</div>
+<pre><code>        4         6         8 
+0.5086326 0.4645102 0.4229655 </code></pre>
+</div>
+<p>Compute the mean of every column in mtcars</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 32
+Columns: 11
+$ mpg  &lt;dbl&gt; 21.0, 21.0, 22.8, 21.4, 18.7, 18.1, 14.3, 24.4, 22.8, 1…
+$ cyl  &lt;dbl&gt; 6, 6, 4, 6, 8, 6, 8, 4, 4, 6, 6, 8, 8, 8, 8, 8, 8, 4, 4…
+$ disp &lt;dbl&gt; 160.0, 160.0, 108.0, 258.0, 360.0, 225.0, 360.0, 146.7,…
+$ hp   &lt;dbl&gt; 110, 110, 93, 110, 175, 105, 245, 62, 95, 123, 123, 180…
+$ drat &lt;dbl&gt; 3.90, 3.90, 3.85, 3.08, 3.15, 2.76, 3.21, 3.69, 3.92, 3…
+$ wt   &lt;dbl&gt; 2.620, 2.875, 2.320, 3.215, 3.440, 3.460, 3.570, 3.190,…
+$ qsec &lt;dbl&gt; 16.46, 17.02, 18.61, 19.44, 17.02, 20.22, 15.84, 20.00,…
+$ vs   &lt;dbl&gt; 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1…
+$ am   &lt;dbl&gt; 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1…
+$ gear &lt;dbl&gt; 4, 4, 4, 3, 3, 3, 3, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 4, 4…
+$ carb &lt;dbl&gt; 4, 4, 1, 1, 2, 1, 4, 2, 2, 4, 4, 3, 3, 3, 4, 4, 4, 1, 2…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mtcars</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>mean</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>       mpg        cyl       disp         hp       drat         wt 
+ 20.090625   6.187500 230.721875 146.687500   3.596563   3.217250 
+      qsec         vs         am       gear       carb 
+ 17.848750   0.437500   0.406250   3.687500   2.812500 </code></pre>
+</div>
+<p>Determine the type of column in flights dataset</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>flights</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 336,776
+Columns: 19
+$ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 201…
+$ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+$ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, …
+$ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, …
+$ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, …
+$ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838,…
+$ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846,…
+$ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2,…
+$ carrier        &lt;chr&gt; &quot;UA&quot;, &quot;UA&quot;, &quot;AA&quot;, &quot;B6&quot;, &quot;DL&quot;, &quot;UA&quot;, &quot;B6&quot;, &quot;EV…
+$ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, …
+$ tailnum        &lt;chr&gt; &quot;N14228&quot;, &quot;N24211&quot;, &quot;N619AA&quot;, &quot;N804JB&quot;, &quot;N668…
+$ origin         &lt;chr&gt; &quot;EWR&quot;, &quot;LGA&quot;, &quot;JFK&quot;, &quot;JFK&quot;, &quot;LGA&quot;, &quot;EWR&quot;, &quot;EW…
+$ dest           &lt;chr&gt; &quot;IAH&quot;, &quot;IAH&quot;, &quot;MIA&quot;, &quot;BQN&quot;, &quot;ATL&quot;, &quot;ORD&quot;, &quot;FL…
+$ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 1…
+$ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, …
+$ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, …
+$ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0…
+$ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 20…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># find a function to determine type of column</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/typeof.html'>typeof</a></span><span class='op'>(</span><span class='va'>flights</span><span class='op'>$</span><span class='va'>year</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;integer&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>flights</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>typeof</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>          year          month            day       dep_time 
+     &quot;integer&quot;      &quot;integer&quot;      &quot;integer&quot;      &quot;integer&quot; 
+sched_dep_time      dep_delay       arr_time sched_arr_time 
+     &quot;integer&quot;       &quot;double&quot;      &quot;integer&quot;      &quot;integer&quot; 
+     arr_delay        carrier         flight        tailnum 
+      &quot;double&quot;    &quot;character&quot;      &quot;integer&quot;    &quot;character&quot; 
+        origin           dest       air_time       distance 
+   &quot;character&quot;    &quot;character&quot;       &quot;double&quot;       &quot;double&quot; 
+          hour         minute      time_hour 
+      &quot;double&quot;       &quot;double&quot;       &quot;double&quot; </code></pre>
+</div>
+<p>Compute the number of unique values in each column of iris</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 150
+Columns: 5
+$ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.…
+$ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.…
+$ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.…
+$ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.…
+$ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa,…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>iris</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_int</span><span class='op'>(</span><span class='va'>n_distinct</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Sepal.Length  Sepal.Width Petal.Length  Petal.Width      Species 
+          35           23           43           22            3 </code></pre>
+</div>
+<p>Generate 10 random normals for each of miu = -10, 0, 10 and 100.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>10</span>, <span class='fl'>0</span>, <span class='fl'>10</span>, <span class='fl'>100</span><span class='op'>)</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>10</span>, mean <span class='op'>=</span> <span class='va'>.</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[[1]]
+ [1]  -8.501952  -8.017926  -9.954449 -10.527896 -11.367753  -8.518719
+ [7]  -8.973262 -10.295413  -8.666817 -10.657593
+
+[[2]]
+ [1]  1.0622306  0.1728670 -1.8079931  0.5542649  1.2390780  0.2565406
+ [7]  0.3427404  1.8666900 -0.6743676 -1.1976806
+
+[[3]]
+ [1]  8.951252  9.671973  9.780482  9.520685  9.916101 10.088140
+ [7]  9.475330 11.045631 10.755672  8.077710
+
+[[4]]
+ [1]  98.83447 100.34102 100.06690 100.40858 100.76098 101.69539
+ [7]  99.91942 100.75977 100.04051 100.52748</code></pre>
+</div>
+<p>How can you create a single vector that for each column in a data frame indicates whether or not it is a factor?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># function:</span>
+<span class='va'>diamonds</span> 
+</code></pre>
+</div>
+<pre><code># A tibble: 53,940 x 10
+   carat cut       color clarity depth table price     x     y     z
+   &lt;dbl&gt; &lt;ord&gt;     &lt;ord&gt; &lt;ord&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1  0.23 Ideal     E     SI2      61.5    55   326  3.95  3.98  2.43
+ 2  0.21 Premium   E     SI1      59.8    61   326  3.89  3.84  2.31
+ 3  0.23 Good      E     VS1      56.9    65   327  4.05  4.07  2.31
+ 4  0.29 Premium   I     VS2      62.4    58   334  4.2   4.23  2.63
+ 5  0.31 Good      J     SI2      63.3    58   335  4.34  4.35  2.75
+ 6  0.24 Very Good J     VVS2     62.8    57   336  3.94  3.96  2.48
+ 7  0.24 Very Good I     VVS1     62.3    57   336  3.95  3.98  2.47
+ 8  0.26 Very Good H     SI1      61.9    55   337  4.07  4.11  2.53
+ 9  0.22 Fair      E     VS2      65.1    61   337  3.87  3.78  2.49
+10  0.23 Very Good H     VS1      59.4    61   338  4     4.05  2.39
+# … with 53,930 more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/factor.html'>is.factor</a></span><span class='op'>(</span><span class='va'>diamonds</span><span class='op'>$</span><span class='va'>color</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] TRUE</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># to check if all the columns are factors:</span>
+
+<span class='va'>diamonds</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_lgl</span><span class='op'>(</span><span class='va'>is.factor</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  carat     cut   color clarity   depth   table   price       x 
+  FALSE    TRUE    TRUE    TRUE   FALSE   FALSE   FALSE   FALSE 
+      y       z 
+  FALSE   FALSE </code></pre>
+</div>
+<h1 id="mapping-over-multiple-arguments">Mapping over Multiple Arguments</h1>
+<p>use map2() or pmap()</p>
+<h1 id="replicating-worked-example-on-rebecca-barters-website">Replicating worked example on Rebecca Barter’s website</h1>
+<p>Let me try to practice more using worked examples from <a href="http://www.rebeccabarter.com/blog/2019-08-19_purrr/" class="uri">http://www.rebeccabarter.com/blog/2019-08-19_purrr/</a>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Create a function to add ten</span>
+
+<span class='va'>add_ten</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>x</span> <span class='op'>+</span> <span class='fl'>10</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='fu'>add_ten</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 20</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Use it for map</span>
+
+<span class='va'>numbers</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>5</span>,<span class='fl'>15</span>,<span class='fl'>25</span><span class='op'>)</span>
+
+<span class='va'>numbers</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>add_ten</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 15 25 35</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># if you want the object returned to be the same as the input:</span>
+
+<span class='va'>numbers</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>modify</span><span class='op'>(</span><span class='va'>add_ten</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 15 25 35</code></pre>
+</div>
+<h2 id="gapminder-dataset">Gapminder dataset</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jennybc/gapminder'>gapminder</a></span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>gapminder</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 1,704
+Columns: 6
+$ country   &lt;fct&gt; &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afghanistan&quot;, &quot;Afgh…
+$ continent &lt;fct&gt; Asia, Asia, Asia, Asia, Asia, Asia, Asia, Asia, As…
+$ year      &lt;int&gt; 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 19…
+$ lifeExp   &lt;dbl&gt; 28.801, 30.332, 31.997, 34.020, 36.088, 38.438, 39…
+$ pop       &lt;int&gt; 8425333, 9240934, 10267083, 11537966, 13079460, 14…
+$ gdpPercap &lt;dbl&gt; 779.4453, 820.8530, 853.1007, 836.1971, 739.9811, …</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># To identify the class of each column:</span>
+
+<span class='va'>gapminder</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_chr</span><span class='op'>(</span><span class='va'>class</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  country continent      year   lifeExp       pop gdpPercap 
+ &quot;factor&quot;  &quot;factor&quot; &quot;integer&quot; &quot;numeric&quot; &quot;integer&quot; &quot;numeric&quot; </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># To identify the number of distinct values in the columnn:</span>
+
+<span class='va'>gapminder</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>n_distinct</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  country continent      year   lifeExp       pop gdpPercap 
+      142         5        12      1626      1704      1704 </code></pre>
+</div>
+<h2 id="tip">Tip:</h2>
+<p>First figure out what code to use for single element of the data frame. Then paste it into map_df()</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Extract single element (.x)</span>
+<span class='va'>.x</span> <span class='op'>&lt;-</span> <span class='va'>gapminder</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pluck</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  <span class='co'># to take first element of list ie country</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>.x</span>
+</code></pre>
+</div>
+<pre><code>[1] Afghanistan Afghanistan Afghanistan Afghanistan Afghanistan
+[6] Afghanistan
+142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Create code (.f)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'>n_distinct</span><span class='op'>(</span><span class='va'>.x</span><span class='op'>)</span>,
+           <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>  n_distinct..x. class..x.
+1              1    factor</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Paste into code for map</span>
+
+<span class='va'>gapminder</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>map_df</span><span class='op'>(</span><span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='fu'>n_distinct</span><span class='op'>(</span><span class='va'>.x</span><span class='op'>)</span>,
+           <span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span>,
+         .id <span class='op'>=</span> <span class='st'>"variable"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>   variable n_distinct..x. class..x.
+1   country            142    factor
+2 continent              5    factor
+3      year             12   integer
+4   lifeExp           1626   numeric
+5       pop           1704   integer
+6 gdpPercap           1704   numeric</code></pre>
+</div>
+<h2 id="maps-with-multiple-input-objects">Maps with multiple input objects</h2>
+<p>map2(.x = object1, .y = object2, .f = function)</p>
+<h2 id="list-columns-and-nested-data-frames">List columns and Nested Data Frames</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>gapminder_nested</span> <span class='op'>&lt;-</span> <span class='va'>gapminder</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>continent</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>nest</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>gapminder_nested</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 2
+# Groups:   continent [5]
+  continent data              
+  &lt;fct&gt;     &lt;list&gt;            
+1 Asia      &lt;tibble [396 × 5]&gt;
+2 Europe    &lt;tibble [360 × 5]&gt;
+3 Africa    &lt;tibble [624 × 5]&gt;
+4 Americas  &lt;tibble [300 × 5]&gt;
+5 Oceania   &lt;tibble [24 × 5]&gt; </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>gapminder_nested</span> <span class='op'>%&gt;%</span> <span class='fu'>pluck</span><span class='op'>(</span><span class='st'>"data"</span>, <span class='fl'>1</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 396 x 5
+   country      year lifeExp      pop gdpPercap
+   &lt;fct&gt;       &lt;int&gt;   &lt;dbl&gt;    &lt;int&gt;     &lt;dbl&gt;
+ 1 Afghanistan  1952    28.8  8425333      779.
+ 2 Afghanistan  1957    30.3  9240934      821.
+ 3 Afghanistan  1962    32.0 10267083      853.
+ 4 Afghanistan  1967    34.0 11537966      836.
+ 5 Afghanistan  1972    36.1 13079460      740.
+ 6 Afghanistan  1977    38.4 14880372      786.
+ 7 Afghanistan  1982    39.9 12881816      978.
+ 8 Afghanistan  1987    40.8 13867957      852.
+ 9 Afghanistan  1992    41.7 16317921      649.
+10 Afghanistan  1997    41.8 22227415      635.
+# … with 386 more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Calculate the average life expectancy within each continent and add it as a new column using mutate( ).</span>
+
+<span class='va'>.x</span> <span class='op'>&lt;-</span> <span class='va'>gapminder_nested</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pluck</span><span class='op'>(</span><span class='st'>"data"</span>, <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='va'>.f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>.x</span><span class='op'>$</span><span class='va'>lifeExp</span><span class='op'>)</span>
+<span class='va'>.f</span>
+</code></pre>
+</div>
+<pre><code>[1] 60.0649</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># put into map</span>
+
+<span class='va'>gapminder_nested</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>av_life_exp <span class='op'>=</span> <span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>data</span>, 
+                               <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>.x</span><span class='op'>$</span><span class='va'>lifeExp</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 3
+# Groups:   continent [5]
+  continent data               av_life_exp
+  &lt;fct&gt;     &lt;list&gt;                   &lt;dbl&gt;
+1 Asia      &lt;tibble [396 × 5]&gt;        60.1
+2 Europe    &lt;tibble [360 × 5]&gt;        71.9
+3 Africa    &lt;tibble [624 × 5]&gt;        48.9
+4 Americas  &lt;tibble [300 × 5]&gt;        64.7
+5 Oceania   &lt;tibble [24 × 5]&gt;         74.3</code></pre>
+</div>
+<h2 id="fitting-a-linear-model-separately-for-each-continent">Fitting a linear model separately for each continent</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>gapminder_nested</span> <span class='op'>&lt;-</span> <span class='va'>gapminder_nested</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>lm_obj <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>data</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>lifeExp</span> <span class='op'>~</span> <span class='va'>pop</span> <span class='op'>+</span> <span class='va'>gdpPercap</span> <span class='op'>+</span> <span class='va'>year</span>, data <span class='op'>=</span> <span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>gapminder_nested</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 3
+# Groups:   continent [5]
+  continent data               lm_obj
+  &lt;fct&gt;     &lt;list&gt;             &lt;list&gt;
+1 Asia      &lt;tibble [396 × 5]&gt; &lt;lm&gt;  
+2 Europe    &lt;tibble [360 × 5]&gt; &lt;lm&gt;  
+3 Africa    &lt;tibble [624 × 5]&gt; &lt;lm&gt;  
+4 Americas  &lt;tibble [300 × 5]&gt; &lt;lm&gt;  
+5 Oceania   &lt;tibble [24 × 5]&gt;  &lt;lm&gt;  </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>gapminder_nested</span> <span class='op'>%&gt;%</span> <span class='fu'>pluck</span><span class='op'>(</span><span class='st'>"lm_obj"</span>, <span class='fl'>1</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>
+Call:
+lm(formula = lifeExp ~ pop + gdpPercap + year, data = .x)
+
+Coefficients:
+(Intercept)          pop    gdpPercap         year  
+ -7.833e+02    4.228e-11    2.510e-04    4.251e-01  </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># predict the response for each continent</span>
+
+<span class='va'>gapminder_nested</span> <span class='op'>&lt;-</span> <span class='va'>gapminder_nested</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>pred <span class='op'>=</span> <span class='fu'>map2</span><span class='op'>(</span><span class='va'>lm_obj</span>,
+                     <span class='va'>data</span>,
+                     <span class='kw'>function</span><span class='op'>(</span><span class='va'>.lm</span>, <span class='va'>.data</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>.lm</span>, <span class='va'>.data</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>gapminder_nested</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 4
+# Groups:   continent [5]
+  continent data               lm_obj pred       
+  &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;list&gt;     
+1 Asia      &lt;tibble [396 × 5]&gt; &lt;lm&gt;   &lt;dbl [396]&gt;
+2 Europe    &lt;tibble [360 × 5]&gt; &lt;lm&gt;   &lt;dbl [360]&gt;
+3 Africa    &lt;tibble [624 × 5]&gt; &lt;lm&gt;   &lt;dbl [624]&gt;
+4 Americas  &lt;tibble [300 × 5]&gt; &lt;lm&gt;   &lt;dbl [300]&gt;
+5 Oceania   &lt;tibble [24 × 5]&gt;  &lt;lm&gt;   &lt;dbl [24]&gt; </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># then calculate the correlation between observed and predicted response for each continent</span>
+
+<span class='va'>gapminder_nested</span> <span class='op'>&lt;-</span> <span class='va'>gapminder_nested</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>cor <span class='op'>=</span> <span class='fu'>map2_dbl</span><span class='op'>(</span><span class='va'>pred</span>,
+                        <span class='va'>data</span>,
+                        <span class='kw'>function</span><span class='op'>(</span><span class='va'>.pred</span>, <span class='va'>.data</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>.pred</span>, <span class='va'>.data</span><span class='op'>$</span><span class='va'>lifeExp</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+
+<span class='va'>gapminder_nested</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 5 x 5
+# Groups:   continent [5]
+  continent data               lm_obj pred          cor
+  &lt;fct&gt;     &lt;list&gt;             &lt;list&gt; &lt;list&gt;      &lt;dbl&gt;
+1 Asia      &lt;tibble [396 × 5]&gt; &lt;lm&gt;   &lt;dbl [396]&gt; 0.723
+2 Europe    &lt;tibble [360 × 5]&gt; &lt;lm&gt;   &lt;dbl [360]&gt; 0.834
+3 Africa    &lt;tibble [624 × 5]&gt; &lt;lm&gt;   &lt;dbl [624]&gt; 0.645
+4 Americas  &lt;tibble [300 × 5]&gt; &lt;lm&gt;   &lt;dbl [300]&gt; 0.779
+5 Oceania   &lt;tibble [24 × 5]&gt;  &lt;lm&gt;   &lt;dbl [24]&gt;  0.987</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># advanced exercise</span>
+
+<span class='va'>gapminder</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>continent</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>nest</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>lm_obj <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>data</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>lifeExp</span> <span class='op'>~</span> <span class='va'>pop</span> <span class='op'>+</span> <span class='va'>year</span> <span class='op'>+</span> <span class='va'>gdpPercap</span>, data <span class='op'>=</span> <span class='va'>.</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>lm_tidy <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>lm_obj</span>, <span class='fu'>broom</span><span class='fu'>::</span><span class='va'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>transmute</span><span class='op'>(</span><span class='va'>continent</span>, <span class='va'>lm_tidy</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  <span class='co'># create new columns and dropping old</span>
+  <span class='fu'>unnest</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>lm_tidy</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 20 x 6
+   continent term         estimate std.error statistic  p.value
+   &lt;fct&gt;     &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Asia      (Intercept) -7.83e+ 2   4.83e+1  -16.2    1.22e-45
+ 2 Asia      pop          4.23e-11   2.04e-9    0.0207 9.83e- 1
+ 3 Asia      year         4.25e- 1   2.44e-2   17.4    1.13e-50
+ 4 Asia      gdpPercap    2.51e- 4   3.01e-5    8.34   1.31e-15
+ 5 Europe    (Intercept) -1.61e+ 2   2.28e+1   -7.09   7.44e-12
+ 6 Europe    pop         -8.18e- 9   7.80e-9   -1.05   2.95e- 1
+ 7 Europe    year         1.16e- 1   1.16e-2    9.96   8.88e-21
+ 8 Europe    gdpPercap    3.25e- 4   2.15e-5   15.2    2.21e-40
+ 9 Africa    (Intercept) -4.70e+ 2   3.39e+1  -13.9    2.17e-38
+10 Africa    pop         -3.68e- 9   1.89e-8   -0.195  8.45e- 1
+11 Africa    year         2.61e- 1   1.71e-2   15.2    1.07e-44
+12 Africa    gdpPercap    1.12e- 3   1.01e-4   11.1    2.46e-26
+13 Americas  (Intercept) -5.33e+ 2   4.10e+1  -13.0    6.40e-31
+14 Americas  pop         -2.15e- 8   8.62e-9   -2.49   1.32e- 2
+15 Americas  year         3.00e- 1   2.08e-2   14.4    3.79e-36
+16 Americas  gdpPercap    6.75e- 4   7.15e-5    9.44   1.13e-18
+17 Oceania   (Intercept) -2.10e+ 2   5.12e+1   -4.10   5.61e- 4
+18 Oceania   pop          8.37e- 9   3.34e-8    0.251  8.05e- 1
+19 Oceania   year         1.42e- 1   2.65e-2    5.34   3.19e- 5
+20 Oceania   gdpPercap    2.03e- 4   8.47e-5    2.39   2.66e- 2</code></pre>
+</div>
+<h1 id="another-tutorial-from-jenny-bryan">Another tutorial from Jenny Bryan</h1>
+<p>The worked examples below are from: <a href="https://jennybc.github.io/purrr-tutorial/" class="uri">https://jennybc.github.io/purrr-tutorial/</a></p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://purrr.tidyverse.org'>purrr</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jennybc/repurrrsive'>repurrrsive</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/timelyportfolio/listviewer'>listviewer</a></span><span class='op'>)</span>
+
+<span class='co'># this is a list</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>wesanderson</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>List of 15
+ $ GrandBudapest : chr [1:4] &quot;#F1BB7B&quot; &quot;#FD6467&quot; &quot;#5B1A18&quot; &quot;#D67236&quot;
+ $ Moonrise1     : chr [1:4] &quot;#F3DF6C&quot; &quot;#CEAB07&quot; &quot;#D5D5D3&quot; &quot;#24281A&quot;
+ $ Royal1        : chr [1:4] &quot;#899DA4&quot; &quot;#C93312&quot; &quot;#FAEFD1&quot; &quot;#DC863B&quot;
+ $ Moonrise2     : chr [1:4] &quot;#798E87&quot; &quot;#C27D38&quot; &quot;#CCC591&quot; &quot;#29211F&quot;
+ $ Cavalcanti    : chr [1:5] &quot;#D8B70A&quot; &quot;#02401B&quot; &quot;#A2A475&quot; &quot;#81A88D&quot; ...
+ $ Royal2        : chr [1:5] &quot;#9A8822&quot; &quot;#F5CDB4&quot; &quot;#F8AFA8&quot; &quot;#FDDDA0&quot; ...
+ $ GrandBudapest2: chr [1:4] &quot;#E6A0C4&quot; &quot;#C6CDF7&quot; &quot;#D8A499&quot; &quot;#7294D4&quot;
+ $ Moonrise3     : chr [1:5] &quot;#85D4E3&quot; &quot;#F4B5BD&quot; &quot;#9C964A&quot; &quot;#CDC08C&quot; ...
+ $ Chevalier     : chr [1:4] &quot;#446455&quot; &quot;#FDD262&quot; &quot;#D3DDDC&quot; &quot;#C7B19C&quot;
+ $ Zissou        : chr [1:5] &quot;#3B9AB2&quot; &quot;#78B7C5&quot; &quot;#EBCC2A&quot; &quot;#E1AF00&quot; ...
+ $ FantasticFox  : chr [1:5] &quot;#DD8D29&quot; &quot;#E2D200&quot; &quot;#46ACC8&quot; &quot;#E58601&quot; ...
+ $ Darjeeling    : chr [1:5] &quot;#FF0000&quot; &quot;#00A08A&quot; &quot;#F2AD00&quot; &quot;#F98400&quot; ...
+ $ Rushmore      : chr [1:5] &quot;#E1BD6D&quot; &quot;#EABE94&quot; &quot;#0B775E&quot; &quot;#35274A&quot; ...
+ $ BottleRocket  : chr [1:7] &quot;#A42820&quot; &quot;#5F5647&quot; &quot;#9B110E&quot; &quot;#3F5151&quot; ...
+ $ Darjeeling2   : chr [1:5] &quot;#ECCBAE&quot; &quot;#046C9A&quot; &quot;#D69C4E&quot; &quot;#ABDDDE&quot; ...</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># use listviewer to view the list</span>
+<span class='fu'><a href='https://rdrr.io/pkg/listviewer/man/jsonedit.html'>jsonedit</a></span><span class='op'>(</span><span class='va'>wesanderson</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-a1438883e73b756bfe1e" style="width:624px;height:384px;" class="jsonedit html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a1438883e73b756bfe1e">{"x":{"data":{"GrandBudapest":["#F1BB7B","#FD6467","#5B1A18","#D67236"],"Moonrise1":["#F3DF6C","#CEAB07","#D5D5D3","#24281A"],"Royal1":["#899DA4","#C93312","#FAEFD1","#DC863B"],"Moonrise2":["#798E87","#C27D38","#CCC591","#29211F"],"Cavalcanti":["#D8B70A","#02401B","#A2A475","#81A88D","#972D15"],"Royal2":["#9A8822","#F5CDB4","#F8AFA8","#FDDDA0","#74A089"],"GrandBudapest2":["#E6A0C4","#C6CDF7","#D8A499","#7294D4"],"Moonrise3":["#85D4E3","#F4B5BD","#9C964A","#CDC08C","#FAD77B"],"Chevalier":["#446455","#FDD262","#D3DDDC","#C7B19C"],"Zissou":["#3B9AB2","#78B7C5","#EBCC2A","#E1AF00","#F21A00"],"FantasticFox":["#DD8D29","#E2D200","#46ACC8","#E58601","#B40F20"],"Darjeeling":["#FF0000","#00A08A","#F2AD00","#F98400","#5BBCD6"],"Rushmore":["#E1BD6D","#EABE94","#0B775E","#35274A","#F2300F"],"BottleRocket":["#A42820","#5F5647","#9B110E","#3F5151","#4E2A1E","#550307","#0C1707"],"Darjeeling2":["#ECCBAE","#046C9A","#D69C4E","#ABDDDE","#000000"]},"options":{"mode":"tree","modes":["code","form","text","tree","view"]}},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># list for Game of Thrones dataset</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>got_chars</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>List of 30
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1022&quot;
+  ..$ id         : int 1022
+  ..$ name       : chr &quot;Theon Greyjoy&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Ironborn&quot;
+  ..$ born       : chr &quot;In 278 AC or 279 AC, at Pyke&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:3] &quot;Prince of Winterfell&quot; &quot;Captain of Sea Bitch&quot; &quot;Lord of the Iron Islands (by law of the green lands)&quot;
+  ..$ aliases    : chr [1:4] &quot;Prince of Fools&quot; &quot;Theon Turncloak&quot; &quot;Reek&quot; &quot;Theon Kinslayer&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Greyjoy of Pyke&quot;
+  ..$ books      : chr [1:3] &quot;A Game of Thrones&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr [1:2] &quot;A Clash of Kings&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Alfie Allen&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1052&quot;
+  ..$ id         : int 1052
+  ..$ name       : chr &quot;Tyrion Lannister&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;&quot;
+  ..$ born       : chr &quot;In 273 AC, at Casterly Rock&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:2] &quot;Acting Hand of the King (former)&quot; &quot;Master of Coin (former)&quot;
+  ..$ aliases    : chr [1:11] &quot;The Imp&quot; &quot;Halfman&quot; &quot;The boyman&quot; &quot;Giant of Lannister&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/2044&quot;
+  ..$ allegiances: chr &quot;House Lannister of Casterly Rock&quot;
+  ..$ books      : chr [1:2] &quot;A Feast for Crows&quot; &quot;The World of Ice and Fire&quot;
+  ..$ povBooks   : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Peter Dinklage&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1074&quot;
+  ..$ id         : int 1074
+  ..$ name       : chr &quot;Victarion Greyjoy&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Ironborn&quot;
+  ..$ born       : chr &quot;In 268 AC or before, at Pyke&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:2] &quot;Lord Captain of the Iron Fleet&quot; &quot;Master of the Iron Victory&quot;
+  ..$ aliases    : chr &quot;The Iron Captain&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Greyjoy of Pyke&quot;
+  ..$ books      : chr [1:3] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot;
+  ..$ povBooks   : chr [1:2] &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1109&quot;
+  ..$ id         : int 1109
+  ..$ name       : chr &quot;Will&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;&quot;
+  ..$ born       : chr &quot;&quot;
+  ..$ died       : chr &quot;In 297 AC, at Haunted Forest&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;&quot;
+  ..$ aliases    : chr &quot;&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: list()
+  ..$ books      : chr &quot;A Clash of Kings&quot;
+  ..$ povBooks   : chr &quot;A Game of Thrones&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;Bronson Webb&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1166&quot;
+  ..$ id         : int 1166
+  ..$ name       : chr &quot;Areo Hotah&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Norvoshi&quot;
+  ..$ born       : chr &quot;In 257 AC or before, at Norvos&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;Captain of the Guard at Sunspear&quot;
+  ..$ aliases    : chr &quot;&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Nymeros Martell of Sunspear&quot;
+  ..$ books      : chr [1:3] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot;
+  ..$ povBooks   : chr [1:2] &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:2] &quot;Season 5&quot; &quot;Season 6&quot;
+  ..$ playedBy   : chr &quot;DeObia Oparei&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1267&quot;
+  ..$ id         : int 1267
+  ..$ name       : chr &quot;Chett&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;&quot;
+  ..$ born       : chr &quot;At Hag&#39;s Mire&quot;
+  ..$ died       : chr &quot;In 299 AC, at Fist of the First Men&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;&quot;
+  ..$ aliases    : chr &quot;&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: list()
+  ..$ books      : chr [1:2] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot;
+  ..$ povBooks   : chr &quot;A Storm of Swords&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1295&quot;
+  ..$ id         : int 1295
+  ..$ name       : chr &quot;Cressen&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;&quot;
+  ..$ born       : chr &quot;In 219 AC or 220 AC&quot;
+  ..$ died       : chr &quot;In 299 AC, at Dragonstone&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;Maester&quot;
+  ..$ aliases    : chr &quot;&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: list()
+  ..$ books      : chr [1:2] &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr &quot;A Clash of Kings&quot;
+  ..$ tvSeries   : chr &quot;Season 2&quot;
+  ..$ playedBy   : chr &quot;Oliver Ford&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/130&quot;
+  ..$ id         : int 130
+  ..$ name       : chr &quot;Arianne Martell&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Dornish&quot;
+  ..$ born       : chr &quot;In 276 AC, at Sunspear&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;Princess of Dorne&quot;
+  ..$ aliases    : chr &quot;&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Nymeros Martell of Sunspear&quot;
+  ..$ books      : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr &quot;A Feast for Crows&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1303&quot;
+  ..$ id         : int 1303
+  ..$ name       : chr &quot;Daenerys Targaryen&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Valyrian&quot;
+  ..$ born       : chr &quot;In 284 AC, at Dragonstone&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:5] &quot;Queen of the Andals and the Rhoynar and the First Men, Lord of the Seven Kingdoms&quot; &quot;Khaleesi of the Great Grass Sea&quot; &quot;Breaker of Shackles/Chains&quot; &quot;Queen of Meereen&quot; ...
+  ..$ aliases    : chr [1:11] &quot;Dany&quot; &quot;Daenerys Stormborn&quot; &quot;The Unburnt&quot; &quot;Mother of Dragons&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/1346&quot;
+  ..$ allegiances: chr &quot;House Targaryen of King&#39;s Landing&quot;
+  ..$ books      : chr &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Emilia Clarke&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/1319&quot;
+  ..$ id         : int 1319
+  ..$ name       : chr &quot;Davos Seaworth&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Westeros&quot;
+  ..$ born       : chr &quot;In 260 AC or before, at King&#39;s Landing&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:4] &quot;Ser&quot; &quot;Lord of the Rainwood&quot; &quot;Admiral of the Narrow Sea&quot; &quot;Hand of the King&quot;
+  ..$ aliases    : chr [1:5] &quot;Onion Knight&quot; &quot;Davos Shorthand&quot; &quot;Ser Onions&quot; &quot;Onion Lord&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/1676&quot;
+  ..$ allegiances: chr [1:2] &quot;House Baratheon of Dragonstone&quot; &quot;House Seaworth of Cape Wrath&quot;
+  ..$ books      : chr &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr [1:3] &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:5] &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; &quot;Season 5&quot; ...
+  ..$ playedBy   : chr &quot;Liam Cunningham&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/148&quot;
+  ..$ id         : int 148
+  ..$ name       : chr &quot;Arya Stark&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Northmen&quot;
+  ..$ born       : chr &quot;In 289 AC, at Winterfell&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;Princess&quot;
+  ..$ aliases    : chr [1:16] &quot;Arya Horseface&quot; &quot;Arya Underfoot&quot; &quot;Arry&quot; &quot;Lumpyface&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Stark of Winterfell&quot;
+  ..$ books      : list()
+  ..$ povBooks   : chr [1:5] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot; ...
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Maisie Williams&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/149&quot;
+  ..$ id         : int 149
+  ..$ name       : chr &quot;Arys Oakheart&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Reach&quot;
+  ..$ born       : chr &quot;At Old Oak&quot;
+  ..$ died       : chr &quot;In 300 AC, at the Greenblood&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;Ser&quot;
+  ..$ aliases    : chr &quot;&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Oakheart of Old Oak&quot;
+  ..$ books      : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr &quot;A Feast for Crows&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/150&quot;
+  ..$ id         : int 150
+  ..$ name       : chr &quot;Asha Greyjoy&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Ironborn&quot;
+  ..$ born       : chr &quot;In 275 AC or 276 AC, at Pyke&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:3] &quot;Princess&quot; &quot;Captain of the Black Wind&quot; &quot;Conqueror of Deepwood Motte&quot;
+  ..$ aliases    : chr [1:2] &quot;Esgred&quot; &quot;The Kraken&#39;s Daughter&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/1372&quot;
+  ..$ allegiances: chr [1:2] &quot;House Greyjoy of Pyke&quot; &quot;House Ironmaker&quot;
+  ..$ books      : chr [1:2] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot;
+  ..$ povBooks   : chr [1:2] &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:3] &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot;
+  ..$ playedBy   : chr &quot;Gemma Whelan&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/168&quot;
+  ..$ id         : int 168
+  ..$ name       : chr &quot;Barristan Selmy&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Westeros&quot;
+  ..$ born       : chr &quot;In 237 AC&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:2] &quot;Ser&quot; &quot;Hand of the Queen&quot;
+  ..$ aliases    : chr [1:5] &quot;Barristan the Bold&quot; &quot;Arstan Whitebeard&quot; &quot;Ser Grandfather&quot; &quot;Barristan the Old&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr [1:2] &quot;House Selmy of Harvest Hall&quot; &quot;House Targaryen of King&#39;s Landing&quot;
+  ..$ books      : chr [1:5] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot; ...
+  ..$ povBooks   : chr &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:4] &quot;Season 1&quot; &quot;Season 3&quot; &quot;Season 4&quot; &quot;Season 5&quot;
+  ..$ playedBy   : chr &quot;Ian McElhinney&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/2066&quot;
+  ..$ id         : int 2066
+  ..$ name       : chr &quot;Varamyr&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Free Folk&quot;
+  ..$ born       : chr &quot;At a village Beyond the Wall&quot;
+  ..$ died       : chr &quot;In 300 AC, at a village Beyond the Wall&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;&quot;
+  ..$ aliases    : chr [1:3] &quot;Varamyr Sixskins&quot; &quot;Haggon&quot; &quot;Lump&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: list()
+  ..$ books      : chr &quot;A Storm of Swords&quot;
+  ..$ povBooks   : chr &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/208&quot;
+  ..$ id         : int 208
+  ..$ name       : chr &quot;Brandon Stark&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Northmen&quot;
+  ..$ born       : chr &quot;In 290 AC, at Winterfell&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;Prince of Winterfell&quot;
+  ..$ aliases    : chr [1:3] &quot;Bran&quot; &quot;Bran the Broken&quot; &quot;The Winged Wolf&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Stark of Winterfell&quot;
+  ..$ books      : chr &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:5] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Isaac Hempstead-Wright&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/216&quot;
+  ..$ id         : int 216
+  ..$ name       : chr &quot;Brienne of Tarth&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;&quot;
+  ..$ born       : chr &quot;In 280 AC&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;&quot;
+  ..$ aliases    : chr [1:3] &quot;The Maid of Tarth&quot; &quot;Brienne the Beauty&quot; &quot;Brienne the Blue&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr [1:3] &quot;House Baratheon of Storm&#39;s End&quot; &quot;House Stark of Winterfell&quot; &quot;House Tarth of Evenfall Hall&quot;
+  ..$ books      : chr [1:3] &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr &quot;A Feast for Crows&quot;
+  ..$ tvSeries   : chr [1:5] &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; &quot;Season 5&quot; ...
+  ..$ playedBy   : chr &quot;Gwendoline Christie&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/232&quot;
+  ..$ id         : int 232
+  ..$ name       : chr &quot;Catelyn Stark&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Rivermen&quot;
+  ..$ born       : chr &quot;In 264 AC, at Riverrun&quot;
+  ..$ died       : chr &quot;In 299 AC, at the Twins&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;Lady of Winterfell&quot;
+  ..$ aliases    : chr [1:5] &quot;Catelyn Tully&quot; &quot;Lady Stoneheart&quot; &quot;The Silent Sistet&quot; &quot;Mother Mercilesr&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/339&quot;
+  ..$ allegiances: chr [1:2] &quot;House Stark of Winterfell&quot; &quot;House Tully of Riverrun&quot;
+  ..$ books      : chr [1:2] &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr [1:3] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot;
+  ..$ tvSeries   : chr [1:3] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot;
+  ..$ playedBy   : chr &quot;Michelle Fairley&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/238&quot;
+  ..$ id         : int 238
+  ..$ name       : chr &quot;Cersei Lannister&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Westerman&quot;
+  ..$ born       : chr &quot;In 266 AC, at Casterly Rock&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:5] &quot;Light of the West&quot; &quot;Queen Dowager&quot; &quot;Protector of the Realm&quot; &quot;Lady of Casterly Rock&quot; ...
+  ..$ aliases    : list()
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/901&quot;
+  ..$ allegiances: chr &quot;House Lannister of Casterly Rock&quot;
+  ..$ books      : chr [1:3] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot;
+  ..$ povBooks   : chr [1:2] &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Lena Headey&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/339&quot;
+  ..$ id         : int 339
+  ..$ name       : chr &quot;Eddard Stark&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Northmen&quot;
+  ..$ born       : chr &quot;In 263 AC, at Winterfell&quot;
+  ..$ died       : chr &quot;In 299 AC, at Great Sept of Baelor in King&#39;s Landing&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr [1:5] &quot;Lord of Winterfell&quot; &quot;Warden of the North&quot; &quot;Hand of the King&quot; &quot;Protector of the Realm&quot; ...
+  ..$ aliases    : chr [1:3] &quot;Ned&quot; &quot;The Ned&quot; &quot;The Quiet Wolf&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/232&quot;
+  ..$ allegiances: chr &quot;House Stark of Winterfell&quot;
+  ..$ books      : chr [1:5] &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot; ...
+  ..$ povBooks   : chr &quot;A Game of Thrones&quot;
+  ..$ tvSeries   : chr [1:2] &quot;Season 1&quot; &quot;Season 6&quot;
+  ..$ playedBy   : chr [1:3] &quot;Sean Bean&quot; &quot;Sebastian Croft&quot; &quot;Robert Aramayo&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/529&quot;
+  ..$ id         : int 529
+  ..$ name       : chr &quot;Jaime Lannister&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Westerlands&quot;
+  ..$ born       : chr &quot;In 266 AC, at Casterly Rock&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:3] &quot;Ser&quot; &quot;Lord Commander of the Kingsguard&quot; &quot;Warden of the East (formerly)&quot;
+  ..$ aliases    : chr [1:4] &quot;The Kingslayer&quot; &quot;The Lion of Lannister&quot; &quot;The Young Lion&quot; &quot;Cripple&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Lannister of Casterly Rock&quot;
+  ..$ books      : chr [1:2] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot;
+  ..$ povBooks   : chr [1:3] &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:5] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Nikolaj Coster-Waldau&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/576&quot;
+  ..$ id         : int 576
+  ..$ name       : chr &quot;Jon Connington&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Stormlands&quot;
+  ..$ born       : chr &quot;In or between 263 AC and 265 AC&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:3] &quot;Lord of Griffin&#39;s Roost&quot; &quot;Hand of the King&quot; &quot;Hand of the True King&quot;
+  ..$ aliases    : chr &quot;Griffthe Mad King&#39;s Hand&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr [1:2] &quot;House Connington of Griffin&#39;s Roost&quot; &quot;House Targaryen of King&#39;s Landing&quot;
+  ..$ books      : chr [1:3] &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot; &quot;The World of Ice and Fire&quot;
+  ..$ povBooks   : chr &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/583&quot;
+  ..$ id         : int 583
+  ..$ name       : chr &quot;Jon Snow&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Northmen&quot;
+  ..$ born       : chr &quot;In 283 AC&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;Lord Commander of the Night&#39;s Watch&quot;
+  ..$ aliases    : chr [1:8] &quot;Lord Snow&quot; &quot;Ned Stark&#39;s Bastard&quot; &quot;The Snow of Winterfell&quot; &quot;The Crow-Come-Over&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Stark of Winterfell&quot;
+  ..$ books      : chr &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Kit Harington&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/60&quot;
+  ..$ id         : int 60
+  ..$ name       : chr &quot;Aeron Greyjoy&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Ironborn&quot;
+  ..$ born       : chr &quot;In or between 269 AC and 273 AC, at Pyke&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr [1:2] &quot;Priest of the Drowned God&quot; &quot;Captain of the Golden Storm (formerly)&quot;
+  ..$ aliases    : chr [1:2] &quot;The Damphair&quot; &quot;Aeron Damphair&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Greyjoy of Pyke&quot;
+  ..$ books      : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr &quot;A Feast for Crows&quot;
+  ..$ tvSeries   : chr &quot;Season 6&quot;
+  ..$ playedBy   : chr &quot;Michael Feast&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/605&quot;
+  ..$ id         : int 605
+  ..$ name       : chr &quot;Kevan Lannister&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;&quot;
+  ..$ born       : chr &quot;In 244 AC&quot;
+  ..$ died       : chr &quot;In 300 AC, at King&#39;s Landing&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr [1:4] &quot;Ser&quot; &quot;Master of laws&quot; &quot;Lord Regent&quot; &quot;Protector of the Realm&quot;
+  ..$ aliases    : chr &quot;&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/327&quot;
+  ..$ allegiances: chr &quot;House Lannister of Casterly Rock&quot;
+  ..$ books      : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:4] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 5&quot; &quot;Season 6&quot;
+  ..$ playedBy   : chr &quot;Ian Gelder&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/743&quot;
+  ..$ id         : int 743
+  ..$ name       : chr &quot;Melisandre&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Asshai&quot;
+  ..$ born       : chr &quot;At Unknown&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;&quot;
+  ..$ aliases    : chr [1:5] &quot;The Red Priestess&quot; &quot;The Red Woman&quot; &quot;The King&#39;s Red Shadow&quot; &quot;Lady Red&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: list()
+  ..$ books      : chr [1:3] &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr [1:5] &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; &quot;Season 5&quot; ...
+  ..$ playedBy   : chr &quot;Carice van Houten&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/751&quot;
+  ..$ id         : int 751
+  ..$ name       : chr &quot;Merrett Frey&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Rivermen&quot;
+  ..$ born       : chr &quot;In 262 AC&quot;
+  ..$ died       : chr &quot;In 300 AC, at Near Oldstones&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;&quot;
+  ..$ aliases    : chr &quot;Merrett Muttonhead&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/712&quot;
+  ..$ allegiances: chr &quot;House Frey of the Crossing&quot;
+  ..$ books      : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Feast for Crows&quot; &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr &quot;A Storm of Swords&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/844&quot;
+  ..$ id         : int 844
+  ..$ name       : chr &quot;Quentyn Martell&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Dornish&quot;
+  ..$ born       : chr &quot;In 281 AC, at Sunspear, Dorne&quot;
+  ..$ died       : chr &quot;In 300 AC, at Meereen&quot;
+  ..$ alive      : logi FALSE
+  ..$ titles     : chr &quot;Prince&quot;
+  ..$ aliases    : chr [1:4] &quot;Frog&quot; &quot;Prince Frog&quot; &quot;The prince who came too late&quot; &quot;The Dragonrider&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Nymeros Martell of Sunspear&quot;
+  ..$ books      : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot;
+  ..$ povBooks   : chr &quot;A Dance with Dragons&quot;
+  ..$ tvSeries   : chr &quot;&quot;
+  ..$ playedBy   : chr &quot;&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/954&quot;
+  ..$ id         : int 954
+  ..$ name       : chr &quot;Samwell Tarly&quot;
+  ..$ gender     : chr &quot;Male&quot;
+  ..$ culture    : chr &quot;Andal&quot;
+  ..$ born       : chr &quot;In 283 AC, at Horn Hill&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;&quot;
+  ..$ aliases    : chr [1:7] &quot;Sam&quot; &quot;Ser Piggy&quot; &quot;Prince Pork-chop&quot; &quot;Lady Piggy&quot; ...
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;&quot;
+  ..$ allegiances: chr &quot;House Tarly of Horn Hill&quot;
+  ..$ books      : chr [1:3] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr [1:2] &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot;
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;John Bradley-West&quot;
+ $ :List of 18
+  ..$ url        : chr &quot;https://www.anapioficeandfire.com/api/characters/957&quot;
+  ..$ id         : int 957
+  ..$ name       : chr &quot;Sansa Stark&quot;
+  ..$ gender     : chr &quot;Female&quot;
+  ..$ culture    : chr &quot;Northmen&quot;
+  ..$ born       : chr &quot;In 286 AC, at Winterfell&quot;
+  ..$ died       : chr &quot;&quot;
+  ..$ alive      : logi TRUE
+  ..$ titles     : chr &quot;Princess&quot;
+  ..$ aliases    : chr [1:3] &quot;Little bird&quot; &quot;Alayne Stone&quot; &quot;Jonquil&quot;
+  ..$ father     : chr &quot;&quot;
+  ..$ mother     : chr &quot;&quot;
+  ..$ spouse     : chr &quot;https://www.anapioficeandfire.com/api/characters/1052&quot;
+  ..$ allegiances: chr [1:2] &quot;House Baelish of Harrenhal&quot; &quot;House Stark of Winterfell&quot;
+  ..$ books      : chr &quot;A Dance with Dragons&quot;
+  ..$ povBooks   : chr [1:4] &quot;A Game of Thrones&quot; &quot;A Clash of Kings&quot; &quot;A Storm of Swords&quot; &quot;A Feast for Crows&quot;
+  ..$ tvSeries   : chr [1:6] &quot;Season 1&quot; &quot;Season 2&quot; &quot;Season 3&quot; &quot;Season 4&quot; ...
+  ..$ playedBy   : chr &quot;Sophie Turner&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/pkg/listviewer/man/jsonedit.html'>jsonedit</a></span><span class='op'>(</span><span class='va'>got_chars</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-8531ffc813f25de2e13c" style="width:624px;height:384px;" class="jsonedit html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8531ffc813f25de2e13c">{"x":{"data":[{"url":"https://www.anapioficeandfire.com/api/characters/1022","id":1022,"name":"Theon Greyjoy","gender":"Male","culture":"Ironborn","born":"In 278 AC or 279 AC, at Pyke","died":"","alive":true,"titles":["Prince of Winterfell","Captain of Sea Bitch","Lord of the Iron Islands (by law of the green lands)"],"aliases":["Prince of Fools","Theon Turncloak","Reek","Theon Kinslayer"],"father":"","mother":"","spouse":"","allegiances":"House Greyjoy of Pyke","books":["A Game of Thrones","A Storm of Swords","A Feast for Crows"],"povBooks":["A Clash of Kings","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Alfie Allen"},{"url":"https://www.anapioficeandfire.com/api/characters/1052","id":1052,"name":"Tyrion Lannister","gender":"Male","culture":"","born":"In 273 AC, at Casterly Rock","died":"","alive":true,"titles":["Acting Hand of the King (former)","Master of Coin (former)"],"aliases":["The Imp","Halfman","The boyman","Giant of Lannister","Lord Tywin's Doom","Lord Tywin's Bane","Yollo","Hugor Hill","No-Nose","Freak","Dwarf"],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/2044","allegiances":"House Lannister of Casterly Rock","books":["A Feast for Crows","The World of Ice and Fire"],"povBooks":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Peter Dinklage"},{"url":"https://www.anapioficeandfire.com/api/characters/1074","id":1074,"name":"Victarion Greyjoy","gender":"Male","culture":"Ironborn","born":"In 268 AC or before, at Pyke","died":"","alive":true,"titles":["Lord Captain of the Iron Fleet","Master of the Iron Victory"],"aliases":"The Iron Captain","father":"","mother":"","spouse":"","allegiances":"House Greyjoy of Pyke","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords"],"povBooks":["A Feast for Crows","A Dance with Dragons"],"tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/1109","id":1109,"name":"Will","gender":"Male","culture":"","born":"","died":"In 297 AC, at Haunted Forest","alive":false,"titles":"","aliases":"","father":"","mother":"","spouse":"","allegiances":[],"books":"A Clash of Kings","povBooks":"A Game of Thrones","tvSeries":"","playedBy":"Bronson Webb"},{"url":"https://www.anapioficeandfire.com/api/characters/1166","id":1166,"name":"Areo Hotah","gender":"Male","culture":"Norvoshi","born":"In 257 AC or before, at Norvos","died":"","alive":true,"titles":"Captain of the Guard at Sunspear","aliases":"","father":"","mother":"","spouse":"","allegiances":"House Nymeros Martell of Sunspear","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords"],"povBooks":["A Feast for Crows","A Dance with Dragons"],"tvSeries":["Season 5","Season 6"],"playedBy":"DeObia Oparei"},{"url":"https://www.anapioficeandfire.com/api/characters/1267","id":1267,"name":"Chett","gender":"Male","culture":"","born":"At Hag's Mire","died":"In 299 AC, at Fist of the First Men","alive":false,"titles":"","aliases":"","father":"","mother":"","spouse":"","allegiances":[],"books":["A Game of Thrones","A Clash of Kings"],"povBooks":"A Storm of Swords","tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/1295","id":1295,"name":"Cressen","gender":"Male","culture":"","born":"In 219 AC or 220 AC","died":"In 299 AC, at Dragonstone","alive":false,"titles":"Maester","aliases":"","father":"","mother":"","spouse":"","allegiances":[],"books":["A Storm of Swords","A Feast for Crows"],"povBooks":"A Clash of Kings","tvSeries":"Season 2","playedBy":"Oliver Ford"},{"url":"https://www.anapioficeandfire.com/api/characters/130","id":130,"name":"Arianne Martell","gender":"Female","culture":"Dornish","born":"In 276 AC, at Sunspear","died":"","alive":true,"titles":"Princess of Dorne","aliases":"","father":"","mother":"","spouse":"","allegiances":"House Nymeros Martell of Sunspear","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"povBooks":"A Feast for Crows","tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/1303","id":1303,"name":"Daenerys Targaryen","gender":"Female","culture":"Valyrian","born":"In 284 AC, at Dragonstone","died":"","alive":true,"titles":["Queen of the Andals and the Rhoynar and the First Men, Lord of the Seven Kingdoms","Khaleesi of the Great Grass Sea","Breaker of Shackles/Chains","Queen of Meereen","Princess of Dragonstone"],"aliases":["Dany","Daenerys Stormborn","The Unburnt","Mother of Dragons","Mother","Mhysa","The Silver Queen","Silver Lady","Dragonmother","The Dragon Queen","The Mad King's daughter"],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/1346","allegiances":"House Targaryen of King's Landing","books":"A Feast for Crows","povBooks":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Emilia Clarke"},{"url":"https://www.anapioficeandfire.com/api/characters/1319","id":1319,"name":"Davos Seaworth","gender":"Male","culture":"Westeros","born":"In 260 AC or before, at King's Landing","died":"","alive":true,"titles":["Ser","Lord of the Rainwood","Admiral of the Narrow Sea","Hand of the King"],"aliases":["Onion Knight","Davos Shorthand","Ser Onions","Onion Lord","Smuggler"],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/1676","allegiances":["House Baratheon of Dragonstone","House Seaworth of Cape Wrath"],"books":"A Feast for Crows","povBooks":["A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"tvSeries":["Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Liam Cunningham"},{"url":"https://www.anapioficeandfire.com/api/characters/148","id":148,"name":"Arya Stark","gender":"Female","culture":"Northmen","born":"In 289 AC, at Winterfell","died":"","alive":true,"titles":"Princess","aliases":["Arya Horseface","Arya Underfoot","Arry","Lumpyface","Lumpyhead","Stickboy","Weasel","Nymeria","Squan","Saltb","Cat of the Canaly","Bets","The Blind Girh","The Ugly Little Girl","Mercedenl","Mercye"],"father":"","mother":"","spouse":"","allegiances":"House Stark of Winterfell","books":[],"povBooks":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Feast for Crows","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Maisie Williams"},{"url":"https://www.anapioficeandfire.com/api/characters/149","id":149,"name":"Arys Oakheart","gender":"Male","culture":"Reach","born":"At Old Oak","died":"In 300 AC, at the Greenblood","alive":false,"titles":"Ser","aliases":"","father":"","mother":"","spouse":"","allegiances":"House Oakheart of Old Oak","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"povBooks":"A Feast for Crows","tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/150","id":150,"name":"Asha Greyjoy","gender":"Female","culture":"Ironborn","born":"In 275 AC or 276 AC, at Pyke","died":"","alive":true,"titles":["Princess","Captain of the Black Wind","Conqueror of Deepwood Motte"],"aliases":["Esgred","The Kraken's Daughter"],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/1372","allegiances":["House Greyjoy of Pyke","House Ironmaker"],"books":["A Game of Thrones","A Clash of Kings"],"povBooks":["A Feast for Crows","A Dance with Dragons"],"tvSeries":["Season 2","Season 3","Season 4"],"playedBy":"Gemma Whelan"},{"url":"https://www.anapioficeandfire.com/api/characters/168","id":168,"name":"Barristan Selmy","gender":"Male","culture":"Westeros","born":"In 237 AC","died":"","alive":true,"titles":["Ser","Hand of the Queen"],"aliases":["Barristan the Bold","Arstan Whitebeard","Ser Grandfather","Barristan the Old","Old Ser"],"father":"","mother":"","spouse":"","allegiances":["House Selmy of Harvest Hall","House Targaryen of King's Landing"],"books":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Feast for Crows","The World of Ice and Fire"],"povBooks":"A Dance with Dragons","tvSeries":["Season 1","Season 3","Season 4","Season 5"],"playedBy":"Ian McElhinney"},{"url":"https://www.anapioficeandfire.com/api/characters/2066","id":2066,"name":"Varamyr","gender":"Male","culture":"Free Folk","born":"At a village Beyond the Wall","died":"In 300 AC, at a village Beyond the Wall","alive":false,"titles":"","aliases":["Varamyr Sixskins","Haggon","Lump"],"father":"","mother":"","spouse":"","allegiances":[],"books":"A Storm of Swords","povBooks":"A Dance with Dragons","tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/208","id":208,"name":"Brandon Stark","gender":"Male","culture":"Northmen","born":"In 290 AC, at Winterfell","died":"","alive":true,"titles":"Prince of Winterfell","aliases":["Bran","Bran the Broken","The Winged Wolf"],"father":"","mother":"","spouse":"","allegiances":"House Stark of Winterfell","books":"A Feast for Crows","povBooks":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 6"],"playedBy":"Isaac Hempstead-Wright"},{"url":"https://www.anapioficeandfire.com/api/characters/216","id":216,"name":"Brienne of Tarth","gender":"Female","culture":"","born":"In 280 AC","died":"","alive":true,"titles":"","aliases":["The Maid of Tarth","Brienne the Beauty","Brienne the Blue"],"father":"","mother":"","spouse":"","allegiances":["House Baratheon of Storm's End","House Stark of Winterfell","House Tarth of Evenfall Hall"],"books":["A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"povBooks":"A Feast for Crows","tvSeries":["Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Gwendoline Christie"},{"url":"https://www.anapioficeandfire.com/api/characters/232","id":232,"name":"Catelyn Stark","gender":"Female","culture":"Rivermen","born":"In 264 AC, at Riverrun","died":"In 299 AC, at the Twins","alive":false,"titles":"Lady of Winterfell","aliases":["Catelyn Tully","Lady Stoneheart","The Silent Sistet","Mother Mercilesr","The Hangwomans"],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/339","allegiances":["House Stark of Winterfell","House Tully of Riverrun"],"books":["A Feast for Crows","A Dance with Dragons"],"povBooks":["A Game of Thrones","A Clash of Kings","A Storm of Swords"],"tvSeries":["Season 1","Season 2","Season 3"],"playedBy":"Michelle Fairley"},{"url":"https://www.anapioficeandfire.com/api/characters/238","id":238,"name":"Cersei Lannister","gender":"Female","culture":"Westerman","born":"In 266 AC, at Casterly Rock","died":"","alive":true,"titles":["Light of the West","Queen Dowager","Protector of the Realm","Lady of Casterly Rock","Queen Regent"],"aliases":[],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/901","allegiances":"House Lannister of Casterly Rock","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords"],"povBooks":["A Feast for Crows","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Lena Headey"},{"url":"https://www.anapioficeandfire.com/api/characters/339","id":339,"name":"Eddard Stark","gender":"Male","culture":"Northmen","born":"In 263 AC, at Winterfell","died":"In 299 AC, at Great Sept of Baelor in King's Landing","alive":false,"titles":["Lord of Winterfell","Warden of the North","Hand of the King","Protector of the Realm","Regent"],"aliases":["Ned","The Ned","The Quiet Wolf"],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/232","allegiances":"House Stark of Winterfell","books":["A Clash of Kings","A Storm of Swords","A Feast for Crows","A Dance with Dragons","The World of Ice and Fire"],"povBooks":"A Game of Thrones","tvSeries":["Season 1","Season 6"],"playedBy":["Sean Bean","Sebastian Croft","Robert Aramayo"]},{"url":"https://www.anapioficeandfire.com/api/characters/529","id":529,"name":"Jaime Lannister","gender":"Male","culture":"Westerlands","born":"In 266 AC, at Casterly Rock","died":"","alive":true,"titles":["Ser","Lord Commander of the Kingsguard","Warden of the East (formerly)"],"aliases":["The Kingslayer","The Lion of Lannister","The Young Lion","Cripple"],"father":"","mother":"","spouse":"","allegiances":"House Lannister of Casterly Rock","books":["A Game of Thrones","A Clash of Kings"],"povBooks":["A Storm of Swords","A Feast for Crows","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5"],"playedBy":"Nikolaj Coster-Waldau"},{"url":"https://www.anapioficeandfire.com/api/characters/576","id":576,"name":"Jon Connington","gender":"Male","culture":"Stormlands","born":"In or between 263 AC and 265 AC","died":"","alive":true,"titles":["Lord of Griffin's Roost","Hand of the King","Hand of the True King"],"aliases":"Griffthe Mad King's Hand","father":"","mother":"","spouse":"","allegiances":["House Connington of Griffin's Roost","House Targaryen of King's Landing"],"books":["A Storm of Swords","A Feast for Crows","The World of Ice and Fire"],"povBooks":"A Dance with Dragons","tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/583","id":583,"name":"Jon Snow","gender":"Male","culture":"Northmen","born":"In 283 AC","died":"","alive":true,"titles":"Lord Commander of the Night's Watch","aliases":["Lord Snow","Ned Stark's Bastard","The Snow of Winterfell","The Crow-Come-Over","The 998th Lord Commander of the Night's Watch","The Bastard of Winterfell","The Black Bastard of the Wall","Lord Crow"],"father":"","mother":"","spouse":"","allegiances":"House Stark of Winterfell","books":"A Feast for Crows","povBooks":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Kit Harington"},{"url":"https://www.anapioficeandfire.com/api/characters/60","id":60,"name":"Aeron Greyjoy","gender":"Male","culture":"Ironborn","born":"In or between 269 AC and 273 AC, at Pyke","died":"","alive":true,"titles":["Priest of the Drowned God","Captain of the Golden Storm (formerly)"],"aliases":["The Damphair","Aeron Damphair"],"father":"","mother":"","spouse":"","allegiances":"House Greyjoy of Pyke","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Dance with Dragons"],"povBooks":"A Feast for Crows","tvSeries":"Season 6","playedBy":"Michael Feast"},{"url":"https://www.anapioficeandfire.com/api/characters/605","id":605,"name":"Kevan Lannister","gender":"Male","culture":"","born":"In 244 AC","died":"In 300 AC, at King's Landing","alive":false,"titles":["Ser","Master of laws","Lord Regent","Protector of the Realm"],"aliases":"","father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/327","allegiances":"House Lannister of Casterly Rock","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Feast for Crows"],"povBooks":"A Dance with Dragons","tvSeries":["Season 1","Season 2","Season 5","Season 6"],"playedBy":"Ian Gelder"},{"url":"https://www.anapioficeandfire.com/api/characters/743","id":743,"name":"Melisandre","gender":"Female","culture":"Asshai","born":"At Unknown","died":"","alive":true,"titles":"","aliases":["The Red Priestess","The Red Woman","The King's Red Shadow","Lady Red","Lot Seven"],"father":"","mother":"","spouse":"","allegiances":[],"books":["A Clash of Kings","A Storm of Swords","A Feast for Crows"],"povBooks":"A Dance with Dragons","tvSeries":["Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Carice van Houten"},{"url":"https://www.anapioficeandfire.com/api/characters/751","id":751,"name":"Merrett Frey","gender":"Male","culture":"Rivermen","born":"In 262 AC","died":"In 300 AC, at Near Oldstones","alive":false,"titles":"","aliases":"Merrett Muttonhead","father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/712","allegiances":"House Frey of the Crossing","books":["A Game of Thrones","A Clash of Kings","A Feast for Crows","A Dance with Dragons"],"povBooks":"A Storm of Swords","tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/844","id":844,"name":"Quentyn Martell","gender":"Male","culture":"Dornish","born":"In 281 AC, at Sunspear, Dorne","died":"In 300 AC, at Meereen","alive":false,"titles":"Prince","aliases":["Frog","Prince Frog","The prince who came too late","The Dragonrider"],"father":"","mother":"","spouse":"","allegiances":"House Nymeros Martell of Sunspear","books":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Feast for Crows"],"povBooks":"A Dance with Dragons","tvSeries":"","playedBy":""},{"url":"https://www.anapioficeandfire.com/api/characters/954","id":954,"name":"Samwell Tarly","gender":"Male","culture":"Andal","born":"In 283 AC, at Horn Hill","died":"","alive":true,"titles":"","aliases":["Sam","Ser Piggy","Prince Pork-chop","Lady Piggy","Sam the Slayer","Black Sam","Lord of Ham"],"father":"","mother":"","spouse":"","allegiances":"House Tarly of Horn Hill","books":["A Game of Thrones","A Clash of Kings","A Dance with Dragons"],"povBooks":["A Storm of Swords","A Feast for Crows"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"John Bradley-West"},{"url":"https://www.anapioficeandfire.com/api/characters/957","id":957,"name":"Sansa Stark","gender":"Female","culture":"Northmen","born":"In 286 AC, at Winterfell","died":"","alive":true,"titles":"Princess","aliases":["Little bird","Alayne Stone","Jonquil"],"father":"","mother":"","spouse":"https://www.anapioficeandfire.com/api/characters/1052","allegiances":["House Baelish of Harrenhal","House Stark of Winterfell"],"books":"A Dance with Dragons","povBooks":["A Game of Thrones","A Clash of Kings","A Storm of Swords","A Feast for Crows"],"tvSeries":["Season 1","Season 2","Season 3","Season 4","Season 5","Season 6"],"playedBy":"Sophie Turner"}],"options":{"mode":"tree","modes":["code","form","text","tree","view"]}},"evals":[],"jsHooks":[]}</script>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Who are the GoT characters?</span>
+
+<span class='va'>got_chars</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map_chr</a></span><span class='op'>(</span><span class='st'>"name"</span><span class='op'>)</span> <span class='co'># to retrieve the elements with name</span>
+</code></pre>
+</div>
+<pre><code> [1] &quot;Theon Greyjoy&quot;      &quot;Tyrion Lannister&quot;   &quot;Victarion Greyjoy&quot; 
+ [4] &quot;Will&quot;               &quot;Areo Hotah&quot;         &quot;Chett&quot;             
+ [7] &quot;Cressen&quot;            &quot;Arianne Martell&quot;    &quot;Daenerys Targaryen&quot;
+[10] &quot;Davos Seaworth&quot;     &quot;Arya Stark&quot;         &quot;Arys Oakheart&quot;     
+[13] &quot;Asha Greyjoy&quot;       &quot;Barristan Selmy&quot;    &quot;Varamyr&quot;           
+[16] &quot;Brandon Stark&quot;      &quot;Brienne of Tarth&quot;   &quot;Catelyn Stark&quot;     
+[19] &quot;Cersei Lannister&quot;   &quot;Eddard Stark&quot;       &quot;Jaime Lannister&quot;   
+[22] &quot;Jon Connington&quot;     &quot;Jon Snow&quot;           &quot;Aeron Greyjoy&quot;     
+[25] &quot;Kevan Lannister&quot;    &quot;Melisandre&quot;         &quot;Merrett Frey&quot;      
+[28] &quot;Quentyn Martell&quot;    &quot;Samwell Tarly&quot;      &quot;Sansa Stark&quot;       </code></pre>
+</div>
+<h1 id="learning-points">Learning points</h1>
+<p>I think I am still swimming in this package.. The basic idea of using the map functions is to try it on one element and then map it, but I think I need more practice…</p>
+<h1 id="reference">Reference</h1>
+<p><a href="https://r4ds.had.co.nz/" class="uri">https://r4ds.had.co.nz/</a></p>
+<p><a href="https://jrnold.github.io/r4ds-exercise-solutions/" class="uri">https://jrnold.github.io/r4ds-exercise-solutions/</a></p>
+<p><a href="https://www.r-bloggers.com/2015/12/how-to-write-the-first-for-loop-in-r/" class="uri">https://www.r-bloggers.com/2015/12/how-to-write-the-first-for-loop-in-r/</a></p>
+<p><a href="http://www.rebeccabarter.com/blog/2019-08-19_purrr/" class="uri">http://www.rebeccabarter.com/blog/2019-08-19_purrr/</a></p>
+<p><a href="https://jennybc.github.io/purrr-tutorial/" class="uri">https://jennybc.github.io/purrr-tutorial/</a></p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>

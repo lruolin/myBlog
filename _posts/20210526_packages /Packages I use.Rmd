@@ -1,0 +1,94 @@
+---
+title: "Packages I use and books I read"
+description: |
+  The packages I use often and useful reference books
+author:
+  - name: lruolin
+date: 05-26-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Useful packages for importing data
+
+- datapasta
+
+# Useful packages for data exploration
+
+- listviewer (to view lists)
+
+# Useful packages for data wrangling
+
+- janitor: to clean data names
+- tidyverse
+- lubridate
+- stringr
+
+## Useful packages for data visualization
+
+- patchwork <https://www.business-science.io/code-tools/2021/05/11/patchwork.html>
+- ggthemes
+- ggsci
+- ggrepel
+- ggstatsplot <https://indrajeetpatil.github.io/ggstatsplot/>
+- ggfortify
+- ggstance
+- bbplot (for bbc style graphics, <https://bbc.github.io/rcookbook/>)
+- gridExtra
+- plotly
+- leaflet
+
+## Useful packages for modelling
+
+- interactions
+- jtools
+
+
+## Useful packages for Design of Experiment
+
+- AlgDesign
+- DoE.base
+- pid (Process Improvement using Data, parato Plot)
+- FrF2
+
+## Others
+ - distill
+ - kableExtra
+ - DT <https://rstudio.github.io/DT/>
+ - pacman (to load libraries quickly)
+ - tidytuesdayR (for practice datasets updated weekly) <https://github.com/rfordatascience/tidytuesday>
+ 
+ 
+# Useful Reference Books
+
+## R
+
+- R Packages <https://r-pkgs.org/>
+- R packages primer <https://kbroman.org/pkg_primer/>
+ 
+ 
+## Data Visualization
+ 
+ - <https://informationisbeautiful.net/visualizations/dataviz-books/>
+ 
+## Design of Experiment
+ 
+ - Design and Analysis of Experiment with R
+ 
+## Machine Learning
+ 
+ - Feature engineering and selection - a practical approach
+ - Applied Predictive Modelling
+ 
+## Chemometrics
+ 
+ - Chemometrics with R
+ - Chemometrics in Food Science
+ - Near-Infrared Spectroscopy: Theory, Spectral Analysis, Instrumentation, and Applications
+ 

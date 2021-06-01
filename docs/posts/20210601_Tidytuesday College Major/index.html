@@ -1,0 +1,3137 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { color: #20794d; } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #20794d; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+  <!--radix_placeholder_meta_tags-->
+<title>pRactice corner: Tidy Tuesday Series</title>
+
+<meta property="description" itemprop="description" content="2018 Week 29 - College Major"/>
+
+<link rel="canonical" href="https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/"/>
+
+<!--  https://schema.org/Article -->
+<meta property="article:published" itemprop="datePublished" content="2021-06-01"/>
+<meta property="article:created" itemprop="dateCreated" content="2021-06-01"/>
+<meta name="article:author" content="lruolin"/>
+
+<!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+<meta property="og:title" content="pRactice corner: Tidy Tuesday Series"/>
+<meta property="og:type" content="article"/>
+<meta property="og:description" content="2018 Week 29 - College Major"/>
+<meta property="og:url" content="https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/"/>
+<meta property="og:image" content="https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-4-1.png"/>
+<meta property="og:image:width" content="1248"/>
+<meta property="og:image:height" content="768"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:site_name" content="pRactice corner"/>
+
+<!--  https://dev.twitter.com/cards/types/summary -->
+<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:title" content="pRactice corner: Tidy Tuesday Series"/>
+<meta property="twitter:description" content="2018 Week 29 - College Major"/>
+<meta property="twitter:url" content="https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/"/>
+<meta property="twitter:image" content="https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-4-1.png"/>
+<meta property="twitter:image:width" content="1248"/>
+<meta property="twitter:image:height" content="768"/>
+
+<!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
+<meta name="citation_title" content="pRactice corner: Tidy Tuesday Series"/>
+<meta name="citation_fulltext_html_url" content="https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/"/>
+<meta name="citation_online_date" content="2021/06/01"/>
+<meta name="citation_publication_date" content="2021/06/01"/>
+<meta name="citation_author" content="lruolin"/>
+<!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+<script type="text/json" id="radix-rmarkdown-metadata">
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","editor_options","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Tidy Tuesday Series"]},{"type":"character","attributes":{},"value":["2018 Week 29 - College Major"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["lruolin"]}]}]},{"type":"character","attributes":{},"value":["06-01-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["chunk_output_type"]}},"value":[{"type":"character","attributes":{},"value":["console"]}]},{"type":"character","attributes":{},"value":["https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/"]},{"type":"character","attributes":{},"value":["https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/"]}]}
+</script>
+<!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["tidy-tuesday-y18w29_files/anchor-4.2.2/anchor.min.js","tidy-tuesday-y18w29_files/bowser-1.9.3/bowser.min.js","tidy-tuesday-y18w29_files/crosstalk-1.1.1/css/crosstalk.css","tidy-tuesday-y18w29_files/crosstalk-1.1.1/js/crosstalk.js","tidy-tuesday-y18w29_files/crosstalk-1.1.1/js/crosstalk.js.map","tidy-tuesday-y18w29_files/crosstalk-1.1.1/js/crosstalk.min.js","tidy-tuesday-y18w29_files/crosstalk-1.1.1/js/crosstalk.min.js.map","tidy-tuesday-y18w29_files/distill-2.2.21/template.v2.js","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-13-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-14-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-15-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-3-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-4-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-5-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-6-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-7-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-8-1.png","tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-9-1.png","tidy-tuesday-y18w29_files/header-attrs-2.8/header-attrs.js","tidy-tuesday-y18w29_files/htmlwidgets-1.5.3/htmlwidgets.js","tidy-tuesday-y18w29_files/jquery-1.11.3/jquery.min.js","tidy-tuesday-y18w29_files/jquery-3.5.1/jquery-AUTHORS.txt","tidy-tuesday-y18w29_files/jquery-3.5.1/jquery.js","tidy-tuesday-y18w29_files/jquery-3.5.1/jquery.min.js","tidy-tuesday-y18w29_files/jquery-3.5.1/jquery.min.map","tidy-tuesday-y18w29_files/plotly-binding-4.9.3/plotly.js","tidy-tuesday-y18w29_files/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css","tidy-tuesday-y18w29_files/plotly-main-1.57.1/plotly-latest.min.js","tidy-tuesday-y18w29_files/popper-2.6.0/popper.min.js","tidy-tuesday-y18w29_files/tippy-6.2.7/tippy-bundle.umd.min.js","tidy-tuesday-y18w29_files/tippy-6.2.7/tippy-light-border.css","tidy-tuesday-y18w29_files/tippy-6.2.7/tippy.css","tidy-tuesday-y18w29_files/tippy-6.2.7/tippy.umd.min.js","tidy-tuesday-y18w29_files/typedarray-0.1/typedarray.min.js","tidy-tuesday-y18w29_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+<meta name="distill:offset" content="../.."/>
+
+<script type="application/javascript">
+
+  window.headroom_prevent_pin = false;
+
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+
+    // initialize headroom for banner
+    var header = $('header').get(0);
+    var headerHeight = header.offsetHeight;
+    var headroom = new Headroom(header, {
+      tolerance: 5,
+      onPin : function() {
+        if (window.headroom_prevent_pin) {
+          window.headroom_prevent_pin = false;
+          headroom.unpin();
+        }
+      }
+    });
+    headroom.init();
+    if(window.location.hash)
+      headroom.unpin();
+    $(header).addClass('headroom--transition');
+
+    // offset scroll location for banner on hash change
+    // (see: https://github.com/WickyNilliams/headroom.js/issues/38)
+    window.addEventListener("hashchange", function(event) {
+      window.scrollTo(0, window.pageYOffset - (headerHeight + 25));
+    });
+
+    // responsive menu
+    $('.distill-site-header').each(function(i, val) {
+      var topnav = $(this);
+      var toggle = topnav.find('.nav-toggle');
+      toggle.on('click', function() {
+        topnav.toggleClass('responsive');
+      });
+    });
+
+    // nav dropdowns
+    $('.nav-dropbtn').click(function(e) {
+      $(this).next('.nav-dropdown-content').toggleClass('nav-dropdown-active');
+      $(this).parent().siblings('.nav-dropdown')
+         .children('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $("body").click(function(e){
+      $('.nav-dropdown-content').removeClass('nav-dropdown-active');
+    });
+    $(".nav-dropdown").click(function(e){
+      e.stopPropagation();
+    });
+  });
+</script>
+
+<style type="text/css">
+
+/* Theme (user-documented overrideables for nav appearance) */
+
+.distill-site-nav {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #0F2E3D;
+  font-size: 15px;
+  font-weight: 300;
+}
+
+.distill-site-nav a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distill-site-nav a:hover {
+  color: white;
+}
+
+@media print {
+  .distill-site-nav {
+    display: none;
+  }
+}
+
+.distill-site-header {
+
+}
+
+.distill-site-footer {
+
+}
+
+
+/* Site Header */
+
+.distill-site-header {
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.distill-site-header .nav-left {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header .nav-left {
+    margin-left: 0;
+  }
+}
+
+
+.distill-site-header .nav-right {
+  float: right;
+  margin-right: 8px;
+}
+
+.distill-site-header a,
+.distill-site-header .title {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 10px 14px 10px;
+}
+
+.distill-site-header .title {
+  font-size: 18px;
+  min-width: 150px;
+}
+
+.distill-site-header .logo {
+  padding: 0;
+}
+
+.distill-site-header .logo img {
+  display: none;
+  max-height: 20px;
+  width: auto;
+  margin-bottom: -4px;
+}
+
+.distill-site-header .nav-image img {
+  max-height: 18px;
+  width: auto;
+  display: inline-block;
+  margin-bottom: -3px;
+}
+
+
+
+@media screen and (min-width: 1000px) {
+  .distill-site-header .logo img {
+    display: inline-block;
+  }
+  .distill-site-header .nav-left {
+    margin-left: 20px;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 20px;
+  }
+  .distill-site-header .title {
+    padding-left: 12px;
+  }
+}
+
+
+.distill-site-header .nav-toggle {
+  display: none;
+}
+
+.nav-dropdown {
+  display: inline-block;
+  position: relative;
+}
+
+.nav-dropdown .nav-dropbtn {
+  border: none;
+  outline: none;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 16px 10px;
+  background-color: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+  margin-top: 1px;
+  z-index: 2;
+}
+
+.nav-dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 200px;
+  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+  z-index: 1;
+  margin-top: 2px;
+  white-space: nowrap;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.nav-dropdown-content hr {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.nav-dropdown-active {
+  display: block;
+}
+
+.nav-dropdown-content a, .nav-dropdown-content .nav-dropdown-header {
+  color: black;
+  padding: 6px 24px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.nav-dropdown-content .nav-dropdown-header {
+  display: block;
+  padding: 5px 24px;
+  padding-bottom: 0;
+  text-transform: uppercase;
+  font-size: 14px;
+  color: #999999;
+  white-space: nowrap;
+}
+
+.nav-dropdown:hover .nav-dropbtn {
+  color: white;
+}
+
+.nav-dropdown-content a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.nav-right .nav-dropdown-content {
+  margin-left: -45%;
+  right: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .distill-site-header a, .distill-site-header .nav-dropdown  {display: none;}
+  .distill-site-header a.nav-toggle {
+    float: right;
+    display: block;
+  }
+  .distill-site-header .title {
+    margin-left: 0;
+  }
+  .distill-site-header .nav-right {
+    margin-right: 0;
+  }
+  .distill-site-header {
+    overflow: hidden;
+  }
+  .nav-right .nav-dropdown-content {
+    margin-left: 0;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-header.responsive {position: relative; min-height: 500px; }
+  .distill-site-header.responsive a.nav-toggle {
+    position: absolute;
+    right: 0;
+    top: 0;
+  }
+  .distill-site-header.responsive a,
+  .distill-site-header.responsive .nav-dropdown {
+    display: block;
+    text-align: left;
+  }
+  .distill-site-header.responsive .nav-left,
+  .distill-site-header.responsive .nav-right {
+    width: 100%;
+  }
+  .distill-site-header.responsive .nav-dropdown {float: none;}
+  .distill-site-header.responsive .nav-dropdown-content {position: relative;}
+  .distill-site-header.responsive .nav-dropdown .nav-dropbtn {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
+}
+
+/* Site Footer */
+
+.distill-site-footer {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 3;
+  margin-top: 30px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  text-align: center;
+}
+
+/* Headroom */
+
+d-title {
+  padding-top: 6rem;
+}
+
+@media print {
+  d-title {
+    padding-top: 4rem;
+  }
+}
+
+.headroom {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.headroom--transition {
+  transition: all .4s ease-in-out;
+}
+
+.headroom--unpinned {
+  top: -100px;
+}
+
+.headroom--pinned {
+  top: 0;
+}
+
+/* adjust viewport for navbar height */
+/* helps vertically center bootstrap (non-distill) content */
+.min-vh-100 {
+  min-height: calc(100vh - 100px) !important;
+}
+
+</style>
+
+<script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+<link href="../../site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet"/>
+<link href="../../site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet"/>
+<script src="../../site_libs/headroom-0.9.4/headroom.min.js"></script>
+<script src="../../site_libs/autocomplete-0.37.1/autocomplete.min.js"></script>
+<script src="../../site_libs/fuse-6.4.1/fuse.min.js"></script>
+
+<script type="application/javascript">
+
+function getMeta(metaName) {
+  var metas = document.getElementsByTagName('meta');
+  for (let i = 0; i < metas.length; i++) {
+    if (metas[i].getAttribute('name') === metaName) {
+      return metas[i].getAttribute('content');
+    }
+  }
+  return '';
+}
+
+function offsetURL(url) {
+  var offset = getMeta('distill:offset');
+  return offset ? offset + '/' + url : url;
+}
+
+function createFuseIndex() {
+
+  // create fuse index
+  var options = {
+    keys: [
+      { name: 'title', weight: 20 },
+      { name: 'categories', weight: 15 },
+      { name: 'description', weight: 10 },
+      { name: 'contents', weight: 5 },
+    ],
+    ignoreLocation: true,
+    threshold: 0
+  };
+  var fuse = new window.Fuse([], options);
+
+  // fetch the main search.json
+  return fetch(offsetURL('search.json'))
+    .then(function(response) {
+      if (response.status == 200) {
+        return response.json().then(function(json) {
+          // index main articles
+          json.articles.forEach(function(article) {
+            fuse.add(article);
+          });
+          // download collections and index their articles
+          return Promise.all(json.collections.map(function(collection) {
+            return fetch(offsetURL(collection)).then(function(response) {
+              if (response.status === 200) {
+                return response.json().then(function(articles) {
+                  articles.forEach(function(article) {
+                    fuse.add(article);
+                  });
+                })
+              } else {
+                return Promise.reject(
+                  new Error('Unexpected status from search index request: ' +
+                            response.status)
+                );
+              }
+            });
+          })).then(function() {
+            return fuse;
+          });
+        });
+
+      } else {
+        return Promise.reject(
+          new Error('Unexpected status from search index request: ' +
+                      response.status)
+        );
+      }
+    });
+}
+
+window.document.addEventListener("DOMContentLoaded", function (event) {
+
+  // get search element (bail if we don't have one)
+  var searchEl = window.document.getElementById('distill-search');
+  if (!searchEl)
+    return;
+
+  createFuseIndex()
+    .then(function(fuse) {
+
+      // make search box visible
+      searchEl.classList.remove('hidden');
+
+      // initialize autocomplete
+      var options = {
+        autoselect: true,
+        hint: false,
+        minLength: 2,
+      };
+      window.autocomplete(searchEl, options, [{
+        source: function(query, callback) {
+          const searchOptions = {
+            isCaseSensitive: false,
+            shouldSort: true,
+            minMatchCharLength: 2,
+            limit: 10,
+          };
+          var results = fuse.search(query, searchOptions);
+          callback(results
+            .map(function(result) { return result.item; })
+          );
+        },
+        templates: {
+          suggestion: function(suggestion) {
+            var img = suggestion.preview && Object.keys(suggestion.preview).length > 0
+              ? `<img src="${offsetURL(suggestion.preview)}"</img>`
+              : '';
+            var html = `
+              <div class="search-item">
+                <h3>${suggestion.title}</h3>
+                <div class="search-item-description">
+                  ${suggestion.description || ''}
+                </div>
+                <div class="search-item-preview">
+                  ${img}
+                </div>
+              </div>
+            `;
+            return html;
+          }
+        }
+      }]).on('autocomplete:selected', function(event, suggestion) {
+        window.location.href = offsetURL(suggestion.path);
+      });
+      // remove inline display style on autocompleter (we want to
+      // manage responsive display via css)
+      $('.algolia-autocomplete').css("display", "");
+    })
+    .catch(function(error) {
+      console.log(error);
+    });
+
+});
+
+</script>
+
+<style type="text/css">
+
+.nav-search {
+  font-size: x-small;
+}
+
+/* Algolioa Autocomplete */
+
+.algolia-autocomplete {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: sub;
+  background-color: white;
+  color: black;
+  padding: 6px;
+  padding-top: 8px;
+  padding-bottom: 0;
+  border-radius: 6px;
+  border: 1px #0F2E3D solid;
+  width: 180px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .distill-site-nav .algolia-autocomplete {
+    display: none;
+    visibility: hidden;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete {
+    display: inline-block;
+    visibility: visible;
+  }
+  .distill-site-nav.responsive .algolia-autocomplete .aa-dropdown-menu {
+    margin-left: 0;
+    width: 400px;
+    max-height: 400px;
+  }
+}
+
+.algolia-autocomplete .aa-input, .algolia-autocomplete .aa-hint {
+  width: 90%;
+  outline: none;
+  border: none;
+}
+
+.algolia-autocomplete .aa-hint {
+  color: #999;
+}
+.algolia-autocomplete .aa-dropdown-menu {
+  width: 550px;
+  max-height: 70vh;
+  overflow-x: visible;
+  overflow-y: scroll;
+  padding: 5px;
+  margin-top: 3px;
+  margin-left: -150px;
+  background-color: #fff;
+  border-radius: 5px;
+  border: 1px solid #999;
+  border-top: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion {
+  cursor: pointer;
+  padding: 5px 4px;
+  border-bottom: 1px solid #eee;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion:last-of-type {
+  border-bottom: none;
+  margin-bottom: 2px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item {
+  overflow: hidden;
+  font-size: 0.8em;
+  line-height: 1.4em;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item h3 {
+  font-size: 1rem;
+  margin-block-start: 0;
+  margin-block-end: 5px;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-description {
+  display: inline-block;
+  overflow: hidden;
+  height: 2.8em;
+  width: 80%;
+  margin-right: 4%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview {
+  display: inline-block;
+  width: 15%;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img {
+  height: 3em;
+  width: auto;
+  display: none;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion .search-item-preview img[src] {
+  display: initial;
+}
+
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion.aa-cursor {
+  background-color: #eee;
+}
+.algolia-autocomplete .aa-dropdown-menu .aa-suggestion em {
+  font-weight: bold;
+  font-style: normal;
+}
+
+</style>
+
+
+<!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+<style type="text/css">
+
+body {
+  background-color: white;
+}
+
+.pandoc-table {
+  width: 100%;
+}
+
+.pandoc-table>caption {
+  margin-bottom: 10px;
+}
+
+.pandoc-table th:not([align]) {
+  text-align: left;
+}
+
+.pagedtable-footer {
+  font-size: 15px;
+}
+
+d-byline .byline {
+  grid-template-columns: 2fr 2fr;
+}
+
+d-byline .byline h3 {
+  margin-block-start: 1.5em;
+}
+
+d-byline .byline .authors-affiliations h3 {
+  margin-block-start: 0.5em;
+}
+
+.authors-affiliations .orcid-id {
+  width: 16px;
+  height:16px;
+  margin-left: 4px;
+  margin-right: 4px;
+  vertical-align: middle;
+  padding-bottom: 2px;
+}
+
+d-title .dt-tags {
+  margin-top: 1em;
+  grid-column: text;
+}
+
+.dt-tags .dt-tag {
+  text-decoration: none;
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0em 0.4em;
+  margin-right: 0.5em;
+  margin-bottom: 0.4em;
+  font-size: 70%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+d-article table.gt_table td,
+d-article table.gt_table th {
+  border-bottom: none;
+}
+
+.html-widget {
+  margin-bottom: 2.0em;
+}
+
+.l-screen-inset {
+  padding-right: 16px;
+}
+
+.l-screen .caption {
+  margin-left: 10px;
+}
+
+.shaded {
+  background: rgb(247, 247, 247);
+  padding-top: 20px;
+  padding-bottom: 20px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .html-widget {
+  margin-bottom: 0;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.shaded .shaded-content {
+  background: white;
+}
+
+.text-output {
+  margin-top: 0;
+  line-height: 1.5em;
+}
+
+.hidden {
+  display: none !important;
+}
+
+d-article {
+  padding-top: 2.5rem;
+  padding-bottom: 30px;
+}
+
+d-appendix {
+  padding-top: 30px;
+}
+
+d-article>p>img {
+  width: 100%;
+}
+
+d-article h2 {
+  margin: 1rem 0 1.5rem 0;
+}
+
+d-article h3 {
+  margin-top: 1.5rem;
+}
+
+d-article iframe {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 2.0em;
+  width: 100%;
+}
+
+/* Tweak code blocks */
+
+d-article div.sourceCode code,
+d-article pre code {
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+}
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: auto;
+}
+
+d-article div.sourceCode {
+  background-color: white;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 10px;
+  font-size: 12px;
+  border-left: 2px solid rgba(0,0,0,0.1);
+}
+
+d-article pre {
+  font-size: 12px;
+  color: black;
+  background: none;
+  margin-top: 0;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+d-article pre a {
+  border-bottom: none;
+}
+
+d-article pre a:hover {
+  border-bottom: none;
+  text-decoration: underline;
+}
+
+d-article details {
+  grid-column: text;
+  margin-bottom: 0.8em;
+}
+
+@media(min-width: 768px) {
+
+d-article pre,
+d-article div.sourceCode,
+d-article div.sourceCode pre {
+  overflow: visible !important;
+}
+
+d-article div.sourceCode pre {
+  padding-left: 18px;
+  font-size: 14px;
+}
+
+d-article pre {
+  font-size: 14px;
+}
+
+}
+
+figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+/* CSS for d-contents */
+
+.d-contents {
+  grid-column: text;
+  color: rgba(0,0,0,0.8);
+  font-size: 0.9em;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+  padding-left: 0.25em;
+  justify-self: start;
+}
+
+@media(min-width: 1000px) {
+  .d-contents.d-contents-float {
+    height: 0;
+    grid-column-start: 1;
+    grid-column-end: 4;
+    justify-self: center;
+    padding-right: 3em;
+    padding-left: 2em;
+  }
+}
+
+.d-contents nav h3 {
+  font-size: 18px;
+  margin-top: 0;
+  margin-bottom: 1em;
+}
+
+.d-contents li {
+  list-style-type: none
+}
+
+.d-contents nav > ul {
+  padding-left: 0;
+}
+
+.d-contents ul {
+  padding-left: 1em
+}
+
+.d-contents nav ul li {
+  margin-top: 0.6em;
+  margin-bottom: 0.2em;
+}
+
+.d-contents nav a {
+  font-size: 13px;
+  border-bottom: none;
+  text-decoration: none
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.d-contents nav a:hover {
+  text-decoration: underline solid rgba(0, 0, 0, 0.6)
+}
+
+.d-contents nav > ul > li > a {
+  font-weight: 600;
+}
+
+.d-contents nav > ul > li > ul {
+  font-weight: inherit;
+}
+
+.d-contents nav > ul > li > ul > li {
+  margin-top: 0.2em;
+}
+
+
+.d-contents nav ul {
+  margin-top: 0;
+  margin-bottom: 0.25em;
+}
+
+.d-article-with-toc h2:nth-child(2) {
+  margin-top: 0;
+}
+
+
+/* Figure */
+
+.figure {
+  position: relative;
+  margin-bottom: 2.5em;
+  margin-top: 1.5em;
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure .caption {
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 12px;
+  line-height: 1.5em;
+}
+
+.figure img.external {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+  padding: 18px;
+  box-sizing: border-box;
+}
+
+.figure .caption a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.figure .caption b,
+.figure .caption strong, {
+  font-weight: 600;
+  color: rgba(0, 0, 0, 1.0);
+}
+
+/* Citations */
+
+d-article .citation {
+  color: inherit;
+  cursor: inherit;
+}
+
+div.hanging-indent{
+  margin-left: 1em; text-indent: -1em;
+}
+
+/* Citation hover box */
+
+.tippy-box[data-theme~=light-border] {
+  background-color: rgba(250, 250, 250, 0.95);
+}
+
+.tippy-content > p {
+  margin-bottom: 0;
+  padding: 2px;
+}
+
+
+/* Tweak 1000px media break to show more text */
+
+@media(min-width: 1000px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 16px;
+  }
+
+  .grid {
+    grid-column-gap: 16px;
+  }
+
+  d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+  }
+  figure .caption, .figure .caption, figure figcaption {
+    font-size: 13px;
+  }
+}
+
+@media(min-width: 1180px) {
+  .base-grid,
+  distill-header,
+  d-title,
+  d-abstract,
+  d-article,
+  d-appendix,
+  distill-appendix,
+  d-byline,
+  d-footnote-list,
+  d-citation-list,
+  distill-footer {
+    grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+    grid-column-gap: 32px;
+  }
+
+  .grid {
+    grid-column-gap: 32px;
+  }
+}
+
+
+/* Get the citation styles for the appendix (not auto-injected on render since
+   we do our own rendering of the citation appendix) */
+
+d-appendix .citation-appendix,
+.d-appendix .citation-appendix {
+  font-size: 11px;
+  line-height: 15px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  padding-left: 18px;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.02);
+  padding: 10px 18px;
+  border-radius: 3px;
+  color: rgba(150, 150, 150, 1);
+  overflow: hidden;
+  margin-top: -12px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* Include appendix styles here so they can be overridden */
+
+d-appendix {
+  contain: layout style;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-top: 60px;
+  margin-bottom: 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: rgba(0,0,0,0.5);
+  padding-top: 60px;
+  padding-bottom: 48px;
+}
+
+d-appendix h3 {
+  grid-column: page-start / text-start;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 1em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.65);
+}
+
+d-appendix h3 + * {
+  margin-top: 1em;
+}
+
+d-appendix ol {
+  padding: 0 0 0 15px;
+}
+
+@media (min-width: 768px) {
+  d-appendix ol {
+    padding: 0 0 0 30px;
+    margin-left: -30px;
+  }
+}
+
+d-appendix li {
+  margin-bottom: 1em;
+}
+
+d-appendix a {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+d-appendix > * {
+  grid-column: text;
+}
+
+d-appendix > d-footnote-list,
+d-appendix > d-citation-list,
+d-appendix > distill-appendix {
+  grid-column: screen;
+}
+
+/* Include footnote styles here so they can be overridden */
+
+d-footnote-list {
+  contain: layout style;
+}
+
+d-footnote-list > * {
+  grid-column: text;
+}
+
+d-footnote-list a.footnote-backlink {
+  color: rgba(0,0,0,0.3);
+  padding-left: 0.5em;
+}
+
+
+
+/* Anchor.js */
+
+.anchorjs-link {
+  /*transition: all .25s linear; */
+  text-decoration: none;
+  border-bottom: none;
+}
+*:hover > .anchorjs-link {
+  margin-left: -1.125em !important;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+/* Social footer */
+
+.social_footer {
+  margin-top: 30px;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.67);
+}
+
+.disqus-comments {
+  margin-right: 30px;
+}
+
+.disqus-comment-count {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+}
+
+#disqus_thread {
+  margin-top: 30px;
+}
+
+.article-sharing a {
+  border-bottom: none;
+  margin-right: 8px;
+}
+
+.article-sharing a:hover {
+  border-bottom: none;
+}
+
+.sidebar-section.subscribe {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.subscribe p {
+  margin-bottom: 0.5em;
+}
+
+
+.article-footer .subscribe {
+  font-size: 15px;
+  margin-top: 45px;
+}
+
+
+.sidebar-section.custom {
+  font-size: 12px;
+  line-height: 1.6em;
+}
+
+.custom p {
+  margin-bottom: 0.5em;
+}
+
+/* Styles for listing layout (hide title) */
+.layout-listing d-title, .layout-listing .d-title {
+  display: none;
+}
+
+/* Styles for posts lists (not auto-injected) */
+
+
+.posts-with-sidebar {
+  padding-left: 45px;
+  padding-right: 45px;
+}
+
+.posts-list .description h2,
+.posts-list .description p {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+}
+
+.posts-list .description h2 {
+  font-weight: 700;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.posts-list h2.post-tag {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  padding-bottom: 12px;
+}
+.posts-list {
+  margin-top: 60px;
+  margin-bottom: 24px;
+}
+
+.posts-list .post-preview {
+  text-decoration: none;
+  overflow: hidden;
+  display: block;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 24px 0;
+}
+
+.post-preview-last {
+  border-bottom: none !important;
+}
+
+.posts-list .posts-list-caption {
+  grid-column: screen;
+  font-weight: 400;
+}
+
+.posts-list .post-preview h2 {
+  margin: 0 0 6px 0;
+  line-height: 1.2em;
+  font-style: normal;
+  font-size: 24px;
+}
+
+.posts-list .post-preview p {
+  margin: 0 0 12px 0;
+  line-height: 1.4em;
+  font-size: 16px;
+}
+
+.posts-list .post-preview .thumbnail {
+  box-sizing: border-box;
+  margin-bottom: 24px;
+  position: relative;
+  max-width: 500px;
+}
+.posts-list .post-preview img {
+  width: 100%;
+  display: block;
+}
+
+.posts-list .metadata {
+  font-size: 12px;
+  line-height: 1.4em;
+  margin-bottom: 18px;
+}
+
+.posts-list .metadata > * {
+  display: inline-block;
+}
+
+.posts-list .metadata .publishedDate {
+  margin-right: 2em;
+}
+
+.posts-list .metadata .dt-authors {
+  display: block;
+  margin-top: 0.3em;
+  margin-right: 2em;
+}
+
+.posts-list .dt-tags {
+  display: block;
+  line-height: 1em;
+}
+
+.posts-list .dt-tags .dt-tag {
+  display: inline-block;
+  color: rgba(0,0,0,0.6);
+  padding: 0.3em 0.4em;
+  margin-right: 0.2em;
+  margin-bottom: 0.4em;
+  font-size: 60%;
+  border: 1px solid rgba(0,0,0,0.2);
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.posts-list img {
+  opacity: 1;
+}
+
+.posts-list img[data-src] {
+  opacity: 0;
+}
+
+.posts-more {
+  clear: both;
+}
+
+
+.posts-sidebar {
+  font-size: 16px;
+}
+
+.posts-sidebar h3 {
+  font-size: 16px;
+  margin-top: 0;
+  margin-bottom: 0.5em;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.sidebar-section {
+  margin-bottom: 30px;
+}
+
+.categories ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.categories li {
+  color: rgba(0, 0, 0, 0.8);
+  margin-bottom: 0;
+}
+
+.categories li>a {
+  border-bottom: none;
+}
+
+.categories li>a:hover {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+}
+
+.categories .active {
+  font-weight: 600;
+}
+
+.categories .category-count {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+
+@media(min-width: 768px) {
+  .posts-list .post-preview h2 {
+    font-size: 26px;
+  }
+  .posts-list .post-preview .thumbnail {
+    float: right;
+    width: 30%;
+    margin-bottom: 0;
+  }
+  .posts-list .post-preview .description {
+    float: left;
+    width: 45%;
+  }
+  .posts-list .post-preview .metadata {
+    float: left;
+    width: 20%;
+    margin-top: 8px;
+  }
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.5em;
+    font-size: 16px;
+  }
+  .posts-with-sidebar .posts-list {
+    float: left;
+    width: 75%;
+  }
+  .posts-with-sidebar .posts-sidebar {
+    float: right;
+    width: 20%;
+    margin-top: 60px;
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
+}
+
+
+/* Improve display for browsers without grid (IE/Edge <= 15) */
+
+.downlevel {
+  line-height: 1.6em;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  margin: 0;
+}
+
+.downlevel .d-title {
+  padding-top: 6rem;
+  padding-bottom: 1.5rem;
+}
+
+.downlevel .d-title h1 {
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.1em;
+  margin: 0 0 0.5rem;
+}
+
+.downlevel .d-title p {
+  font-weight: 300;
+  font-size: 1.2rem;
+  line-height: 1.55em;
+  margin-top: 0;
+}
+
+.downlevel .d-byline {
+  padding-top: 0.8em;
+  padding-bottom: 0.8em;
+  font-size: 0.8rem;
+  line-height: 1.8em;
+}
+
+.downlevel .section-separator {
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.downlevel .d-article {
+  font-size: 1.06rem;
+  line-height: 1.7em;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+
+.downlevel .d-appendix {
+  padding-left: 0;
+  padding-right: 0;
+  max-width: none;
+  font-size: 0.8em;
+  line-height: 1.7em;
+  margin-bottom: 0;
+  color: rgba(0,0,0,0.5);
+  padding-top: 40px;
+  padding-bottom: 48px;
+}
+
+.downlevel .footnotes ol {
+  padding-left: 13px;
+}
+
+.downlevel .base-grid,
+.downlevel .distill-header,
+.downlevel .d-title,
+.downlevel .d-abstract,
+.downlevel .d-article,
+.downlevel .d-appendix,
+.downlevel .distill-appendix,
+.downlevel .d-byline,
+.downlevel .d-footnote-list,
+.downlevel .d-citation-list,
+.downlevel .distill-footer,
+.downlevel .appendix-bottom,
+.downlevel .posts-container {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+@media(min-width: 768px) {
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+  padding-left: 150px;
+  padding-right: 150px;
+  max-width: 900px;
+}
+}
+
+.downlevel pre code {
+  display: block;
+  border-left: 2px solid rgba(0, 0, 0, .1);
+  padding: 0 0 0 20px;
+  font-size: 14px;
+}
+
+.downlevel code, .downlevel pre {
+  color: black;
+  background: none;
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+.downlevel .posts-list .post-preview {
+  color: inherit;
+}
+
+
+
+</style>
+
+<script type="application/javascript">
+
+function is_downlevel_browser() {
+  if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                 window.navigator.userAgent)) {
+    return true;
+  } else {
+    return window.load_distill_framework === undefined;
+  }
+}
+
+// show body when load is complete
+function on_load_complete() {
+
+  // add anchors
+  if (window.anchors) {
+    window.anchors.options.placement = 'left';
+    window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+  }
+
+
+  // set body to visible
+  document.body.style.visibility = 'visible';
+
+  // force redraw for leaflet widgets
+  if (window.HTMLWidgets) {
+    var maps = window.HTMLWidgets.findAll(".leaflet");
+    $.each(maps, function(i, el) {
+      var map = this.getMap();
+      map.invalidateSize();
+      map.eachLayer(function(layer) {
+        if (layer instanceof L.TileLayer)
+          layer.redraw();
+      });
+    });
+  }
+
+  // trigger 'shown' so htmlwidgets resize
+  $('d-article').trigger('shown');
+}
+
+function init_distill() {
+
+  init_common();
+
+  // create front matter
+  var front_matter = $('<d-front-matter></d-front-matter>');
+  $('#distill-front-matter').wrap(front_matter);
+
+  // create d-title
+  $('.d-title').changeElementType('d-title');
+
+  // create d-byline
+  var byline = $('<d-byline></d-byline>');
+  $('.d-byline').replaceWith(byline);
+
+  // create d-article
+  var article = $('<d-article></d-article>');
+  $('.d-article').wrap(article).children().unwrap();
+
+  // move posts container into article
+  $('.posts-container').appendTo($('d-article'));
+
+  // create d-appendix
+  $('.d-appendix').changeElementType('d-appendix');
+
+  // flag indicating that we have appendix items
+  var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+  // replace footnotes with <d-footnote>
+  $('.footnote-ref').each(function(i, val) {
+    appendix = true;
+    var href = $(this).attr('href');
+    var id = href.replace('#', '');
+    var fn = $('#' + id);
+    var fn_p = $('#' + id + '>p');
+    fn_p.find('.footnote-back').remove();
+    var text = fn_p.html();
+    var dtfn = $('<d-footnote></d-footnote>');
+    dtfn.html(text);
+    $(this).replaceWith(dtfn);
+  });
+  // remove footnotes
+  $('.footnotes').remove();
+
+  // move refs into #references-listing
+  $('#references-listing').replaceWith($('#refs'));
+
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    var id = $(this).attr('id');
+    $('.d-contents a[href="#' + id + '"]').parent().remove();
+    appendix = true;
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+  });
+
+  // show d-appendix if we have appendix content
+  $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+  // localize layout chunks to just output
+  $('.layout-chunk').each(function(i, val) {
+
+    // capture layout
+    var layout = $(this).attr('data-layout');
+
+    // apply layout to markdown level block elements
+    var elements = $(this).children().not('details, div.sourceCode, pre, script');
+    elements.each(function(i, el) {
+      var layout_div = $('<div class="' + layout + '"></div>');
+      if (layout_div.hasClass('shaded')) {
+        var shaded_content = $('<div class="shaded-content"></div>');
+        $(this).wrap(shaded_content);
+        $(this).parent().wrap(layout_div);
+      } else {
+        $(this).wrap(layout_div);
+      }
+    });
+
+
+    // unwrap the layout-chunk div
+    $(this).children().unwrap();
+  });
+
+  // remove code block used to force  highlighting css
+  $('.distill-force-highlighting-css').parent().remove();
+
+  // remove empty line numbers inserted by pandoc when using a
+  // custom syntax highlighting theme
+  $('code.sourceCode a:empty').remove();
+
+  // load distill framework
+  load_distill_framework();
+
+  // wait for window.distillRunlevel == 4 to do post processing
+  function distill_post_process() {
+
+    if (!window.distillRunlevel || window.distillRunlevel < 4)
+      return;
+
+    // hide author/affiliations entirely if we have no authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+    if (!have_authors)
+      $('d-byline').addClass('hidden');
+
+    // article with toc class
+    $('.d-contents').parent().addClass('d-article-with-toc');
+
+    // strip links that point to #
+    $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+    // add orcid ids
+    $('.authors-affiliations').find('.author').each(function(i, el) {
+      var orcid_id = front_matter.authors[i].orcidID;
+      if (orcid_id) {
+        var a = $('<a></a>');
+        a.attr('href', 'https://orcid.org/' + orcid_id);
+        var img = $('<img></img>');
+        img.addClass('orcid-id');
+        img.attr('alt', 'ORCID ID');
+        img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+        a.append(img);
+        $(this).append(a);
+      }
+    });
+
+    // hide elements of author/affiliations grid that have no value
+    function hide_byline_column(caption) {
+      $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+    }
+
+    // affiliations
+    var have_affiliations = false;
+    for (var i = 0; i<front_matter.authors.length; ++i) {
+      var author = front_matter.authors[i];
+      if (author.affiliation !== "&nbsp;") {
+        have_affiliations = true;
+        break;
+      }
+    }
+    if (!have_affiliations)
+      $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+    // published date
+    if (!front_matter.publishedDate)
+      hide_byline_column("Published");
+
+    // document object identifier
+    var doi = $('d-byline').find('h3:contains("DOI")');
+    var doi_p = doi.next().empty();
+    if (!front_matter.doi) {
+      // if we have a citation and valid citationText then link to that
+      if ($('#citation').length > 0 && front_matter.citationText) {
+        doi.html('Citation');
+        $('<a href="#citation"></a>')
+          .text(front_matter.citationText)
+          .appendTo(doi_p);
+      } else {
+        hide_byline_column("DOI");
+      }
+    } else {
+      $('<a></a>')
+         .attr('href', "https://doi.org/" + front_matter.doi)
+         .html(front_matter.doi)
+         .appendTo(doi_p);
+    }
+
+     // change plural form of authors/affiliations
+    if (front_matter.authors.length === 1) {
+      var grid = $('.authors-affiliations');
+      grid.children('h3:contains("Authors")').text('Author');
+      grid.children('h3:contains("Affiliations")').text('Affiliation');
+    }
+
+    // remove d-appendix and d-footnote-list local styles
+    $('d-appendix > style:first-child').remove();
+    $('d-footnote-list > style:first-child').remove();
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // hoverable references
+    $('span.citation[data-cites]').each(function() {
+      var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+      window.tippy(this, {
+        allowHTML: true,
+        content: refHtml,
+        maxWidth: 500,
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'light-border',
+        placement: 'bottom-start'
+      });
+    });
+
+    // clear polling timer
+    clearInterval(tid);
+
+    // show body now that everything is ready
+    on_load_complete();
+  }
+
+  var tid = setInterval(distill_post_process, 50);
+  distill_post_process();
+
+}
+
+function init_downlevel() {
+
+  init_common();
+
+   // insert hr after d-title
+  $('.d-title').after($('<hr class="section-separator"/>'));
+
+  // check if we have authors
+  var front_matter = JSON.parse($("#distill-front-matter").html());
+  var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+  // manage byline/border
+  if (!have_authors)
+    $('.d-byline').remove();
+  $('.d-byline').after($('<hr class="section-separator"/>'));
+  $('.d-byline a').remove();
+
+  // remove toc
+  $('.d-contents').remove();
+
+  // move appendix elements
+  $('h1.appendix, h2.appendix').each(function(i, val) {
+    $(this).changeElementType('h3');
+  });
+  $('h3.appendix').each(function(i, val) {
+    $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+  });
+
+
+  // inject headers into references and footnotes
+  var refs_header = $('<h3></h3>');
+  refs_header.text('References');
+  $('#refs').prepend(refs_header);
+
+  var footnotes_header = $('<h3></h3');
+  footnotes_header.text('Footnotes');
+  $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+  // move appendix-bottom entries to the bottom
+  $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+  $('.appendix-bottom').remove();
+
+  // remove appendix if it's empty
+  if ($('.d-appendix').children().length === 0)
+    $('.d-appendix').remove();
+
+  // prepend separator above appendix
+  $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+  // trim code
+  $('pre>code').each(function(i, val) {
+    $(this).html($.trim($(this).html()));
+  });
+
+  // move posts-container right before article
+  $('.posts-container').insertBefore($('.d-article'));
+
+  $('body').addClass('downlevel');
+
+  on_load_complete();
+}
+
+
+function init_common() {
+
+  // jquery plugin to change element types
+  (function($) {
+    $.fn.changeElementType = function(newType) {
+      var attrs = {};
+
+      $.each(this[0].attributes, function(idx, attr) {
+        attrs[attr.nodeName] = attr.nodeValue;
+      });
+
+      this.replaceWith(function() {
+        return $("<" + newType + "/>", attrs).append($(this).contents());
+      });
+    };
+  })(jQuery);
+
+  // prevent underline for linked images
+  $('a > img').parent().css({'border-bottom' : 'none'});
+
+  // mark non-body figures created by knitr chunks as 100% width
+  $('.layout-chunk').each(function(i, val) {
+    var figures = $(this).find('img, .html-widget');
+    if ($(this).attr('data-layout') !== "l-body") {
+      figures.css('width', '100%');
+    } else {
+      figures.css('max-width', '100%');
+      figures.filter("[width]").each(function(i, val) {
+        var fig = $(this);
+        fig.css('width', fig.attr('width') + 'px');
+      });
+
+    }
+  });
+
+  // auto-append index.html to post-preview links in file: protocol
+  // and in rstudio ide preview
+  $('.post-preview').each(function(i, val) {
+    if (window.location.protocol === "file:")
+      $(this).attr('href', $(this).attr('href') + "index.html");
+  });
+
+  // get rid of index.html references in header
+  if (window.location.protocol !== "file:") {
+    $('.distill-site-header a[href]').each(function(i,val) {
+      $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+    });
+  }
+
+  // add class to pandoc style tables
+  $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+  $('.kable-table').children('table').addClass('pandoc-table');
+
+  // add figcaption style to table captions
+  $('caption').parent('table').addClass("figcaption");
+
+  // initialize posts list
+  if (window.init_posts_list)
+    window.init_posts_list();
+
+  // implmement disqus comment link
+  $('.disqus-comment-count').click(function() {
+    window.headroom_prevent_pin = true;
+    $('#disqus_thread').toggleClass('hidden');
+    if (!$('#disqus_thread').hasClass('hidden')) {
+      var offset = $(this).offset();
+      $(window).resize();
+      $('html, body').animate({
+        scrollTop: offset.top - 35
+      });
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  if (is_downlevel_browser())
+    init_downlevel();
+  else
+    window.addEventListener('WebComponentsReady', init_distill);
+});
+
+</script>
+
+<!--/radix_placeholder_distill-->
+  <script src="../../site_libs/header-attrs-2.8/header-attrs.js"></script>
+  <script src="../../site_libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+  <script src="../../site_libs/plotly-binding-4.9.3/plotly.js"></script>
+  <script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script>
+  <script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script>
+  <link href="../../site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+  <script src="../../site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+  <link href="../../site_libs/plotly-htmlwidgets-css-1.57.1/plotly-htmlwidgets.css" rel="stylesheet" />
+  <script src="../../site_libs/plotly-main-1.57.1/plotly-latest.min.js"></script>
+  <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
+  <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="../../site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="../../site_libs/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="../../site_libs/anchor-4.2.2/anchor.min.js"></script>
+  <script src="../../site_libs/bowser-1.9.3/bowser.min.js"></script>
+  <script src="../../site_libs/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="../../site_libs/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+<!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Tidy Tuesday Series","description":"2018 Week 29 - College Major","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-06-01T00:00:00.000+00:00","citationText":"lruolin, 2021"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<header class="header header--fixed" role="banner">
+<nav class="distill-site-nav distill-site-header">
+<div class="nav-left">
+<a href="../../index.html" class="title">pRactice corner</a>
+<input id="distill-search" class="nav-search hidden" type="text" placeholder="Search..."/>
+</div>
+<div class="nav-right">
+<a href="../../index.html">Home</a>
+<a href="../../about.html">About</a>
+<a href="../../usefullinks.html">Useful Links</a>
+<a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
+</div>
+</nav>
+</header>
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Tidy Tuesday Series</h1>
+<!--radix_placeholder_categories-->
+<!--/radix_placeholder_categories-->
+<p><p>2018 Week 29 - College Major</p></p>
+</div>
+
+<div class="d-byline">
+  lruolin  
+  
+<br/>06-01-2021
+</div>
+
+<div class="d-article">
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>knitr</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/knitr/man/opts_chunk.html'>opts_chunk</a></span><span class='op'>$</span><span class='fu'>set</span><span class='op'>(</span>echo <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+
+<span class='co'># load packages</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/thebioengineer/tidytuesdayR'>tidytuesdayR</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+
+<span class='co'># to download data</span>
+<span class='va'>tt_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytuesdayR/man/tt_load.html'>tt_load</a></span><span class='op'>(</span><span class='fl'>2018</span>, week <span class='op'>=</span> <span class='fl'>29</span><span class='op'>)</span>
+<span class='va'>tt_data</span><span class='op'>$</span><span class='va'>`recent-grads`</span>
+
+<span class='co'># to view readme</span>
+<span class='fu'><a href='https://rdrr.io/pkg/tidytuesdayR/man/readme.html'>readme</a></span><span class='op'>(</span><span class='va'>tt_data</span><span class='op'>)</span>
+
+<span class='co'># to see available datasets:</span>
+<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span><span class='op'>(</span><span class='va'>tt_data</span><span class='op'>)</span> <span class='co'># recent-grads</span>
+
+<span class='va'>recent_grads</span> <span class='op'>&lt;-</span> <span class='va'>tt_data</span><span class='op'>$</span><span class='va'>`recent-grads`</span>
+</code></pre>
+</div>
+</div>
+<h1 id="load-packages">Load Packages</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/thebioengineer/tidytuesdayR'>tidytuesdayR</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jrnold/ggthemes'>ggthemes</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/slowkow/ggrepel'>ggrepel</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://plotly-r.com'>plotly</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h1 id="load-data-from-tidytuesdayr-package">Load Data from tidytuesdayR package</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># to download data</span>
+<span class='va'>tt_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/tidytuesdayR/man/tt_load.html'>tt_load</a></span><span class='op'>(</span><span class='fl'>2018</span>, week <span class='op'>=</span> <span class='fl'>29</span><span class='op'>)</span>
+<span class='va'>tt_data</span><span class='op'>$</span><span class='va'>`recent-grads`</span>
+
+<span class='co'># to view readme</span>
+<span class='fu'><a href='https://rdrr.io/pkg/tidytuesdayR/man/readme.html'>readme</a></span><span class='op'>(</span><span class='va'>tt_data</span><span class='op'>)</span>
+
+<span class='va'>recent_grads</span> <span class='op'>&lt;-</span> <span class='va'>tt_data</span><span class='op'>$</span><span class='va'>`recent-grads`</span>
+</code></pre>
+</div>
+</div>
+<h1 id="explore-dataset">Explore Dataset</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>grads_processed</span> <span class='op'>&lt;-</span> <span class='va'>recent_grads</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>janitor</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/janitor/man/clean_names.html'>clean_names</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>major <span class='op'>=</span> <span class='fu'>str_to_title</span><span class='op'>(</span><span class='va'>major</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># check for na values</span>
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>grads_processed</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 4</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># identify location</span>
+<span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>grads_processed</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1]  541  714  887 1233</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>grads_processed</span><span class='op'>[</span><span class='fl'>541</span>,<span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 21
+   rank major_code major total   men women major_category share_women
+  &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;
+1    NA         NA &lt;NA&gt;     NA    NA    NA &lt;NA&gt;                    NA
+# … with 13 more variables: sample_size &lt;dbl&gt;, employed &lt;dbl&gt;,
+#   full_time &lt;dbl&gt;, part_time &lt;dbl&gt;, full_time_year_round &lt;dbl&gt;,
+#   unemployed &lt;dbl&gt;, unemployment_rate &lt;dbl&gt;, median &lt;dbl&gt;,
+#   p25th &lt;dbl&gt;, p75th &lt;dbl&gt;, college_jobs &lt;dbl&gt;,
+#   non_college_jobs &lt;dbl&gt;, low_wage_jobs &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>grads_processed</span><span class='op'>[</span><span class='fl'>714</span>,<span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 21
+   rank major_code major total   men women major_category share_women
+  &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;
+1    NA         NA &lt;NA&gt;     NA    NA    NA &lt;NA&gt;                    NA
+# … with 13 more variables: sample_size &lt;dbl&gt;, employed &lt;dbl&gt;,
+#   full_time &lt;dbl&gt;, part_time &lt;dbl&gt;, full_time_year_round &lt;dbl&gt;,
+#   unemployed &lt;dbl&gt;, unemployment_rate &lt;dbl&gt;, median &lt;dbl&gt;,
+#   p25th &lt;dbl&gt;, p75th &lt;dbl&gt;, college_jobs &lt;dbl&gt;,
+#   non_college_jobs &lt;dbl&gt;, low_wage_jobs &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>grads_processed</span><span class='op'>[</span><span class='fl'>887</span>,<span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 21
+   rank major_code major total   men women major_category share_women
+  &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;
+1    NA         NA &lt;NA&gt;     NA    NA    NA &lt;NA&gt;                    NA
+# … with 13 more variables: sample_size &lt;dbl&gt;, employed &lt;dbl&gt;,
+#   full_time &lt;dbl&gt;, part_time &lt;dbl&gt;, full_time_year_round &lt;dbl&gt;,
+#   unemployed &lt;dbl&gt;, unemployment_rate &lt;dbl&gt;, median &lt;dbl&gt;,
+#   p25th &lt;dbl&gt;, p75th &lt;dbl&gt;, college_jobs &lt;dbl&gt;,
+#   non_college_jobs &lt;dbl&gt;, low_wage_jobs &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>grads_processed</span><span class='op'>[</span><span class='fl'>1233</span>, <span class='op'>]</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 1 x 21
+   rank major_code major total   men women major_category share_women
+  &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;                &lt;dbl&gt;
+1    NA         NA &lt;NA&gt;     NA    NA    NA &lt;NA&gt;                    NA
+# … with 13 more variables: sample_size &lt;dbl&gt;, employed &lt;dbl&gt;,
+#   full_time &lt;dbl&gt;, part_time &lt;dbl&gt;, full_time_year_round &lt;dbl&gt;,
+#   unemployed &lt;dbl&gt;, unemployment_rate &lt;dbl&gt;, median &lt;dbl&gt;,
+#   p25th &lt;dbl&gt;, p75th &lt;dbl&gt;, college_jobs &lt;dbl&gt;,
+#   non_college_jobs &lt;dbl&gt;, low_wage_jobs &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># remove NA</span>
+<span class='va'>grads_processed_2</span> <span class='op'>&lt;-</span> <span class='va'>grads_processed</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>drop_na</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>grads_processed_2</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] 0</code></pre>
+</div>
+<p>Note:</p>
+<ul>
+<li>change CAPS to title for Major</li>
+<li>check for missing values</li>
+<li>remove NA values</li>
+</ul>
+<h1 id="exploratory-questions">Exploratory questions</h1>
+<ul>
+<li>Which majors make the most money?</li>
+<li>Which majors are the most popular?</li>
+<li>Breakdown of popular majors by gender?</li>
+<li>How does gender breakdown relate to typical earnings?</li>
+</ul>
+<p>Simplify the dataset again:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cleaned_data</span> <span class='op'>&lt;-</span> <span class='va'>grads_processed_2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>rank</span>, <span class='va'>major_category</span>, <span class='va'>major</span>, <span class='va'>total</span>, <span class='va'>men</span>, <span class='va'>women</span>, <span class='va'>share_women</span>, <span class='va'>sample_size</span>, <span class='va'>median</span>, <span class='va'>p25th</span>, <span class='va'>p75th</span> <span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>pct_sample <span class='op'>=</span> <span class='va'>sample_size</span><span class='op'>/</span><span class='va'>total</span><span class='op'>*</span><span class='fl'>100</span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>cleaned_data</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 172
+Columns: 12
+$ rank           &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14…
+$ major_category &lt;chr&gt; &quot;Engineering&quot;, &quot;Engineering&quot;, &quot;Engineering&quot;, …
+$ major          &lt;chr&gt; &quot;Petroleum Engineering&quot;, &quot;Mining And Mineral …
+$ total          &lt;dbl&gt; 2339, 756, 856, 1258, 32260, 2573, 3777, 1792…
+$ men            &lt;dbl&gt; 2057, 679, 725, 1123, 21239, 2200, 2110, 832,…
+$ women          &lt;dbl&gt; 282, 77, 131, 135, 11021, 373, 1667, 960, 109…
+$ share_women    &lt;dbl&gt; 0.1205643, 0.1018519, 0.1530374, 0.1073132, 0…
+$ sample_size    &lt;dbl&gt; 36, 7, 3, 16, 289, 17, 51, 10, 1029, 631, 399…
+$ median         &lt;dbl&gt; 110000, 75000, 73000, 70000, 65000, 65000, 62…
+$ p25th          &lt;dbl&gt; 95000, 55000, 50000, 43000, 50000, 50000, 530…
+$ p75th          &lt;dbl&gt; 125000, 90000, 105000, 80000, 75000, 102000, …
+$ pct_sample     &lt;dbl&gt; 1.5391193, 0.9259259, 0.3504673, 1.2718601, 0…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># 16 types of major category</span>
+<span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>major_category</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>major_category</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'>n</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 16 x 2
+   major_category                          n
+   &lt;chr&gt;                               &lt;int&gt;
+ 1 Agriculture &amp; Natural Resources         9
+ 2 Arts                                    8
+ 3 Biology &amp; Life Science                 14
+ 4 Business                               13
+ 5 Communications &amp; Journalism             4
+ 6 Computers &amp; Mathematics                11
+ 7 Education                              16
+ 8 Engineering                            29
+ 9 Health                                 12
+10 Humanities &amp; Liberal Arts              15
+11 Industrial Arts &amp; Consumer Services     7
+12 Interdisciplinary                       1
+13 Law &amp; Public Policy                     5
+14 Physical Sciences                      10
+15 Psychology &amp; Social Work                9
+16 Social Science                          9</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># 172 types of major</span>
+<span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>major</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>major</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'>n</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 172 x 2
+   major                                     n
+   &lt;chr&gt;                                 &lt;int&gt;
+ 1 Accounting                                1
+ 2 Actuarial Science                         1
+ 3 Advertising And Public Relations          1
+ 4 Aerospace Engineering                     1
+ 5 Agricultural Economics                    1
+ 6 Agriculture Production And Management     1
+ 7 Animal Sciences                           1
+ 8 Anthropology And Archeology               1
+ 9 Applied Mathematics                       1
+10 Architectural Engineering                 1
+# … with 162 more rows</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># see unique values for character columns</span>
+<span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_if</span><span class='op'>(</span><span class='va'>is_character</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$major_category
+ [1] &quot;Engineering&quot;                        
+ [2] &quot;Business&quot;                           
+ [3] &quot;Physical Sciences&quot;                  
+ [4] &quot;Law &amp; Public Policy&quot;                
+ [5] &quot;Computers &amp; Mathematics&quot;            
+ [6] &quot;Industrial Arts &amp; Consumer Services&quot;
+ [7] &quot;Arts&quot;                               
+ [8] &quot;Health&quot;                             
+ [9] &quot;Social Science&quot;                     
+[10] &quot;Biology &amp; Life Science&quot;             
+[11] &quot;Education&quot;                          
+[12] &quot;Agriculture &amp; Natural Resources&quot;    
+[13] &quot;Humanities &amp; Liberal Arts&quot;          
+[14] &quot;Psychology &amp; Social Work&quot;           
+[15] &quot;Communications &amp; Journalism&quot;        
+[16] &quot;Interdisciplinary&quot;                  
+
+$major
+  [1] &quot;Petroleum Engineering&quot;                                            
+  [2] &quot;Mining And Mineral Engineering&quot;                                   
+  [3] &quot;Metallurgical Engineering&quot;                                        
+  [4] &quot;Naval Architecture And Marine Engineering&quot;                        
+  [5] &quot;Chemical Engineering&quot;                                             
+  [6] &quot;Nuclear Engineering&quot;                                              
+  [7] &quot;Actuarial Science&quot;                                                
+  [8] &quot;Astronomy And Astrophysics&quot;                                       
+  [9] &quot;Mechanical Engineering&quot;                                           
+ [10] &quot;Electrical Engineering&quot;                                           
+ [11] &quot;Computer Engineering&quot;                                             
+ [12] &quot;Aerospace Engineering&quot;                                            
+ [13] &quot;Biomedical Engineering&quot;                                           
+ [14] &quot;Materials Science&quot;                                                
+ [15] &quot;Engineering Mechanics Physics And Science&quot;                        
+ [16] &quot;Biological Engineering&quot;                                           
+ [17] &quot;Industrial And Manufacturing Engineering&quot;                         
+ [18] &quot;General Engineering&quot;                                              
+ [19] &quot;Architectural Engineering&quot;                                        
+ [20] &quot;Court Reporting&quot;                                                  
+ [21] &quot;Computer Science&quot;                                                 
+ [22] &quot;Electrical Engineering Technology&quot;                                
+ [23] &quot;Materials Engineering And Materials Science&quot;                      
+ [24] &quot;Management Information Systems And Statistics&quot;                    
+ [25] &quot;Civil Engineering&quot;                                                
+ [26] &quot;Construction Services&quot;                                            
+ [27] &quot;Operations Logistics And E-Commerce&quot;                              
+ [28] &quot;Miscellaneous Engineering&quot;                                        
+ [29] &quot;Public Policy&quot;                                                    
+ [30] &quot;Environmental Engineering&quot;                                        
+ [31] &quot;Engineering Technologies&quot;                                         
+ [32] &quot;Miscellaneous Fine Arts&quot;                                          
+ [33] &quot;Geological And Geophysical Engineering&quot;                           
+ [34] &quot;Nursing&quot;                                                          
+ [35] &quot;Finance&quot;                                                          
+ [36] &quot;Economics&quot;                                                        
+ [37] &quot;Business Economics&quot;                                               
+ [38] &quot;Industrial Production Technologies&quot;                               
+ [39] &quot;Nuclear, Industrial Radiology, And Biological Technologies&quot;       
+ [40] &quot;Accounting&quot;                                                       
+ [41] &quot;Mathematics&quot;                                                      
+ [42] &quot;Computer And Information Systems&quot;                                 
+ [43] &quot;Physics&quot;                                                          
+ [44] &quot;Medical Technologies Technicians&quot;                                 
+ [45] &quot;Information Sciences&quot;                                             
+ [46] &quot;Statistics And Decision Science&quot;                                  
+ [47] &quot;Applied Mathematics&quot;                                              
+ [48] &quot;Pharmacology&quot;                                                     
+ [49] &quot;Oceanography&quot;                                                     
+ [50] &quot;Engineering And Industrial Management&quot;                            
+ [51] &quot;Medical Assisting Services&quot;                                       
+ [52] &quot;Mathematics And Computer Science&quot;                                 
+ [53] &quot;Computer Programming And Data Processing&quot;                         
+ [54] &quot;Cognitive Science And Biopsychology&quot;                              
+ [55] &quot;School Student Counseling&quot;                                        
+ [56] &quot;International Relations&quot;                                          
+ [57] &quot;General Business&quot;                                                 
+ [58] &quot;Architecture&quot;                                                     
+ [59] &quot;International Business&quot;                                           
+ [60] &quot;Pharmacy Pharmaceutical Sciences And Administration&quot;              
+ [61] &quot;Molecular Biology&quot;                                                
+ [62] &quot;Miscellaneous Business &amp; Medical Administration&quot;                  
+ [63] &quot;Agriculture Production And Management&quot;                            
+ [64] &quot;General Agriculture&quot;                                              
+ [65] &quot;Miscellaneous Engineering Technologies&quot;                           
+ [66] &quot;Mechanical Engineering Related Technologies&quot;                      
+ [67] &quot;Genetics&quot;                                                         
+ [68] &quot;Miscellaneous Social Sciences&quot;                                    
+ [69] &quot;United States History&quot;                                            
+ [70] &quot;Industrial And Organizational Psychology&quot;                         
+ [71] &quot;Agricultural Economics&quot;                                           
+ [72] &quot;Physical Sciences&quot;                                                
+ [73] &quot;Military Technologies&quot;                                            
+ [74] &quot;Chemistry&quot;                                                        
+ [75] &quot;Electrical, Mechanical, And Precision Technologies And Production&quot;
+ [76] &quot;Business Management And Administration&quot;                           
+ [77] &quot;Marketing And Marketing Research&quot;                                 
+ [78] &quot;Political Science And Government&quot;                                 
+ [79] &quot;Geography&quot;                                                        
+ [80] &quot;Microbiology&quot;                                                     
+ [81] &quot;Computer Administration Management And Security&quot;                  
+ [82] &quot;Biochemical Sciences&quot;                                             
+ [83] &quot;Botany&quot;                                                           
+ [84] &quot;Computer Networking And Telecommunications&quot;                       
+ [85] &quot;Geology And Earth Science&quot;                                        
+ [86] &quot;Human Resources And Personnel Management&quot;                         
+ [87] &quot;Pre-Law And Legal Studies&quot;                                        
+ [88] &quot;Miscellaneous Health Medical Professions&quot;                         
+ [89] &quot;Public Administration&quot;                                            
+ [90] &quot;Geosciences&quot;                                                      
+ [91] &quot;Social Psychology&quot;                                                
+ [92] &quot;Environmental Science&quot;                                            
+ [93] &quot;Communications&quot;                                                   
+ [94] &quot;Criminal Justice And Fire Protection&quot;                             
+ [95] &quot;Commercial Art And Graphic Design&quot;                                
+ [96] &quot;Journalism&quot;                                                       
+ [97] &quot;Multi-Disciplinary Or General Science&quot;                            
+ [98] &quot;Advertising And Public Relations&quot;                                 
+ [99] &quot;Area Ethnic And Civilization Studies&quot;                             
+[100] &quot;Special Needs Education&quot;                                          
+[101] &quot;Physiology&quot;                                                       
+[102] &quot;Criminology&quot;                                                      
+[103] &quot;Nutrition Sciences&quot;                                               
+[104] &quot;Health And Medical Administrative Services&quot;                       
+[105] &quot;Communication Technologies&quot;                                       
+[106] &quot;Transportation Sciences And Technologies&quot;                         
+[107] &quot;Natural Resources Management&quot;                                     
+[108] &quot;Neuroscience&quot;                                                     
+[109] &quot;Multi/Interdisciplinary Studies&quot;                                  
+[110] &quot;Atmospheric Sciences And Meteorology&quot;                             
+[111] &quot;Forestry&quot;                                                         
+[112] &quot;Soil Science&quot;                                                     
+[113] &quot;General Education&quot;                                                
+[114] &quot;History&quot;                                                          
+[115] &quot;French German Latin And Other Common Foreign Language Studies&quot;    
+[116] &quot;Intercultural And International Studies&quot;                          
+[117] &quot;Social Science Or History Teacher Education&quot;                      
+[118] &quot;Community And Public Health&quot;                                      
+[119] &quot;Mathematics Teacher Education&quot;                                    
+[120] &quot;Educational Administration And Supervision&quot;                       
+[121] &quot;Health And Medical Preparatory Programs&quot;                          
+[122] &quot;Miscellaneous Biology&quot;                                            
+[123] &quot;Biology&quot;                                                          
+[124] &quot;Sociology&quot;                                                        
+[125] &quot;Mass Media&quot;                                                       
+[126] &quot;Treatment Therapy Professions&quot;                                    
+[127] &quot;Hospitality Management&quot;                                           
+[128] &quot;Language And Drama Education&quot;                                     
+[129] &quot;Linguistics And Comparative Language And Literature&quot;              
+[130] &quot;Miscellaneous Education&quot;                                          
+[131] &quot;Interdisciplinary Social Sciences&quot;                                
+[132] &quot;Ecology&quot;                                                          
+[133] &quot;Secondary Teacher Education&quot;                                      
+[134] &quot;General Medical And Health Services&quot;                              
+[135] &quot;Philosophy And Religious Studies&quot;                                 
+[136] &quot;Art And Music Education&quot;                                          
+[137] &quot;English Language And Literature&quot;                                  
+[138] &quot;Elementary Education&quot;                                             
+[139] &quot;Physical Fitness Parks Recreation And Leisure&quot;                    
+[140] &quot;Liberal Arts&quot;                                                     
+[141] &quot;Film Video And Photographic Arts&quot;                                 
+[142] &quot;General Social Sciences&quot;                                          
+[143] &quot;Plant Science And Agronomy&quot;                                       
+[144] &quot;Science And Computer Teacher Education&quot;                           
+[145] &quot;Psychology&quot;                                                       
+[146] &quot;Music&quot;                                                            
+[147] &quot;Physical And Health Education Teaching&quot;                           
+[148] &quot;Art History And Criticism&quot;                                        
+[149] &quot;Fine Arts&quot;                                                        
+[150] &quot;Family And Consumer Sciences&quot;                                     
+[151] &quot;Social Work&quot;                                                      
+[152] &quot;Animal Sciences&quot;                                                  
+[153] &quot;Visual And Performing Arts&quot;                                       
+[154] &quot;Teacher Education: Multiple Levels&quot;                               
+[155] &quot;Miscellaneous Psychology&quot;                                         
+[156] &quot;Human Services And Community Organization&quot;                        
+[157] &quot;Humanities&quot;                                                       
+[158] &quot;Theology And Religious Vocations&quot;                                 
+[159] &quot;Studio Arts&quot;                                                      
+[160] &quot;Cosmetology Services And Culinary Arts&quot;                           
+[161] &quot;Miscellaneous Agriculture&quot;                                        
+[162] &quot;Anthropology And Archeology&quot;                                      
+[163] &quot;Communication Disorders Sciences And Services&quot;                    
+[164] &quot;Early Childhood Education&quot;                                        
+[165] &quot;Other Foreign Languages&quot;                                          
+[166] &quot;Drama And Theater Arts&quot;                                           
+[167] &quot;Composition And Rhetoric&quot;                                         
+[168] &quot;Zoology&quot;                                                          
+[169] &quot;Educational Psychology&quot;                                           
+[170] &quot;Clinical Psychology&quot;                                              
+[171] &quot;Counseling Psychology&quot;                                            
+[172] &quot;Library Science&quot;                                                  </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># see summary statistics for dbl columns</span>
+<span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_if</span><span class='op'>(</span><span class='va'>is.numeric</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>.</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'>broom</span><span class='fu'>::</span><span class='fu'><a href='https://generics.r-lib.org/reference/tidy.html'>tidy</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$rank
+# A tibble: 1 x 6
+  minimum    q1 median  mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1       1  44.8   87.5  87.4  130.     173
+
+$total
+# A tibble: 1 x 6
+  minimum    q1 median   mean     q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+1     124 4550.  15104 39370. 38910.  393735
+
+$men
+# A tibble: 1 x 6
+  minimum    q1 median   mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1     119 2178.   5434 16723. 14631  173809
+
+$women
+# A tibble: 1 x 6
+  minimum    q1 median   mean     q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
+1       0 1778.  8386. 22647. 22554.  307087
+
+$share_women
+# A tibble: 1 x 6
+  minimum    q1 median  mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1       0 0.336  0.534 0.522 0.703   0.969
+
+$sample_size
+# A tibble: 1 x 6
+  minimum    q1 median  mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1       2    42    131  358.   339    4212
+
+$median
+# A tibble: 1 x 6
+  minimum    q1 median   mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1   22000 33000  36000 40077. 45000  110000
+
+$p25th
+# A tibble: 1 x 6
+  minimum    q1 median   mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1   18500 24000  27000 29487. 33250   95000
+
+$p75th
+# A tibble: 1 x 6
+  minimum    q1 median   mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1   22000 41750  47000 51387. 58500  125000
+
+$pct_sample
+# A tibble: 1 x 6
+  minimum    q1 median  mean    q3 maximum
+    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1   0.161 0.660  0.881 0.909  1.12    3.23</code></pre>
+</div>
+<h2 id="checking-sample-size">Checking Sample Size</h2>
+<p>Which of the survey results had higher sample size?</p>
+<p>Plot sample size (x) and median (x), label major</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>sample_size</span>, <span class='va'>median</span>, label <span class='op'>=</span> <span class='va'>major</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>major</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_x_log10</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<p>A larger sample size would mean that the survey results were more credible.</p>
+<h2 id="which-categories-of-major-make-the-most-money">Which categories of major make the most money?</h2>
+<p>Rank median salary in descending order and fct_reorder, ggplot</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>theme_set</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/pkg/ggthemes/man/theme_few.html'>theme_few</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>major_category</span>, <span class='va'>median</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>major_category</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>median <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>median</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>median</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 16 x 2
+   major_category                      median
+   &lt;chr&gt;                                &lt;dbl&gt;
+ 1 Engineering                          57000
+ 2 Computers &amp; Mathematics              45000
+ 3 Business                             40000
+ 4 Physical Sciences                    39500
+ 5 Social Science                       38000
+ 6 Biology &amp; Life Science               36300
+ 7 Law &amp; Public Policy                  36000
+ 8 Agriculture &amp; Natural Resources      35000
+ 9 Communications &amp; Journalism          35000
+10 Health                               35000
+11 Industrial Arts &amp; Consumer Services  35000
+12 Interdisciplinary                    35000
+13 Education                            32750
+14 Humanities &amp; Liberal Arts            32000
+15 Arts                                 30750
+16 Psychology &amp; Social Work             30000</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='fu'>fct_reorder</span><span class='op'>(</span><span class='va'>major_category</span>, <span class='va'>median</span><span class='op'>)</span>, <span class='va'>median</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_boxplot</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Distribution of median salary for different major categories"</span>,
+       caption <span class='op'>=</span> <span class='st'>"Source: American Community Survey 2010-2012"</span>,
+       x <span class='op'>=</span> <span class='st'>""</span>,
+       y <span class='op'>=</span> <span class='st'>"Median Salary"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_y_continuous</span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='va'><a href='https://scales.r-lib.org/reference/label_number.html'>comma</a></span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>expand_limits</span><span class='op'>(</span>y <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<h2 id="what-are-the-highest-earning-mojors">What are the highest earning mojors?</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>sample_size</span><span class='op'>&gt;</span><span class='fl'>100</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>median</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>slice_head</span><span class='op'>(</span>n<span class='op'>=</span><span class='fl'>20</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='fu'>fct_reorder</span><span class='op'>(</span><span class='va'>major</span>, <span class='va'>median</span><span class='op'>)</span>, <span class='va'>median</span>, col <span class='op'>=</span> <span class='va'>major_category</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_errorbar</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>ymin <span class='op'>=</span> <span class='va'>p25th</span>, ymax <span class='op'>=</span> <span class='va'>p75th</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_y_continuous</span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='va'><a href='https://scales.r-lib.org/reference/label_number.html'>comma</a></span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>expand_limits</span><span class='op'>(</span>y <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Top 20 Majors by Median Income, with at least 100 people surveyed"</span>,
+       subtitle <span class='op'>=</span> <span class='st'>"Error bars represent 25th and 75th percentile"</span>,
+       col <span class='op'>=</span> <span class='st'>"Major Categories"</span>,
+       x <span class='op'>=</span> <span class='st'>""</span>,
+       y <span class='op'>=</span> <span class='st'>"Median Salary"</span>,
+       caption <span class='op'>=</span> <span class='st'>"Source: Americal Community Survey 2010-2012"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<h2 id="which-majors-are-the-most-popular">Which majors are the most popular?</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>count</span><span class='op'>(</span><span class='va'>major</span>, wt <span class='op'>=</span> <span class='va'>total</span>, sort <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>slice_head</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='fu'>fct_reorder</span><span class='op'>(</span><span class='va'>major</span>, <span class='va'>n</span><span class='op'>)</span>, <span class='va'>n</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_col</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"forestgreen"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>
+</div>
+<h2 id="breakdown-of-popular-majors-by-gender">Breakdown of popular majors by gender?</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"men"</span>, <span class='st'>"women"</span><span class='op'>)</span>,
+               names_to <span class='op'>=</span> <span class='st'>"gender"</span>,
+               values_to <span class='op'>=</span> <span class='st'>"number"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>total</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fl'>20</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>major</span>, <span class='va'>number</span>, fill <span class='op'>=</span> <span class='va'>gender</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_col</span><span class='op'>(</span>position <span class='op'>=</span> <span class='st'>"stack"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<h2 id="how-does-gender-breakdown-relate-to-typical-earnings">How does gender breakdown relate to typical earnings?</h2>
+<p>x - share women y - median</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>cleaned_data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>share_women</span>, y <span class='op'>=</span> <span class='va'>median</span>, label <span class='op'>=</span> <span class='va'>major</span>,
+             col <span class='op'>=</span> <span class='va'>major_category</span>, size <span class='op'>=</span> <span class='va'>sample_size</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_smooth</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>group <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, method <span class='op'>=</span> <span class='st'>"lm"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'><a href='https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html'>geom_text_repel</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>major</span>, force <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"bottom"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
+</div>
+<h1 id="singapore-2018-graduate-survey">SINGAPORE 2018 GRADUATE SURVEY</h1>
+<p>Import Singapore’s data, downloaded from Data.gov.sg</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sg</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"~/Desktop/r-tidyverse/graduate-employment-survey-ntu-nus-sit-smu-suss-sutd.csv"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sg</span> <span class='op'>&lt;-</span> <span class='fu'>read_csv</span><span class='op'>(</span><span class='st'>"~/Desktop/r-tidyverse/graduate-employment-survey-ntu-nus-sit-smu-suss-sutd.csv"</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Explore the dataset</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>sg</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 703
+Columns: 12
+$ year                      &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013…
+$ university                &lt;chr&gt; &quot;Nanyang Technological University&quot;…
+$ school                    &lt;chr&gt; &quot;College of Business (Nanyang Busi…
+$ degree                    &lt;chr&gt; &quot;Accountancy and Business&quot;, &quot;Accou…
+$ employment_rate_overall   &lt;chr&gt; &quot;97.4&quot;, &quot;97.1&quot;, &quot;90.9&quot;, &quot;87.5&quot;, &quot;9…
+$ employment_rate_ft_perm   &lt;chr&gt; &quot;96.1&quot;, &quot;95.7&quot;, &quot;85.7&quot;, &quot;87.5&quot;, &quot;9…
+$ basic_monthly_mean        &lt;chr&gt; &quot;3701&quot;, &quot;2850&quot;, &quot;3053&quot;, &quot;3557&quot;, &quot;3…
+$ basic_monthly_median      &lt;chr&gt; &quot;3200&quot;, &quot;2700&quot;, &quot;3000&quot;, &quot;3400&quot;, &quot;3…
+$ gross_monthly_mean        &lt;chr&gt; &quot;3727&quot;, &quot;2938&quot;, &quot;3214&quot;, &quot;3615&quot;, &quot;3…
+$ gross_monthly_median      &lt;chr&gt; &quot;3350&quot;, &quot;2700&quot;, &quot;3000&quot;, &quot;3400&quot;, &quot;3…
+$ gross_mthly_25_percentile &lt;chr&gt; &quot;2900&quot;, &quot;2700&quot;, &quot;2700&quot;, &quot;3000&quot;, &quot;3…
+$ gross_mthly_75_percentile &lt;chr&gt; &quot;4000&quot;, &quot;2900&quot;, &quot;3500&quot;, &quot;4100&quot;, &quot;3…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>sg</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># no missing data</span>
+</code></pre>
+</div>
+<pre><code>[1] 0</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># convert to numeric</span>
+<span class='va'>sg_cleaned</span> <span class='op'>&lt;-</span> <span class='va'>sg</span>
+
+<span class='va'>sg_cleaned</span> <span class='op'>&lt;-</span> <span class='va'>sg_cleaned</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='fu'>across</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>7</span><span class='op'>:</span><span class='fl'>12</span><span class='op'>)</span>, <span class='va'>as.numeric</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>sg_cleaned</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 703
+Columns: 12
+$ year                      &lt;dbl&gt; 2013, 2013, 2013, 2013, 2013, 2013…
+$ university                &lt;chr&gt; &quot;Nanyang Technological University&quot;…
+$ school                    &lt;chr&gt; &quot;College of Business (Nanyang Busi…
+$ degree                    &lt;chr&gt; &quot;Accountancy and Business&quot;, &quot;Accou…
+$ employment_rate_overall   &lt;chr&gt; &quot;97.4&quot;, &quot;97.1&quot;, &quot;90.9&quot;, &quot;87.5&quot;, &quot;9…
+$ employment_rate_ft_perm   &lt;chr&gt; &quot;96.1&quot;, &quot;95.7&quot;, &quot;85.7&quot;, &quot;87.5&quot;, &quot;9…
+$ basic_monthly_mean        &lt;dbl&gt; 3701, 2850, 3053, 3557, 3494, 2952…
+$ basic_monthly_median      &lt;dbl&gt; 3200, 2700, 3000, 3400, 3500, 2900…
+$ gross_monthly_mean        &lt;dbl&gt; 3727, 2938, 3214, 3615, 3536, 3166…
+$ gross_monthly_median      &lt;dbl&gt; 3350, 2700, 3000, 3400, 3500, 3125…
+$ gross_mthly_25_percentile &lt;dbl&gt; 2900, 2700, 2700, 3000, 3100, 2893…
+$ gross_mthly_75_percentile &lt;dbl&gt; 4000, 2900, 3500, 4100, 3816, 3365…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>sg_cleaned</span><span class='op'>$</span><span class='va'>year</span><span class='op'>)</span> <span class='co'># 2018</span>
+</code></pre>
+</div>
+<pre><code>[1] 2018</code></pre>
+</div>
+<p>Transform:</p>
+<ul>
+<li><p>Filter to see year 2018</p></li>
+<li><p>Need to remove any missing values</p></li>
+<li><p>Need to recode the degree into smaller number of categories using fct_collapse</p></li>
+<li><p>Need to remove *, # and ^ using str_replace_all</p></li>
+<li><p>Need to change to lower case for easier typing using str_to_lower</p></li>
+<li><p>Need to remove white space in case there are any using trim_ws or str_trim</p></li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sg_2018</span> <span class='op'>&lt;-</span> <span class='va'>sg_cleaned</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>year</span> <span class='op'>==</span> <span class='fl'>2018</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>drop_na</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>basic_monthly_median</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>school <span class='op'>=</span> <span class='fu'>str_replace_all</span><span class='op'>(</span><span class='va'>school</span>, <span class='st'>"\\*"</span>, <span class='st'>""</span><span class='op'>)</span>,
+         degree <span class='op'>=</span> <span class='fu'>str_replace_all</span><span class='op'>(</span><span class='va'>degree</span>, <span class='st'>"\\#"</span>, <span class='st'>""</span><span class='op'>)</span>,
+         degree <span class='op'>=</span> <span class='fu'>str_replace_all</span><span class='op'>(</span><span class='va'>degree</span>, <span class='st'>"\\^"</span>, <span class='st'>""</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>degree <span class='op'>=</span> <span class='fu'>str_to_lower</span><span class='op'>(</span><span class='va'>degree</span><span class='op'>)</span>,
+         degree <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/trimws.html'>trimws</a></span><span class='op'>(</span><span class='va'>degree</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>degree_recode <span class='op'>=</span> <span class='fu'>fct_collapse</span><span class='op'>(</span><span class='va'>degree</span>,
+                                      
+                  accountancy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"accountancy"</span>,
+                                  <span class='st'>"accountancy (cum laude and above)"</span>,
+                                  <span class='st'>"accountancy and business"</span>,
+                                  <span class='st'>"bachelor of accountancy"</span>,
+                                  <span class='st'>"bachelor of accountancy with honours"</span>,
+                                  <span class='st'>"bachelor of business administration (accountancy)"</span>,
+                                  <span class='st'>"bachelor of business administration (accountancy) (hons)"</span><span class='op'>)</span>,
+                  
+                   arts <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"art, design &amp; media"</span>,
+                           <span class='st'>"arts (with education)"</span>,
+                           <span class='st'>"bachelor of arts"</span>,
+                           <span class='st'>"bachelor of arts (hons)"</span>,
+                           <span class='st'>"bachelor of arts (industrial design)"</span>,
+                           <span class='st'>"bachelor of arts in game design"</span>,
+                           <span class='st'>"bachelor of arts with honours"</span>,
+                           <span class='st'>"bachelor of arts with honours in communication design"</span>,
+                           <span class='st'>"bachelor of arts with honours in interior design"</span>,
+                           <span class='st'>"bachelor of fine arts in digital art and animation"</span>,
+                           <span class='st'>"history"</span>,
+                           <span class='st'>"philosophy"</span><span class='op'>)</span>,
+                  
+                  bizad <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of business administration"</span>,
+                            <span class='st'>"bachelor of business administration (hons)"</span>,
+                            <span class='st'>"bachelor of business administration in food business management"</span>,
+                            <span class='st'>"bachelor of hospitality business with honours"</span>,
+                            <span class='st'>"bachelor of science in finance"</span>,
+                            <span class='st'>"bachelor of science in marketing"</span>,
+                            <span class='st'>"business"</span>,
+                            <span class='st'>"business and computing"</span>,
+                            <span class='st'>"business management"</span>,
+                            <span class='st'>"business management (cum laude and above)"</span>,
+                            <span class='st'>"sport science and management"</span><span class='op'>)</span>,
+                  
+                   building_real_estate <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of science (project and facilities management)"</span>,
+                                           <span class='st'>"bachelor of science (real estate)"</span><span class='op'>)</span>,
+                  
+                  comsci <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of computing (computer science)"</span>,
+                             <span class='st'>"bachelor of computing (information systems)"</span>,
+                             <span class='st'>"bachelor of computing (information systems)"</span>,
+                             <span class='st'>"bachelor of science in computer science and game design"</span>,
+                             <span class='st'>"bachelor of science in computer science in real-time interactive simulation"</span>,
+                             <span class='st'>"bachelor of science with honours in computing science"</span>,
+                             <span class='st'>"computer science"</span><span class='op'>)</span>,
+                  
+                  communications <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"communication studies"</span><span class='op'>)</span>,
+                  
+                  early_childhood <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of science in early childhood education"</span><span class='op'>)</span>,
+                  
+                  engineering <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"aerospace engineering"</span>,
+                                  <span class='st'>"bachelor of engineering (biomedical engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (chemical engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (civil engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (computer engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (electrical engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (environmental engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (industrial and systems engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (materials science and engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering (mechanical engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in aeronautical engineering"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in aerospace systems"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in chemical engineering"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in electrical power engineering"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in information &amp; communications technology (information security)"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in information &amp; communications technology (software engineering)"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in marine engineering"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in mechanical design and manufacturing engineering"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in mechanical design engineering"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in mechatronics"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in naval architecture"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in offshore engineering"</span>,
+                                  <span class='st'>"bachelor of engineering with honours in sustainable infrastructure engineering (land)"</span>,
+                                  <span class='st'>"bachelor of science in chemical engineering"</span>,
+                                  <span class='st'>"bachelor of science in electrical engineering &amp; information technology"</span>,
+                                  <span class='st'>"bioengineering"</span>,
+                                  <span class='st'>"chemical &amp; biomolecular engineering"</span>,
+                                  <span class='st'>"civil engineering"</span>,
+                                  <span class='st'>"computer engineering"</span>,
+                                  <span class='st'>"electrical &amp; electronic engineering"</span>,
+                                  <span class='st'>"environmental engineering"</span>,
+                                  <span class='st'>"materials engineering"</span>,
+                                  <span class='st'>"mechanical engineering"</span><span class='op'>)</span>,
+                  
+                  healthsci <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor in science (diagnostic radiography)"</span>,
+                                <span class='st'>"bachelor in science (occupational therapy)"</span>,
+                                <span class='st'>"bachelor in science (physiotherapy)"</span>,
+                                <span class='st'>"bachelor of science (nursing)"</span>,
+                                <span class='st'>"bachelor of science (nursing) (hons)"</span>,
+                                <span class='st'>"bachelor of science (pharmacy)"</span>,
+                                <span class='st'>"bachelor of science with honours in nursing"</span>,
+                                <span class='st'>"bachelor of dental surgery"</span><span class='op'>)</span>,
+                  
+                  info_sys <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"information systems"</span>,
+                              <span class='st'>"information engineering &amp; media"</span>,
+                              <span class='st'>"information systems (cum laude and above)"</span><span class='op'>)</span>,
+                  
+                  languages <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"english"</span>,
+                                <span class='st'>"chinese"</span>,
+                                <span class='st'>"linguistics &amp; multilingual studies"</span><span class='op'>)</span>,
+                  
+                  law <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of laws"</span>,
+                          <span class='st'>"law"</span>,
+                          <span class='st'>"law (cum laude and above)"</span><span class='op'>)</span>,
+                  
+                  music <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of music"</span><span class='op'>)</span>,
+                  
+                   science <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of environmental studies"</span>,
+                              <span class='st'>"bachelor of science"</span>,
+                              <span class='st'>"bachelor of science (business analytics)"</span>,
+                              <span class='st'>"bachelor of science (hons)"</span>,
+                              <span class='st'>"bachelor of science with honours"</span>,
+                              <span class='st'>"bachelor of science with honours in food and human nutrition"</span>,
+                              <span class='st'>"biological sciences"</span>,
+                              <span class='st'>"biomedical sciences &amp; chinese medicine"</span>,
+                              <span class='st'>"chemistry &amp; biological chemistry"</span>,
+                              <span class='st'>"environmental earth systems science"</span>,
+                              <span class='st'>"mathematical sciences"</span>,
+                              <span class='st'>"physics &amp; applied physics"</span>,
+                              <span class='st'>"maritime studies"</span>,
+                              <span class='st'>"science (with education)"</span><span class='op'>)</span>,
+                  
+                 
+                  social_science <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"bachelor of social sciences"</span>,
+                                     <span class='st'>"bachelor of arts with honours in criminology and security"</span>,
+                                     <span class='st'>"economics"</span>,
+                                     <span class='st'>"economics (cum laude and above)"</span>,
+                                     <span class='st'>"mathematics &amp; economics"</span>,
+                                     <span class='st'>"psychology"</span>,
+                                     <span class='st'>"public policy and global affairs"</span>,
+                                     <span class='st'>"social sciences"</span>,
+                                     <span class='st'>"social sciences (cum laude and above)"</span>,
+                                     <span class='st'>"sociology"</span><span class='op'>)</span>
+
+                  <span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>year</span>, <span class='va'>university</span>, <span class='va'>school</span>, <span class='va'>degree</span>, <span class='va'>degree_recode</span>, <span class='va'>employment_rate_ft_perm</span>, 
+         <span class='va'>gross_monthly_median</span>, <span class='va'>gross_mthly_25_percentile</span>, <span class='va'>gross_mthly_75_percentile</span><span class='op'>)</span>
+
+<span class='co'># degree &lt;- sg_2018 %&gt;% </span>
+ <span class='co'># count(degree)</span>
+
+<span class='co'># print(degree, n = 115)</span>
+
+
+<span class='va'>sg_2018</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 117 x 9
+    year university   school   degree   degree_recode employment_rate…
+   &lt;dbl&gt; &lt;chr&gt;        &lt;chr&gt;    &lt;chr&gt;    &lt;fct&gt;         &lt;chr&gt;           
+ 1  2018 National Un… &quot;Facult… bachelo… law           92.6            
+ 2  2018 National Un… &quot;Yale-N… bachelo… science       78.9            
+ 3  2018 Singapore M… &quot;School… law (cu… law           92.6            
+ 4  2018 Singapore M… &quot;School… informa… info_sys      97.2            
+ 5  2018 Singapore M… &quot;School… law      law           90.8            
+ 6  2018 Nanyang Tec… &quot;Colleg… busines… bizad         100             
+ 7  2018 National Un… &quot;School… bachelo… science       93.5            
+ 8  2018 National Un… &quot;School… bachelo… comsci        95.3            
+ 9  2018 National Un… &quot;School… bachelo… comsci        91.8            
+10  2018 National Un… &quot;Facult… bachelo… healthsci     100             
+# … with 107 more rows, and 3 more variables:
+#   gross_monthly_median &lt;dbl&gt;, gross_mthly_25_percentile &lt;dbl&gt;,
+#   gross_mthly_75_percentile &lt;dbl&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sg_2018</span><span class='op'>$</span><span class='va'>employment_rate_ft_perm</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>sg_2018</span><span class='op'>$</span><span class='va'>employment_rate_ft_perm</span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>sg_2018</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 117
+Columns: 9
+$ year                      &lt;dbl&gt; 2018, 2018, 2018, 2018, 2018, 2018…
+$ university                &lt;chr&gt; &quot;National University of Singapore&quot;…
+$ school                    &lt;chr&gt; &quot;Faculty of Law&quot;, &quot;Yale-NUS Colleg…
+$ degree                    &lt;chr&gt; &quot;bachelor of laws&quot;, &quot;bachelor of s…
+$ degree_recode             &lt;fct&gt; law, science, law, info_sys, law, …
+$ employment_rate_ft_perm   &lt;dbl&gt; 92.6, 78.9, 92.6, 97.2, 90.8, 100.…
+$ gross_monthly_median      &lt;dbl&gt; 5500, 4800, 5513, 4685, 4500, 4575…
+$ gross_mthly_25_percentile &lt;dbl&gt; 4500, 3600, 4500, 4200, 4050, 4200…
+$ gross_mthly_75_percentile &lt;dbl&gt; 5840, 6435, 6000, 5000, 5600, 4900…</code></pre>
+</div>
+<p>Plot</p>
+<p>x - median error - 25, 75 y - degree_code fill = school</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>sg_2018</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 117
+Columns: 9
+$ year                      &lt;dbl&gt; 2018, 2018, 2018, 2018, 2018, 2018…
+$ university                &lt;chr&gt; &quot;National University of Singapore&quot;…
+$ school                    &lt;chr&gt; &quot;Faculty of Law&quot;, &quot;Yale-NUS Colleg…
+$ degree                    &lt;chr&gt; &quot;bachelor of laws&quot;, &quot;bachelor of s…
+$ degree_recode             &lt;fct&gt; law, science, law, info_sys, law, …
+$ employment_rate_ft_perm   &lt;dbl&gt; 92.6, 78.9, 92.6, 97.2, 90.8, 100.…
+$ gross_monthly_median      &lt;dbl&gt; 5500, 4800, 5513, 4685, 4500, 4575…
+$ gross_mthly_25_percentile &lt;dbl&gt; 4500, 3600, 4500, 4200, 4050, 4200…
+$ gross_mthly_75_percentile &lt;dbl&gt; 5840, 6435, 6000, 5000, 5600, 4900…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>sg_2018</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='fu'>desc</span><span class='op'>(</span><span class='va'>gross_monthly_median</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>slice_head</span><span class='op'>(</span>n<span class='op'>=</span><span class='fl'>20</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>degree_recode</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>median <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/median.html'>median</a></span><span class='op'>(</span><span class='va'>gross_monthly_median</span><span class='op'>)</span>,
+            minp25 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>gross_mthly_25_percentile</span><span class='op'>)</span>,
+            maxp25 <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>gross_mthly_75_percentile</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'>fct_reorder</span><span class='op'>(</span><span class='fu'>str_to_title</span><span class='op'>(</span><span class='va'>degree_recode</span><span class='op'>)</span>, <span class='va'>median</span><span class='op'>)</span>,
+             y <span class='op'>=</span> <span class='va'>median</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_errorbar</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>ymin <span class='op'>=</span> <span class='va'>minp25</span>,
+                    ymax <span class='op'>=</span> <span class='va'>maxp25</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_y_continuous</span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='va'><a href='https://scales.r-lib.org/reference/label_dollar.html'>dollar</a></span>, 
+                     n.breaks <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>expand_limits</span><span class='op'>(</span>y <span class='op'>=</span> <span class='fl'>0</span>, x <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>""</span>,
+       y <span class='op'>=</span> <span class='st'>""</span>,
+       title <span class='op'>=</span> <span class='st'>"Median Gross Monthly Salary for different Degree Majors"</span>,
+       subtitle <span class='op'>=</span> <span class='st'>"Error bars represent minimum 25th and maximum 75th percentile"</span>,
+       caption <span class='op'>=</span> <span class='st'>"Source: Data.gov.sg - Graduate Employment Survey"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="tidy-tuesday-y18w29_files/figure-html5/unnamed-chunk-14-1.png" width="1536" /></p>
+</div>
+<div class="layout-chunk" data-layout="1-page">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://plotly-r.com'>plotly</a></span><span class='op'>)</span>
+
+<span class='va'>p</span> <span class='op'>&lt;-</span> <span class='va'>sg_2018</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='fu'>fct_reorder</span><span class='op'>(</span><span class='fu'>str_to_title</span><span class='op'>(</span><span class='va'>degree_recode</span><span class='op'>)</span>, <span class='va'>gross_monthly_median</span><span class='op'>)</span>,
+             y <span class='op'>=</span> <span class='va'>gross_monthly_median</span> ,
+             label <span class='op'>=</span> <span class='va'>degree_recode</span>,
+             col <span class='op'>=</span> <span class='va'>university</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_point</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>text <span class='op'>=</span> <span class='va'>degree</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Median Gross Monthly Salary for Different Majors for Year 2018 Graduates (with min 25th and max 75th percentile)"</span>,
+       subtitle <span class='op'>=</span> <span class='st'>"There are differences among majors and among schools"</span>,
+       x <span class='op'>=</span> <span class='st'>""</span>,
+       y <span class='op'>=</span> <span class='st'>""</span>,
+       caption <span class='op'>=</span> <span class='st'>"Source: Data.gov.sg - Graduate Employment Survey"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>coord_flip</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_y_continuous</span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='va'><a href='https://scales.r-lib.org/reference/label_dollar.html'>dollar</a></span>, n.breaks <span class='op'>=</span> <span class='fl'>10</span>,
+                     limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fl'>6000</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://docs.ropensci.org/plotly/reference/ggplotly.html'>ggplotly</a></span><span class='op'>(</span><span class='va'>p</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-10df3092748d56b2a6f0" style="width:1536px;height:384px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-10df3092748d56b2a6f0">{"x":{"data":[{"x":[4575,4000,4000,3800,3800,3750,3775,3800,3650,3500,3500,3600,3600,3500,3536,3500,3600,3440,3500,3500,3400,3350,3350,3370,3400,3200,3250,3300,3220,3200,3500,3000,3000,3000,3000,3000,3000],"y":[8,4,14,9,7,13,11,11,9,8,11,11,11,11,12,7,12,9,11,11,11,12,9,12,9,6,9,8,12,9,6,4,3,6,7,9,7],"text":["business and computing<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 4575<br />degree_recode: bizad<br />university: Nanyang Technological University","accountancy and business<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 4000<br />degree_recode: accountancy<br />university: Nanyang Technological University","computer science<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Comsci<br />gross_monthly_median: 4000<br />degree_recode: comsci<br />university: Nanyang Technological University","science (with education)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3800<br />degree_recode: science<br />university: Nanyang Technological University","arts (with education)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3800<br />degree_recode: arts<br />university: Nanyang Technological University","information engineering & media<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Info_sys<br />gross_monthly_median: 3750<br />degree_recode: info_sys<br />university: Nanyang Technological University","computer engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3775<br />degree_recode: engineering<br />university: Nanyang Technological University","aerospace engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3800<br />degree_recode: engineering<br />university: Nanyang Technological University","mathematical sciences<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3650<br />degree_recode: science<br />university: Nanyang Technological University","business<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 3500<br />degree_recode: bizad<br />university: Nanyang Technological University","bioengineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3500<br />degree_recode: engineering<br />university: Nanyang Technological University","chemical & biomolecular engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3600<br />degree_recode: engineering<br />university: Nanyang Technological University","electrical & electronic engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3600<br />degree_recode: engineering<br />university: Nanyang Technological University","mechanical engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3500<br />degree_recode: engineering<br />university: Nanyang Technological University","economics<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3536<br />degree_recode: social_science<br />university: Nanyang Technological University","history<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3500<br />degree_recode: arts<br />university: Nanyang Technological University","mathematics & economics<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3600<br />degree_recode: social_science<br />university: Nanyang Technological University","environmental earth systems science<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3440<br />degree_recode: science<br />university: Nanyang Technological University","civil engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3500<br />degree_recode: engineering<br />university: Nanyang Technological University","materials engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3500<br />degree_recode: engineering<br />university: Nanyang Technological University","environmental engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3400<br />degree_recode: engineering<br />university: Nanyang Technological University","public policy and global affairs<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3350<br />degree_recode: social_science<br />university: Nanyang Technological University","maritime studies<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3350<br />degree_recode: science<br />university: Nanyang Technological University","psychology<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3370<br />degree_recode: social_science<br />university: Nanyang Technological University","physics & applied physics<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3400<br />degree_recode: science<br />university: Nanyang Technological University","linguistics & multilingual studies<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Languages<br />gross_monthly_median: 3200<br />degree_recode: languages<br />university: Nanyang Technological University","biological sciences<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3250<br />degree_recode: science<br />university: Nanyang Technological University","sport science and management<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 3300<br />degree_recode: bizad<br />university: Nanyang Technological University","sociology<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3220<br />degree_recode: social_science<br />university: Nanyang Technological University","chemistry & biological chemistry<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3200<br />degree_recode: science<br />university: Nanyang Technological University","chinese<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Languages<br />gross_monthly_median: 3500<br />degree_recode: languages<br />university: Nanyang Technological University","accountancy<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 3000<br />degree_recode: accountancy<br />university: Nanyang Technological University","communication studies<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Communications<br />gross_monthly_median: 3000<br />degree_recode: communications<br />university: Nanyang Technological University","english<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Languages<br />gross_monthly_median: 3000<br />degree_recode: languages<br />university: Nanyang Technological University","philosophy<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3000<br />degree_recode: arts<br />university: Nanyang Technological University","biomedical sciences & chinese medicine<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3000<br />degree_recode: science<br />university: Nanyang Technological University","art, design & media<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3000<br />degree_recode: arts<br />university: Nanyang Technological University"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(248,118,109,1)","opacity":1,"size":18.8976377952756,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(248,118,109,1)"}},"hoveron":"points","name":"Nanyang Technological University","legendgroup":"Nanyang Technological University","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[5500,4800,4500,4458,4320,4050,3895,3895,3975,4000,3700,3600,3630,3500,3700,3650,3414,3400,3550,3300,3389,3400,3400,3300,3450,3250,3225,3200,3200,3060,3100,3020,1800],"y":[15,9,9,14,14,10,11,8,11,11,11,11,7,11,11,10,9,12,10,7,11,11,9,5,10,7,8,4,7,5,9,4,1],"text":["bachelor of laws<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Law<br />gross_monthly_median: 5500<br />degree_recode: law<br />university: National University of Singapore","bachelor of science with honours<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 4800<br />degree_recode: science<br />university: National University of Singapore","bachelor of science (business analytics)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 4500<br />degree_recode: science<br />university: National University of Singapore","bachelor of computing (information systems)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Comsci<br />gross_monthly_median: 4458<br />degree_recode: comsci<br />university: National University of Singapore","bachelor of computing (computer science)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Comsci<br />gross_monthly_median: 4320<br />degree_recode: comsci<br />university: National University of Singapore","bachelor of dental surgery<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 4050<br />degree_recode: healthsci<br />university: National University of Singapore","bachelor of engineering (industrial and systems engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3895<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of business administration (hons)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 3895<br />degree_recode: bizad<br />university: National University of Singapore","bachelor of engineering (computer engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3975<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of engineering (chemical engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 4000<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of engineering (electrical engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3700<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of engineering (materials science and engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3600<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of arts with honours<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3630<br />degree_recode: arts<br />university: National University of Singapore","bachelor of engineering (civil engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3500<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of engineering (mechanical engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3700<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of science (pharmacy)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 3650<br />degree_recode: healthsci<br />university: National University of Singapore","bachelor of environmental studies<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3414<br />degree_recode: science<br />university: National University of Singapore","bachelor of social sciences<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3400<br />degree_recode: social_science<br />university: National University of Singapore","bachelor of science (nursing) (hons)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 3550<br />degree_recode: healthsci<br />university: National University of Singapore","bachelor of arts (hons)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3300<br />degree_recode: arts<br />university: National University of Singapore","bachelor of engineering (biomedical engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3389<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of engineering (environmental engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3400<br />degree_recode: engineering<br />university: National University of Singapore","bachelor of science (hons)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3400<br />degree_recode: science<br />university: National University of Singapore","bachelor of science (real estate)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Building_real_estate<br />gross_monthly_median: 3300<br />degree_recode: building_real_estate<br />university: National University of Singapore","bachelor of science (nursing)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 3450<br />degree_recode: healthsci<br />university: National University of Singapore","bachelor of arts (industrial design)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3250<br />degree_recode: arts<br />university: National University of Singapore","bachelor of business administration<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 3225<br />degree_recode: bizad<br />university: National University of Singapore","bachelor of business administration (accountancy) (hons)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 3200<br />degree_recode: accountancy<br />university: National University of Singapore","bachelor of arts<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3200<br />degree_recode: arts<br />university: National University of Singapore","bachelor of science (project and facilities management)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Building_real_estate<br />gross_monthly_median: 3060<br />degree_recode: building_real_estate<br />university: National University of Singapore","bachelor of science<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 3100<br />degree_recode: science<br />university: National University of Singapore","bachelor of business administration (accountancy)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 3020<br />degree_recode: accountancy<br />university: National University of Singapore","bachelor of music<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Music<br />gross_monthly_median: 1800<br />degree_recode: music<br />university: National University of Singapore"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(163,165,0,1)","opacity":1,"size":18.8976377952756,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(163,165,0,1)"}},"hoveron":"points","name":"National University of Singapore","legendgroup":"National University of Singapore","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[4016,4045,4000,4000,3600,3500,3600,3729,3550,3460,3500,3500,3300,3343,3400,3350,3300,3380,3250,3253,3200,3300,3510,3075,3200,2925,2950,2800,2900,2825,2775,2663],"y":[14,11,11,14,14,11,11,12,11,10,11,10,7,11,11,10,10,11,11,11,11,11,11,4,11,2,7,7,9,8,7,8],"text":["bachelor of science in computer science in real-time interactive simulation<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Comsci<br />gross_monthly_median: 4016<br />degree_recode: comsci<br />university: Singapore Institute of Technology","bachelor of engineering with honours in information & communications technology (information security)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 4045<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in information & communications technology (software engineering)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 4000<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of science with honours in computing science<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Comsci<br />gross_monthly_median: 4000<br />degree_recode: comsci<br />university: Singapore Institute of Technology","bachelor of science in computer science and game design<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Comsci<br />gross_monthly_median: 3600<br />degree_recode: comsci<br />university: Singapore Institute of Technology","bachelor of science in electrical engineering & information technology<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3500<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in mechatronics<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3600<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of arts with honours in criminology and security<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3729<br />degree_recode: social_science<br />university: Singapore Institute of Technology","bachelor of engineering with honours in sustainable infrastructure engineering (land)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3550<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor in science (occupational therapy)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 3460<br />degree_recode: healthsci<br />university: Singapore Institute of Technology","bachelor of engineering with honours in mechanical design engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3500<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of science with honours in nursing<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 3500<br />degree_recode: healthsci<br />university: Singapore Institute of Technology","bachelor of arts in game design<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 3300<br />degree_recode: arts<br />university: Singapore Institute of Technology","bachelor of engineering with honours in electrical power engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3343<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in naval architecture<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3400<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor in science (diagnostic radiography)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 3350<br />degree_recode: healthsci<br />university: Singapore Institute of Technology","bachelor in science (physiotherapy)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Healthsci<br />gross_monthly_median: 3300<br />degree_recode: healthsci<br />university: Singapore Institute of Technology","bachelor of engineering with honours in aerospace systems<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3380<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in marine engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3250<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in mechanical design and manufacturing engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3253<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in aeronautical engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3200<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in chemical engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3300<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of engineering with honours in offshore engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3510<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of accountancy with honours<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 3075<br />degree_recode: accountancy<br />university: Singapore Institute of Technology","bachelor of science in chemical engineering<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Engineering<br />gross_monthly_median: 3200<br />degree_recode: engineering<br />university: Singapore Institute of Technology","bachelor of science in early childhood education<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Early_childhood<br />gross_monthly_median: 2925<br />degree_recode: early_childhood<br />university: Singapore Institute of Technology","bachelor of arts with honours in communication design<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 2950<br />degree_recode: arts<br />university: Singapore Institute of Technology","bachelor of fine arts in digital art and animation<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 2800<br />degree_recode: arts<br />university: Singapore Institute of Technology","bachelor of science with honours in food and human nutrition<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Science<br />gross_monthly_median: 2900<br />degree_recode: science<br />university: Singapore Institute of Technology","bachelor of hospitality business with honours<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 2825<br />degree_recode: bizad<br />university: Singapore Institute of Technology","bachelor of arts with honours in interior design<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Arts<br />gross_monthly_median: 2775<br />degree_recode: arts<br />university: Singapore Institute of Technology","bachelor of business administration in food business management<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 2663<br />degree_recode: bizad<br />university: Singapore Institute of Technology"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,191,125,1)","opacity":1,"size":18.8976377952756,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,191,125,1)"}},"hoveron":"points","name":"Singapore Institute of Technology","legendgroup":"Singapore Institute of Technology","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[5513,4685,4500,4000,4000,4000,3700,3600,3700,3550,3210,3000],"y":[15,13,15,8,12,13,8,12,12,4,12,4],"text":["law (cum laude and above)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Law<br />gross_monthly_median: 5513<br />degree_recode: law<br />university: Singapore Management University","information systems (cum laude and above)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Info_sys<br />gross_monthly_median: 4685<br />degree_recode: info_sys<br />university: Singapore Management University","law<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Law<br />gross_monthly_median: 4500<br />degree_recode: law<br />university: Singapore Management University","business management (cum laude and above)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 4000<br />degree_recode: bizad<br />university: Singapore Management University","economics (cum laude and above)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 4000<br />degree_recode: social_science<br />university: Singapore Management University","information systems<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Info_sys<br />gross_monthly_median: 4000<br />degree_recode: info_sys<br />university: Singapore Management University","business management<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 3700<br />degree_recode: bizad<br />university: Singapore Management University","social sciences (cum laude and above)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3600<br />degree_recode: social_science<br />university: Singapore Management University","economics<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3700<br />degree_recode: social_science<br />university: Singapore Management University","accountancy (cum laude and above)<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 3550<br />degree_recode: accountancy<br />university: Singapore Management University","social sciences<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Social_science<br />gross_monthly_median: 3210<br />degree_recode: social_science<br />university: Singapore Management University","accountancy<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 3000<br />degree_recode: accountancy<br />university: Singapore Management University"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,176,246,1)","opacity":1,"size":18.8976377952756,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(0,176,246,1)"}},"hoveron":"points","name":"Singapore Management University","legendgroup":"Singapore Management University","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[3400,3000,3000],"y":[8,8,4],"text":["bachelor of science in finance<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 3400<br />degree_recode: bizad<br />university: Singapore University of Social Sciences","bachelor of science in marketing<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Bizad<br />gross_monthly_median: 3000<br />degree_recode: bizad<br />university: Singapore University of Social Sciences","bachelor of accountancy<br />fct_reorder(str_to_title(degree_recode), gross_monthly_median): Accountancy<br />gross_monthly_median: 3000<br />degree_recode: accountancy<br />university: Singapore University of Social Sciences"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(231,107,243,1)","opacity":1,"size":18.8976377952756,"symbol":"circle","line":{"width":1.88976377952756,"color":"rgba(231,107,243,1)"}},"hoveron":"points","name":"Singapore University of Social Sciences","legendgroup":"Singapore University of Social Sciences","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":67.0087173100872,"r":7.97011207970112,"b":48.6176836861768,"l":139.47696139477},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022},"title":{"text":"Median Gross Monthly Salary for Different Majors for Year 2018 Graduates (with min 25th and max 75th percentile)","font":{"color":"rgba(0,0,0,1)","family":"","size":19.1282689912827},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[750,6250],"tickmode":"array","ticktext":["$1,000","$2,000","$3,000","$4,000","$5,000","$6,000"],"tickvals":[1000,2000,3000,4000,5000,6000],"categoryorder":"array","categoryarray":["$1,000","$2,000","$3,000","$4,000","$5,000","$6,000"],"nticks":null,"ticks":"outside","tickcolor":"rgba(77,77,77,1)","ticklen":3.98505603985056,"tickwidth":0.724555643609193,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[0.4,15.6],"tickmode":"array","ticktext":["Music","Early_childhood","Communications","Accountancy","Building_real_estate","Languages","Arts","Bizad","Science","Healthsci","Engineering","Social_science","Info_sys","Comsci","Law"],"tickvals":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15],"categoryorder":"array","categoryarray":["Music","Early_childhood","Communications","Accountancy","Building_real_estate","Languages","Arts","Bizad","Science","Healthsci","Engineering","Social_science","Info_sys","Comsci","Law"],"nticks":null,"ticks":"outside","tickcolor":"rgba(77,77,77,1)","ticklen":3.98505603985056,"tickwidth":0.724555643609193,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":12.7521793275218},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":15.9402241594022}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(77,77,77,1)","width":0.724555643609193,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":false,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":2.06156048675734,"font":{"color":"rgba(0,0,0,1)","family":"","size":12.7521793275218}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","showSendToCloud":false},"source":"A","attrs":{"d5e31b90e97d":{"text":{},"x":{},"y":{},"label":{},"colour":{},"type":"scatter"}},"cur_data":"d5e31b90e97d","visdat":{"d5e31b90e97d":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>How should a 18 year old, or 20 year old, choose a major? Should it be by salary, or by interest?</p>
+<p>It would be great if you land a job you are passionate about, and also pays you well… but I think it is more important to find a job in an industry that you have interest in, and slowly work your way to have higher salary, if that is a very deal-breaker/deal-maker for you.</p>
+<h1 id="references">References</h1>
+<p><a href="https://www.youtube.com/watch?v=nx5yhXAQLxw&amp;list=PL19ev-r1GBwkuyiwnxoHTRC8TTqP8OEi8&amp;index=81" class="uri">https://www.youtube.com/watch?v=nx5yhXAQLxw&amp;list=PL19ev-r1GBwkuyiwnxoHTRC8TTqP8OEi8&amp;index=81</a></p>
+<p><a href="https://data.gov.sg/dataset/graduate-employment-survey-ntu-nus-sit-smu-suss-sutd?resource_id=9326ca53-9153-4a9c-b93f-8ae032637b70" class="uri">https://data.gov.sg/dataset/graduate-employment-survey-ntu-nus-sit-smu-suss-sutd?resource_id=9326ca53-9153-4a9c-b93f-8ae032637b70</a></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<div class="article-footer">
+  <p class="social_footer">
+    <span class="disqus-comments">
+      <i class="fas fa-comments"></i>
+      &nbsp;
+      <span class="disqus-comment-count" data-disqus-identifier="posts/20210601_Tidytuesday College Major/">Comment on this article</span>
+    </span>
+    <span class="article-sharing">
+      Share: &nbsp;
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Flruolin.github.io%2FmyBlog%2Fposts%2F20210601_Tidytuesday%20College%20Major%2F&amp;title=Tidy%20Tuesday%20Series">
+        <i class="fab fa-linkedin"></i>
+      </a>
+    </span>
+  </p>
+  <script id="dsq-count-scr" src="https://https-lruolin-github-io-myblog-2.disqus.com/count.js" async></script>
+  <div id="disqus_thread" class="hidden"></div>
+  <script type="text/javascript" cookie-consent="functionality">
+var disqus_config = function () {
+  this.page.url = 'https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/';
+  this.page.identifier = 'posts/20210601_Tidytuesday College Major/';
+};
+(function() {
+  var d = document, s = d.createElement('script');
+  s.src = 'https://https-lruolin-github-io-myblog-2.disqus.com/embed.js';
+  s.setAttribute('data-timestamp', +new Date());
+  (d.head || d.body).appendChild(s);
+})();
+</script>
+</div>
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom">
+  <h3 id="citation">Citation</h3>
+  <p>For attribution, please cite this work as</p>
+  <pre class="citation-appendix short">lruolin (2021, June 1). pRactice corner: Tidy Tuesday Series. Retrieved from https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/</pre>
+  <p>BibTeX citation</p>
+  <pre class="citation-appendix long">@misc{lruolin2021tidy,
+  author = {lruolin, },
+  title = {pRactice corner: Tidy Tuesday Series},
+  url = {https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/},
+  year = {2021}
+}</pre>
+</div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
