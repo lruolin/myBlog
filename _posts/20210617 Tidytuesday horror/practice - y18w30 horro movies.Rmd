@@ -1,0 +1,337 @@
+---
+title: "practice - y18w30 - horror movies"
+author: "lruoln"
+date: "6/1/2021"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# LOAD PACKAGES
+
+```{r load packages}
+library(pacman)
+p_load(tidyverse, lubridate, ggrepel, ggthemes, janitor, tidytuesdayR, broom, 
+       scales,skimr)
+
+```
+
+
+# IMPORT
+
+```{r import data, eval=FALSE}
+# horror_tt <- tt_load("2018-10-23")
+# horror_raw <- horror_tt$movie_profit
+# write_csv(horror_raw, "horror_raw.csv")
+
+
+
+```
+
+
+```{r import from WD}
+horror_raw <- read_csv("horror_raw.csv")
+
+glimpse(horror_raw)
+```
+
+Save as a cleaned version:
+
+- remove first row
+- parse date (currently in chr, in month-day-year format)
+
+```{r glance dataset}
+data <- horror_raw %>% 
+  select(-1) %>% 
+  filter(worldwide_gross>0)
+
+glimpse(data)
+
+# check NA values
+
+data %>% 
+  lapply(., function(x) sum(is.na(x)))
+
+# check summary values
+data %>% 
+  select_if(is.numeric) %>% 
+  lapply(., function(x) summary(x))
+
+```
+
+# TIDY/TRANSFORM
+
+release date is as chr, need to change to date.
+
+```{r data tidy - date}
+
+data_trans <- data %>% 
+  mutate(release_date = parse_date(release_date, "%m/%d/%Y")) %>% 
+  arrange(desc(row_number())) %>% 
+  distinct(movie, release_date, .keep_all = T) %>% 
+  filter(release_date <= "2018-01-01") %>% 
+  mutate(distributor_new = fct_lump(distributor, n = 5))  # top 6 distributors)
+
+glimpse(data_trans)
+
+# check that there are no duplicates
+data_trans %>% 
+  count(movie, release_date, sort = T)
+
+```
+
+```{r}
+theme_set(theme_few())
+
+data_trans %>% 
+  ggplot(aes(production_budget)) +
+  geom_histogram() +
+  scale_x_log10()
+  
+# use log scale for dollars
+data_trans %>% 
+  ggplot(aes(fct_rev(distributor_new), production_budget)) +
+  geom_boxplot() +
+  scale_y_log10(labels = dollar) +
+  coord_flip()
+
+data_trans %>% 
+  ggplot(aes(fct_rev(distributor_new), worldwide_gross)) +
+  geom_boxplot() +
+  scale_y_log10(labels = dollar) +
+  coord_flip()
+
+# which genre did the best?
+
+data_trans %>% 
+  count(genre, sort = T) # 5 genre
+
+data_trans %>% 
+  ggplot(aes(fct_reorder(genre, production_budget), production_budget)) +
+  geom_boxplot() +
+  scale_y_log10(labels = dollar) +
+  coord_flip()
+
+glimpse(data_trans)
+
+data_trans %>% 
+  ggplot(aes(fct_reorder(genre, worldwide_gross), worldwide_gross)) +
+  geom_boxplot() +
+  scale_y_log10(labels = dollar) +
+  coord_flip()
+
+data_trans %>% 
+  filter(!is.na(distributor)) %>% 
+  ggplot(aes(fct_reorder(genre, production_budget), production_budget)) +
+  geom_boxplot() +
+  scale_y_log10(labels = dollar) +
+  coord_flip() +
+  facet_wrap ( ~distributor_new)
+
+data_trans %>% 
+  filter(!is.na(distributor)) %>% 
+  ggplot(aes(fct_reorder(genre, worldwide_gross), worldwide_gross)) +
+  geom_boxplot() +
+  scale_y_log10(labels = dollar) +
+  coord_flip() +
+  facet_wrap ( ~distributor_new)
+
+
+# what are typical budgets over time
+
+data_trans %>%
+  mutate(decade = 10*floor(year(release_date)/10)) %>% 
+  group_by(decade) %>%
+  arrange(decade) %>% 
+  view()
+
+data_trans %>%
+  mutate(decade = 10*floor(year(release_date)/10)) %>% 
+  group_by(decade) %>%
+  summarise(across(c(3,4,5), ~ median(.x, na.rm = TRUE))) %>% 
+  pivot_longer(cols = c(-decade),
+               names_to = "metric",
+               values_to = "value"
+                 ) %>% 
+  ggplot(aes(decade, value, col = metric)) +
+  geom_line(size = 2) +
+  scale_y_continuous(labels = dollar) # Gone with the Wind, 1930s
+
+# top 20 movies
+data_trans %>% arrange(desc(worldwide_gross)) %>% 
+  select(release_date, movie, genre, worldwide_gross) %>% 
+  head(20)
+```
+
+
+```{r}
+# Difference between worldwise gross and production budget = profit
+# Which genres have the biggest payoff?
+
+data_trans %>% 
+  mutate(profit_ratio = worldwide_gross/production_budget) %>% 
+  arrange(desc(profit_ratio)) %>%  # mostly horror movies topping the chart
+  head(10)
+
+data_trans %>% 
+  mutate(profit_ratio = worldwide_gross/production_budget) %>% 
+  arrange(desc(profit_ratio)) %>%
+  ggplot(aes(profit_ratio)) +
+  geom_histogram() +
+  scale_x_log10()
+
+data_trans %>% 
+  mutate(profit_ratio = worldwide_gross/production_budget) %>% 
+  arrange(desc(profit_ratio)) %>%
+  group_by(genre) %>% 
+  summarize(median_profit_ratio = median(profit_ratio)) %>%
+  arrange(desc(median_profit_ratio))
+  
+data_trans %>% 
+  mutate(profit_ratio = worldwide_gross/production_budget) %>% 
+  arrange(desc(profit_ratio)) %>%
+  group_by(genre) %>% 
+  summarize(median_profit_ratio = median(profit_ratio)) %>%
+  arrange(desc(median_profit_ratio)) %>% 
+  
+  ggplot(aes(fct_reorder(genre, median_profit_ratio), median_profit_ratio)) +
+  geom_col() +
+  scale_y_log10() +
+  coord_flip()
+
+
+data_trans %>% 
+  mutate(profit_ratio = worldwide_gross/production_budget) %>% 
+  arrange(desc(profit_ratio)) %>%
+  group_by(genre, year = year(release_date)) %>% 
+  summarize(median_profit_ratio = median(profit_ratio),
+            movies = n()) %>%
+  ungroup() %>% 
+  filter(year>2000) %>% 
+  arrange(desc(median_profit_ratio)) %>% 
+  
+  ggplot(aes(year, 
+             median_profit_ratio,
+             col = genre)) +
+  geom_line(size = 2) +
+  scale_y_log10() 
+
+# horror makes the most profit
+```
+
+
+Horror movies start being more profitable around 2013.
+
+```{r}
+# look at genre, year, distributor, and look at the data by decade because sometimes per year there are less than 10 horror movies
+
+data_trans %>% 
+  mutate(profit_ratio = worldwide_gross/production_budget,
+         decade = 10*floor(year(release_date)/10)) %>% 
+  group_by(genre, distributor_new, decade) %>% 
+  summarize(median_profit_ratio = median(profit_ratio),
+            movies = n()) %>%
+  ungroup() %>% 
+  filter( decade >= 1990,
+          !is.na(distributor_new)) %>% 
+  arrange(desc(median_profit_ratio)) %>% 
+  
+  ggplot(aes(decade, 
+             median_profit_ratio,
+             col = genre)) +
+  geom_line(size = 2) +
+  facet_wrap( ~distributor_new) +
+  scale_y_log10() 
+
+```
+
+
+## What are the most common genres over time
+
+```{r}
+data_trans_2 <- data_trans %>% 
+  mutate(profit_ratio = worldwide_gross/production_budget,
+         decade = 10*floor(year(release_date)/10)) 
+
+glimpse(data_trans_2) # with profit ratio and decade
+
+
+data_trans_2 %>% 
+  count(decade, genre) %>%
+  group_by(decade) %>% 
+  mutate(percent = n/sum(n)) %>% 
+  ggplot(aes(decade, percent, col = genre)) +
+  geom_line(size = 2) +
+  scale_y_continuous(labels = percent)
+
+# what distributors make the genre?
+
+data_trans_2 %>% 
+  filter(!is.na(distributor_new)) %>% 
+  count(distributor_new, genre) %>% 
+  ggplot(aes(genre, n, 
+             fill = genre)) +
+  geom_col() +
+  facet_wrap( ~ distributor_new, scales = "free_x") +
+  coord_flip()
+
+# horror movies are the least common genre produced
+```
+
+
+What were some of the profitable horror movies?
+
+```{r}
+glimpse(data_trans_2)
+
+data_trans_2 %>% 
+  filter(genre == "Horror") %>% 
+  arrange(desc(profit_ratio)) %>% 
+  select(release_date, movie, worldwide_gross, distributor) %>% 
+  head(10)
+
+
+data_horror <- data_trans_2 %>% 
+  filter(genre == "Horror") %>% 
+  arrange(desc(profit_ratio)) 
+
+
+data_horror %>% 
+  head(10) %>% 
+  ggplot(aes(fct_reorder(movie, profit_ratio), 
+             profit_ratio,
+             fill = distributor_new)) +
+  geom_col(aes(fill = distributor_new)) +
+  labs(x = "",
+       y = "Ratio of Worldwide Gross/Production Budget",
+       title = "Top 10 horror movies that outgrossed their budget") +
+  coord_flip()
+```
+
+Top 20 movies that outgrossed their budget
+
+```{r}
+data_trans_2 %>% 
+  arrange(desc(profit_ratio)) %>% 
+  head(20) %>% 
+  mutate(movie_year = paste0(movie, " (", year(release_date), ")")) %>% 
+    ggplot(aes(fct_reorder(movie_year, profit_ratio), 
+             profit_ratio,
+             fill = genre)) +
+  geom_col(aes(fill = genre)) +
+  labs(x = "",
+       y = "Ratio of Worldwide Gross/Production Budget",
+       title = "Top 20 movies that outgrossed their budget") +
+ # facet_wrap( ~ distributor_new, scales = "free") +
+  coord_flip()
+
+```
+
+
+
+# REFERENCES
+<https://www.youtube.com/watch?v=3-DRwg9yeNA&list=PL19ev-r1GBwkuyiwnxoHTRC8TTqP8OEi8&index=80>

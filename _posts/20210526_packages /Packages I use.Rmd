@@ -22,6 +22,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Useful packages for data exploration
 
 - listviewer (to view lists)
+- skimr
 
 # Useful packages for data wrangling
 
