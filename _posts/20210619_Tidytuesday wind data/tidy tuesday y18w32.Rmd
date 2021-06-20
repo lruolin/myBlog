@@ -1,0 +1,278 @@
+---
+title: "Tidy Tuesday Series"
+description: |
+  2018 Week 32 - US Wind Farm Locations
+author:
+  - name: lruolin
+date: 06-18-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, eval=FALSE, include = F}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load packages
+library(tidytuesdayR)
+library(tidyverse)
+
+# to download data
+tt_data <- tt_load(2018, week = 32)
+tt_data$us_wind
+
+# to view readme
+readme(tt_data)
+
+# to see available datasets:
+print(tt_data) # us_wind
+
+us_wind <- tt_data$us_wind
+
+write_csv(us_wind, "us_wind.csv")
+
+```
+
+# Load Packages
+
+```{r load packages}
+library(tidyverse)
+library(tidytuesdayR)
+library(ggthemes)
+library(mapproj)
+
+```
+
+
+# Load Data from tidytuesdayR package
+
+```{r load data from TT, eval = F}
+
+# to download data
+tt_data <- tt_load(2018, week = 32)
+
+
+# to view readme
+readme(tt_data)
+
+recent_grads <- tt_data$us_wind
+```
+
+```{r export us wind, include = F}
+us_wind <- read_csv("us_wind.csv")
+```
+
+
+# Explore Dataset
+
+```{r}
+glimpse(us_wind)
+```
+
+## Count state
+
+```{r}
+us_wind %>% 
+  count(t_state, sort = T)
+```
+
+## Count project names 
+
+```{r}
+us_wind %>% 
+  count(p_name, sort = T)
+```
+
+
+## Plot longitude and latitude
+
+```{r}
+us_wind %>% 
+  filter(xlong<100) %>% # filter out outlier
+  ggplot(aes(xlong, ylat)) +
+  geom_point() +
+  borders("state") +
+  coord_map() +
+  theme_void()
+```
+
+# Distribution of wind turbines in  US States
+
+```{r}
+count_states <- us_wind$t_state %>% factor() %>% fct_count() 
+
+us_wind %>% 
+  filter(!t_state %in% c("AK", "HI", "GU", "PR")) %>% # Exclude Alaska, Hawaii, Guam, Puerto Rico
+  ggplot(aes(xlong, ylat)) +
+  geom_point() +
+  borders("state") +
+  coord_map() +
+  labs(title = "Distribution of wind turbines in US",
+       subtitle = "Most wind turbines are situated along middle of US.",
+       caption = "Source: USGS.gov") +
+  theme_void()
+```
+
+# Projects
+
+```{r}
+us_wind_raw <- us_wind
+
+us_wind_processed <- us_wind %>%
+  filter(!t_state %in% c("AK", "HI", "GU", "PR")) %>% 
+  na_if(-9999) # replace -9999 as na
+
+wind_projects <- us_wind_processed %>% 
+  group_by(p_name, t_state) %>% 
+  summarise(turbines = n(),
+            long = mean(xlong),
+            lat = mean(ylat),
+            long_sd = sd(xlong),
+            lat_sd = sd(ylat))
+
+wind_projects %>% 
+  ggplot(aes(long, lat, col = turbines, size = turbines)) +
+  geom_point(aes(size = turbines), show.legend = T) +
+  scale_color_continuous(type = "viridis") +
+  borders("state") +
+  coord_map() +
+  labs(title = "Distribution of projects in US",
+       subtitle = "The bigest project is 251 Wind, in California",
+       caption = "Source: usgs.gov") +
+  theme_void()
+```
+
+To find out what is the biggest project:
+
+```{r}
+us_wind_processed %>% 
+  count(p_name, t_state)
+```
+
+# Year
+
+```{r}
+wind_projects <- us_wind_processed %>% 
+  group_by(p_name, t_state) %>% 
+  summarise(year = min(p_year, na.rm = T), # first year project started
+            turbines = n(),
+            total_capacity_kw = sum(t_cap, na.rm = T),
+            lon = mean(xlong),
+            lat = mean(ylat),
+            lon_sd = sd(xlong),
+            lat_sd = sd(ylat))
+
+wind_projects %>% 
+  ggplot(aes(year)) +
+  geom_histogram(fill = "deepskyblue4") +
+  labs(title = "Distribution of projects by year",
+       subtitle = "Wind Turbine Projects gained momentum after 2000",
+       caption = "Source: usgs.gov") +
+  theme_clean()
+
+```
+
+
+```{r}
+wind_projects %>% 
+  ggplot(aes(lon, lat, size = turbines, col = year))+
+  geom_point(aes(size = turbines), show.legend = T) +
+  scale_color_continuous(type = "viridis") +
+  borders("state") +
+  coord_map() +
+  labs(title = "Age and Scale of US Wind Turbine Projects",
+       subtitle = "251 Wind in CA is the oldest project, and the newer projects are situated along middle of the country",
+       caption = "Source: usgs.gov") +
+  theme_void()
+```
+
+# Capacity
+
+```{r}
+us_wind_processed %>% 
+  distinct(p_name, p_cap) %>% # capacity
+  count(p_name, sort = T)
+
+us_wind_processed %>% 
+  group_by(p_name, t_state) %>% 
+  summarise(year = min(p_year, na.rm = T), # first year project started
+            turbines = n(),
+            total_capacity_kw = sum(t_cap, na.rm = T),
+            lon = mean(xlong),
+            lat = mean(ylat),
+            lon_sd = sd(xlong),
+            lat_sd = sd(ylat)) %>% 
+  ungroup()
+
+```
+
+# How has turbine capacity changed over time?
+
+```{r}
+turbine <- us_wind_processed %>% 
+  group_by(p_name, t_state) %>% 
+  summarise(year = min(p_year, na.rm = T), # first year project started
+            turbines = n(),
+            total_capacity_kw = sum(t_cap),
+            lon = mean(xlong),
+            lat = mean(ylat),
+            lon_sd = sd(xlong),
+            lat_sd = sd(ylat)) %>% 
+  ungroup()
+
+
+turbine %>% 
+  ggplot(aes(year, total_capacity_kw/turbines)) +
+  geom_point() +
+  geom_smooth(method= "lm") +
+  labs(title = "Change in Total Capacity per Turbine over Time",
+       subtitle = "Total Capacity per Turbine increased over time",
+       caption = "Source: usgs.gov") +
+  theme_few()
+
+
+```
+
+# Turbine models
+
+```{r}
+turbine_models <- us_wind_processed %>% 
+  group_by(t_model) %>% 
+  summarize(t_cap = median(t_cap), # turbine capacity (kW)
+            t_hh = median(t_hh), # turbine hub height (m)
+            t_rd = median(t_rd), # turbine rotor diameter (m)
+            t_rsw = median(t_rsa), # turbine rotor swept area (m2)
+            t_ttlh = median(t_ttlh), # turbine total height calculated (m)
+            turbines = n(), # number of turbines
+            projects = n_distinct(p_name)) %>%  # number of projects
+  arrange(desc(projects))
+
+turbine_models %>% 
+  ggplot(aes(t_ttlh, t_cap)) +
+  geom_point() +
+  labs(title = "Relationship between turbine height and capacity",
+       subtitle = "Taller Turbines have higher capacity",
+       x = "Turbine Total Height Calculated (m)",
+       y = "Turbine Capacity (kW)") +
+  theme_clean()
+
+```
+
+
+
+# Learning points:
+
+- Plotting a map of US using ggplot
+- Replacing missing data using dplyr::na_if to replace all -9999 
+- Data cleaning should be done at the start
+
+# References
+
+<https://www.youtube.com/watch?v=O1oDIQV6VKU&list=PL19ev-r1GBwkuyiwnxoHTRC8TTqP8OEi8&index=78> 
+
+

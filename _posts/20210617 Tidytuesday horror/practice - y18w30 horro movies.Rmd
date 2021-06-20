@@ -1,8 +1,15 @@
 ---
-title: "practice - y18w30 - horror movies"
-author: "lruoln"
-date: "6/1/2021"
-output: html_document
+title: "Tidy Tuesday Series"
+description: |
+  2018 Week 30 - Horro Movies
+author:
+  - name: lruolin
+date: 06-01-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
 editor_options: 
   chunk_output_type: console
 ---
