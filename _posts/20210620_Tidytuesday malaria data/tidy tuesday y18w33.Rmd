@@ -1,0 +1,253 @@
+---
+title: "Tidy Tuesday Series"
+description: |
+  2018 Week 33 - Malaria Data
+author:
+  - name: lruolin
+date: 06-20-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, eval=FALSE, include = F}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load packages
+library(tidytuesdayR)
+library(tidyverse)
+
+# to download data
+tt_data <- tt_load(2018, week = 33)
+tt_data$malaria_deaths_age 
+tt_data$malaria_deaths
+tt_data$malaria_inc
+
+# to view readme
+readme(tt_data)
+
+# to see available datasets:
+print(tt_data)
+
+incidence <- tt_data$malaria_inc
+deaths <- tt_data$malaria_deaths
+deaths_age <- tt_data$malaria_deaths_age 
+
+write_csv(incidence, "malaria_incidence.csv")
+write_csv(deaths, "malaria_deaths.csv")
+write_csv(deaths_age, "malaria_deaths_age.csv")
+```
+
+# Load Packages
+
+```{r load packages}
+library(tidyverse)
+library(tidytuesdayR)
+library(ggthemes)
+library(skimr)
+library(malariaAtlas)
+library(maps)
+
+```
+
+
+# Load Data from tidytuesdayR package
+
+```{r load data from TT, eval = F}
+
+# to download data
+tt_data <- tt_load(2018, week = 33)
+
+
+# to view readme
+readme(tt_data)
+
+# Save data as objects
+incidence <- tt_data$malaria_inc
+deaths <- tt_data$malaria_deaths
+deaths_age <- tt_data$malaria_deaths_age 
+```
+
+```{r}
+data_deaths <- read_csv("malaria_deaths.csv")
+data_deaths_age <- read_csv("malaria_deaths_age.csv")
+data_incidence <- read_csv("malaria_incidence.csv")
+
+
+
+```
+
+# Summarise by year over time on a map
+
+```{r}
+# prevelance/parasite rate
+kenya_pr <- getPR(ISO = "KEN", # KENYA
+            species = "BOTH") %>% 
+  filter(!is.na(pr))
+
+glimpse(kenya_pr)
+
+# check
+table(is.na(kenya_pr$pr))
+
+# plot
+kenya_pr %>% 
+  group_by(year_start) %>% 
+  dplyr::summarise(examined = sum(examined),
+            positive = sum(positive),
+            studies = n()) %>% 
+  mutate (pr = positive/examined) %>% 
+  ggplot(aes(year_start, pr)) +
+  geom_line() +
+  labs(title = "Change in Prevalance Rate (Positive/Examined) rate over the years",
+       subtitle = "Prevalance rate decreased over the years",
+       x = "Year",
+       y = "Prevalance Rate",
+       caption = "Source: mariaAtlas package") +
+  theme_few()
+```
+
+```{r}
+kenya_pr %>% 
+  arrange(pr) %>% 
+  ggplot(aes(longitude, latitude, col = pr)) +
+  geom_point() +
+  borders("world", regions = "Kenya") +
+  scale_colour_gradient2(low = "blue", high = "red", 
+                         midpoint = 0.5, 
+                         labels = scales::percent_format()) +
+  labs(title = "Prevalence of Malaria in Kenya",
+       caption = "Source: mariaAtlas package") +
+  coord_map() +
+  theme_void()
+```
+
+Aggregate Prevalence by decade
+
+```{r}
+kenya_pr %>% 
+  group_by(decade = 10 * (year_start %/% 10)) %>% 
+  arrange(pr) %>% 
+  ggplot(aes(longitude, latitude, col = pr)) +
+  geom_point() +
+  borders("world", regions = "Kenya") +
+  scale_colour_gradient2(low = "blue", high = "red", 
+                         midpoint = 0.5, 
+                         labels = scales::percent_format()) +
+  labs(title = "Prevalence of Malaria in Kenya, by decade",
+       caption = "Source: mariaAtlas package",
+       col = "Prevalence") +
+  coord_map() +
+  facet_wrap ( ~decade) +
+  theme_void()
+```
+
+# Incidence
+
+Looking at aggregated data
+
+```{r}
+glimpse(data_incidence)
+
+# change column names
+malaria_inc_processed <- data_incidence %>% 
+  setNames(c("country", "code", "year", "incidence")) %>% 
+  mutate(incidence = incidence /1000)
+
+malaria_inc_processed%>% 
+  filter(country %in% sample(unique(country), 6)) %>% 
+  ggplot(aes(year, incidence, col = country)) +
+  geom_line() +
+  scale_y_continuous(labels = scales::percent_format()) +
+  theme_few()
+
+```
+
+Looking at 2015 levels and the change from 2000 to 2015
+```{r}
+malaria_spread <- malaria_inc_processed %>% 
+  mutate(year = paste0("Y",year)) %>% 
+  pivot_wider(names_from = year,
+              values_from = incidence) %>% 
+  mutate(current = Y2015,
+         change = Y2015 - Y2000)
+
+
+malaria_spread %>% 
+  filter(country != "Turkey", # outlier
+         !is.na(code)) %>%  # no country code
+  ggplot(aes(current, change)) +
+  geom_point() +
+  geom_text(aes(label = code), vjust = 1, hjust = 1) +
+  theme_few()
+
+```
+
+
+
+```{r}
+# what countries are not in the map data?
+malaria_spread %>% 
+  anti_join(map_data("world"), by = c(country = "region"))
+
+maps::iso3166 %>% 
+  as_tibble()
+
+world <- map_data("world") %>% 
+  filter(region != "Antarctica")
+
+data_plot <- malaria_inc_processed %>% 
+  filter(incidence < 1) %>% 
+  inner_join(maps::iso3166 %>% 
+              select(a3, mapname), 
+              by = c(code = "a3")) %>% 
+  inner_join(world, by = c(mapname = "region")) 
+
+glimpse(data_plot)
+
+data_plot %>% 
+  ggplot(aes(long, lat, group = group, fill = incidence)) +
+  geom_polygon() +
+  scale_fill_gradient2(low = "blue",
+                       high = "red",
+                       midpoint = 0.2,
+                       labels = scales::percent_format()) +
+  facet_wrap( ~ year) +
+  coord_map() +
+  labs(title = "Malaria incidence over time around the world",
+       subtitle = "Malaria incidence had generally decreased over time.", 
+       fill = "Incidence",
+       caption = "Source: malariaAtlas package") +
+  theme_void() +
+  theme(strip.text = element_text(face = "bold", size = 14),
+        title = element_text(face = "bold", size = 16))
+
+
+```
+
+
+# Deaths
+
+
+```{r}
+glimpse(data_deaths)
+
+# change column names
+malaria_deaths_processed <- data_deaths %>% 
+  setNames(c("country", "code", "year", "deaths")) 
+
+glimpse(malaria_deaths_processed)
+
+```
+
+
+# References
+
+<https://www.youtube.com/watch?v=5_6O2oDy5Jk&list=PL19ev-r1GBwkuyiwnxoHTRC8TTqP8OEi8&index=77> 
+
+

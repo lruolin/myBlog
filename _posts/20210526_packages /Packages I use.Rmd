@@ -45,6 +45,8 @@ knitr::opts_chunk$set(echo = TRUE)
 - plotly
 - leaflet
 - gganimate (animated ggplots)
+- grafify
+- superheat (create heatmaps)
 
 ## Useful packages for modelling
 
