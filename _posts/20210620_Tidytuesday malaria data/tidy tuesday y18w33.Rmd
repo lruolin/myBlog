@@ -147,7 +147,7 @@ kenya_pr %>%
   theme_void()
 ```
 
-# Incidence
+# Incidence 
 
 Looking at aggregated data
 
@@ -160,12 +160,13 @@ malaria_inc_processed <- data_incidence %>%
   mutate(incidence = incidence /1000)
 
 malaria_inc_processed%>% 
-  filter(country %in% sample(unique(country), 6)) %>% 
-  ggplot(aes(year, incidence, col = country)) +
+  filter(country %in% sample(unique(country), 6)) +
+  ggplot(aes(years, incidence, col = country)) +
   geom_line() +
-  scale_y_continuous(labels = scales::percent_format()) +
-  theme_few()
+  scale_y_continuous(labels = scales::percent_format())
 
+
+glimpse(malaria_inc)  
 ```
 
 Looking at 2015 levels and the change from 2000 to 2015
@@ -175,7 +176,7 @@ malaria_spread <- malaria_inc_processed %>%
   pivot_wider(names_from = year,
               values_from = incidence) %>% 
   mutate(current = Y2015,
-         change = Y2015 - Y2000)
+         change = Y2015 - Y2000) %>% 
 
 
 malaria_spread %>% 
@@ -197,6 +198,8 @@ malaria_spread %>%
 
 maps::iso3166 %>% 
   as_tibble()
+
+  arrange((change))
 
 world <- map_data("world") %>% 
   filter(region != "Antarctica")
@@ -230,19 +233,47 @@ data_plot %>%
 
 ```
 
-
-# Deaths
-
+# Deaths over time
 
 ```{r}
 glimpse(data_deaths)
 
-# change column names
 malaria_deaths_processed <- data_deaths %>% 
-  setNames(c("country", "code", "year", "deaths")) 
+  setNames(c("country", "code", "year", "deaths")) %>% 
+  mutate(deaths = deaths)
 
 glimpse(malaria_deaths_processed)
 
+```
+
+```{r}
+set.seed(20210627)
+
+malaria_deaths_processed %>% 
+  filter(country %in% sample(unique(country), 6)) %>% 
+  ggplot(aes(year, deaths, col = country)) +
+  geom_line() +
+  labs (y = "Deaths per 100,000") +
+  theme_few()
+```
+
+
+```{r}
+malaria_deaths_processed %>% 
+  inner_join(maps::iso3166 %>% 
+               select(a3, mapname),
+             by = c(code = "a3")) %>% 
+  filter(year )
+  inner_join(world, by = c(mapname = "region")) %>% 
+  ggplot(aes(long, lat, group= group, fill = deaths)) +
+  geom_polygon() +
+  scale_fill_gradient2(low = "blue", high = "red", 
+                       midpoint = 0.2, 
+                       labels = scales::percent_format()) +
+  coord_map() +
+  facet_wrap( ~year) +
+  theme_void() +
+  labs(title ="Malaria Deaths over time around the world")
 ```
 
 

@@ -85,47 +85,53 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-<title>pRactice corner: Packages I use and books I read</title>
+<title>pRactice corner: Multiple t-test in R</title>
 
-<meta property="description" itemprop="description" content="The packages I use often and useful reference books"/>
+<meta property="description" itemprop="description" content="What if I have many variables to compare?"/>
 
-<link rel="canonical" href="https://lruolin.github.io/myBlog/posts/20210526_packages /"/>
+<link rel="canonical" href="https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/"/>
 
 <!--  https://schema.org/Article -->
-<meta property="article:published" itemprop="datePublished" content="2021-05-26"/>
-<meta property="article:created" itemprop="dateCreated" content="2021-05-26"/>
+<meta property="article:published" itemprop="datePublished" content="2021-07-26"/>
+<meta property="article:created" itemprop="dateCreated" content="2021-07-26"/>
 <meta name="article:author" content="lruolin"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="pRactice corner: Packages I use and books I read"/>
+<meta property="og:title" content="pRactice corner: Multiple t-test in R"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="The packages I use often and useful reference books"/>
-<meta property="og:url" content="https://lruolin.github.io/myBlog/posts/20210526_packages /"/>
+<meta property="og:description" content="What if I have many variables to compare?"/>
+<meta property="og:url" content="https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/"/>
+<meta property="og:image" content="https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/Multiple-t-test-in-R-for-different-variables_files/figure-html5/unnamed-chunk-5-1.png"/>
+<meta property="og:image:width" content="1248"/>
+<meta property="og:image:height" content="768"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="pRactice corner"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
-<meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="pRactice corner: Packages I use and books I read"/>
-<meta property="twitter:description" content="The packages I use often and useful reference books"/>
-<meta property="twitter:url" content="https://lruolin.github.io/myBlog/posts/20210526_packages /"/>
+<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:title" content="pRactice corner: Multiple t-test in R"/>
+<meta property="twitter:description" content="What if I have many variables to compare?"/>
+<meta property="twitter:url" content="https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/"/>
+<meta property="twitter:image" content="https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/Multiple-t-test-in-R-for-different-variables_files/figure-html5/unnamed-chunk-5-1.png"/>
+<meta property="twitter:image:width" content="1248"/>
+<meta property="twitter:image:height" content="768"/>
 
 <!--  https://scholar.google.com/intl/en/scholar/inclusion.html#indexing -->
-<meta name="citation_title" content="pRactice corner: Packages I use and books I read"/>
-<meta name="citation_fulltext_html_url" content="https://lruolin.github.io/myBlog/posts/20210526_packages /"/>
-<meta name="citation_online_date" content="2021/05/26"/>
-<meta name="citation_publication_date" content="2021/05/26"/>
+<meta name="citation_title" content="pRactice corner: Multiple t-test in R"/>
+<meta name="citation_fulltext_html_url" content="https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/"/>
+<meta name="citation_online_date" content="2021/07/26"/>
+<meta name="citation_publication_date" content="2021/07/26"/>
 <meta name="citation_author" content="lruolin"/>
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Packages I use and books I read"]},{"type":"character","attributes":{},"value":["The packages I use often and useful reference books"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["lruolin"]}]}]},{"type":"character","attributes":{},"value":["05-26-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"character","attributes":{},"value":["https://lruolin.github.io/myBlog/posts/20210526_packages /"]},{"type":"character","attributes":{},"value":["https://lruolin.github.io/myBlog/posts/20210526_packages /"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","editor_options","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["Multiple t-test in R"]},{"type":"character","attributes":{},"value":["What if I have many variables to compare?"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["lruolin"]}]}]},{"type":"character","attributes":{},"value":["07-26-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["chunk_output_type"]}},"value":[{"type":"character","attributes":{},"value":["console"]}]},{"type":"character","attributes":{},"value":["https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/"]},{"type":"character","attributes":{},"value":["https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["Packages-I-use_files/anchor-4.2.2/anchor.min.js","Packages-I-use_files/bowser-1.9.3/bowser.min.js","Packages-I-use_files/distill-2.2.21/template.v2.js","Packages-I-use_files/header-attrs-2.8/header-attrs.js","Packages-I-use_files/jquery-1.11.3/jquery.min.js","Packages-I-use_files/popper-2.6.0/popper.min.js","Packages-I-use_files/tippy-6.2.7/tippy-bundle.umd.min.js","Packages-I-use_files/tippy-6.2.7/tippy-light-border.css","Packages-I-use_files/tippy-6.2.7/tippy.css","Packages-I-use_files/tippy-6.2.7/tippy.umd.min.js","Packages-I-use_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["Multiple-t-test-in-R-for-different-variables_files/anchor-4.2.2/anchor.min.js","Multiple-t-test-in-R-for-different-variables_files/bowser-1.9.3/bowser.min.js","Multiple-t-test-in-R-for-different-variables_files/distill-2.2.21/template.v2.js","Multiple-t-test-in-R-for-different-variables_files/figure-html5/unnamed-chunk-5-1.png","Multiple-t-test-in-R-for-different-variables_files/figure-html5/unnamed-chunk-8-1.png","Multiple-t-test-in-R-for-different-variables_files/header-attrs-2.9/header-attrs.js","Multiple-t-test-in-R-for-different-variables_files/jquery-1.11.3/jquery.min.js","Multiple-t-test-in-R-for-different-variables_files/popper-2.6.0/popper.min.js","Multiple-t-test-in-R-for-different-variables_files/tippy-6.2.7/tippy-bundle.umd.min.js","Multiple-t-test-in-R-for-different-variables_files/tippy-6.2.7/tippy-light-border.css","Multiple-t-test-in-R-for-different-variables_files/tippy-6.2.7/tippy.css","Multiple-t-test-in-R-for-different-variables_files/tippy-6.2.7/tippy.umd.min.js","Multiple-t-test-in-R-for-different-variables_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2070,7 +2076,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Packages I use and books I read","description":"The packages I use often and useful reference books","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-26T00:00:00.000+00:00","citationText":"lruolin, 2021"}
+{"title":"Multiple t-test in R","description":"What if I have many variables to compare?","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-07-26T00:00:00.000+00:00","citationText":"lruolin, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2094,113 +2100,237 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Packages I use and books I read</h1>
+<h1>Multiple t-test in R</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>The packages I use often and useful reference books</p></p>
+<p><p>What if I have many variables to compare?</p></p>
 </div>
 
 <div class="d-byline">
   lruolin  
   
-<br/>05-26-2021
+<br/>07-26-2021
 </div>
 
 <div class="d-article">
-<h1 id="useful-packages-for-importing-data">Useful packages for importing data</h1>
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
 <ul>
-<li>datapasta</li>
-</ul>
-<h1 id="useful-packages-for-data-exploration">Useful packages for data exploration</h1>
+<li><a href="#load-packages">Load Packages</a></li>
+<li><a href="#load-dataset">Load dataset</a></li>
+<li><a href="#transform-into-long-format">Transform into long format</a></li>
+<li><a href="#run-multiple-t-test-using-rstatix-package">Run multiple t-test using rstatix package</a></li>
+<li><a href="#visualization">Visualization</a></li>
+<li><a href="#applying-it-to-a-food-science-dataset">Applying it to a food science dataset</a>
 <ul>
-<li>listviewer (to view lists)</li>
-<li>skimr</li>
+<li><a href="#dataset">Dataset</a></li>
+<li><a href="#statistical-test">Statistical test</a></li>
+<li><a href="#visualization-1">Visualization</a></li>
+</ul></li>
+<li><a href="#reference">Reference:</a></li>
 </ul>
-<h1 id="useful-packages-for-data-wrangling">Useful packages for data wrangling</h1>
-<ul>
-<li>janitor: to clean data names</li>
-<li>tidyverse</li>
-<li>lubridate</li>
-<li>stringr</li>
-</ul>
-<h2 id="useful-packages-for-data-visualization">Useful packages for data visualization</h2>
-<ul>
-<li>patchwork <a href="https://www.business-science.io/code-tools/2021/05/11/patchwork.html" class="uri">https://www.business-science.io/code-tools/2021/05/11/patchwork.html</a></li>
-<li>ggthemes</li>
-<li>ggsci</li>
-<li>ggrepel</li>
-<li>ggstatsplot <a href="https://indrajeetpatil.github.io/ggstatsplot/" class="uri">https://indrajeetpatil.github.io/ggstatsplot/</a></li>
-<li>ggfortify</li>
-<li>ggstance</li>
-<li>bbplot (for bbc style graphics, <a href="https://bbc.github.io/rcookbook/" class="uri">https://bbc.github.io/rcookbook/</a>)</li>
-<li>gridExtra</li>
-<li>plotly</li>
-<li>leaflet</li>
-<li>gganimate (animated ggplots)</li>
-<li>grafify</li>
-<li>superheat (create heatmaps)</li>
-</ul>
-<h2 id="useful-packages-for-modelling">Useful packages for modelling</h2>
-<ul>
-<li>interactions</li>
-<li>jtools</li>
-</ul>
-<h2 id="useful-packages-for-statistical-inference">Useful packages for statistical inference</h2>
-<ul>
-<li>rstatix (pipe friendly framework for basic statistical tests) <a href="https://github.com/kassambara/rstatix" class="uri">https://github.com/kassambara/rstatix</a></li>
-</ul>
-<h2 id="useful-packages-for-design-of-experiment">Useful packages for Design of Experiment</h2>
-<ul>
-<li>AlgDesign</li>
-<li>DoE.base</li>
-<li>pid (Process Improvement using Data, parato Plot)</li>
-<li>FrF2</li>
-</ul>
-<h2 id="others">Others</h2>
-<ul>
-<li>distill</li>
-<li>kableExtra</li>
-<li>DT <a href="https://rstudio.github.io/DT/" class="uri">https://rstudio.github.io/DT/</a></li>
-<li>pacman (to load libraries quickly)</li>
-<li>tidytuesdayR (for practice datasets updated weekly) <a href="https://github.com/rfordatascience/tidytuesday" class="uri">https://github.com/rfordatascience/tidytuesday</a></li>
-</ul>
-<h1 id="useful-reference-books">Useful Reference Books</h1>
-<h2 id="r">R</h2>
-<ul>
-<li>R Packages <a href="https://r-pkgs.org/" class="uri">https://r-pkgs.org/</a></li>
-<li>R packages primer <a href="https://kbroman.org/pkg_primer/" class="uri">https://kbroman.org/pkg_primer/</a></li>
-</ul>
-<h2 id="data-visualization">Data Visualization</h2>
-<ul>
-<li><a href="https://informationisbeautiful.net/visualizations/dataviz-books/" class="uri">https://informationisbeautiful.net/visualizations/dataviz-books/</a></li>
-</ul>
-<h2 id="design-of-experiment">Design of Experiment</h2>
-<ul>
-<li>Design and Analysis of Experiment with R</li>
-</ul>
-<h2 id="machine-learning">Machine Learning</h2>
-<ul>
-<li>Feature engineering and selection - a practical approach</li>
-<li>Applied Predictive Modelling</li>
-</ul>
-<h2 id="chemometrics">Chemometrics</h2>
-<ul>
-<li>Chemometrics with R</li>
-<li>Chemometrics in Food Science</li>
-<li>Near-Infrared Spectroscopy: Theory, Spectral Analysis, Instrumentation, and Applications</li>
-</ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+</nav>
+</div>
+<p>I was looking at a dateset at work, and was wondering how I can carry out t-test to check if there were any significant difference in flavor compounds between two different species of the same fruit.</p>
+<p>The exercise below is from a website <a href="https://www.datanovia.com/en/blog/how-to-perform-multiple-t-test-in-r-for-different-variables/" class="uri">https://www.datanovia.com/en/blog/how-to-perform-multiple-t-test-in-r-for-different-variables/</a>, and I used it on a dataset which was on the physicochemical properties of bananas (from Easy Statistics for Food Science with R)</p>
+<h1 id="load-packages">Load Packages</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rpkgs.datanovia.com/rstatix/'>rstatix</a></span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rpkgs.datanovia.com/ggpubr/'>ggpubr</a></span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h1 id="load-dataset">Load dataset</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>iris</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>Species</span> <span class='op'>!=</span> <span class='st'>"virginica"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>as_tibble</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 100
+Columns: 5
+$ Sepal.Length &lt;dbl&gt; 5.1, 4.9, 4.7, 4.6, 5.0, 5.4, 4.6, 5.0, 4.4, 4.…
+$ Sepal.Width  &lt;dbl&gt; 3.5, 3.0, 3.2, 3.1, 3.6, 3.9, 3.4, 3.4, 2.9, 3.…
+$ Petal.Length &lt;dbl&gt; 1.4, 1.4, 1.3, 1.5, 1.4, 1.7, 1.4, 1.5, 1.4, 1.…
+$ Petal.Width  &lt;dbl&gt; 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.…
+$ Species      &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa,…</code></pre>
+</div>
+<h1 id="transform-into-long-format">Transform into long format</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data_long</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='va'>Sepal.Length</span><span class='op'>:</span><span class='va'>Petal.Width</span>,
+               names_to <span class='op'>=</span> <span class='st'>"variables"</span>,
+               values_to <span class='op'>=</span> <span class='st'>"value"</span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>data_long</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 400
+Columns: 3
+$ Species   &lt;fct&gt; setosa, setosa, setosa, setosa, setosa, setosa, se…
+$ variables &lt;chr&gt; &quot;Sepal.Length&quot;, &quot;Sepal.Width&quot;, &quot;Petal.Length&quot;, &quot;Pe…
+$ value     &lt;dbl&gt; 5.1, 3.5, 1.4, 0.2, 4.9, 3.0, 1.4, 0.2, 4.7, 3.2, …</code></pre>
+</div>
+<h1 id="run-multiple-t-test-using-rstatix-package">Run multiple t-test using rstatix package</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stat_test</span> <span class='op'>&lt;-</span> <span class='va'>data_long</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>variables</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/t_test.html'>t_test</a></span><span class='op'>(</span><span class='va'>value</span> <span class='op'>~</span> <span class='va'>Species</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/adjust_pvalue.html'>adjust_pvalue</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"bonferroni"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/add_significance.html'>add_significance</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h1 id="visualization">Visualization</h1>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>boxplot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggboxplot.html'>ggboxplot</a></span><span class='op'>(</span><span class='va'>data_long</span>,
+          x <span class='op'>=</span> <span class='st'>"Species"</span>,
+          y <span class='op'>=</span> <span class='st'>"value"</span>,
+          fill <span class='op'>=</span> <span class='st'>"Species"</span>,
+          palette <span class='op'>=</span> <span class='st'>"jco"</span>,
+          legend <span class='op'>=</span> <span class='st'>"none"</span>,
+          ggtheme <span class='op'>=</span> <span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/theme_pubr.html'>theme_pubr</a></span><span class='op'>(</span>border <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span> <span class='op'>(</span> <span class='op'>~</span> <span class='va'>variables</span>, scales <span class='op'>=</span> <span class='st'>"free"</span> <span class='op'>)</span>
+
+<span class='co'># with sig diff</span>
+<span class='va'>stat_test_plot</span> <span class='op'>&lt;-</span> <span class='va'>stat_test</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/get_pvalue_position.html'>add_xy_position</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Species"</span><span class='op'>)</span> <span class='co'># from r-statix</span>
+
+<span class='va'>boxplot</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/stat_pvalue_manual.html'>stat_pvalue_manual</a></span><span class='op'>(</span><span class='va'>stat_test_plot</span>, label <span class='op'>=</span> <span class='st'>"p.adj.signif"</span>,
+                     hide.ns <span class='op'>=</span> <span class='cn'>T</span>, tip.length <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Multiple-t-test-in-R-for-different-variables_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<h1 id="applying-it-to-a-food-science-dataset">Applying it to a food science dataset</h1>
+<p>Comparing the pH and TSS (Brix) of bananas (Cavendish vs Dream) (dataset is from Easy Statistics for Food Science with R, page 78)</p>
+<h2 id="dataset">Dataset</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>banana</span> <span class='op'>&lt;-</span> <span class='fu'>tribble</span><span class='op'>(</span>
+  <span class='op'>~</span> <span class='va'>variety</span>,  <span class='op'>~</span><span class='va'>pH</span>,   <span class='op'>~</span><span class='va'>tss</span>,
+  <span class='co'># --------#------#-------</span>
+  <span class='st'>"cavendish"</span>, <span class='fl'>5.60</span>, <span class='fl'>4.33</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>5.57</span>, <span class='fl'>4.03</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>4.76</span>, <span class='fl'>3.77</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>5.56</span>, <span class='fl'>4.10</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>4.95</span>, <span class='fl'>3.97</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>4.84</span>, <span class='fl'>4.40</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>5.07</span>, <span class='fl'>4.50</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>4.94</span>, <span class='fl'>4.43</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>5.04</span>, <span class='fl'>4.30</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>4.93</span>, <span class='fl'>4.57</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>5.05</span>, <span class='fl'>4.30</span>,
+  <span class='st'>"cavendish"</span>, <span class='fl'>5.21</span>, <span class='fl'>4.40</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.31</span>, <span class='fl'>3.67</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.41</span>, <span class='fl'>3.80</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.35</span>, <span class='fl'>3.00</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.49</span>, <span class='fl'>3.40</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.39</span>, <span class='fl'>3.67</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.43</span>, <span class='fl'>3.33</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.44</span>, <span class='fl'>3.47</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.44</span>, <span class='fl'>3.57</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.52</span>, <span class='fl'>3.20</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.79</span>, <span class='fl'>3.17</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.68</span>, <span class='fl'>3.27</span>,
+  <span class='st'>"dream"</span>, <span class='fl'>4.83</span>, <span class='fl'>3.30</span>
+<span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>variety <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>variety</span><span class='op'>)</span><span class='op'>)</span>
+
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>banana</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 24
+Columns: 3
+$ variety &lt;fct&gt; cavendish, cavendish, cavendish, cavendish, cavendis…
+$ pH      &lt;dbl&gt; 5.60, 5.57, 4.76, 5.56, 4.95, 4.84, 5.07, 4.94, 5.04…
+$ tss     &lt;dbl&gt; 4.33, 4.03, 3.77, 4.10, 3.97, 4.40, 4.50, 4.43, 4.30…</code></pre>
+</div>
+<h2 id="statistical-test">Statistical test</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>banana_long</span> <span class='op'>&lt;-</span> <span class='va'>banana</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='va'>pH</span><span class='op'>:</span><span class='va'>tss</span>,
+               names_to <span class='op'>=</span> <span class='st'>"variables"</span>,
+               values_to <span class='op'>=</span> <span class='st'>"values"</span><span class='op'>)</span>
+
+<span class='fu'>glimpse</span><span class='op'>(</span><span class='va'>banana_long</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>Rows: 48
+Columns: 3
+$ variety   &lt;fct&gt; cavendish, cavendish, cavendish, cavendish, cavend…
+$ variables &lt;chr&gt; &quot;pH&quot;, &quot;tss&quot;, &quot;pH&quot;, &quot;tss&quot;, &quot;pH&quot;, &quot;tss&quot;, &quot;pH&quot;, &quot;tss&quot;…
+$ values    &lt;dbl&gt; 5.60, 4.33, 5.57, 4.03, 4.76, 3.77, 5.56, 4.10, 4.…</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stat_test</span> <span class='op'>&lt;-</span> <span class='va'>banana_long</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>variables</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/t_test.html'>t_test</a></span><span class='op'>(</span><span class='va'>values</span> <span class='op'>~</span> <span class='va'>variety</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/adjust_pvalue.html'>adjust_pvalue</a></span><span class='op'>(</span>method <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/add_significance.html'>add_significance</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>stat_test</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 2 x 11
+  variables .y.    group1  group2    n1    n2 statistic    df        p
+* &lt;chr&gt;     &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+1 pH        values cavend… dream     12    12      6.32  17.6  6.56e-6
+2 tss       values cavend… dream     12    12      8.75  22.0  1.28e-8
+# … with 2 more variables: p.adj &lt;dbl&gt;, p.adj.signif &lt;chr&gt;</code></pre>
+</div>
+<h2 id="visualization-1">Visualization</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>boxplot</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/ggboxplot.html'>ggboxplot</a></span><span class='op'>(</span><span class='va'>banana_long</span>,
+          x <span class='op'>=</span> <span class='st'>"variety"</span>,
+          y <span class='op'>=</span> <span class='st'>"values"</span>,
+          fill <span class='op'>=</span> <span class='st'>"variety"</span>,
+          palette <span class='op'>=</span> <span class='st'>"jco"</span>,
+          legend <span class='op'>=</span> <span class='st'>"none"</span>,
+          ggtheme <span class='op'>=</span> <span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/theme_pubr.html'>theme_pubr</a></span><span class='op'>(</span>border <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>facet_wrap</span> <span class='op'>(</span> <span class='op'>~</span> <span class='va'>variables</span>, scales <span class='op'>=</span> <span class='st'>"free"</span> <span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Cavendish Bananas have higher pH and total soluble solids. "</span><span class='op'>)</span>
+
+<span class='co'># with sig diff</span>
+<span class='va'>stat_test_plot</span> <span class='op'>&lt;-</span> <span class='va'>stat_test</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/rstatix/reference/get_pvalue_position.html'>add_xy_position</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"variety"</span><span class='op'>)</span> <span class='co'># from r-statix</span>
+
+<span class='va'>boxplot</span> <span class='op'>+</span> 
+  <span class='fu'><a href='https://rpkgs.datanovia.com/ggpubr/reference/stat_pvalue_manual.html'>stat_pvalue_manual</a></span><span class='op'>(</span><span class='va'>stat_test_plot</span>, 
+                     label <span class='op'>=</span> <span class='st'>"p = {p.adj}{p.adj.signif}"</span>,
+                     hide.ns <span class='op'>=</span> <span class='cn'>T</span>, tip.length <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Multiple-t-test-in-R-for-different-variables_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<h1 id="reference">Reference:</h1>
+<p><a href="https://www.datanovia.com/en/blog/how-to-perform-multiple-t-test-in-r-for-different-variables/" class="uri">https://www.datanovia.com/en/blog/how-to-perform-multiple-t-test-in-r-for-different-variables/</a></p>
+<p><a href="https://www.datanovia.com/en/blog/how-to-add-p-values-to-ggplot-facets/" class="uri">https://www.datanovia.com/en/blog/how-to-add-p-values-to-ggplot-facets/</a></p>
+<p><a href="https://books.google.com.sg/books?id=e0JvDwAAQBAJ&amp;pg=PA77&amp;lpg=PA77&amp;dq=cavendish+dream+pH+tss&amp;source=bl&amp;ots=XHNZARp1_F&amp;sig=ACfU3U1QE4DIuf936cwJ5HdUQlhfGmtZNQ&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwjt46PMwf_xAhUEWCsKHVhwBBgQ6AEwEHoECBMQAw#v=onepage&amp;q=cavendish%20dream%20pH%20tss&amp;f=false" class="uri">https://books.google.com.sg/books?id=e0JvDwAAQBAJ&amp;pg=PA77&amp;lpg=PA77&amp;dq=cavendish+dream+pH+tss&amp;source=bl&amp;ots=XHNZARp1_F&amp;sig=ACfU3U1QE4DIuf936cwJ5HdUQlhfGmtZNQ&amp;hl=en&amp;sa=X&amp;ved=2ahUKEwjt46PMwf_xAhUEWCsKHVhwBBgQ6AEwEHoECBMQAw#v=onepage&amp;q=cavendish%20dream%20pH%20tss&amp;f=false</a></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <div class="article-footer">
   <p class="social_footer">
     <span class="disqus-comments">
       <i class="fas fa-comments"></i>
       &nbsp;
-      <span class="disqus-comment-count" data-disqus-identifier="posts/20210526_packages /">Comment on this article</span>
+      <span class="disqus-comment-count" data-disqus-identifier="posts/20210726 Multiple t-test in R for different variables/">Comment on this article</span>
     </span>
     <span class="article-sharing">
       Share: &nbsp;
-      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Flruolin.github.io%2FmyBlog%2Fposts%2F20210526_packages%20%2F&amp;title=Packages%20I%20use%20and%20books%20I%20read">
+      <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Flruolin.github.io%2FmyBlog%2Fposts%2F20210726%20Multiple%20t-test%20in%20R%20for%20different%20variables%2F&amp;title=Multiple%20t-test%20in%20R">
         <i class="fab fa-linkedin"></i>
       </a>
     </span>
@@ -2209,8 +2339,8 @@ document.addEventListener('DOMContentLoaded', function() {
   <div id="disqus_thread" class="hidden"></div>
   <script type="text/javascript" cookie-consent="functionality">
 var disqus_config = function () {
-  this.page.url = 'https://lruolin.github.io/myBlog/posts/20210526_packages /';
-  this.page.identifier = 'posts/20210526_packages /';
+  this.page.url = 'https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/';
+  this.page.identifier = 'posts/20210726 Multiple t-test in R for different variables/';
 };
 (function() {
   var d = document, s = d.createElement('script');
@@ -2233,12 +2363,12 @@ var disqus_config = function () {
 <div class="appendix-bottom">
   <h3 id="citation">Citation</h3>
   <p>For attribution, please cite this work as</p>
-  <pre class="citation-appendix short">lruolin (2021, May 26). pRactice corner: Packages I use and books I read. Retrieved from https://lruolin.github.io/myBlog/posts/20210526_packages /</pre>
+  <pre class="citation-appendix short">lruolin (2021, July 26). pRactice corner: Multiple t-test in R. Retrieved from https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/</pre>
   <p>BibTeX citation</p>
-  <pre class="citation-appendix long">@misc{lruolin2021packages,
+  <pre class="citation-appendix long">@misc{lruolin2021multiple,
   author = {lruolin, },
-  title = {pRactice corner: Packages I use and books I read},
-  url = {https://lruolin.github.io/myBlog/posts/20210526_packages /},
+  title = {pRactice corner: Multiple t-test in R},
+  url = {https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/},
   year = {2021}
 }</pre>
 </div>

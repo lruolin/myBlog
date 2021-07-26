@@ -1,0 +1,179 @@
+---
+title: "Multiple t-test in R"
+description: |
+  What if I have many variables to compare?
+author:
+  - name: lruolin
+date: 07-26-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+I was looking at a dateset at work, and was wondering how I can carry out t-test to check if there were any significant difference in flavor compounds between two different species of the same fruit. 
+
+The exercise below is from a website <https://www.datanovia.com/en/blog/how-to-perform-multiple-t-test-in-r-for-different-variables/>, and I used it on a dataset which was on the physicochemical properties of bananas (from Easy Statistics for Food Science with R)
+
+
+# Load Packages
+
+```{r}
+library(tidyverse)
+library(rstatix)
+library(ggpubr)
+```
+
+
+# Load dataset
+
+```{r}
+data <- iris %>% 
+  filter(Species != "virginica") %>% 
+  as_tibble()
+
+glimpse(data)
+
+```
+
+# Transform into long format
+
+```{r}
+
+data_long <- data %>% 
+  pivot_longer(cols = Sepal.Length:Petal.Width,
+               names_to = "variables",
+               values_to = "value")
+
+glimpse(data_long)
+```
+
+# Run multiple t-test using rstatix package
+
+```{r}
+stat_test <- data_long %>% 
+  group_by(variables) %>% 
+  t_test(value ~ Species) %>% 
+  adjust_pvalue(method = "bonferroni") %>% 
+  add_significance()
+```
+
+
+# Visualization
+
+```{r}
+boxplot <- ggboxplot(data_long,
+          x = "Species",
+          y = "value",
+          fill = "Species",
+          palette = "jco",
+          legend = "none",
+          ggtheme = theme_pubr(border = T)) +
+  facet_wrap ( ~ variables, scales = "free" )
+
+# with sig diff
+stat_test_plot <- stat_test %>% 
+  add_xy_position(x = "Species") # from r-statix
+
+boxplot + 
+  stat_pvalue_manual(stat_test_plot, label = "p.adj.signif",
+                     hide.ns = T, tip.length = 0)
+```
+
+# Applying it to a food science dataset
+
+Comparing the pH and TSS (Brix) of bananas (Cavendish vs Dream)
+(dataset is from Easy Statistics for Food Science with R, page 78)
+
+
+## Dataset
+```{r}
+
+banana <- tribble(
+  ~ variety,  ~pH,   ~tss,
+  # --------#------#-------
+  "cavendish", 5.60, 4.33,
+  "cavendish", 5.57, 4.03,
+  "cavendish", 4.76, 3.77,
+  "cavendish", 5.56, 4.10,
+  "cavendish", 4.95, 3.97,
+  "cavendish", 4.84, 4.40,
+  "cavendish", 5.07, 4.50,
+  "cavendish", 4.94, 4.43,
+  "cavendish", 5.04, 4.30,
+  "cavendish", 4.93, 4.57,
+  "cavendish", 5.05, 4.30,
+  "cavendish", 5.21, 4.40,
+  "dream", 4.31, 3.67,
+  "dream", 4.41, 3.80,
+  "dream", 4.35, 3.00,
+  "dream", 4.49, 3.40,
+  "dream", 4.39, 3.67,
+  "dream", 4.43, 3.33,
+  "dream", 4.44, 3.47,
+  "dream", 4.44, 3.57,
+  "dream", 4.52, 3.20,
+  "dream", 4.79, 3.17,
+  "dream", 4.68, 3.27,
+  "dream", 4.83, 3.30
+) %>% 
+  mutate(variety = factor(variety))
+
+
+glimpse(banana)
+```
+
+## Statistical test
+
+```{r}
+banana_long <- banana %>% 
+  pivot_longer(cols = pH:tss,
+               names_to = "variables",
+               values_to = "values")
+
+glimpse(banana_long)
+
+stat_test <- banana_long %>% 
+  group_by(variables) %>% 
+  t_test(values ~ variety) %>% 
+  adjust_pvalue(method = "none") %>% 
+  add_significance()
+
+stat_test
+```
+
+## Visualization
+
+```{r}
+boxplot <- ggboxplot(banana_long,
+          x = "variety",
+          y = "values",
+          fill = "variety",
+          palette = "jco",
+          legend = "none",
+          ggtheme = theme_pubr(border = T)) +
+  facet_wrap ( ~ variables, scales = "free" ) +
+  labs(title = "Cavendish Bananas have higher pH and total soluble solids. ")
+
+# with sig diff
+stat_test_plot <- stat_test %>% 
+  add_xy_position(x = "variety") # from r-statix
+
+boxplot + 
+  stat_pvalue_manual(stat_test_plot, 
+                     label = "p = {p.adj}{p.adj.signif}",
+                     hide.ns = T, tip.length = 0)
+```
+
+
+
+# Reference:
+
+<https://www.datanovia.com/en/blog/how-to-perform-multiple-t-test-in-r-for-different-variables/>
+
+<https://www.datanovia.com/en/blog/how-to-add-p-values-to-ggplot-facets/>
+
+<https://books.google.com.sg/books?id=e0JvDwAAQBAJ&pg=PA77&lpg=PA77&dq=cavendish+dream+pH+tss&source=bl&ots=XHNZARp1_F&sig=ACfU3U1QE4DIuf936cwJ5HdUQlhfGmtZNQ&hl=en&sa=X&ved=2ahUKEwjt46PMwf_xAhUEWCsKHVhwBBgQ6AEwEHoECBMQAw#v=onepage&q=cavendish%20dream%20pH%20tss&f=false>

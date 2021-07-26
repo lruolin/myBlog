@@ -53,6 +53,9 @@ knitr::opts_chunk$set(echo = TRUE)
 - interactions
 - jtools
 
+## Useful packages for statistical inference
+
+- rstatix (pipe friendly framework for basic statistical tests) <https://github.com/kassambara/rstatix>
 
 ## Useful packages for Design of Experiment
 
