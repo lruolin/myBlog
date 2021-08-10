@@ -1,0 +1,110 @@
+---
+title: "Multiple ANOVA in R"
+description: |
+  What if I have many variables to compare?
+author:
+  - name: lruolin
+date: 07-29-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+I was looking at a dateset at work, and was wondering how I can carry out t-test to check if there were any significant difference in flavor compounds between two different species of the same fruit. 
+
+Previously, I looked at how to carry out t-tests efficiently, using rstatix package.
+
+For ANOVA, I can use purrr to carry out iterative statistical testing.
+If I want to look at differences in chemical groups for 3 different types of stinky tofu, the strategy would be to calculate the % area for each group (analysed as triplicates), and then nest by the chemical group, carry out anova test, and then create a new column to show p-values.
+
+I used fictitious data, but is based on what I saw from: <https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6321173/>
+
+
+
+# Load Packages
+
+```{r}
+library(tidyverse)
+library(datapasta)
+```
+
+
+# Load dataset
+
+```{r}
+tofu <- 
+  tibble::tribble(
+          ~group_no,             ~groups,   ~a1,   ~a2,   ~a3,   ~b1,   ~b2,  ~b3,  ~c1,   ~c2,  ~c3,
+                 1L,           "phenols", 23.32, 23.56, 22.97, 47.87,  46.6, 46.9, 9.93, 10.21, 9.79,
+                 2L,            "ethers",  0.02,  0.03,  0.01,  0.99,  0.94, 0.97, 14.3,  14.4, 14.3,
+                 3L, "aldehydes_ketones",  0.21,  0.24,  0.25,  0.02,  0.02, 0.01, 0.11,  0.12, 0.11,
+                 4L,           "indoles", 22.99,  22.9, 22.93,  35.2, 35.22, 35.9,  5.5,   5.3,  5.4
+          )
+
+
+tofu
+```
+
+
+# Visualization
+
+```{r}
+tofu_long <- tofu %>% 
+  pivot_longer(cols = a1:c3,
+               names_to = "sample",
+               values_to = "percent_area") %>% 
+  mutate(sample_cleaned = fct_recode(sample,
+                                     a = "a1",
+                                     a = "a2",
+                                     a = "a3",
+                                     b = "b1",
+                                     b = "b2",
+                                     b = "b3",
+                                     c = "c1",
+                                     c = "c2",
+                                     c = "c3"))
+
+tofu_long%>% 
+  group_by(sample_cleaned, groups) %>% 
+  summarise(av_percent_area = mean(percent_area)) %>% 
+  ggplot(aes(sample_cleaned, av_percent_area)) +
+  geom_boxplot(aes(fill = sample_cleaned)) +
+  facet_wrap( ~ groups, scales = "free") +
+  labs(x = "") +
+  theme_classic() +
+  theme(legend.position = "none")
+```
+
+# Anova
+
+```{r}
+library(broom)
+
+results_anova <- tofu_long %>% 
+  nest(-group_no) %>% 
+  mutate(model = map(data, ~aov(percent_area ~ sample_cleaned, .)),
+         tidy = map(model, tidy)) %>% 
+  select(group_no, tidy) %>% 
+  unnest(cols = c(tidy)) %>% 
+  filter(term != "Residuals")
+
+results_anova
+
+results_anova %>% 
+  filter(p.value<0.05)
+
+```
+
+From the analysis, all three compounds differed significantly for all four chemical groups. 
+This is a efficient way of carrying out ANOVA test.
+
+The analysis strategy is to nest, mutate, unnest, to efficiently extract the p.values. The Tukey's post-hoc comparison can be carried out in a similar way. 
+
+# References
+
+<http://ritsokiguess.site/docs/2018/01/30/tidy-simple-effects-in-analysis-of-variance/>
+<https://towardsdatascience.com/anova-in-r-4a4a4edc9448>

@@ -1,0 +1,355 @@
+---
+title: "Tidy Tuesday Series"
+description: |
+  20190614 - Ramen Ratings Data
+author:
+  - name: lruolin
+date: 07-28-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, eval=FALSE, include = F}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load packages
+
+library(tidyverse)
+
+ramen_ratings <- read_csv("https://raw.githubusercontent.com/stephen-haslett/FALL2019TIDYVERSE/master/ramen-ratings.csv", show_col_types = F)
+
+write_csv(ramen_ratings, "ramen_ratings.csv")
+```
+
+# Load Packages and Data
+
+```{r load packages}
+library(tidyverse)
+library(ggthemes)
+library(skimr)
+library(janitor)
+
+# Import data 
+
+# Old
+ramen_ratings <- read_csv("https://raw.githubusercontent.com/stephen-haslett/FALL2019TIDYVERSE/master/ramen-ratings.csv", show_col_types = F)
+
+glimpse(ramen_ratings)
+
+# Updated on 17 Jan 2021
+updated_ramen_ratings <- readxl::read_xlsx("The-Big-List-20210117.xlsx")
+
+glimpse(updated_ramen_ratings) # more data, to use this instead
+```
+
+# Exploratory data
+
+## What are the types of variables?
+
+```{r}
+# Editing raw dataset for use
+ramen <- updated_ramen_ratings %>% 
+  clean_names() %>% # changing column names
+  mutate(brand = factor(brand),
+         country = factor(country),
+         style = factor(style))
+```
+
+- size of dataset: 3702 reviews (observations), 7 variables (review #, brand, variety, style, country, stars, top 10)
+
+## Check for missing data: 2 for style
+
+```{r}
+sapply(ramen, function(x) sum(is.na(x)))
+```
+
+## What is in each variable?
+
+### Brand
+
+```{r}
+# brand, variety, style, country, stars, top 10
+glimpse(ramen) 
+
+# 543 different brands
+ramen %>% 
+  select(brand) %>% 
+  unique()
+
+# brands with most varieties
+ramen %>% 
+  group_by(brand) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+
+# top 20 brands with most varieties
+ramen %>% 
+  group_by(brand) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  slice_head(n = 20) # top 20
+
+# which country are these top 20 brands located?
+ramen %>% 
+  group_by(brand, country) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))  # 1 brand can be located in different countries
+```
+
+### Variety
+
+```{r}
+glimpse(ramen)
+
+# now, look at variety
+
+ramen %>% 
+  group_by(variety) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+
+# variety: different names, may need to clean up to standardize flavor
+```
+
+### Country
+
+```{r}
+glimpse(ramen)
+
+# 38 different countries
+# Japan, USA, South Korea have the most number of products
+
+ramen %>% 
+  group_by(country) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+```
+
+#### Products from Singapore
+
+```{r}
+# singapore has 140 listed products
+ ramen %>% 
+  filter(country == "Singapore") %>% 
+  arrange(desc(stars))
+
+# 7 of them made it to top 10
+ ramen %>% 
+  filter(country == "Singapore") %>% 
+  arrange(desc(stars)) %>% 
+   filter(!is.na(top_ten))
+```
+
+#### Products from Japan
+
+```{r}
+# Japan has 109 listed products
+ ramen %>% 
+  filter(country == "Japan") %>% 
+  arrange(desc(stars))
+
+# 6 of them made it to top 10
+ ramen %>% 
+  filter(country == "Japan") %>% 
+  arrange(desc(stars)) %>% 
+   filter(!is.na(top_ten))
+```
+
+#### Products from Taiwan
+
+```{r}
+
+# Taiwan has 224 listed products
+ ramen %>% 
+  filter(country == "Taiwan") %>% 
+  arrange(desc(stars))
+
+# 2 of them made it to top 10
+ ramen %>% 
+  filter(country == "Taiwan") %>% 
+  arrange(desc(stars)) %>% 
+   filter(!is.na(top_ten))
+```
+
+
+
+#### Products from Korea
+
+```{r}
+
+# Korea has 224 listed products
+ ramen %>% 
+  filter(country %in% c("South Korea")) %>% 
+  arrange(desc(stars))
+
+# 7 of them made it to top 10
+ ramen %>% 
+  filter(country == "South Korea") %>% 
+  arrange(desc(stars)) %>% 
+   filter(!is.na(top_ten))
+```
+
+## Style
+
+```{r}
+glimpse(ramen)
+
+ramen %>% 
+  count(style) %>% 
+  arrange(desc(n))
+
+# which are the missing ones?
+ramen %>% 
+  filter(is.na(style))
+
+# bar, can?
+
+ramen %>% 
+  filter(style %in% c("Bar", "Can"))
+
+# is pringles potato chips? or ramen?
+
+```
+
+## Stars
+
+Scores are very strange. 
+```{r}
+ggplot(ramen, aes(stars)) +
+  geom_histogram(stat = "count")
+
+# scores are as character format at the moment. need to change to numerical.
+
+ramen$stars %>% 
+  unique()
+
+ramen %>% 
+  filter(stars == "Unrated")
+
+# to remove unrated, and na values from dataset,
+# replace unrated as "NA" in main dataset, using dplyr
+
+ramen <- ramen %>% 
+  mutate(stars_cleaned = na_if(stars, "Unrated"),
+         stars_cleaned = as.numeric(stars_cleaned)) 
+
+
+glimpse(ramen)
+
+sapply(ramen, function(x) sum(is.na(x))) # the three unrated reviews have been updated
+
+
+# descriptive stats
+psych::describe(ramen$stars_cleaned)
+
+ramen %>% 
+  ggplot(aes(stars_cleaned)) +
+  geom_histogram() # not normally distributed. can ramen receive 0?
+
+```
+
+## Top 10
+
+```{r}
+ramen$top_ten %>% 
+  unique()  
+
+# what is \n? -- maybe should change to NA
+
+ramen %>% 
+  filter(top_ten == "\n")
+
+ramen <- ramen %>% 
+  mutate(top_ten_cleaned = na_if(top_ten, "\n"))
+
+# using tidyr::separate gives df, but
+#str_split gives list or matrix
+ramen_cleaned <- separate(data = ramen, col = top_ten_cleaned, 
+           into = c("year", "ranking"), sep = "\\#") %>% 
+  mutate(year = as.numeric(year),
+         ranking = as.numeric(ranking))
+
+ramen_cleaned
+
+
+ramen_cleaned %>% 
+  filter(!is.na(top_ten))
+
+# now, it is possible to look at the rankings by year
+
+ramen_cleaned %>% 
+  count(year)
+
+rankings <- ramen_cleaned %>% 
+  filter(!is.na(year)) %>% 
+  arrange(year, ranking)
+
+# not all the top rankings are inside the data
+
+# which countries appear most?
+
+rankings %>% 
+  count(country) %>% 
+  arrange(desc(n))
+
+# Singapore?!
+
+```
+
+
+
+# Visualize
+
+```{r}
+theme_set(theme_clean())
+```
+
+
+## Top 10 ramens (by year)
+
+## Top 10 (by country)
+
+## Top 10 (by packaging)
+
+## Top 20 brands, by variety?
+
+```{r}
+# top 20 brands with most varieties
+ramen %>% 
+  group_by(brand) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  slice_head(n = 20) %>%  # top 20
+  ggplot(aes(fct_reorder(brand, n), n)) +
+  geom_col(fill = "deepskyblue4") +
+  geom_text(aes(label = n), hjust = -0.5) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 400)) +
+  labs(title = "Top 20 brands with the most products",
+       x = "",
+       y = "No. of ramen products",
+       subtitle = "Nissin is the market leader in terms of number of products carried",
+       caption = "Source: www.theramenrater.com") +
+  coord_flip() +
+  theme(axis.title = element_text(face = "bold", size = 14),
+        axis.text = element_text(size = 12),
+        title = element_text(size = 16))
+```
+
+
+
+## Mean ratings by country, breakdown by style
+
+
+
+# References
+
+<https://casualinference.netlify.app/2019/06/04/tidytuesday-ramen-ratings/>
+
+

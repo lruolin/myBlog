@@ -1,0 +1,504 @@
+---
+title: "Tidy Tuesday Series"
+description: |
+  20190614 - Ramen Ratings Data
+author:
+  - name: lruolin
+date: 07-28-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+
+```{r setup, eval=FALSE, include = F}
+knitr::opts_chunk$set(echo = TRUE)
+
+# load packages
+
+library(tidyverse)
+
+ramen_ratings <- read_csv("https://raw.githubusercontent.com/stephen-haslett/FALL2019TIDYVERSE/master/ramen-ratings.csv", show_col_types = F)
+
+write_csv(ramen_ratings, "ramen_ratings.csv")
+```
+
+# Background
+
+This ramen dataset was taken from one of the TidyTuesday datasets released in 2019. <https://github.com/rfordatascience/tidytuesday/tree/master/data/2019/2019-06-04>. I was halfway through the data exploration step, and went into the original source of data at The Ramen Rater <https://www.theramenrater.com/resources-2/the-list/>, only to realise that there is a even more updated list. As such, I will use the list compiled in 2021 for exploratory work. 
+
+The Ramen Rater rates the different ramen (or instant noodles) from different parts of the world. Let's see what kind of insights we can have from his dataset. 
+
+# Load Packages and Data
+
+```{r load packages}
+library(tidyverse)
+library(ggthemes)
+library(skimr)
+library(janitor)
+library(datapasta)
+library(naniar)
+library(tidytext)
+library(wordcloud2)
+
+# Import data 
+
+# Old
+ramen_ratings <- read_csv("https://raw.githubusercontent.com/stephen-haslett/FALL2019TIDYVERSE/master/ramen-ratings.csv", show_col_types = F)
+
+glimpse(ramen_ratings)
+
+# Updated on 17 Jan 2021
+updated_ramen_ratings <- readxl::read_xlsx("The-Big-List-20210117.xlsx")
+
+glimpse(updated_ramen_ratings) # more data, to use this instead
+
+```
+
+# Exploratory data
+
+## What are the types of variables?
+
+```{r}
+# Editing raw dataset for use
+ramen <- updated_ramen_ratings %>% 
+  clean_names() %>% # changing column names
+  mutate(brand = factor(brand),
+         country = factor(country),
+         style = factor(style)) %>% 
+  select(-t) # used to be top 10, but will remove this since there are no values
+
+glimpse(ramen)
+```
+
+- size of dataset: 3702 reviews (observations), 6 variables (review #, brand, variety, style, country, stars)
+
+## Check for missing data: 
+
+```{r}
+sapply(ramen, function(x) sum(is.na(x))) # no missing data
+```
+
+## What is in each variable?
+
+### Brand
+
+```{r}
+# brand, variety, style, country, stars, top 10
+
+# 543 different brands
+ramen %>% 
+  select(brand) %>% 
+  unique()
+
+# brands with most varieties
+ramen %>% 
+  group_by(brand) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+
+# top 20 brands with most varieties
+ramen %>% 
+  group_by(brand) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  slice_head(n = 20) # top 20
+
+# which country are these top 20 brands located?
+ramen %>% 
+  group_by(brand, country) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))  # 1 brand can be located in different countries
+```
+
+### Variety
+
+```{r}
+glimpse(ramen)
+
+# now, look at variety
+
+ramen %>% 
+  group_by(variety) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+
+# variety: different names, may need to clean up to standardize flavor
+```
+
+Variety would mean flavors. 
+
+### Country
+
+```{r}
+glimpse(ramen)
+
+# 51 different countries
+# Japan, USA, South Korea have the most number of products
+
+ramen %>% 
+  group_by(country) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+```
+
+#### Products from Singapore
+
+```{r}
+# singapore has 140 listed products
+ ramen %>% 
+  filter(country == "Singapore") %>% 
+  arrange(desc(stars))
+
+```
+
+#### Products from Japan
+
+```{r}
+# Japan has 684 listed products
+ ramen %>% 
+  filter(country == "Japan") %>% 
+  arrange(desc(stars))
+
+```
+
+#### Products from Taiwan
+
+```{r}
+
+# Taiwan has 372 listed products
+ ramen %>% 
+  filter(country == "Taiwan") %>% 
+  arrange(desc(stars))
+
+```
+
+
+#### Products from Korea
+
+```{r}
+
+# Korea has 413 listed products
+ ramen %>% 
+  filter(country %in% c("South Korea")) %>% 
+  arrange(desc(stars))
+
+```
+
+## Style
+
+```{r}
+glimpse(ramen)
+
+ramen %>% 
+  count(style) %>% 
+  arrange(desc(n))
+
+# which are the missing ones?
+ramen %>% 
+  filter(is.na(style))
+
+# bar, can?
+
+ramen %>% 
+  filter(style %in% c("Bar", "Can"))
+
+# is pringles potato chips? or ramen?
+
+```
+
+## Stars
+
+Scores are very strange. 
+```{r}
+ggplot(ramen, aes(stars)) +
+  geom_histogram(stat = "count")
+
+# scores are as character format at the moment. need to change to numerical.
+
+ramen$stars %>% 
+  unique()
+
+ramen %>% 
+  filter(stars == "Unrated")
+
+dirty_stars <- ramen %>% 
+  filter(stars %in% c("0",
+                      "NR", "Unrated",
+                      "NS",
+                      "42829",
+                      "42859",
+                      "42860",
+                      "1.1000000000000001",
+                      "2.2999999999999998"))
+
+# to remove unrated, and na values from dataset,
+# replace unrated as "NA" in main dataset, using dplyr
+# some noodles had 2 scores: 1 for broth and 1 for noodles, so will take average
+
+ramen_cleaned_a <- ramen %>% 
+  naniar::replace_with_na(replace = list(stars = c("NR",
+                                                   "NS",
+                                                   "42829",
+                                                   "42860",
+                                                   "42859",
+                                                   "Unrated"))) %>% 
+  mutate(stars_cleaned_a = str_replace_all(stars, "3.5/2.5", "3")) %>% 
+  mutate(stars_cleaned_b = str_replace_all(stars_cleaned_a, "4.25/5", "4.25")) %>% 
+  mutate(stars_cleaned_c = str_replace_all(stars_cleaned_b, "1.1000000000000001", "1.1")) %>% 
+  mutate(stars_cleaned_d = str_replace_all(stars_cleaned_c, "5/2.5", "3.75")) %>% 
+  mutate(stars_cleaned_e = str_replace_all(stars_cleaned_d, "4.5/5", "4.75")) %>% 
+  mutate(stars_cleaned_f = str_replace_all(stars_cleaned_e, "4.5/5", "4.75")) %>% 
+  mutate(stars_cleaned_g = str_replace_all(stars_cleaned_f, "2.2999999999999998", "2.3")) %>% 
+  select(review_number, brand, variety, style, country, stars_cleaned_g) %>% 
+  rename(flavor = variety,
+         packaging = style,
+         stars = stars_cleaned_g) %>% 
+  filter(!is.na(stars)) %>% 
+  mutate(stars = as.numeric(stars))
+
+
+glimpse(ramen_cleaned_a) # 3692, removed na
+
+ramen_cleaned_a
+
+ramen_cleaned_a %>% 
+  ggplot(aes(stars)) +
+  geom_histogram() # not normally distributed. can ramen receive 0?
+
+median(ramen_cleaned_a$stars) # median = 3.75
+mean(ramen_cleaned_a$stars) # mean = 3.73
+
+```
+
+
+## Packaging
+
+```{r}
+ramen_cleaned_a %>% 
+  count(packaging) %>% 
+  arrange(desc(n))
+
+# create a new packaging variable to lump low levels together
+
+ramen_cleaned_b <- ramen_cleaned_a %>% 
+  mutate(packaging_cleaned = fct_inorder(fct_lump_n(packaging, 5),
+                                         ordered = NA))
+
+# (ramen_cleaned_b$packaging_cleaned)
+
+glimpse(ramen_cleaned_b)
+```
+
+
+# Final dataset:
+
+```{r}
+ramen_final <- ramen_cleaned_b
+```
+
+
+# Visualize
+
+```{r}
+theme_set(theme_clean())
+```
+
+
+## Top 10 (by country)
+
+```{r, layout = "1-page", fig.width=26, fig.height=20}
+ramen_final %>% 
+  count(packaging_cleaned,country) %>% 
+  arrange(desc(n)) %>% 
+  group_by(packaging_cleaned) %>% 
+  slice_head(n = 10) %>% 
+  ggplot(aes(fct_reorder(country, n), n, 
+             fill = country,
+             label = n)) +
+  geom_col(show.legend = F) +
+  facet_wrap( . ~ packaging_cleaned, ncol = 3, scales = "free") +
+  ylim(0, 400) +
+  geom_text(aes(label = n, hjust = -0.1)) +
+  coord_flip() +
+  labs(title = "Top 10 Countries with most number of products",
+       x = "",
+       y = "Count",
+       subtitle = "In general, Japan has the highest number of products across main categories, followed by United States. \nTaiwan has the more products than Japan for Packs.",
+       caption = "Source: The Ramen Rater") +
+  theme(axis.title = element_text(face = "bold", size = 20),
+        strip.text = element_text(face = "bold", size = 18),
+        axis.text = element_text(face = "bold", size = 18),
+        title = element_text(face = "bold", size = 24))
+```
+
+
+## Top 20 brands, by variety?
+
+```{r, layout = "1-page", fig.width=20, fig.height=12}
+# top 20 brands with most varieties
+ramen_final %>% 
+  group_by(brand) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n)) %>% 
+  slice_head(n = 10) %>%  # top 10
+  ggplot(aes(fct_reorder(brand, n), n)) +
+  geom_col(fill = "deepskyblue4") +
+  geom_text(aes(label = n), hjust = -0.5) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 600)) +
+  labs(title = "Top 10 brands with the most products",
+       x = "",
+       y = "No. of products",
+       subtitle = "Nissin is the market leader in terms of number of products carried",
+       caption = "Source: The Ramen Rater") +
+  coord_flip() +
+  theme(axis.title = element_text(face = "bold", size = 18),
+        axis.text = element_text(size = 16),
+        title = element_text(size = 24))
+```
+
+## Top Brands
+
+```{r, layout = "1-page", fig.width=20, fig.height=12}
+data_plot <- ramen_final %>% 
+  group_by(brand, country) %>% 
+  summarise(
+    count = n(),
+    mean_rating = mean(stars),
+    min_rating = min(stars),
+    max_rating = max(stars)
+  ) %>% 
+  ungroup() %>% 
+  filter(mean_rating > 3.75) %>% 
+  select(country, brand, count, mean_rating, min_rating, max_rating) %>% 
+  arrange(desc(count, mean_rating)) 
+
+data_plot
+
+data_plot%>%
+  slice_head(n = 15) %>% 
+  ggplot(aes(fct_reorder(brand, mean_rating), mean_rating, col = country)) +
+  geom_point(aes(size = count), show.legend = F) +
+  geom_errorbar(aes(ymin = min_rating,
+                    ymax = max_rating),
+                width = 0.5, size = 0.8) +
+  labs(title = "Top brands - in terms of number of products launched and mean ratings",
+       subtitle = "MyKuali and Indomie may have narrower product range but are highly scored. \nNissin has many products (produced in JP, SG, US), and has high mean ratings with narrower range in scores - \nie greater product quality consistency",
+       caption = "Source: The Ramen Rater",
+       x = "Mean Rating",
+       y = "Brand",
+       fill  = "Country") +
+  ylim(0, 5) +
+  coord_flip() +
+  theme(axis.text = element_text(face = "bold", size = 16),
+        title = element_text(face = "bold", size = 24))
+
+```
+
+
+## Mean ratings by country
+
+```{r, layout = "1-page"}
+ramen_final %>% 
+  group_by(country) %>% 
+  summarise(mean_rating = mean(stars),
+            count = n()) %>% 
+  arrange(desc(count, mean_rating)) %>% 
+  slice_head(n = 10) %>% 
+  ggplot(aes(fct_reorder(country, mean_rating), mean_rating, fill = country,
+             text = round(mean_rating, 2))) +
+  geom_col(show.legend = F) +
+
+  geom_text(aes(label = round(mean_rating, 2)), hjust = -0.25) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 5)) +
+  coord_flip() +
+  labs(title = "Top Countries with Highest Mean Ratings",
+       subtitle = "Southeast Asian Countries are doing very well",
+       caption = "Source: The Ramen Rater",
+       x = "", 
+       y = "Mean rating")
+
+```
+
+
+## Wordcloud for popular flavors
+
+
+```{r}
+ramen_cleaned_a %>% 
+  select(flavor) %>% 
+  distinct()
+
+ramen_cleaned_a
+
+# tidytext::unnest_tokens to split flavor into words ----
+
+tidy_flavor <- ramen_cleaned_a %>% 
+  mutate(flavor2 = flavor) %>% 
+  unnest_tokens(word, # output column to be created as string 
+                flavor) %>%  # input column to be split)
+  group_by(word) %>% 
+  count() %>% 
+  arrange(desc(n)) %>% 
+  anti_join(stop_words) %>% 
+  filter(!word %in% c("noodle", "ramen", "instant", "flavor", "flavour",
+                      "noodles", "soup", "cup", "artificial", "style", "bowl", "mi",
+                      "sauce")) %>% 
+  ungroup() %>% 
+  filter(n>1)
+
+
+tidy_flavor
+
+# top flavors are chicken, spicy, beef/
+
+# look at bigrams
+
+
+# bigrams
+
+tidy_bigrams <- ramen_cleaned_a %>% 
+  unnest_tokens(bigram, flavor, token = "ngrams", n = 2) %>% 
+  separate(bigram, c("word1", "word2"), sep = " ") %>% 
+  filter(!word1 %in% c(stop_words$word)) %>% 
+  filter(!word2 %in% c(stop_words$word)) %>% 
+  count(word1, word2, sort = T) %>% 
+  drop_na()  %>% 
+  filter(!word1 %in% c("noodle", "ramen", "instant", "flavor", "flavour",
+                      "noodles", "soup", "cup", "artificial", "style", "bowl", "mi",
+                      "sauce")) %>% 
+  filter(!word2 %in% c("noodle", "ramen", "instant", "flavor", "flavour",
+                      "noodles", "soup", "cup", "artificial", "style", "bowl", "mi",
+                      "sauce")) %>% 
+  filter(n>5) %>% 
+  unite("joined_flv", word1:word2, sep = " ")
+
+
+tidy_bigrams
+
+```
+
+```{r}
+wordcloud2(data = tidy_bigrams)
+```
+
+Bigrams offer more information: hot and spicy, rather that hot, spicy. 
+
+Ramen rater seems to like spicy instant noodles!
+
+
+
+
+
+# References
+
+<https://casualinference.netlify.app/2019/06/04/tidytuesday-ramen-ratings/>
+<https://beta.rstudioconnect.com/content/5291/tidytuesday-ramen.nb.html>
+<https://rstudio-pubs-static.s3.amazonaws.com/502700_3ee879f2e94f4d1da5696be52b9e6107.html>
+
+
