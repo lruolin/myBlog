@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Thu, 29 Jul 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>High Dimension Data</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210810 High Dimension Data </link>
+      <description>EdX Course</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210810 High Dimension Data </guid>
+      <pubDate>Wed, 11 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210810 High Dimension Data /High-Dimension-Data_files/figure-html5/unnamed-chunk-1-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Multiple ANOVA in R</title>
       <dc:creator>lruolin</dc:creator>
