@@ -9,6 +9,16 @@ Math inside RMarkdown:
 
 - <https://rpruim.github.io/s341/S19/from-class/MathinRmd.html>
 
+Statistical Inference via Data Science:
+- <https://moderndive.com/index.html>
+
+
 Machine Learning:
 
-- <https://online.stat.psu.edu/stat508/lesson/1a
+- <https://online.stat.psu.edu/stat508/lesson/1a>
+- <https://web.stanford.edu/~hastie/ISLRv2_website.pdf>
+- <https://github.com/onmee/ISLR-Answers>
+- <https://www.tidymodels.org/>
+
+Text Analysis:
+- <https://smltar.com/>

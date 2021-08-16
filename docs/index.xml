@@ -7,7 +7,15 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 11 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 16 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>ANOVA to compare sample means</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210815 ANOVA to compare means</link>
+      <description>Using ANOVA to compare GI for different noodles</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210815 ANOVA to compare means</guid>
+      <pubDate>Mon, 16 Aug 2021 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>High Dimension Data</title>
       <dc:creator>lruolin</dc:creator>

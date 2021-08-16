@@ -1,0 +1,241 @@
+---
+title: "ANOVA to compare sample means"
+description: |
+  Using ANOVA to compare GI for different noodles
+author:
+  - name: lruolin
+date: 08-16-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Data
+
+The data used below was sourced from [Easy Food Science for Statistics]<https://www.sciencedirect.com/book/9780128142622/easy-statistics-for-food-science-with-r>
+
+# Objective
+
+- To carry out ANOVA to compare the GI for different types of yellow noodles prepared using partial substitution of wheat flour with banana pulp or peel flour. 
+
+- GI is glycemic index, which is a measure of the blood glucose raising ability of the available carbohydrate in foods, and is defined as the incremental area under the glycemic response curve elicited by a portion of food containing 50g of availalbe carbohydrate expressed as a percentage of the area under curve elicited by a 50g glucose in the same subject (Wolever et al., “Measuring the Glycemic Index of Foods.”). In my other life, I was involved in clinical studies looking at glycemic index of foods in Singapore. I vividly remember preparing 50 g of sugar solutions, doing lab tests to calculate what is the equivalent to 50g of total available carbohydrates, as well as running IAUC calculations on Excel before I got to know about SPSS. Nevertheless, it was an enriching journey as a research officer!
+
+
+
+# Load Packages
+
+```{r}
+library(pacman)
+p_load(tidyverse, janitor, datapasta, ggthemes, broom, gridExtra, ggstatsplot,
+       GGally)
+
+```
+
+# Load Data
+
+```{r load data}
+data <- tibble::tribble(
+                ~Noodles, ~GI_1, ~GI_2, ~GI_3,
+          "conventional", 52.83, 53.02, 52.85,
+   "ripe cavendish pulp",  48.8, 49.05, 48.65,
+   "ripe cavendish peel", 50.66, 50.64, 50.95,
+  "green cavendish pulp", 48.41, 47.87, 48.63,
+  "green cavendish peel", 51.49, 51.41, 48.09,
+       "ripe dream pulp", 47.99, 47.73, 49.36,
+       "ripe dream peel",  49.6, 49.36, 49.09,
+      "green dream pulp", 47.26, 47.88,  47.7,
+      "green dream peel", 52.52, 52.55, 52.54
+  ) %>% 
+    mutate(noodles_abbrev =factor(Noodles,
+                                     levels = c("conventional",
+                                     "ripe cavendish pulp",
+                                     "ripe cavendish peel",
+                                     "green cavendish pulp",
+                                     "green cavendish peel",
+                                     "ripe dream pulp",
+                                     "ripe dream peel",
+                                     "green dream pulp",
+                                     "green dream peel"),
+         labels = c("control", "rcpulp", "rcpeel", "gcpulp", "gcpeel",
+                     "rdpulp", "rdpeel", "gdpulp",
+                    "gdpeel"))) 
+
+# data without control
+data_no_control <- data %>% 
+  filter(Noodles != "conventional") %>% 
+    # create additional columns in case I want to look at effect of species/ripeness/part later
+  mutate(noodles2 = Noodles) %>% 
+  separate(noodles2, c("ripe_unripe", "species", "part"))
+
+glimpse(data_no_control)
+```
+
+# Visualization
+
+```{r boxplot for GI}
+
+data_long <- data %>% 
+  pivot_longer(cols = starts_with("GI"),
+               names_to = "reading",
+               values_to = "gi")
+
+
+glimpse(data_long)
+
+summary(data_long)
+
+fig_anova <- data_long%>% 
+  group_by(Noodles) %>% 
+  summarise(mean_gi = mean(gi)) %>% 
+  ggplot(aes(x = fct_reorder(Noodles, mean_gi), y = mean_gi)) +
+  geom_boxplot() +
+  geom_text(aes(label = round(mean_gi, 2)), hjust = -0.25) +
+  scale_y_continuous(limits = c(47, 55)) +
+  labs(title = "Comparing GI of different noodles",
+       subtitle = "Conventional noodles had the highest GI, and flours made with peel have higher GI than that from pulp.",
+       x = "",
+       y = "Mean GI (Average of Triplicates)",
+       caption = "Source: Easy Statistics for Food Science with R") +
+  coord_flip() +
+  theme_clean() 
+```
+
+
+```{r 1-way anova}
+# 1 way anova:
+
+m1_aov <- aov(gi ~ noodles_abbrev, data = data_long)
+summary(m1_aov)
+
+
+# Post-hoc comparison
+
+fig_post_hoc <- TukeyHSD(m1_aov, which = "noodles_abbrev", ordered = F) %>% 
+  tidy() %>% 
+  filter(adj.p.value<0.05) %>% 
+  mutate(high_low = case_when(estimate >=0 ~ "higher",
+                             TRUE ~ "lower")) %>% 
+  ggplot(aes(x = fct_reorder(contrast, estimate), y = estimate)) +
+  geom_point(size = 3, aes(col = high_low)) +
+  geom_errorbar(aes(ymin = conf.low,
+                    ymax = conf.high, col = high_low), width = 0.5) +
+  coord_flip() +
+  labs(title = "95% family-wise confidence level for groups with p<0.05",
+       x = "",
+       y = "Differences in mean levels of noodles") +
+  theme_clean() +
+  theme(legend.position = "none")
+
+grid.arrange(fig_anova, fig_post_hoc)
+```
+
+The results below are slightly different due to different post-hoc analysis. 
+
+```{r}
+# another way, using ggstatsplot
+
+ggbetweenstats(
+  data = data_long,
+  x = noodles_abbrev,
+  y = gi,
+  plot.type = "box",
+  type = "p",
+  package = "ggsci",
+  palette = "nrc_npg",
+  pairwise.display = "significant",
+  title = "Comparing GI for different noodles"
+)
+```
+
+# Confounding?
+
+Let's look at the effect of ripeness, variety and part on GI.
+
+```{r}
+glimpse(data_no_control)
+
+data_long_no_control <- data_no_control %>% 
+  pivot_longer(cols = starts_with("GI"),
+               names_to = "replicates",
+               values_to = "gi")
+
+# main effect
+m2_aov <- aov(gi ~ ripe_unripe + species + part, data = data_long_no_control)
+summary(m2_aov) # residuals reduced compared to m2_aov
+
+# interaction
+
+m3_aov <- aov(gi ~ ripe_unripe * species * part, data = data_long_no_control)
+summary(m3_aov)
+
+# testing the models
+
+anova(m2_aov, m3_aov) # p -s significant so interaction term is not by chance. 
+
+# Checking assumptions --
+
+# to check for homogeneity of variance
+library(car)
+leveneTest(gi ~ ripe_unripe*species*part, data = data_long_no_control)  # p> 0.05, so equal variance can be assumed
+
+# to check whether residuals are normally distributed
+m3_aov$residuals %>% 
+  as_tibble() %>% 
+  ggplot(aes(value)) +
+  geom_histogram() +
+  theme_clean() # slightly right-skewed
+```
+
+From the ANOVA results, the part of banana used (pulp or peel) has an effect on GI. 
+
+There are also interactions between ripeness:species, ripeness: part.
+
+
+# Visualizing interaction
+
+```{r}
+fig_a <- data_long_no_control %>% 
+  ggplot(aes(x = ripe_unripe, y = gi)) +
+  geom_boxplot(aes(fill = species)) +
+  labs(title = "Ripeness:Species Interaction",
+       x = "Green/Ripe",
+       y = "GI noodles",
+       fill = "Species") +
+  theme_clean()
+
+fig_b <- data_long_no_control %>% 
+  ggplot(aes(x = ripe_unripe, y = gi)) +
+  geom_boxplot(aes(fill = part)) +
+  labs(title = "Ripeness:Part Interaction",
+       x = "Green/Ripe",
+       y = "GI",
+       fill = "Part") +
+  theme_clean()
+
+fig_c <- data_long_no_control %>% 
+  ggplot(aes(x = part, y = gi)) +
+  geom_boxplot(aes(fill = species)) +
+  labs(title = "Part:Species Interaction",
+       x = "Part",
+       y = "GI") +
+  theme_clean()
+
+grid.arrange(fig_a, fig_b, fig_c, ncol = 2)
+```
+
+# Learning points
+
+- It may be worthwhile to consider each type of noodles as a combination of three variables: ripeness, part and species to have more rigorous understanding of the ANOVA results.
+
+- When carrying out ANOVA, one needs to check whether the model meets normality assumptions
+
+- Visualizing post-hoc t-tests using the tidyverse way (and being able to filter out significant terms)
+
+- aov (ANOVA) tells you what are the factors that are important. The contribution of each term comes from lm (by looking at the coefficients).
+
+
+
