@@ -1,0 +1,454 @@
+---
+title: "ISLR02 - Statistical Learning/ Exploratory Data Analysis"
+description: |
+  An Introduction to Statistical Learning: With Applications in R, Chapter 2
+author:
+  - name: lruolin
+date: 08-17-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Applied Exercise for Chapter 2
+
+# Chapter overview
+
+- Using a model to predict Y from X. **Prediction** (this would be more applicable for machine learning)
+
+- Using a model to understand relationship between X and Y (how Y changes as a function of X) **Statistical Inference**  (this would be more applicable for design of experiment analysis). 
+
+- Bias-Variance trade-off
+  
+  Variance would mean how the model would vary should there be a change in data points used for training. A linear regression model does not vary very much but a flexible model would vary by quite a lot depending on the training datapoints
+  
+  Bias would refer to the error that exists in the model in predicting the Y variable. A simple model (rigid) would have higher bias, but a flexible model would have lower bias (although it would function more like a black-box)
+  
+- Determining whether the problem is classification (predicting categorical Y) or regression (predicting numerical Y)
+
+# Simple Workflow for Machine Learning:
+
+* collect data
+* import data
+* tidy data
+* transform data
+* exploratory data analysis (EDA): number of rows, columns, determining whether it is numerical/categorical, look for missing values and outliers, determine the distribution of each variable, determine the relationships between variables (correlations), get summary statistics for data
+
+
+* visualize data 
+
+
+* split data into train and test sets
+* preprocess data
+* fit models
+* assess different models using test dataset
+* choose best model based on metrics (eg root mean square error for regression)
+* tune parameters if needed
+
+# Main Learning Points from Exercise below
+
+- using packages such as GGally to automate EDA
+- using melt, pivot_longer, purrr::map to automate plots
+- main things to look out for during EDA:
+  - numerical variables may be categorical
+  - looking at distribution of variable
+  - looking at correlation for potential predictor variables
+  - looking at specific features and which part of dataset the subsetted data falls into and how data may be explained
+
+# College Dataset
+
+Carry out EDA for **College** dataset
+
+## Import data
+```{r}
+# Import data
+library(ISLR2)
+library(janitor)
+library(skimr)
+library(tidyverse)
+library(ggthemes)
+
+college <- read_csv("https://github.com/nguyen-toan/ISLR/blob/master/dataset/College.csv")
+
+
+# raw dataset
+college_raw <- College
+glimpse(college_raw)
+
+# working dataset
+college_working <- college_raw %>% 
+  rownames_to_column() %>% 
+  rename(college = rowname) %>% 
+  clean_names()
+
+
+glimpse(college_working)
+
+```
+
+**Notes**:
+
+- Every row is a college name
+- 777 colleges (rows) and 18 variables
+
+The variables are:
+- private/public  (cat)
+- apps: number of applications received (num)
+- accept: number of applicants accepted (num)
+- enroll: number of new students enrolled (num)
+
+- top10perc: new students from top 10% of high school class (num)
+- top25perc: new students from top 25% of high school class (num)
+
+- f_undergrad: number of full time undergraduates (num)
+- p_undergrad: number of part time undergraduates (num)
+
+- outstate: out of state tuition (num)
+- room_board: room and board costs (num)
+- books: estimated book costs (num)
+- personal: estimated personal spending (num)
+
+- ph_d: percent of faculty with phd (num)
+- terminal: percent of faculty with terminal degree (num)
+- s_f_ratio: student/faculty ratio (num)
+
+- perc_alumni: percent of alumni who donate (num)
+- expend: instructional expenditure per student (num)
+- grad_rate: graduation rate (num)
+
+
+
+## Summary statistics
+
+```{r}
+college_working %>% 
+  select(-college) %>% 
+  skim()
+```
+
+
+
+## EDA using DataExplorer
+
+```{r}
+
+library(DataExplorer)
+library(GGally)
+
+# understanding the dataset
+introduce(college_working) %>% 
+  tibble() %>% 
+  pivot_longer(cols = everything())
+
+# plot basic description for dataset
+plot_intro(college_working)
+
+# plot missing value distribution
+plot_missing(college_working) # no missing data
+
+# plot distribution (discrete)
+plot_bar(college_working)
+
+# plot distribution (numerical)
+plot_density(college_working) 
+
+
+
+```
+
+
+
+```{r, layout = "1-page", fig.width = 18, fig.height=12}
+# correlation heatmap
+plot_correlation(college_working)
+```
+
+```{r}
+college_working %>% 
+  select(private) %>% 
+  table()
+
+# percentage for public, private colleges
+table(college_working$private)/777 * 100
+
+glimpse(college_working)
+
+# min, max for numeric columns
+college_working %>% 
+  pivot_longer(cols = 3:19) %>% 
+  group_by(name) %>% 
+  summarise(min = min(value), 
+            max = max(value))
+
+college_working %>% 
+  filter(grad_rate>100) # outlier
+```
+
+```{r}
+college_working %>% 
+  ggplot(aes(private, outstate)) +
+  geom_boxplot(fill = "darkorange") +
+  theme_clean()
+```
+
+Create a new qualitative variable, Elite, by binning the Top10perc variable
+
+```{r}
+glimpse(college_working)
+
+college_working %>% 
+  ggplot(aes(top10perc)) +
+  geom_histogram(fill = "darkorange", col = "black") +
+  theme_few()
+
+# using case_when
+college_working_b <- college_working %>% 
+  mutate(elite = as.factor(case_when(top10perc > 50 ~ "elite",
+                           TRUE ~ "not_elite"))) %>% 
+  filter(grad_rate <=100)
+
+glimpse(college_working_b)
+
+# to check number of elite vs non_elite
+summary(college_working_b$elite)
+
+# boxplot
+college_working_b %>% 
+  ggplot(aes(elite, outstate)) +
+  geom_boxplot(fill = "darkorange") +
+  theme_clean()
+
+```
+
+```{r}
+# differences between elite, number of applications
+
+college_working_b %>% 
+  ggplot(aes(elite, apps)) +
+  geom_boxplot(fill = "darkorange") +
+  theme_clean()
+
+# which is the outlier? - Rutgers at New Brunswick
+college_working_b %>% 
+  select(college, apps, elite) %>% 
+  filter(apps > 40000)
+```
+
+```{r, layout = "1-page", fig.width = 18, fig.height=12}
+# Looking at boxplots (numerical) vs private/not private
+college_working_b %>%
+  dplyr::select(-college) %>% 
+  reshape::melt() %>% 
+  ggplot(., aes(x = private, value)) +
+  geom_boxplot(fill = "deepskyblue4") +
+  facet_wrap(~variable, ncol = 4, scales = "free") +
+  theme_minimal() +
+  theme(strip.text = element_text(size = 14, face = "bold"))
+
+# looking at boxplots (numerical) vs elite/not elite
+college_working_b %>%
+  dplyr::select(-college) %>% 
+  reshape::melt() %>% 
+  ggplot(., aes(x = elite, value)) +
+  geom_boxplot(fill = "purple") +
+  facet_wrap(~variable, ncol = 4, scales = "free") +
+  theme_minimal() +
+  theme(strip.text = element_text(size = 14, face = "bold"))
+
+
+
+```
+
+
+```{r, layout = "1-page", fig.width = 18, fig.height=12}
+
+college_working_b %>% 
+  ggstatsplot::ggcorrmat() # what correlates with graduation rate?
+
+
+# 
+college_working_b %>% 
+  ggplot(aes(grad_rate, top10perc)) +
+  geom_point() +
+  geom_smooth() +
+  theme_minimal()
+
+college_working_b %>% 
+  ggplot(aes(grad_rate, outstate)) +
+  geom_point() +
+  geom_smooth() +
+  theme_minimal()
+
+college_working_b %>% 
+  ggplot(aes(grad_rate, s_f_ratio)) +
+  geom_point() +
+  geom_smooth() +
+  theme_minimal()
+
+college_working_b %>% 
+  ggplot(aes(grad_rate, perc_alumni)) +
+  geom_point() +
+  geom_smooth() +
+  theme_minimal()
+```
+
+
+# Auto dataset
+
+## Import data
+
+```{r}
+data(Auto)
+glimpse(Auto)
+
+```
+
+```{r}
+
+auto_working <- Auto %>% 
+  mutate(cylinders = factor(cylinders),
+         origin = factor(origin),
+         year_fct = factor(year)
+  ) 
+
+
+glimpse(auto_working)
+
+
+# range for quantitative
+
+auto_working %>% 
+  dplyr::select(displacement:year) %>% 
+  pivot_longer(everything()) %>% 
+  group_by(name) %>% 
+  summarise(min = min(value),
+            max = max(value),
+            range = max - min,
+            mean = mean(value),
+            sd = sd(value))
+  
+# remove 10th to 85th observation
+
+auto_working %>% 
+  slice(-(10:85)) %>% 
+  dplyr::select(displacement:year) %>% 
+  pivot_longer(everything()) %>% 
+  group_by(name) %>% 
+  summarise(min = min(value),
+            max = max(value),
+            range = max - min,
+            mean = mean(value),
+            sd = sd(value))
+  
+```
+
+## Create plots
+
+```{r, layout = "1-page", fig.width = 18, fig.height=12}
+summary(auto_working)
+
+table(auto_working$mpg) %>% 
+  as.data.frame() %>% 
+  group_by(Var1) %>% 
+  count()
+
+auto_working %>% 
+  select(-name) %>% 
+  ggpairs() +
+  theme_classic()
+
+# to predict mog, potentially useful variables would be displacement, horsepower, weight, acceleration, and maybe year. 
+```
+
+
+# Boston housing dataset
+
+```{r}
+library(MASS)
+data("Boston") # Housing Values in Suburbs of Boston
+
+glimpse(Boston) # 506 rows, 14 columns
+
+summary(Boston) # median pt ratio = 19.05
+
+boston_working <- Boston %>% 
+  mutate(charles = factor(chas)) %>% 
+  dplyr::select(-chas)
+```
+
+Dataset:
+
+crim - per capita crime rate by town
+zn - proportion of residential land zoned for lots over 25,000 sq ft
+indus - proportion of non-retail business acres per town
+chas - charles river dummy variable ( = 1 if tract bounds river; 0 if otherwise)
+nox - nitrogen oxides concentration (parts per 10 million)
+rm - average number of rooms per dwelling
+age - proportion of owner-occupied units built prior to 1940
+dis - weighted mean of distances to five Boston employment centres
+rad - index of accessibility to radial highways
+tax - full value property tax per $10,000
+ptratio - pupil-teacher ratio by town
+black - proportion of blacks by town
+lstat - lower status of population (%)
+medv - median value of owner occupied homes in $1000s
+
+
+
+```{r, layout = "1-page", fig.width = 18, fig.height=12}
+boston_working %>% 
+  ggpairs() +
+  theme_classic()
+
+# pos corr: indus, nox, rad, tax, lstat
+# neg corr: medv
+
+```
+
+```{r}
+summary(boston_working$charles)
+```
+
+```{r}
+summary(boston_working$medv)
+
+boston_working %>% 
+  arrange(medv) %>% 
+  slice(n = 1)
+
+# high crime rate, high proportion of industrialization, very old district, not near employment centres, not near radial highways, high pt ratio, high black proportion, high lstat.
+```
+
+```{r}
+summary(boston_working$rm)
+
+boston_working %>% 
+  filter(rm>7) %>% 
+  count()
+
+boston_working %>% 
+  filter(rm > 8) %>% 
+  count()
+
+boston_working %>% 
+  filter(rm > 8) %>% 
+  dplyr::select(-charles) %>% 
+  rowid_to_column() %>% 
+  pivot_longer(cols = crim:medv) %>% 
+  group_by(name) %>% 
+  summarise(mean = mean(value),
+            median = median(value),
+            min = min(value),
+            max = max(value))
+  
+# high age, low black, low crime, near employment centers, low % of lower status of population, high median value, low pt ratio, big houses
+```
+
+
+# Resources:
+
+<https://github.com/onmee/ISLR-Answers/blob/master/2.%20Statistical%20Learning%20Exercises.Rmd>

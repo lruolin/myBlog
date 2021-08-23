@@ -18,11 +18,14 @@ knitr::opts_chunk$set(echo = TRUE)
 # Useful packages for importing data
 
 - datapasta
+- rio (to import multiple excel files) <https://johnmackintosh.net/tag-rio/>
 
 # Useful packages for data exploration
 
 - listviewer (to view lists)
-- skimr (for summary statistics)
+- skimr::skim (for summary statistics)
+- GGally::ggpairs() or ggstatsplot::ggcorrmat - to view correlations of variables
+- DataExplorer - to automate EDA <https://boxuancui.github.io/DataExplorer/>
 
 # Useful packages for data wrangling
 
@@ -48,6 +51,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - grafify
 - superheat (create heatmaps)
 
+
 ## Useful packages for modelling
 
 - interactions
@@ -56,6 +60,8 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Useful packages for statistical inference
 
 - rstatix (pipe friendly framework for basic statistical tests) <https://github.com/kassambara/rstatix>
+- gvlma (to check whether assumptions for normality are met)
+
 
 ## Useful packages for Design of Experiment
 

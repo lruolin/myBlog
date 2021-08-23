@@ -23,6 +23,7 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -115,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["Packages-I-use_files/anchor-4.2.2/anchor.min.js","Packages-I-use_files/bowser-1.9.3/bowser.min.js","Packages-I-use_files/distill-2.2.21/template.v2.js","Packages-I-use_files/header-attrs-2.8/header-attrs.js","Packages-I-use_files/jquery-1.11.3/jquery.min.js","Packages-I-use_files/popper-2.6.0/popper.min.js","Packages-I-use_files/tippy-6.2.7/tippy-bundle.umd.min.js","Packages-I-use_files/tippy-6.2.7/tippy-light-border.css","Packages-I-use_files/tippy-6.2.7/tippy.css","Packages-I-use_files/tippy-6.2.7/tippy.umd.min.js","Packages-I-use_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["Packages-I-use_files/anchor-4.2.2/anchor.min.js","Packages-I-use_files/bowser-1.9.3/bowser.min.js","Packages-I-use_files/distill-2.2.21/template.v2.js","Packages-I-use_files/header-attrs-2.10/header-attrs.js","Packages-I-use_files/header-attrs-2.8/header-attrs.js","Packages-I-use_files/header-attrs-2.9/header-attrs.js","Packages-I-use_files/jquery-1.11.3/jquery.min.js","Packages-I-use_files/popper-2.6.0/popper.min.js","Packages-I-use_files/tippy-6.2.7/tippy-bundle.umd.min.js","Packages-I-use_files/tippy-6.2.7/tippy-light-border.css","Packages-I-use_files/tippy-6.2.7/tippy.css","Packages-I-use_files/tippy-6.2.7/tippy.umd.min.js","Packages-I-use_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1433,7 +1434,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="Packages-I-use_files/header-attrs-2.9/header-attrs.js"></script>
+  <script src="Packages-I-use_files/header-attrs-2.10/header-attrs.js"></script>
   <script src="Packages-I-use_files/jquery-1.11.3/jquery.min.js"></script>
   <script src="Packages-I-use_files/popper-2.6.0/popper.min.js"></script>
   <link href="Packages-I-use_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -1480,11 +1481,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1 id="useful-packages-for-importing-data">Useful packages for importing data</h1>
 <ul>
 <li>datapasta</li>
+<li>rio (to import multiple excel files) <a href="https://johnmackintosh.net/tag-rio/" class="uri">https://johnmackintosh.net/tag-rio/</a></li>
 </ul>
 <h1 id="useful-packages-for-data-exploration">Useful packages for data exploration</h1>
 <ul>
 <li>listviewer (to view lists)</li>
-<li>skimr</li>
+<li>skimr::skim (for summary statistics)</li>
+<li>GGally::ggpairs() or ggstatsplot::ggcorrmat - to view correlations of variables</li>
+<li>DataExplorer - to automate EDA <a href="https://boxuancui.github.io/DataExplorer/" class="uri">https://boxuancui.github.io/DataExplorer/</a></li>
 </ul>
 <h1 id="useful-packages-for-data-wrangling">Useful packages for data wrangling</h1>
 <ul>
@@ -1518,6 +1522,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h2 id="useful-packages-for-statistical-inference">Useful packages for statistical inference</h2>
 <ul>
 <li>rstatix (pipe friendly framework for basic statistical tests) <a href="https://github.com/kassambara/rstatix" class="uri">https://github.com/kassambara/rstatix</a></li>
+<li>gvlma (to check whether assumptions for normality are met)</li>
 </ul>
 <h2 id="useful-packages-for-design-of-experiment">Useful packages for Design of Experiment</h2>
 <ul>

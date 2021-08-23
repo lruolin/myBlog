@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Mon, 16 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 17 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>ISLR02 - Statistical Learning/ Exploratory Data Analysis</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210817 ISLR2 - Chap 2 Statistical Learning</link>
+      <description>An Introduction to Statistical Learning: With Applications in R, Chapter 2</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210817 ISLR2 - Chap 2 Statistical Learning</guid>
+      <pubDate>Tue, 17 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210817 ISLR2 - Chap 2 Statistical Learning/ISLR2-Chap02_Statistical-Learning_files/figure-html5/unnamed-chunk-3-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>ANOVA to compare sample means</title>
       <dc:creator>lruolin</dc:creator>

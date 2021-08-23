@@ -18,6 +18,7 @@ Machine Learning:
 - <https://online.stat.psu.edu/stat508/lesson/1a>
 - <https://web.stanford.edu/~hastie/ISLRv2_website.pdf>
 - <https://github.com/onmee/ISLR-Answers>
+- <https://www.dataschool.io/15-hours-of-expert-machine-learning-videos/>
 - <https://www.tidymodels.org/>
 
 Text Analysis:
