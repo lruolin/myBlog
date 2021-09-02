@@ -1,0 +1,660 @@
+---
+title: "ISLR03 - Linear Regression"
+description: |
+  An Introduction to Statistical Learning: With Applications in R, Chapter 2
+author:
+  - name: lruolin
+date: 08-23-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Applied Exercise for Chapter 3
+
+# Chapter overview - Linear regression
+
+Linear regression can be used to explain the below:
+
+- Is there a relationship between X and Y? Is the relationship a slope, or just a random line? (Look at the slope, the confidence interval the t-statistic/F statistic, the p-value)
+
+- How strong is the relationship between X and Y? - how much of the variace may be explained using R-sq?
+
+- Which X contribute to Y? (check p-values)
+
+- How accurately can we estimate the effect of each X and Y? (Look at the r-square, which tells about the about of variation that can be explained)
+
+- How accurately can we predict future Y? (Look at the confidence interval, look at residual standard error - how much predicted Y would differ from true Y even if model is correct)
+
+- How large is the effect of each X on Y? (Look at the confidence intervals, from the standard error of slope. If the CI includes zero, then the variable is not statistially significant. )
+
+- Is the relationship linear?
+
+- Are there interactions among X variables?
+
+# Interpreting linear regression results
+
+## Linear regression: 
+
+The null hypothesis is that there is no relationship between X and Y.
+
+The alternative hypothesis is that there is some relationship between X and Y.
+
+The t-statistic measures the **number of standard deviations that the estimated coefficient (slope) is away from zero**. If the p-value is small, the null hypothesis can e rejected (there is relationship between X and Y). 
+
+The F-statistic will be close to 1 if there is no relationship between X variables and Y variable (null hypothesis). If the alternative hypothesis, ie there is relationship between X and Y variables, then F will be larger than 1. 
+
+- Using dummy variables to carry out regression for categorical predictor X variables.
+
+- **Hierarchical Principle**: if we include an interaction effect, we should also include the main effects, even if the p-values are not significant for the main effect coefficients. 
+
+- What to watch out for:
+
+  Non-linearity of response-predictor relationships (always check with visualization)
+  
+  Collinearity (check using car::vif)
+  
+  Outliers
+  
+  High-leverage points
+  
+  Whether normality assumptions are met
+  
+  Correlation of error terms (usually occurs in time-series data)
+
+## Regression assumptions (Taken from sthda website, link under Resources:
+
+1. Linearity of data - No outliers, high leverage points
+2. Normality of residuals
+3. Homogeneity of residuals variance -- Homoscedasticity
+4. Independence of residuals error terms
+
+Plots can be generated using ggfortify::autoplot(linear model)
+
+## Comparing two models using anova()
+
+Null hypothesis: both models perform equally well
+Alternative hypothesis: there is a difference between both models
+
+## What can be extracted from lm equation in R:
+
+Using names(model):
+
+- coefficients
+- residuals
+- effects
+- rank
+- fitted.values
+- assign
+- qr
+- df.residual
+- xlevels
+- call
+- terms
+- model
+
+To extract confidence intervals for coefficient estimates:
+
+- confint(model) command
+
+
+To predict y:
+
+- predict(model, <arguments ie x values> )
+
+# Packages
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+library(janitor)
+library(broom)
+library(ggstatsplot)
+library(GGally)
+library(reshape)
+library(skimr)
+library(Hmisc)
+library(gvlma)
+library(ggfortify)
+
+```
+
+
+# Data - Advertising (Numerical Xs)
+
+```{r}
+advertising <- read_csv("https://book.huihoo.com/introduction-to-statistical-learning/Advertising.csv") %>% 
+  clean_names() %>% 
+  select(-x1)
+
+glimpse(advertising)
+
+# Exploratory
+
+summary(advertising)
+
+skimr::skim(advertising) # newspaper is a bit skewed, no missing values
+
+advertising %>% 
+  ggcorrmat()
+
+advertising %>% 
+  ggpairs()
+
+# to filter correlation r values if needed
+advertising %>% 
+  as.matrix(.) %>% 
+  Hmisc::rcorr(.) %>% 
+  tidy(.) %>% 
+  as_tibble()
+
+#  Modelling
+mod_1 <- lm(sales ~ tv, data = advertising)
+summary(mod_1)
+
+
+mod_2 <- lm(sales ~ radio, data = advertising)
+summary(mod_2)
+
+
+mod_3 <- lm(sales ~ newspaper, data = advertising)
+summary(mod_3)
+
+# Backward selection for important variables
+# Putting all the X variables in the equation and then removing the non-significant
+
+mod_4 <- lm(sales ~ tv + radio + newspaper, data = advertising)
+
+summary(mod_4) # newspaper is not a significant predictor
+
+mod_5 <- lm(sales ~tv + radio, data = advertising)
+summary(mod_5)
+
+mod_6 <- lm(sales ~ tv * radio, data = advertising)
+summary(mod_6) # choose this, with interaction
+
+
+# to compare if the improvement is due to chance
+
+anova(mod_6, mod_5) # p<0.05 ie not due to chance
+
+# lower RSE, higher adjusted R-sq for mod_6
+
+gvlma(mod_6) # actually this model does not meet the assumptions for normality
+
+# Efficient way of comparing two models
+
+jtools::export_summs(mod_5, mod_6,
+                     error_format = "[{conf.low},{conf.high}],
+                                      (p = {p.value}",
+                     model.names = c("Main Effects", "Interaction Effects"),
+                     digits = 5)
+```
+
+# Data - Credit (Qualitative Xs)
+
+## Import and carry out EDA
+
+```{r}
+# Import data from ISLR Package
+
+library(ISLR)
+
+data(Credit)
+
+glimpse(Credit)
+
+library(DataExplorer)
+
+introduce(Credit) %>% 
+  pivot_longer(everything()) # no missing values, 4 discrete columns
+
+# gender, student, married, ethnicity
+
+credit <- Credit %>% 
+  janitor::clean_names() %>% 
+  mutate(cards = factor(cards)) # could be factor or number
+
+# EDA
+
+
+library(cowplot)
+
+# categorical
+credit_nested_cat <- credit %>% 
+  select(where(is.factor)) %>% 
+  pivot_longer(everything()) %>% 
+  group_split(name) %>% 
+  imap(~ ggplot(data = .x) +
+         geom_bar(aes(value), fill = "darkorange", col = "black") +
+         labs(title = paste(unique(.x$name))) +
+         theme_classic()
+       )
+
+plot_grid(credit_nested_cat[[1]],
+          credit_nested_cat[[2]],
+          credit_nested_cat[[3]],
+          credit_nested_cat[[4]],
+          credit_nested_cat[[5]]
+      )
+
+# numeric
+credit_nested_num <- credit %>% 
+  select(-id) %>% 
+  select(where(is.numeric)) %>% 
+  pivot_longer(cols = income:balance) %>% 
+  group_split(name) %>% 
+  imap( ~ ggplot(data = .x) +
+          geom_histogram(aes(value), fill = "dodgerblue", col = "black") +
+          labs(title = paste(unique(.x$name))) +
+          theme_classic()
+          )
+
+
+plot_grid(credit_nested_num[[1]],
+  credit_nested_num[[2]],
+  credit_nested_num[[3]],
+  credit_nested_num[[4]],
+  credit_nested_num[[5]],
+  credit_nested_num[[6]], ncol = 3)
+
+# corr matrix
+
+library(ggstatsplot)
+
+credit %>% 
+  ggcorrmat()
+
+```
+
+## Recode dummy variables for gender
+
+```{r}
+credit_recoded <- credit %>% 
+  mutate(gender_1_female = ifelse(credit$gender == "Female", 1, 0)) %>% 
+  mutate(ethnicity_2 = ethnicity) # for later
+
+glimpse(credit_recoded)
+
+table(credit_recoded$gender_1_female)
+
+# check
+table(credit$gender)
+```
+
+
+## Linear Regression
+
+```{r}
+credit_mod_1 <- lm(balance ~ gender_1_female, data = credit_recoded)
+summary(credit_mod_1)
+
+# average credit card balance for males is $509.80
+# females are estimated to carry $19.73 in additional debt for a total
+# of 509.80 + 19.73
+# but there is no statistical evidence for this since p value is > 0.05
+```
+
+Alternatively, the dummy variable can also be coded as (-1) and (1).
+The interpretation will be different - **the intercept will be the average credit card balance**, ignoring the gender effect. Similarly, the slope will be the **average difference between males and males** (halved)
+
+## More than two levels for categorical predictors
+
+```{r}
+# using recipes package
+
+library(recipes)
+
+credit_recoded_b <- credit_recoded %>% 
+  recipe(balance ~. ) %>% 
+  step_dummy(ethnicity,
+             one_hot = T) %>% 
+  prep() %>% 
+  bake(credit_recoded)
+
+glimpse(credit_recoded_b)
+
+# linear regression
+
+credit_mod_2 <- lm(balance ~ ethnicity_Asian + ethnicity_Caucasian,
+                   data = credit_recoded_b)
+
+summary(credit_mod_2)
+gvlma(credit_mod_2)
+
+# no statistical evidence of a real difference in credit balance between ethnicities
+
+# actually linear model is not suitable in the first place
+
+```
+
+# Data - Boston housing
+
+## Import
+
+EDA was previously carried out in chapter 2.
+
+```{r}
+library(MASS)
+data(Boston)
+
+glimpse(Boston)  # 13 predictors (X), Y (medv)
+
+
+Boston_nested_num <- Boston %>% 
+  pivot_longer(cols = everything()) %>% 
+  group_split(name) %>% 
+  imap( ~ ggplot(data = .x) +
+          geom_histogram(aes(value), fill = "dodgerblue", col = "black") +
+          labs(title = paste(unique(.x$name))) +
+          theme_classic()
+          )
+
+
+plot_grid(Boston_nested_num[[1]],
+  Boston_nested_num[[2]],
+  Boston_nested_num[[3]],
+  Boston_nested_num[[4]],
+  Boston_nested_num[[5]],
+  Boston_nested_num[[6]],
+  Boston_nested_num[[7]],
+  Boston_nested_num[[8]],
+  Boston_nested_num[[9]],
+  Boston_nested_num[[10]],
+  Boston_nested_num[[11]],
+  Boston_nested_num[[12]],
+  ncol = 3)
+
+# some data transformations would be required!
+```
+
+
+## Linear regression using lstat 
+
+lstat: lower status of population (%)
+
+```{r}
+# Visualizations
+Boston %>% 
+  dplyr::select(lstat) %>% 
+  ggplot(aes(x = lstat)) +
+  geom_histogram(fill = "deepskyblue4", col = "black") +
+  theme_classic()
+
+mean(Boston$lstat) # 12.65
+median(Boston$lstat) # 11.36
+min(Boston$lstat) # 1.73
+max(Boston$lstat) # 37.97
+
+Boston %>% 
+  ggplot(aes(x = lstat, y = medv)) +
+  geom_point(col = "deepskyblue4") +
+  geom_smooth(method = "lm") +
+  theme_classic() # not very suitable
+
+Boston %>% 
+  ggplot(aes(x = lstat, y = medv)) +
+  geom_point(col = "deepskyblue4") +
+  geom_smooth(method = "lm") +
+  theme_classic() # not very suitable
+
+# Further proof that simple lm is not suitable
+boston_mod_1 <- lm(medv ~ lstat, data = Boston)
+
+gvlma(boston_mod_1) # failed
+
+autoplot(boston_mod_1)
+
+summary(boston_mod_1)
+
+```
+
+## Non-linear transformation
+
+```{r}
+# Performing non-linear transformation
+
+Boston %>% 
+  ggplot(aes(x = lstat, y = medv)) +
+  geom_point(col = "darkorange") +
+  stat_smooth(method = "lm", formula = y ~ x + I(x^2), col = "darkorange") +
+  theme_classic()
+
+# modelling
+boston_mod_2 <- lm(medv ~ lstat + I(lstat^2), data = Boston)
+summary(boston_mod_2)
+
+# using anova to compare
+anova(boston_mod_1, boston_mod_2)
+# quadratic fit is a better fit since p<0.05
+```
+
+
+```{r}
+# Polynomial transformation
+
+boston_mod_poly <- lm(medv ~poly(lstat, 5), data = Boston)
+summary(boston_mod_poly) # improved fit since adjusted r-sq improves
+```
+
+
+## Log transformation
+
+```{r}
+boston_mod_log <- lm(medv ~ log(rm), data = Boston)
+summary(boston_mod_log)
+```
+
+
+## Multiple linear regression using Boston dataset
+
+```{r}
+boston_mod_3 <- lm(medv ~ ., data = Boston)
+
+summary(boston_mod_3)
+
+# check for multicollinearity
+
+library(car)
+car::vif(boston_mod_3) %>% 
+  as.data.frame()
+
+# Variables with vif > 4
+car::vif(boston_mod_3) %>% 
+  as.data.frame() %>% 
+  filter(.>4)
+
+# nox: nitrogen oxide concentration
+# rad: accessbility to radial highways
+# tax: full value property tax rate
+
+Boston %>% 
+  ggcorrmat()
+
+# filtering out non significant terms
+
+boston_mod_4 <- lm(medv ~ . -age - indus,
+                   data = Boston)
+
+summary(boston_mod_4)
+gvlma(boston_mod_4) # failed all
+autoplot(boston_mod_4)
+
+# to get the fit:
+summary(boston_mod_4)$r.sq
+
+# to get RSE:
+summary(boston_mod_4)$sigma
+
+# can also use glance
+glance(boston_mod_4)
+
+# to get coefficients in tidy format:
+boston_mod_4$coefficients %>% 
+  tidy()
+```
+
+## Interaction
+
+```{r}
+boston_mod_5 <- lm(medv ~ lstat * age, data = Boston)
+
+summary(boston_mod_5)
+```
+
+
+### Predicing crime rate
+```{r}
+# Fit a linear regression model to predict crime rate for each predictor
+
+Boston %>% 
+  dplyr::select(-crim) %>% 
+  map(~lm(Boston$crim ~ .x, data = Boston)) %>% 
+  map(summary) %>% 
+  map(c("coefficients")) %>% 
+  map_dbl(8) %>%  # 8th element = p-value
+  tidy %>% 
+  arrange(desc(x)) %>% 
+  dplyr::rename("p-value" = x)
+```
+
+All predictors are significant except chas.
+
+
+```{r}
+boston_crim_plots <- Boston %>% 
+  pivot_longer(cols = zn:medv,
+                names_to = "parameter") %>% 
+  group_by(parameter) %>% 
+  nest() %>% 
+  mutate(plot = map2(.x = data, 
+                     .y = parameter, 
+                     ~ggplot(data = .x, aes(value, crim)) +
+                      geom_point() +
+                      geom_smooth(method = "lm") +
+                      labs(title = .y) +
+                      theme_classic()))
+           
+
+boston_crim_plots$plot[1]
+boston_crim_plots$plot[2] 
+boston_crim_plots$plot[3] 
+boston_crim_plots$plot[4] 
+boston_crim_plots$plot[5] 
+boston_crim_plots$plot[6] 
+boston_crim_plots$plot[7] 
+boston_crim_plots$plot[8] 
+boston_crim_plots$plot[9] 
+boston_crim_plots$plot[10] 
+boston_crim_plots$plot[11] 
+boston_crim_plots$plot[12]
+           
+
+```
+
+Fit a multiple regression model
+
+```{r}
+boston_mod_7 <- lm(crim ~ ., data = Boston)
+summary(boston_mod_7)
+
+# only zn, dis, rad, medv are significant
+
+```
+
+
+# Data - Carseats
+
+```{r}
+library(ISLR2)
+data(Carseats)
+
+head(Carseats)
+
+carseats_mod_1 <- lm(Sales ~ . + Income:Advertising + Price:Age,
+                     data = Carseats)
+
+
+summary(carseats_mod_1)
+gvlma(carseats_mod_1)
+car::vif(carseats_mod_1)
+autoplot(carseats_mod_1)
+
+# Good and medium shelving location increases sales
+
+```
+
+Fit a multiple regression model to predict Sales using Price, Urban, US
+
+```{r}
+carseats_mod_2 <- lm(Sales ~ Price + Urban + US, data = Carseats)
+summary(carseats_mod_2)
+
+autoplot(carseats_mod_2) # there is evidence of high leverage points and outliers from scale-location and residuals vs leverage plots
+
+gvlma(carseats_mod_2)
+
+# only price and US (YES) are significant
+
+# Sales = (-0.054459*Price + 1.200573(US YES) + 13.043469)
+# Urban is not a significant predictor
+
+carseats_mod_3 <- lm(Sales ~ Price + US, data = Carseats)
+summary(carseats_mod_3)
+
+# only 23% of variance is explained
+
+confint(carseats_mod_3) # confidence intervals for the coefficients
+
+
+```
+
+
+# Data - Auto
+
+```{r}
+data(Auto)
+head(Auto)
+
+auto_mod_1 <- lm(mpg ~ horsepower, data = Auto)
+summary(auto_mod_1)
+
+# horsepower coefficient: p<0.05; strong relationship betweeen x and y
+# r-sq is 0.6049, 60% of variance is explained by model
+# slope is -0.15, when horsepower increases by 1 unit, mpg decreases by 0.158.
+
+predict(auto_mod_1, data.frame(horsepower = 98, interval = "prediction"))
+predict(auto_mod_1, data.frame(horsepower = 98, interval = "confidence"))
+
+# Visualization
+Auto %>% 
+  ggplot(aes(horsepower, mpg)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_classic() # may not be very suitable
+
+autoplot(auto_mod_1)
+
+# residuals vs fitted: deviates from linearity
+# scale-location: some outliers
+# residuals vs leverage: some points are high leverage
+
+gvlma(auto_mod_1)
+# violated assumptions
+
+```
+
+
+# Resources:
+
+ISLR2, Chapter 3
+
+<http://www.sthda.com/english/articles/39-regression-model-diagnostics/161-linear-regression-assumptions-and-diagnostics-in-r-essentials/>
+
+<https://sebastiansauer.github.io/multiple-lm-purrr2/>
+
+<https://github.com/onmee/ISLR-Answers/blob/master/3.%20Linear%20Regression%20Exercises.Rmd>

@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 17 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Aug 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>ISLR03 - Linear Regression</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210824 ISLR2 - Chap 3 Linear regression</link>
+      <description>An Introduction to Statistical Learning: With Applications in R, Chapter 2</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210824 ISLR2 - Chap 3 Linear regression</guid>
+      <pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210824 ISLR2 - Chap 3 Linear regression/ISLR2-Chap03_Linear-regression_files/figure-html5/unnamed-chunk-2-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>ISLR02 - Statistical Learning/ Exploratory Data Analysis</title>
       <dc:creator>lruolin</dc:creator>
