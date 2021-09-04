@@ -1,0 +1,225 @@
+---
+title: "Research and Development Expenditure by Area of Research in Singapore"
+description: |
+  Exporting data out from Singapore Department of Statistics
+author:
+  - name: lruolin
+date: 09-01-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Learning points
+
+- Exporting data out from Singapore Department of Statistics using API
+- Trying out different ggplot themes: BBC style, and using grafify.
+- Understanding how R&D Expenditure is divided among different sectors
+
+# Load packages
+
+```{r}
+library(pacman)
+p_load(httr, jsonlite, lubridate, tidyverse, bbplot,
+       grafify) # bbc style, grafify
+```
+
+
+# Import data
+
+The codes below were adapted from <https://www.infoworld.com/article/3434627/get-api-data-with-r.html>
+
+```{r}
+my_url <- paste0("https://tablebuilder.singstat.gov.sg/api/table/tabledata/M081331")
+
+my_raw_result <- httr::GET(my_url)
+
+content <- httr::content(my_raw_result, as = "text") %>% 
+  fromJSON()
+
+# Data is stored in first list
+# content[1]
+
+text <- content[["Data"]][["row"]][["rowText"]]
+
+text <- text %>% as_tibble %>% rowid_to_column()
+```
+
+## Extracting lists
+
+```{r}
+food_pte <- content[["Data"]][["row"]][["columns"]][[7]] %>% 
+  mutate(industry = "Agricultural & Food Sciences",
+         sector = "Private")
+
+food_govt <- content[["Data"]][["row"]][["columns"]][[17]] %>% 
+  mutate(industry = "Agricultural & Food Sciences",
+         sector = "Government")
+
+food_pri <- content[["Data"]][["row"]][["columns"]][[22]] %>% 
+  mutate(industry = "Agricultural & Food Sciences",
+         sector = "Public Research Institutes")
+
+food_ihl <- content[["Data"]][["row"]][["columns"]][[12]] %>% 
+  mutate(industry = "Agricultural & Food Sciences",
+         sector = "Institutes of Higher Learning")
+
+#
+engin_pte <- content[["Data"]][["row"]][["columns"]][[8]] %>% 
+  mutate(industry = "Engineering & Technology",
+         sector = "Private")
+
+engin_govt <- content[["Data"]][["row"]][["columns"]][[18]] %>% 
+  mutate(industry = "Engineering & Technology",
+         sector = "Government")
+
+engin_pri <- content[["Data"]][["row"]][["columns"]][[23]] %>% 
+  mutate(industry = "Engineering & Technology",
+         sector = "Public Research Institutes")
+
+engin_ihl <- content[["Data"]][["row"]][["columns"]][[13]] %>% 
+  mutate(industry = "Engineering & Technology",
+         sector = "Institutes of Higher Learning")
+
+#
+biomed_pte <- content[["Data"]][["row"]][["columns"]][[9]] %>% 
+  mutate(industry = "Biomedical & Related Sciences",
+         sector = "Private")
+
+biomed_govt <- content[["Data"]][["row"]][["columns"]][[19]] %>% 
+  mutate(industry = "Biomedical & Related Sciences",
+         sector = "Government")
+
+biomed_pri <- content[["Data"]][["row"]][["columns"]][[24]] %>% 
+  mutate(industry = "Biomedical & Related Sciences",
+         sector = "Public Research Institutes")
+
+biomed_ihl <- content[["Data"]][["row"]][["columns"]][[14]] %>% 
+  mutate(industry = "Biomedical & Related Sciences",
+         sector = "Institutes of Higher Learning")
+
+#
+natsci_pte <- content[["Data"]][["row"]][["columns"]][[10]] %>% 
+  mutate(industry = "Natural Sciences (Excl Biological Sciences)",
+         sector = "Private")
+
+natsci_govt <- content[["Data"]][["row"]][["columns"]][[20]] %>% 
+  mutate(industry = "Natural Sciences (Excl Biological Sciences)",
+         sector = "Government")
+
+natsci_pri <- content[["Data"]][["row"]][["columns"]][[25]] %>% 
+  mutate(industry = "Natural Sciences (Excl Biological Sciences)",
+         sector = "Public Research Institutes")
+
+natsci_ihl <- content[["Data"]][["row"]][["columns"]][[15]] %>% 
+  mutate(industry = "Natural Sciences (Excl Biological Sciences)",
+         sector = "Institutes of Higher Learning")
+
+#
+energy_pte <- content[["Data"]][["row"]][["columns"]][[27]] %>% 
+  mutate(industry = "Energy & Others",
+         sector = "Private")
+
+energy_govt <- content[["Data"]][["row"]][["columns"]][[28]] %>% 
+  mutate(industry = "Energy & Others",
+         sector = "Government")
+
+energy_pri <- content[["Data"]][["row"]][["columns"]][[29]] %>% 
+  mutate(industry = "Energy & Others",
+         sector = "Public Research Institutes")
+
+energy_ihl <- content[["Data"]][["row"]][["columns"]][[30]] %>% 
+  mutate(industry = "Energy & Others",
+         sector = "Institutes of Higher Learning")
+
+grand_total <- content[["Data"]][["row"]][["columns"]][[1]]
+```
+
+## Bind into a dataframe
+
+```{r}
+expenditure <- bind_rows(
+  food_govt, food_ihl, food_pri, food_pte,
+  engin_govt, engin_ihl, engin_pri, engin_pte,
+  biomed_govt, biomed_ihl, biomed_pri, biomed_pte,
+  natsci_govt, natsci_ihl, natsci_pri, natsci_pte,
+  energy_govt, energy_ihl, energy_pri, energy_pte,
+) %>% 
+  mutate(year = as.double(key)) %>% 
+  left_join(grand_total, by = "key", suffix = c("_ind", "_total")) %>% 
+  arrange(industry, year) %>% 
+  mutate(value_ind = as.numeric(value_ind),
+         value_total = as.numeric(value_total)) %>% 
+  group_by(industry, year) %>% 
+  mutate(industry_total = sum(value_ind),
+         percent_institute = value_ind/industry_total*100,
+         percent_total = industry_total/value_total * 100,
+         percent_sector_of_sector_total = round(percent_institute, 2),
+         percent_industry_of_total_expenditure = round(percent_total, 2)) 
+
+glimpse(expenditure)
+```
+
+# Look at Industries
+
+```{r, layout="l-page", fig.width = 16, fig.height=12}
+expenditure %>% 
+  dplyr::select(year, industry, percent_industry_of_total_expenditure) %>% 
+  distinct(year, percent_industry_of_total_expenditure, .keep_all = T) %>% 
+  ggplot(aes(year, percent_industry_of_total_expenditure, col = industry)) +
+  geom_line(aes(col = industry), size = 2) +
+  scale_x_continuous(breaks = seq(2000, 2020, 4),
+                     expand = c(0,0)) +
+  labs(title = "Twenty Years of R & D Expenditure in Singapore",
+       subtitle = "More than half the expenditure is spent on Engineering and Technology.",
+       caption = "Source: Department of Statistics Singapore",
+       x = "",
+       y = "% of Total Expenditure") +
+  bbc_style() +
+  theme(legend.position = "right")
+```
+
+# Looking at Agricultural and Food Science
+
+```{r, layout="l-page", fig.width = 16, fig.height = 12}
+expenditure %>% 
+  filter(industry == "Agricultural & Food Sciences") %>% 
+  dplyr::select(year, sector, value_ind, industry_total, percent_sector_of_sector_total) %>%
+  filter(year %in% c(1999,2009, 2019)) %>% 
+  grafify::plot_befafter_colors(year, value_ind,
+                                sector,
+                                symsize = 5,
+                                symthick = 2,
+                                ColPal = "vibrant") +
+  labs(y = "Millions (SGD)",
+       x = "",
+       title = "Change in R & D Expenditure for Agricultural and Food Sciences",
+       subtitle = "There is a sharp increase in spending in Private sector",
+       fill = "Sector",
+       caption = "Source: Department of Statistics Singapore") +
+  theme(legend.position = "bottom")
+```
+
+That's interesting, the spending in PRI (which includes A*STAR had actually decreased in 2019 as compared to 1999.
+
+I think this may be that the data for 2020 had not been taken into account, as A*STAR had a new research institute, SIFBI which was officially launched in 2020.
+
+The increase in expenditure in Private sector definitely impacted the job market. When I graduated in 2008, there were not as many choices in the job market as compared to now. The food science graduates are definitely beneficiaries from the efforts of EDB to grow Singapore into a food science, technology and nutrition hub in Singapore!
+
+I honestly feel that the future of my field is the Industry 4.0 revolution. How data is harnessed when making decisions, in an efficient way for intuitive analysis. This could be chemometrics, machine learning. The widespread use of sensors in the production plants, the use of high-end instruments for analysis, how supply chain manages inventories,  all these involve capturing data, and making predictions about classes, numbers. There is definitely a lot of room for growing in Singapore and we are at quite a teenager stage as compared to countries like Netherlands, USA, especially in the field of machine learning and chemometrics.. 
+
+
+
+# References
+<https://www.infoworld.com/article/3434627/get-api-data-with-r.html>
+
+<https://www.a-star.edu.sg/docs/librariesprovider1/default-document-library/news-events/publications/national-survey-of-r-d-2018.pdf>
+
+<https://www.a-star.edu.sg/News-and-Events/a-star-news/news/publicity-highlights/a-star-launches-new-research-institute-to-support-singapore's-food-innovation-ecosystem>)
+
+
+
