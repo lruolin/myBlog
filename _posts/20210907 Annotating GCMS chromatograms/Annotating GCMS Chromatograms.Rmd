@@ -1,0 +1,205 @@
+---
+title: "Annotating GCMS chromatograms"
+description: |
+  Using ggplot for GCMS chromagrams visualization
+author:
+  - name: lruolin
+date: 09-07-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Learning points
+
+- how to read GCMS data into R
+- how to extract the scan time and TIC embedded within the lists
+- how to use ggplot for data visualization and annotation
+
+# Things to improve
+
+- reading files using iteratively?
+- using more updated xcms tutorial found at <https://bioconductor.org/packages/release/bioc/vignettes/xcms/inst/doc/xcms.html>
+
+
+# Load packages
+```{r}
+library(pacman)
+
+p_load(tidyverse, metaMSdata, xcms)
+
+```
+
+
+
+# Import data
+
+The cdf files were taken from metaMSdata package, available on Bioconductor. 
+
+```{r}
+
+# define path for data stored in metaMSdata package
+cdfpath <- system.file("extdata", package = "metaMSdata")
+files <- list.files(cdfpath, "_RP_pos", full.names = T)
+files
+
+file_a <- xcmsRaw("/Library/Frameworks/R.framework/Versions/4.1/Resources/library/metaMSdata/extdata/STDmix_RP_pos01.CDF")
+
+file_b <- xcmsRaw("/Library/Frameworks/R.framework/Versions/4.1/Resources/library/metaMSdata/extdata/STDmix_RP_pos02.CDF")
+
+file_c <- xcmsRaw("/Library/Frameworks/R.framework/Versions/4.1/Resources/library/metaMSdata/extdata/STDmix_RP_pos03.CDF")
+
+file_d <- xcmsRaw("/Library/Frameworks/R.framework/Versions/4.1/Resources/library/metaMSdata/extdata/STDmix_RP_pos04.CDF")
+
+```
+
+
+## Extracting lists for retention time and TIC
+
+```{r}
+file_a_tic <- file_a@tic
+
+file_a_scan_time <- file_a@scantime
+
+
+df_file_a <- bind_cols(file_a_scan_time, file_a_tic) %>% mutate(sample = "a")
+
+names(df_file_a) <- c("scan_time", "tic", "sample")
+
+#
+
+file_b_tic <- file_b@tic
+
+file_b_scan_time <- file_b@scantime
+
+df_file_b <- bind_cols(file_b_scan_time, file_b_tic) %>%
+  mutate(sample = "b")
+
+names(df_file_b) <- c("scan_time", "tic", "sample")
+
+#
+
+file_c_tic <- file_c@tic
+
+file_c_scan_time <- file_c@scantime
+
+df_file_c <- bind_cols(file_c_scan_time, file_c_tic) %>%
+  mutate(sample = "c")
+
+names(df_file_c) <- c("scan_time", "tic", "sample")
+
+#
+
+file_d_tic <- file_d@tic
+
+file_d_scan_time <- file_d@scantime
+
+df_file_d <- bind_cols(file_d_scan_time, file_d_tic) %>%
+  mutate(sample = "d")
+
+
+names(df_file_d) <- c("scan_time", "tic", "sample")
+
+# df_ all
+
+df_all <- rbind(df_file_a,
+
+                df_file_b,
+
+                df_file_c,
+
+                df_file_d) %>%
+
+  mutate(sample = factor(sample))
+
+ 
+
+df_all$sample %>% unique()
+
+ 
+
+glimpse(df_all)
+```
+
+## GGplot
+
+```{r}
+df_all %>% 
+  ggplot(aes(x = scan_time/60,
+             y = tic, col = sample)) +
+  
+  geom_line(aes(col = sample), size = 1) +
+
+  # facet_grid(sample ~.) +
+
+  labs(x = "scan_time(min)",
+       caption = "Source: metaMSdata package",
+       col = "Sample") +
+
+  theme_classic()
+```
+
+## Adding Annotations
+
+```{r}
+library(datapasta)
+
+annotate_df <- tibble::tribble(
+
+            ~Compound,   ~rt,
+
+           "Linalool", 17.86,
+  "Methyl salicylate", 22.44,
+  "Ethyl hexanoate", 10.77
+
+  )
+
+join_annotate <- df_all %>%
+  mutate(scan_time_round = round(scan_time/60, 2)) %>%
+  left_join(annotate_df, by = c("scan_time_round" = "rt")) %>%
+  filter(!duplicated(Compound)) %>%
+  filter(!is.na(Compound))
+
+# Adding to plot
+df_all %>%
+  ggplot(aes(x = scan_time/60,
+             y = tic, col = sample)) +
+
+  geom_line(aes(col = sample), size = 1) +
+
+  # facet_grid(sample ~.) +
+
+  labs(x = "scan_time(min)",
+       title = "GCMS chromagram overlay for Standard Mixes",
+       caption = "Source: metaMSdata package") +
+
+  scale_x_continuous(expand = c(0,0),
+                     breaks = seq(0, 70, 5)) +
+
+  scale_y_continuous(expand = c(0,0),
+                     breaks = seq(0, 30000, 5000)) +
+
+  ggrepel::geom_text_repel(data = join_annotate,
+                           aes(x = scan_time_round,
+                               label = Compound),
+                           col = "darkblue",
+                           nudge_y = 5000,
+                           size = 5) +
+
+  theme_classic() +
+
+  theme(axis.title = element_text(size = 12, face = "bold"))
+```
+
+
+# References
+
+Wehrens R, Franceschi P (2021). metaMSdata: Example CDF data for the metaMS package. R package version 1.28.0.
+
+<https://www.intechopen.com/chapters/52527>
+
+

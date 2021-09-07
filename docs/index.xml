@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 01 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 07 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Annotating GCMS chromatograms</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210907 Annotating GCMS chromatograms</link>
+      <description>Using ggplot for GCMS chromagrams visualization</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210907 Annotating GCMS chromatograms</guid>
+      <pubDate>Tue, 07 Sep 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20210907 Annotating GCMS chromatograms/Annotating-GCMS-Chromatograms_files/figure-html5/unnamed-chunk-4-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Research and Development Expenditure by Area of Research in Singapore</title>
       <dc:creator>lruolin</dc:creator>
