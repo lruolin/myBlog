@@ -1,0 +1,99 @@
+---
+title: "Plot a GC-FID Chromatogram"
+description: |
+  Using ggplot for GCFID chromagram visualization
+author:
+  - name: lruolin
+date: 09-30-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Learning points
+
+- Importing GCFID data into R (From .csv file)
+- Using left_join to import Kovats Index values based on retention times
+- Using plotly to create FID chromatogram with KI values
+
+# Thoughts
+
+After the last post on GC-MS chromatogram annotation, I was thinking about how to do the same for a GC-FID chromatogram. I searched the internet to find a package that can import the GC data file and plot the chromatogram, to no avail.
+
+I went back to my instrument, and found that the signal could be exported out as a .csv file! That solved my problem, I can easily import the .csv file into R and then use ggplot to visualize the chromatogram. The retention time could be expressed in minutes.
+
+When carrying out peak identification, I often have to toggle between the instrument software, AMDIS, NIST search, and my excel spreadsheet with calculated KI values. 
+
+My workaround is to peg the KI values to the retention time (rounded off to the same number of decimal places), and then use plotly to visualize. 
+
+The main learning point I had from this exercise, was the difference in rendering speed between ggplotly and plot_ly, as described [here](https://plotly.com/r/line-charts/). I was very used to ggplotly, after creating the ggplot object, but the number of points was too many and rendering was very slow. Using plot_ly greatly reduced the processing time required!
+
+```{r, example}
+
+# taken from https://plotly.com/r/line-charts/
+library(plotly)
+
+x <- c(1:100)
+random_y <- rnorm(100, mean = 0)
+data <- data.frame(x, random_y)
+
+fig <- plot_ly(data, x = ~x, y = ~random_y, type = 'scatter', mode = 'lines')
+
+fig
+```
+
+I love how useful plotly is! Sometimes, when printing out the chromatogram, I either did not choose the right zoom and miss out the small peaks or am unable to view the large peaks in totality. Plotly allows me to zoom in and out as I want to view the chromatogram, and I can also see the KI to match that of the NIST database. 
+
+In addition, I can also annotate the peak names after identifying if I want. 
+
+# Sidenote
+
+When I was new to flavor analysis, I was often overwhelmed by peak identification, keying in of the peak areas and names, keying in the CAS numbers and FEMA numbers *manually* for every single report.
+
+Over time, I learnt how to use vlookup and create my own database.
+
+I learnt how to export data from commercial databases (such as Flavorbase)
+
+With R, I learnt how to bypass vlookup and just merge in the database using left_join, full_join. 
+
+I learnt how to merge the areas for different samples into one table efficiently with full_join.
+
+# What comes after?
+
+What if I have a lot of data to process, such as looking at the change in flavor over time in a food product? 
+
+One way is to quantify each compound (using internal standards to calculate).
+
+More often than not, we compare the change as compared to the reference sample kept in fridge/freezer, and calculate the peak area ratio.
+
+Borrowing from the genomics field, one can then use the volcano plot to look at the plot of -log10(p-value) vs log2(Fold Change), as described [here](https://biocorecrg.github.io/CRG_RIntroduction/volcano-plots.html). This allows for clear visualization of what are the compounds that became significantly higher or lower.
+
+If there are more data to be processed, one can also look at PCA for clustering. 
+
+# Workflow
+
+There are many packages in R that can help in data processing and interpretation, such as xcms. I am still the ropes for this! Other packages that I need to learn are flagme, RMet, GCAlignR, enviGCMS, ChemoSpec, metaMS. 
+
+The general workflow is:
+
+- Data acquisition
+- Raw data processing (Import into R)
+- Data pre-processing (Missing values? Peak alignment?)
+- Data pre-treatment (Normalizing, Scaling)
+- Univariate analysis (Fold Change, t-test, Volcano Plot)
+- Multivariate analysis (Clustering, PLS)
+- Feature visualization (Heatmaps, Boxplots)
+
+Source: <https://www.intechopen.com/chapters/52527>
+
+Multivariate analysis would be interesting in terms of looking at shelf life study results, to see if the different time points could be correctly clustered together and what were the discerning factors. 
+
+There is so much to learn! 
+
+This is a wordy post with very little codes as I would need to work with open-source data in order to show the codes... so instead of showing the codes I wrote for work here, I can only jot down the main points so that I can refer back to this corner in the future. Hope I can find some example datasets to work with online!
+
+I also need to work on using functions and purrr to do iterative analysis efficiently, instead of copying and pasting chunks of codes...

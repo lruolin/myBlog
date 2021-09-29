@@ -7,7 +7,15 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 07 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 30 Sep 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Plot a GC-FID Chromatogram</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20210929 Plotting GC-FID Chromatograms</link>
+      <description>Using ggplot for GCFID chromagram visualization</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20210929 Plotting GC-FID Chromatograms</guid>
+      <pubDate>Thu, 30 Sep 2021 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Annotating GCMS chromatograms</title>
       <dc:creator>lruolin</dc:creator>
