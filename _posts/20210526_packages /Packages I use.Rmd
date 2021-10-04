@@ -84,9 +84,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - R Packages <https://r-pkgs.org/>
 - R packages primer <https://kbroman.org/pkg_primer/>
-- Big Book of R <https://www.bigbookofr.com/>
- 
- 
+- Big Book of R <https://www.bigbookofr.com/>404040
 ## Data Visualization
  
  - <https://informationisbeautiful.net/visualizations/dataviz-books/>

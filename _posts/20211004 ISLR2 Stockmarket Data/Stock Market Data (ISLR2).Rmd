@@ -1,0 +1,200 @@
+---
+title: "The Stock Market Data (ISLR2)"
+description: |
+  Predicting whether stock moves Up or Down
+author:
+  - name: lruolin
+date: 10-04-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+A simple exercise to understand how to run logistic regression with stock market data using tidymodels framework. 
+
+# Packages
+
+```{r}
+library(pacman)
+p_load(ISLR2, tidyverse, tidymodels, janitor, GGally,
+       workflows, yardstick)
+```
+
+# Data
+
+This dataset consists of percentage returns for the S&P 500 stock market over 1,250 days, from the beginning of 2001 until the end of 2005.
+
+This is slightly different from the usual initial_split method. 
+
+
+```{r}
+stock_market <- Smarket %>% 
+  clean_names()
+
+head(stock_market)
+glimpse(stock_market) # 1250 x 9
+
+```
+
+# EDA
+
+```{r}
+summary(stock_market)
+```
+
+
+```{r}
+stock_market %>% 
+  ggpairs()
+```
+
+
+# Split data
+
+To use 2015 data for testing
+
+To use data prior to 2015 for training
+
+```{r}
+set.seed(2021100401)
+
+train_data <- stock_market %>% 
+                filter(!year == 2005)
+
+test_data <- stock_market %>% 
+              filter(year == 2005)
+```
+
+# Create model
+
+```{r}
+lr_model <- 
+  logistic_reg() %>% 
+  set_engine("glm")
+
+```
+
+
+# Create recipe 
+
+```{r}
+
+stock_recipe <- 
+  recipe(direction ~ ., data = train_data) %>% 
+  update_role(year, today, new_role = "ID")
+
+summary(stock_recipe)
+```
+
+# Create workflow
+
+```{r}
+stock_workflow <- 
+  workflow() %>% 
+  add_model(lr_model) %>% 
+  add_recipe(stock_recipe)
+
+stock_workflow
+```
+
+# Fit data
+
+```{r}
+stock_fit <- 
+  stock_workflow %>% 
+  fit(data = train_data)
+```
+
+```{r}
+stock_fit %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+Smallest p-value is assoicatied with lag1, but the negative coefficient suggests that if the market had a positive return yesterday, then it is less likely to go up today. 
+
+However, at a p-value of 0.15, the p-value is still relatively large, and there is no clear evidence of a real association vetween lag1 and direction. 
+
+# Predict
+
+```{r}
+
+predict(stock_fit, test_data)
+
+stock_augment <- 
+  augment(stock_fit, test_data) %>% 
+  select(year, direction, .pred_class, .pred_Down, .pred_Up)
+
+stock_augment
+```
+
+```{r}
+stock_augment %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  autoplot()
+
+stock_augment %>% 
+  roc_auc(truth = direction, .pred_Down) # 0.52
+
+```
+
+
+# Removing variables with high p-value
+
+
+```{r}
+stock_recipe_two_lag <- 
+  recipe(direction ~ ., data = train_data) %>% 
+  update_role(year, today, lag3, lag4, lag5, volume, new_role = "ID")
+
+summary(stock_recipe_two_lag)
+
+# update workflow
+
+stock_workflow_update <- 
+  workflow() %>% 
+  add_model(lr_model) %>% 
+  add_recipe(stock_recipe_two_lag)
+
+stock_workflow_update
+
+# fit data
+
+stock_fit_update <- 
+  stock_workflow_update %>% 
+  fit(data = train_data)
+
+stock_fit_update %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+
+# predict
+predict(stock_fit_update, test_data)
+
+# augment
+stock_augment_update <- 
+  augment(stock_fit_update, test_data) %>% 
+  select(year, direction, .pred_class, .pred_Down, .pred_Up)
+
+stock_augment_update
+
+# ROC curve
+stock_augment_update %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  autoplot()
+
+stock_augment_update %>% 
+  roc_auc(truth = direction, .pred_Down)  # 0.558. 
+```
+
+55.8% of the daily movements were correctly predicted.
+
+# Reference:
+
+- [ISLR2 book] (https://web.stanford.edu/~hastie/ISLRv2_website.pdf)
+
+- <https://www.tidymodels.org/start/recipes/>
