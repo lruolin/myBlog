@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" version="1.0">
+  <url>
+    <loc>https://lruolin.github.io/myBlog/about.html</loc>
+    <lastmod>2021-05-04T20:26:19+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/</loc>
+    <lastmod>2021-01-18T22:22:48+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/usefullinks.html</loc>
+    <lastmod>2021-08-17T20:46:46+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210929 Plotting GC-FID Chromatograms/</loc>
+    <lastmod>2021-10-04T17:31:49+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210907 Annotating GCMS chromatograms/</loc>
+    <lastmod>2021-09-07T16:57:28+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210901 Downloading from SingStat/</loc>
+    <lastmod>2021-09-04T22:51:31+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210824 ISLR2 - Chap 3 Linear regression/</loc>
+    <lastmod>2021-09-02T21:12:59+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210817 ISLR2 - Chap 2 Statistical Learning/</loc>
+    <lastmod>2021-08-23T20:47:35+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210815 ANOVA to compare means/</loc>
+    <lastmod>2021-08-16T21:50:38+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210810 High Dimension Data /</loc>
+    <lastmod>2021-08-15T10:10:34+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210729 Multiple ANOVA in R for different variables/</loc>
+    <lastmod>2021-08-10T19:23:25+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210728_Tidytuesday ramen ratings/</loc>
+    <lastmod>2021-08-10T19:14:03+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210726 Multiple t-test in R for different variables/</loc>
+    <lastmod>2021-08-10T19:23:57+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210620_Tidytuesday malaria data/</loc>
+    <lastmod>2021-07-02T21:11:21+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210619_Tidytuesday wind data/</loc>
+    <lastmod>2021-06-20T08:54:53+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210601_Tidytuesday College Major/</loc>
+    <lastmod>2021-06-01T21:09:46+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210617 Tidytuesday horror/</loc>
+    <lastmod>2021-06-19T08:20:49+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210526_Practicing/</loc>
+    <lastmod>2021-05-27T20:47:00+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210526_Tidyverse Chap 17 - Iteration with purrr/</loc>
+    <lastmod>2021-05-26T20:53:03+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210526_packages /</loc>
+    <lastmod>2021-10-02T11:23:02+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210526_Tidyverse Chap 16 - Vectors/</loc>
+    <lastmod>2021-05-26T13:01:28+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210525_cheatsheet/</loc>
+    <lastmod>2021-05-25T21:38:32+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210525_Tidyverse Chap 15 - Functions/</loc>
+    <lastmod>2021-05-25T21:39:29+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210524_Tidyverse Chap 13 - Lubridate/</loc>
+    <lastmod>2021-05-25T19:51:52+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210514_Tidyverse Chap 9 - Tidy Data/</loc>
+    <lastmod>2021-05-17T14:09:02+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210517_Tidyverse Chap 10 - Relational Data/</loc>
+    <lastmod>2021-05-17T15:19:35+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210512_Tidyverse Chap 8 - Import/</loc>
+    <lastmod>2021-05-14T17:37:06+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210514_Tidyverse Chap 7 - Tibbles/</loc>
+    <lastmod>2021-05-14T15:44:53+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210501_Tidyverse Chap 5 - ggplot2/</loc>
+    <lastmod>2021-05-12T16:24:03+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210424_Tidyverse Chap 1 - Data visualization/</loc>
+    <lastmod>2021-05-01T22:46:16+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210421_DOE Full Factorial Another Example/</loc>
+    <lastmod>2021-04-23T22:47:12+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210414_DOE Full Factorial/</loc>
+    <lastmod>2021-04-15T21:04:07+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210405_Outliers/</loc>
+    <lastmod>2021-04-07T22:13:44+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210328_NIR Meat Data (PLS-regression)/</loc>
+    <lastmod>2021-03-28T23:46:45+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210311_notes on resampling/</loc>
+    <lastmod>2021-03-11T21:41:14+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210309_tidy models plsr gasoline/</loc>
+    <lastmod>2021-03-10T11:55:27+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210301_tidy models regression 1/</loc>
+    <lastmod>2021-03-03T22:04:39+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210219_color calculations (juice)/</loc>
+    <lastmod>2021-02-21T15:51:34+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210216_durian volatiles/</loc>
+    <lastmod>2021-02-16T23:53:30+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210209_tidy_tuesday_coffee_ratings/</loc>
+    <lastmod>2021-02-12T00:21:12+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210202_Clustering wine/</loc>
+    <lastmod>2021-02-03T00:24:11+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210130_Volatiles_tomato/</loc>
+    <lastmod>2021-02-01T23:36:52+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210123_PCA wine/</loc>
+    <lastmod>2021-03-16T20:20:38+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210120_statistical concepts/</loc>
+    <lastmod>2021-01-21T00:34:33+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210115_kovats/</loc>
+    <lastmod>2021-01-15T11:19:30+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210118_calibration curves/</loc>
+    <lastmod>2021-01-18T23:23:27+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20210114_motivations/</loc>
+    <lastmod>2021-01-14T20:47:28+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/welcome/</loc>
+    <lastmod>2021-01-18T21:54:53+08:00</lastmod>
+  </url>
+</urlset>

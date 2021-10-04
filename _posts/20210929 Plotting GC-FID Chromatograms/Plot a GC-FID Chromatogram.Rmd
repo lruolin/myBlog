@@ -96,4 +96,26 @@ There is so much to learn!
 
 This is a wordy post with very little codes as I would need to work with open-source data in order to show the codes... so instead of showing the codes I wrote for work here, I can only jot down the main points so that I can refer back to this corner in the future. Hope I can find some example datasets to work with online!
 
+Example of code for plotly:
+
+```{r, eval=FALSE}
+p <-
+  plotly(
+    data = xxx,
+    x = ~time_round,
+    y = ~signal_round,
+    type = "scatter",
+    mode = "lines",
+  
+  text = paste(
+          "</br> RT: ", time_round,
+          "</br> KI: ", ki,
+          "</br> Intensity: ", signal_round))
+
+htmlwidgets::saveWidget(p, "filename.html")  
+```
+
+
+
+
 I also need to work on using functions and purrr to do iterative analysis efficiently, instead of copying and pasting chunks of codes...

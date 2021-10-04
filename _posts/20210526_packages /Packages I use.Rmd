@@ -84,6 +84,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - R Packages <https://r-pkgs.org/>
 - R packages primer <https://kbroman.org/pkg_primer/>
+- Big Book of R <https://www.bigbookofr.com/>
  
  
 ## Data Visualization
@@ -98,10 +99,16 @@ knitr::opts_chunk$set(echo = TRUE)
  
  - Feature engineering and selection - a practical approach
  - Applied Predictive Modelling
- 
+ - Tidy Modelling with R <https://www.tmwr.org/>
+
 ## Chemometrics
  
  - Chemometrics with R
  - Chemometrics in Food Science
  - Near-Infrared Spectroscopy: Theory, Spectral Analysis, Instrumentation, and Applications
+ 
+## Text Mining
+
+- <https://www.tidytextmining.com/>
+
  
