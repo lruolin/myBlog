@@ -1,0 +1,156 @@
+---
+title: "Easy plots with ggplot2"
+description: |
+  PUsing curly curly brackets in functions (tidyeval)
+author:
+  - name: lruolin
+date: 10-04-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Background
+
+I was watching Julia Silge's youtube video on tidymodels, and saw that she had a very neat way of creating visualizations for exploratory data analysis. 
+
+A function is created to reduce the copying and pasting of code, and you can use curly curly brackets to refer to variables directly.
+
+Let's try it out!
+
+# Packages
+
+```{r}
+library(tidyverse)
+```
+
+# Data
+
+```{r}
+mtcars_df <- mtcars %>% 
+  as.data.frame()
+
+```
+
+# An easy plot
+
+```{r}
+ggplot(aes(mpg, cyl), data = mtcars_df) +
+  geom_point() +
+  labs(title = "Plot of cyl against mpg") +
+  theme_classic() +
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(face = "bold", size = 16),
+        title = element_text(face = "bold", size = 20))
+
+```
+
+# Writing a function
+
+```{r}
+ 
+# function
+ 
+# var_x : x variable
+# var_y : y variable
+# title : title of chart, in string
+
+plot_mtcars <- function(var_x, var_y, title) {
+
+  ggplot(aes({{var_x}}, {{var_y}}), data = mtcars_df) +
+  geom_point() +
+  labs(title = title) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(face = "bold", size = 16),
+        title = element_text(face = "bold", size = 20))
+ 
+}
+ 
+```
+
+# Using the function
+
+The customizations are saved in the function, simplifying the code and reducing the need for copying and pasting. 
+
+```{r}
+
+plot_mtcars(mpg, vs, "mpg vs vs")
+ 
+```
+
+# Sleep dataset
+
+```{r}
+glimpse(sleep)
+
+```
+
+# Simple plot
+
+```{r}
+sleep %>% 
+  group_by(group) %>% 
+  summarise(mean_extra_hrs = mean(extra), na.rm = T) %>% 
+  ggplot(aes(group, mean_extra_hrs)) +
+  geom_boxplot(aes(fill = group)) +
+  geom_text(aes(label = mean_extra_hrs), vjust = -1) +
+  theme_classic() +  
+  labs(title = "Plot of mean_extra_hrs against group") +
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(face = "bold", size = 16),
+        title = element_text(face = "bold", size = 20))
+```
+
+# Function
+
+```{r}
+
+plot_boxplot_group_comparison <- function(data_df, var_x, var_y) {
+  
+  {{data_df}} %>% 
+  group_by({{var_x}}) %>% 
+  summarise(mean = mean({{var_y}}), na.rm = T) %>% 
+  ggplot(aes({{var_x}}, mean)) +
+  geom_boxplot(aes(fill = {{var_x}})) +
+      geom_text(aes(label = mean), vjust = -1) +
+    labs(title = 
+           paste("Plot of ", as_label( enquo(var_y)), "against ", as_label(enquo(var_x))),
+         y = paste("mean_", as_label(enquo(var_y)))) +
+  theme_classic() +  
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(face = "bold", size = 16),
+        title = element_text(face = "bold", size = 20))
+  
+}
+
+
+# using the function  
+plot_boxplot_group_comparison(sleep, group, extra)
+
+```
+
+
+# Using it on another dataset
+
+```{r}
+
+# iris dataset
+
+plot_boxplot_group_comparison(iris, Species, Petal.Width)
+```
+
+# Thoughts
+
+I really like this! Coding can be miminalist and functional at the same time.
+
+# References:
+
+- <https://sharla.party/post/tidyeval/>
+- <https://www.youtube.com/channel/UCTTBgWyJl2HrrhQOOc710kA>
+
+

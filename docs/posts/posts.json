@@ -19,6 +19,25 @@
     "preview_height": 768
   },
   {
+    "path": "posts/20211006 Easy plots with ggplot2/",
+    "title": "Easy plots with ggplot2",
+    "description": "PUsing curly curly brackets in functions (tidyeval)",
+    "author": [
+      {
+        "name": "lruolin",
+        "url": {}
+      }
+    ],
+    "date": "2021-10-04",
+    "categories": [],
+    "contents": "\n\nContents\nBackground\nPackages\nData\nAn easy plot\nWriting a function\nUsing the function\nSleep dataset\nSimple plot\nFunction\nUsing it on another dataset\nThoughts\nReferences:\n\nBackground\nI was watching Julia Silge’s youtube video on tidymodels, and saw that she had a very neat way of creating visualizations for exploratory data analysis.\nA function is created to reduce the copying and pasting of code, and you can use curly curly brackets to refer to variables directly.\nLet’s try it out!\nPackages\n\n\nlibrary(tidyverse)\n\n\n\nData\n\n\nmtcars_df <- mtcars %>% \n  as.data.frame()\n\n\n\nAn easy plot\n\n\nggplot(aes(mpg, cyl), data = mtcars_df) +\n  geom_point() +\n  labs(title = \"Plot of cyl against mpg\") +\n  theme_classic() +\n  theme(axis.text = element_text(size = 14),\n        axis.title = element_text(face = \"bold\", size = 16),\n        title = element_text(face = \"bold\", size = 20))\n\n\n\n\nWriting a function\n\n\n# function\n \n# var_x : x variable\n# var_y : y variable\n# title : title of chart, in string\n\nplot_mtcars <- function(var_x, var_y, title) {\n\n  ggplot(aes({{var_x}}, {{var_y}}), data = mtcars_df) +\n  geom_point() +\n  labs(title = title) +\n  theme_classic() +\n  theme(axis.text = element_text(size = 14),\n        axis.title = element_text(face = \"bold\", size = 16),\n        title = element_text(face = \"bold\", size = 20))\n \n}\n\n\n\nUsing the function\nThe customizations are saved in the function, simplifying the code and reducing the need for copying and pasting.\n\n\nplot_mtcars(mpg, vs, \"mpg vs vs\")\n\n\n\n\nSleep dataset\n\n\nglimpse(sleep)\n\n\nRows: 20\nColumns: 3\n$ extra <dbl> 0.7, -1.6, -0.2, -1.2, -0.1, 3.4, 3.7, 0.8, 0.0, 2.0, …\n$ group <fct> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, …\n$ ID    <fct> 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8,…\n\nSimple plot\n\n\nsleep %>% \n  group_by(group) %>% \n  summarise(mean_extra_hrs = mean(extra), na.rm = T) %>% \n  ggplot(aes(group, mean_extra_hrs)) +\n  geom_boxplot(aes(fill = group)) +\n  geom_text(aes(label = mean_extra_hrs), vjust = -1) +\n  theme_classic() +  \n  labs(title = \"Plot of mean_extra_hrs against group\") +\n  theme(axis.text = element_text(size = 14),\n        axis.title = element_text(face = \"bold\", size = 16),\n        title = element_text(face = \"bold\", size = 20))\n\n\n\n\nFunction\n\n\nplot_boxplot_group_comparison <- function(data_df, var_x, var_y) {\n  \n  {{data_df}} %>% \n  group_by({{var_x}}) %>% \n  summarise(mean = mean({{var_y}}), na.rm = T) %>% \n  ggplot(aes({{var_x}}, mean)) +\n  geom_boxplot(aes(fill = {{var_x}})) +\n      geom_text(aes(label = mean), vjust = -1) +\n    labs(title = \n           paste(\"Plot of \", as_label( enquo(var_y)), \"against \", as_label(enquo(var_x))),\n         y = paste(\"mean_\", as_label(enquo(var_y)))) +\n  theme_classic() +  \n  theme(axis.text = element_text(size = 14),\n        axis.title = element_text(face = \"bold\", size = 16),\n        title = element_text(face = \"bold\", size = 20))\n  \n}\n\n\n# using the function  \nplot_boxplot_group_comparison(sleep, group, extra)\n\n\n\n\nUsing it on another dataset\n\n\n# iris dataset\n\nplot_boxplot_group_comparison(iris, Species, Petal.Width)\n\n\n\n\nThoughts\nI really like this! Coding can be miminalist and functional at the same time.\nReferences:\nhttps://sharla.party/post/tidyeval/\nhttps://www.youtube.com/channel/UCTTBgWyJl2HrrhQOOc710kA\n\n\n\n",
+    "preview": "posts/20211006 Easy plots with ggplot2/Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-3-1.png",
+    "last_modified": "2021-10-05T21:03:40+08:00",
+    "input_file": {},
+    "preview_width": 1248,
+    "preview_height": 768
+  },
+  {
     "path": "posts/20210929 Plotting GC-FID Chromatograms/",
     "title": "Plot a GC-FID Chromatogram",
     "description": "Using ggplot for GCFID chromagram visualization",
