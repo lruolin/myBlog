@@ -4,7 +4,7 @@ description: |
   Predicting whether stock moves Up or Down
 author:
   - name: lruolin
-date: 10-04-2021
+date: 10-07-2021
 output:
   distill::distill_article:
     self_contained: false
@@ -16,12 +16,18 @@ editor_options:
 
 A simple exercise to understand how to run logistic regression with stock market data using tidymodels framework. 
 
+# Learning points:
+
+- Fitting logistic regression, LDA and QDA on stock market data
+- Visualizing ROC and comparing AUC
+
+
 # Packages
 
 ```{r}
 library(pacman)
 p_load(ISLR2, tidyverse, tidymodels, janitor, GGally,
-       workflows, yardstick)
+       workflows, yardstick, discrim)
 ```
 
 # Data
@@ -193,8 +199,206 @@ stock_augment_update %>%
 
 55.8% of the daily movements were correctly predicted.
 
+# A second model - Linear Discriminant: 
+
+```{r}
+
+lda_model <- 
+  discrim_linear() %>% 
+  set_engine("MASS")
+  
+```
+
+MASS::lda() fits a model that estimates a multivariate distribution for the predictors separately for the data in each class (Gaussian with a common covariance matrix). Bayes' theorem is used to compute the probability of each class, given the predictor values.
+
+This engine has no tuning parameters, and is used for classification. 
+
+# Create recipe and workflow
+
+The same recipe can be reused.
+
+```{r}
+
+stock_recipe_two_lag
+
+```
+
+
+```{r}
+
+lda_workflow <- 
+  workflow() %>% 
+  add_model(lda_model) %>% 
+  add_recipe(stock_recipe_two_lag)
+
+```
+
+
+# Fit data
+
+```{r}
+lda_fit <- 
+  lda_workflow %>% 
+  fit(data = train_data)
+
+lda_fit %>% 
+  extract_fit_parsnip() 
+
+```
+
+# Predict
+
+```{r}
+predict(lda_fit, test_data)
+
+lda_augment <- 
+  augment(lda_fit, test_data) %>% 
+  select(year, direction, .pred_class, .pred_Down, .pred_Up)
+
+lda_augment %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  autoplot()
+
+lda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) # 0.558
+```
+
+
+# Comparing logistic regression against linear discriminant 
+
+```{r}
+log_reg_auc <- 
+  stock_augment_update %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  mutate(model = "Log Regression")
+
+lda_auc <- 
+  lda_augment %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  mutate(model = "LDA")
+
+bind_rows(log_reg_auc, lda_auc) %>% 
+  ggplot(aes(x = 1-specificity,
+             y = sensitivity,
+             col = model)) +
+  geom_path(lwd = 1.5, alpha = 0.6) +
+  geom_abline(lty = 3) +
+  coord_equal()  +
+  labs(title = "Comparing LDA with Log Regression",
+       subtitle = "The predictions are almost identical!") +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+# A third model: Quadratic Discriminant Analysis
+
+discrim_quad() defines a model that estimates a multivariate distribution for the predictors separately for the data in each class (usually Gaussian with separate covariance matrices). Bayes' theorem is used to compute the probability of each class, given the predictor values.
+
+regularization_method	:
+A character string for the type of regularized estimation. Possible values are: "diagonal", "shrink_cov", and "shrink_mean" (sparsediscrim engine only).
+
+```{r}
+qda_mod <-
+  discrim_quad() %>%
+  set_engine("MASS")
+```
+
+# Recipe
+
+I used the same recipe
+
+```{r}
+stock_recipe_two_lag
+```
+
+
+# Workflow
+
+```{r}
+qda_workflow <- 
+  workflow() %>% 
+  add_model(qda_mod) %>% 
+  add_recipe(stock_recipe_two_lag)
+```
+
+# Fit data
+
+```{r}
+qda_fit <- 
+  qda_workflow %>% 
+  fit(data = train_data)
+
+qda_fit %>% 
+  extract_fit_parsnip()
+```
+
+
+# Predict
+
+```{r}
+predict(qda_fit, test_data)
+
+qda_augment <- 
+  augment(qda_fit, test_data) %>% 
+  select(year, direction, .pred_class, .pred_Down, .pred_Up)
+
+qda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) # 0.562
+
+qda_auc <- 
+  qda_augment %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  mutate(model = "QDA")
+
+
+```
+
+# Comparing against the first two models
+
+Comparing AUC:
+
+```{r}
+auc_log <- stock_augment_update %>% 
+  roc_auc(truth = direction, .pred_Down) %>% 
+  mutate(model = "Log Reg")
+
+auc_lda <- lda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) %>% 
+  mutate(model = "LDA")
+
+auc_qda <- qda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) %>% 
+  mutate(model = "QDA")
+
+bind_rows(auc_log, auc_lda, auc_qda)
+```
+
+ROC plot:
+
+```{r}
+bind_rows(log_reg_auc, 
+          lda_auc,
+          qda_auc) %>% 
+  ggplot(aes(x = 1-specificity,
+             y = sensitivity,
+             col = model)) +
+  geom_path(lwd = 1.5, alpha = 0.8) +
+  geom_abline(lty = 3) +
+  coord_equal()  +
+  labs(title = "Comparing QDA, LDA and Log Regression",
+       subtitle = "QDA is very slightly better than the other two models!") +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+
+
 # Reference:
 
 - [ISLR2 book] (https://web.stanford.edu/~hastie/ISLRv2_website.pdf)
 
 - <https://www.tidymodels.org/start/recipes/>
+
+- <https://discrim.tidymodels.org/reference/discrim_linear.html>
+
+- <https://discrim.tidymodels.org/reference/discrim_quad.html>
