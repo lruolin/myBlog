@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["Stock-Market-Data--ISLR2-_files/anchor-4.2.2/anchor.min.js","Stock-Market-Data--ISLR2-_files/bowser-1.9.3/bowser.min.js","Stock-Market-Data--ISLR2-_files/distill-2.2.21/template.v2.js","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-12-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-13-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-18-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-19-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-26-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-4-1.png","Stock-Market-Data--ISLR2-_files/header-attrs-2.11.3/header-attrs.js","Stock-Market-Data--ISLR2-_files/header-attrs-2.11/header-attrs.js","Stock-Market-Data--ISLR2-_files/jquery-3.6.0/jquery-3.6.0.js","Stock-Market-Data--ISLR2-_files/jquery-3.6.0/jquery-3.6.0.min.js","Stock-Market-Data--ISLR2-_files/jquery-3.6.0/jquery-3.6.0.min.map","Stock-Market-Data--ISLR2-_files/popper-2.6.0/popper.min.js","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy-bundle.umd.min.js","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy-light-border.css","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy.css","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy.umd.min.js","Stock-Market-Data--ISLR2-_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["Stock-Market-Data--ISLR2-_files/anchor-4.2.2/anchor.min.js","Stock-Market-Data--ISLR2-_files/bowser-1.9.3/bowser.min.js","Stock-Market-Data--ISLR2-_files/distill-2.2.21/template.v2.js","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-11-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-12-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-13-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-18-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-19-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-20-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-21-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-26-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-27-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-34-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-4-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-5-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-6-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-8-1.png","Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-9-1.png","Stock-Market-Data--ISLR2-_files/header-attrs-2.11.3/header-attrs.js","Stock-Market-Data--ISLR2-_files/header-attrs-2.11/header-attrs.js","Stock-Market-Data--ISLR2-_files/jquery-3.6.0/jquery-3.6.0.js","Stock-Market-Data--ISLR2-_files/jquery-3.6.0/jquery-3.6.0.min.js","Stock-Market-Data--ISLR2-_files/jquery-3.6.0/jquery-3.6.0.min.map","Stock-Market-Data--ISLR2-_files/popper-2.6.0/popper.min.js","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy-bundle.umd.min.js","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy-light-border.css","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy.css","Stock-Market-Data--ISLR2-_files/tippy-6.2.7/tippy.umd.min.js","Stock-Market-Data--ISLR2-_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1489,7 +1489,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#learning-points">Learning points:</a></li>
 <li><a href="#packages">Packages</a></li>
 <li><a href="#data">Data</a></li>
-<li><a href="#eda">EDA</a></li>
+<li><a href="#eda">EDA</a>
+<ul>
+<li><a href="#a-simple-ggplot-for-factor-variable-direction">A simple ggplot for factor variable (direction):</a></li>
+<li><a href="#ggplot-for-numerical-variables---geom_freqpoly">ggplot for numerical variables - geom_freqpoly</a></li>
+</ul></li>
 <li><a href="#split-data">Split data</a></li>
 <li><a href="#create-model">Create model</a></li>
 <li><a href="#create-recipe">Create recipe</a></li>
@@ -1515,6 +1519,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>A simple exercise to understand how to run logistic regression with stock market data using tidymodels framework.</p>
 <h1 id="learning-points">Learning points:</h1>
 <ul>
+<li>Customizing my own functions for EDA, and using patchwork to join plots</li>
 <li>Fitting logistic regression, LDA and QDA on stock market data</li>
 <li>Visualizing ROC and comparing AUC</li>
 </ul>
@@ -1523,7 +1528,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/trinker/pacman'>pacman</a></span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/pkg/pacman/man/p_load.html'>p_load</a></span><span class='op'>(</span><span class='va'>ISLR2</span>, <span class='va'>tidyverse</span>, <span class='va'>tidymodels</span>, <span class='va'>janitor</span>, <span class='va'>GGally</span>,
-       <span class='va'>workflows</span>, <span class='va'>yardstick</span>, <span class='va'>discrim</span><span class='op'>)</span>
+       <span class='va'>workflows</span>, <span class='va'>yardstick</span>, <span class='va'>discrim</span>, <span class='va'>skimr</span>, <span class='va'>ggsci</span>,
+       <span class='va'>patchwork</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -1533,7 +1539,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stock_market</span> <span class='op'>&lt;-</span> <span class='va'>Smarket</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>clean_names</span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'>clean_names</span><span class='op'>(</span><span class='op'>)</span> 
 
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>stock_market</span><span class='op'>)</span>
 </code></pre>
@@ -1592,11 +1598,310 @@ $ direction &lt;fct&gt; Up, Up, Down, Up, Up, Up, Down, Up, Up, Up, Down, …</c
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stock_market</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>skim</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Name</td>
+<td style="text-align: left;">Piped data</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Number of rows</td>
+<td style="text-align: left;">1250</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Number of columns</td>
+<td style="text-align: left;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">_______________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Column type frequency:</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">factor</td>
+<td style="text-align: left;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">numeric</td>
+<td style="text-align: left;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">________________________</td>
+<td style="text-align: left;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Group variables</td>
+<td style="text-align: left;">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: factor</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: left;">ordered</th>
+<th style="text-align: right;">n_unique</th>
+<th style="text-align: left;">top_counts</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">direction</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">FALSE</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Up: 648, Dow: 602</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">skim_variable</th>
+<th style="text-align: right;">n_missing</th>
+<th style="text-align: right;">complete_rate</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">sd</th>
+<th style="text-align: right;">p0</th>
+<th style="text-align: right;">p25</th>
+<th style="text-align: right;">p50</th>
+<th style="text-align: right;">p75</th>
+<th style="text-align: right;">p100</th>
+<th style="text-align: left;">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">year</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2003.02</td>
+<td style="text-align: right;">1.41</td>
+<td style="text-align: right;">2001.00</td>
+<td style="text-align: right;">2002.00</td>
+<td style="text-align: right;">2003.00</td>
+<td style="text-align: right;">2004.00</td>
+<td style="text-align: right;">2005.00</td>
+<td style="text-align: left;">▇▇▇▇▇</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lag1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">-4.92</td>
+<td style="text-align: right;">-0.64</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: left;">▁▃▇▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lag2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">-4.92</td>
+<td style="text-align: right;">-0.64</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: left;">▁▃▇▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lag3</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">-4.92</td>
+<td style="text-align: right;">-0.64</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: left;">▁▃▇▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lag4</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">-4.92</td>
+<td style="text-align: right;">-0.64</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: left;">▁▃▇▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lag5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: right;">1.15</td>
+<td style="text-align: right;">-4.92</td>
+<td style="text-align: right;">-0.64</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: left;">▁▃▇▁▁</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">volume</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.48</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: right;">1.26</td>
+<td style="text-align: right;">1.42</td>
+<td style="text-align: right;">1.64</td>
+<td style="text-align: right;">3.15</td>
+<td style="text-align: left;">▁▇▅▁▁</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">today</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: right;">-4.92</td>
+<td style="text-align: right;">-0.64</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">0.60</td>
+<td style="text-align: right;">5.73</td>
+<td style="text-align: left;">▁▃▇▁▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stock_market</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>ggpairs</span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
 </div>
+<h2 id="a-simple-ggplot-for-factor-variable-direction">A simple ggplot for factor variable (direction):</h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stock_market</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>direction</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_bar</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>direction</span><span class='op'>)</span>, show.legend <span class='op'>=</span> <span class='cn'>F</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"count"</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>..count..</span><span class='op'>)</span>, vjust <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_jco</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Direction"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span>,
+        axis.text.x <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<p>Going the extra mile to create a function:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plot_fct_boxplot</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>var_x</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>stock_market</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>var_x_fct <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>var_x</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  <span class='co'># so that other classes can be used for plot as well</span>
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>var_x_fct</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_bar</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='va'>var_x_fct</span><span class='op'>)</span>, show.legend <span class='op'>=</span> <span class='cn'>F</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"count"</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>..count..</span><span class='op'>)</span>, vjust <span class='op'>=</span> <span class='op'>-</span><span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>scale_fill_jco</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> <span class='co'># from ggsci package</span>
+  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='fu'>str_to_title</span><span class='op'>(</span><span class='fu'>as_label</span><span class='op'>(</span><span class='fu'>enquo</span><span class='op'>(</span><span class='va'>var_x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+       x <span class='op'>=</span> <span class='fu'>as_label</span><span class='op'>(</span><span class='fu'>enquo</span><span class='op'>(</span><span class='va'>var_x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span>,
+        axis.text.x <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plot_direction</span> <span class='op'>&lt;-</span> <span class='fu'>plot_fct_boxplot</span><span class='op'>(</span><span class='va'>direction</span><span class='op'>)</span>
+
+<span class='va'>plot_year</span> <span class='op'>&lt;-</span> <span class='fu'>plot_fct_boxplot</span><span class='op'>(</span><span class='va'>year</span><span class='op'>)</span>
+
+<span class='co'># using patchwork</span>
+<span class='va'>plot_direction</span> <span class='op'>+</span> <span class='va'>plot_year</span>
+</code></pre>
+</div>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<h2 id="ggplot-for-numerical-variables---geom_freqpoly">ggplot for numerical variables - geom_freqpoly</h2>
+<p>A simple plot:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stock_market</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='va'>lag1</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> 
+  <span class='fu'>geom_freqpoly</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"lag1"</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span>,
+        axis.text.x <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
+</div>
+<p>A function:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>plot_many_freqpoly</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>var_x</span><span class='op'>)</span> <span class='op'>{</span>
+
+  <span class='va'>stock_market</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>var_x</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>geom_freqpoly</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='fu'>str_to_title</span><span class='op'>(</span><span class='fu'>as_label</span><span class='op'>(</span><span class='fu'>enquo</span><span class='op'>(</span><span class='va'>var_x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>,
+       x <span class='op'>=</span> <span class='fu'>as_label</span><span class='op'>(</span><span class='fu'>enquo</span><span class='op'>(</span><span class='va'>var_x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+  <span class='fu'>theme</span><span class='op'>(</span>axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span>,
+        axis.text.x <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>plot_many_freqpoly</span><span class='op'>(</span><span class='va'>lag3</span><span class='op'>)</span>
+</code></pre>
+</div>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-11-1.png" width="624" /></p>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># set names to loop through</span>
+<span class='va'>num_var</span> <span class='op'>&lt;-</span> <span class='va'>stock_market</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>year</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>select_if</span><span class='op'>(</span><span class='va'>is.numeric</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># let the iterations begin</span>
+<span class='va'>num_var</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>syms</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span>  <span class='co'># take strings as input and turn them into symbols</span>
+  <span class='fu'>map</span><span class='op'>(</span><span class='kw'>function</span><span class='op'>(</span><span class='va'>var</span><span class='op'>)</span> <span class='fu'>plot_many_freqpoly</span><span class='op'>(</span><span class='op'>!</span><span class='op'>!</span><span class='va'>var</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>wrap_plots</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># from patchwork</span>
+</code></pre>
+</div>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-12-1.png" width="624" /></p>
+</div>
+<p>Although these plots were seen using the skim() function, I can customise the appearance by building my own functions.</p>
 <h1 id="split-data">Split data</h1>
 <p>To use 2015 data for testing</p>
 <p>To use data prior to 2015 for training</p>
@@ -1746,7 +2051,7 @@ Computational engine: glm </code></pre>
   <span class='fu'>autoplot</span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-12-1.png" width="624" />
+<img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-20-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stock_augment</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>roc_auc</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>direction</span>, <span class='va'>.pred_Down</span><span class='op'>)</span> <span class='co'># 0.52</span>
@@ -1868,7 +2173,7 @@ Computational engine: glm </code></pre>
   <span class='fu'>autoplot</span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-13-1.png" width="624" />
+<img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-21-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>stock_augment_update</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>roc_auc</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>direction</span>, <span class='va'>.pred_Down</span><span class='op'>)</span>  <span class='co'># 0.558. </span>
@@ -1929,7 +2234,7 @@ Inputs:
 </div>
 <pre><code>parsnip model object
 
-Fit time:  7ms 
+Fit time:  5ms 
 Call:
 lda(..y ~ ., data = data)
 
@@ -1977,7 +2282,7 @@ lag2 -0.5135293</code></pre>
   <span class='fu'>autoplot</span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-18-1.png" width="624" />
+<img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-26-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lda_augment</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>roc_auc</span><span class='op'>(</span>truth <span class='op'>=</span> <span class='va'>direction</span>, <span class='va'>.pred_Down</span><span class='op'>)</span> <span class='co'># 0.558</span>
@@ -2014,7 +2319,7 @@ lag2 -0.5135293</code></pre>
   <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"top"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-19-1.png" width="624" /></p>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-27-1.png" width="624" /></p>
 </div>
 <h1 id="a-third-model-quadratic-discriminant-analysis">A third model: Quadratic Discriminant Analysis</h1>
 <p>discrim_quad() defines a model that estimates a multivariate distribution for the predictors separately for the data in each class (usually Gaussian with separate covariance matrices). Bayes’ theorem is used to compute the probability of each class, given the predictor values.</p>
@@ -2066,7 +2371,7 @@ Inputs:
 </div>
 <pre><code>parsnip model object
 
-Fit time:  7ms 
+Fit time:  6ms 
 Call:
 qda(..y ~ ., data = data)
 
@@ -2164,7 +2469,7 @@ Up   -0.03954635 -0.03132544</code></pre>
   <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"top"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-26-1.png" width="624" /></p>
+<p><img src="Stock-Market-Data--ISLR2-_files/figure-html5/unnamed-chunk-34-1.png" width="624" /></p>
 </div>
 <h1 id="reference">Reference:</h1>
 <ul>

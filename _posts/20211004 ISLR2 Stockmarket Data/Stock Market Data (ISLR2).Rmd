@@ -18,6 +18,7 @@ A simple exercise to understand how to run logistic regression with stock market
 
 # Learning points:
 
+- Customizing my own functions for EDA, and using patchwork to join plots
 - Fitting logistic regression, LDA and QDA on stock market data
 - Visualizing ROC and comparing AUC
 
@@ -27,7 +28,8 @@ A simple exercise to understand how to run logistic regression with stock market
 ```{r}
 library(pacman)
 p_load(ISLR2, tidyverse, tidymodels, janitor, GGally,
-       workflows, yardstick, discrim)
+       workflows, yardstick, discrim, skimr, ggsci,
+       patchwork)
 ```
 
 # Data
@@ -39,7 +41,7 @@ This is slightly different from the usual initial_split method.
 
 ```{r}
 stock_market <- Smarket %>% 
-  clean_names()
+  clean_names() 
 
 head(stock_market)
 glimpse(stock_market) # 1250 x 9
@@ -55,9 +57,109 @@ summary(stock_market)
 
 ```{r}
 stock_market %>% 
+  skim()
+
+```
+
+
+```{r}
+stock_market %>% 
   ggpairs()
 ```
 
+
+## A simple ggplot for factor variable (direction):
+
+```{r}
+stock_market %>% 
+  ggplot(aes(direction)) +
+  geom_bar(aes(fill = direction), show.legend = F) +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -1) +
+  scale_fill_jco() +
+  theme_classic() +
+  labs(title = "Direction") +
+  theme(axis.title = element_text(face = "bold"),
+        axis.text.x = element_text(face = "bold"))
+```
+
+Going the extra mile to create a function:
+
+```{r}
+plot_fct_boxplot <- function(var_x) {
+  stock_market %>% 
+  mutate(var_x_fct = factor({{var_x}})) %>%  # so that other classes can be used for plot as well
+  ggplot(aes(var_x_fct)) +
+  geom_bar(aes(fill = var_x_fct), show.legend = F) +
+  geom_text(stat = "count", aes(label = ..count..), vjust = -1) +
+  scale_fill_jco() + # from ggsci package
+  theme_classic() +
+  labs(title = str_to_title(as_label(enquo(var_x))),
+       x = as_label(enquo(var_x))) +
+  theme(axis.title = element_text(face = "bold"),
+        axis.text.x = element_text(face = "bold"))
+}
+```
+
+```{r}
+plot_direction <- plot_fct_boxplot(direction)
+
+plot_year <- plot_fct_boxplot(year)
+
+# using patchwork
+plot_direction + plot_year
+```
+
+## ggplot for numerical variables - geom_freqpoly
+
+A simple plot:
+
+```{r}
+stock_market %>% 
+  ggplot(aes(lag1)) + 
+  geom_freqpoly(size = 1) +
+  theme_classic() +
+  labs(title = "lag1") +
+  theme(axis.title = element_text(face = "bold"),
+        axis.text.x = element_text(face = "bold"))
+  
+```
+
+A function:
+
+```{r}
+plot_many_freqpoly <- function(var_x) {
+
+  stock_market %>% 
+  ggplot(aes({{var_x}})) +
+  geom_freqpoly(size = 1) +
+  theme_classic() +
+  labs(title = str_to_title(as_label(enquo(var_x))),
+       x = as_label(enquo(var_x))) +
+  theme(axis.title = element_text(face = "bold"),
+        axis.text.x = element_text(face = "bold"))
+}
+```
+
+```{r}
+plot_many_freqpoly(lag3)
+```
+
+```{r}
+# set names to loop through
+num_var <- stock_market %>% 
+  select(-year) %>% 
+  select_if(is.numeric) %>% 
+  names()
+
+# let the iterations begin
+num_var %>% 
+  syms() %>%  # take strings as input and turn them into symbols
+  map(function(var) plot_many_freqpoly(!!var)) %>% 
+  wrap_plots() # from patchwork
+
+```
+
+Although these plots were seen using the skim() function, I can customise the appearance by building my own functions.
 
 # Split data
 
