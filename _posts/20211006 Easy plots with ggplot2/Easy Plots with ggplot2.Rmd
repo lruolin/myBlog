@@ -103,7 +103,7 @@ sleep %>%
   labs(title = "Plot of mean_extra_hrs against group") +
   theme(axis.text = element_text(size = 14),
         axis.title = element_text(face = "bold", size = 16),
-        title = element_text(face = "bold", size = 20))
+        title = element_text(face = "bold", size = 18))
 ```
 
 # Function

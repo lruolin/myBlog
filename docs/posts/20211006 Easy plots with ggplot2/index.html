@@ -132,7 +132,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-3-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-5-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-7-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-8-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-9-1.png"]}
+  {"type":"character","attributes":{},"value":["Easy-Plots-with-ggplot2_files/anchor-4.2.2/anchor.min.js","Easy-Plots-with-ggplot2_files/bowser-1.9.3/bowser.min.js","Easy-Plots-with-ggplot2_files/distill-2.2.21/template.v2.js","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-3-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-5-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-7-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-8-1.png","Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-9-1.png","Easy-Plots-with-ggplot2_files/header-attrs-2.11/header-attrs.js","Easy-Plots-with-ggplot2_files/jquery-3.6.0/jquery-3.6.0.js","Easy-Plots-with-ggplot2_files/jquery-3.6.0/jquery-3.6.0.min.js","Easy-Plots-with-ggplot2_files/jquery-3.6.0/jquery-3.6.0.min.map","Easy-Plots-with-ggplot2_files/popper-2.6.0/popper.min.js","Easy-Plots-with-ggplot2_files/tippy-6.2.7/tippy-bundle.umd.min.js","Easy-Plots-with-ggplot2_files/tippy-6.2.7/tippy-light-border.css","Easy-Plots-with-ggplot2_files/tippy-6.2.7/tippy.css","Easy-Plots-with-ggplot2_files/tippy-6.2.7/tippy.umd.min.js","Easy-Plots-with-ggplot2_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -1885,7 +1885,10 @@ function init_distill() {
 
     // hoverable references
     $('span.citation[data-cites]').each(function() {
-      var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+      var refs = $(this).attr('data-cites').split(" ");
+      var refHtml = refs.map(function(ref) {
+        return "<p>" + $('#ref-' + ref).html() + "</p>";
+      }).join("\n");
       window.tippy(this, {
         allowHTML: true,
         content: refHtml,
@@ -2077,7 +2080,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Easy plots with ggplot2","description":"PUsing curly curly brackets in functions (tidyeval)","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-10-04T00:00:00.000+00:00","citationText":"lruolin, 2021"}
+{"title":"Easy plots with ggplot2","description":"PUsing curly curly brackets in functions (tidyeval)","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-10-04T00:00:00.000+08:00","citationText":"lruolin, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2223,7 +2226,7 @@ $ ID    &lt;fct&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8,…</c
   <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Plot of mean_extra_hrs against group"</span><span class='op'>)</span> <span class='op'>+</span>
   <span class='fu'>theme</span><span class='op'>(</span>axis.text <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>size <span class='op'>=</span> <span class='fl'>14</span><span class='op'>)</span>,
         axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span>, size <span class='op'>=</span> <span class='fl'>16</span><span class='op'>)</span>,
-        title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span>, size <span class='op'>=</span> <span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span>
+        title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>face <span class='op'>=</span> <span class='st'>"bold"</span>, size <span class='op'>=</span> <span class='fl'>18</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <p><img src="Easy-Plots-with-ggplot2_files/figure-html5/unnamed-chunk-7-1.png" width="624" /></p>

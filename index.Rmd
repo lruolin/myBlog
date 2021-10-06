@@ -1,8 +1,9 @@
 ---
-title: "My Blog"
+title: "myBlog"
 site: distill::distill_website
 listing: posts
 ---
+
 
 
 

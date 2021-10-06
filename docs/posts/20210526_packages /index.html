@@ -126,7 +126,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["Packages-I-use_files/anchor-4.2.2/anchor.min.js","Packages-I-use_files/bowser-1.9.3/bowser.min.js","Packages-I-use_files/distill-2.2.21/template.v2.js","Packages-I-use_files/header-attrs-2.10/header-attrs.js","Packages-I-use_files/header-attrs-2.8/header-attrs.js","Packages-I-use_files/header-attrs-2.9/header-attrs.js","Packages-I-use_files/jquery-1.11.3/jquery.min.js","Packages-I-use_files/popper-2.6.0/popper.min.js","Packages-I-use_files/tippy-6.2.7/tippy-bundle.umd.min.js","Packages-I-use_files/tippy-6.2.7/tippy-light-border.css","Packages-I-use_files/tippy-6.2.7/tippy.css","Packages-I-use_files/tippy-6.2.7/tippy.umd.min.js","Packages-I-use_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["Packages-I-use_files/anchor-4.2.2/anchor.min.js","Packages-I-use_files/bowser-1.9.3/bowser.min.js","Packages-I-use_files/distill-2.2.21/template.v2.js","Packages-I-use_files/header-attrs-2.10/header-attrs.js","Packages-I-use_files/header-attrs-2.11/header-attrs.js","Packages-I-use_files/header-attrs-2.8/header-attrs.js","Packages-I-use_files/header-attrs-2.9/header-attrs.js","Packages-I-use_files/jquery-1.11.3/jquery.min.js","Packages-I-use_files/jquery-3.6.0/jquery-3.6.0.js","Packages-I-use_files/jquery-3.6.0/jquery-3.6.0.min.js","Packages-I-use_files/jquery-3.6.0/jquery-3.6.0.min.map","Packages-I-use_files/popper-2.6.0/popper.min.js","Packages-I-use_files/tippy-6.2.7/tippy-bundle.umd.min.js","Packages-I-use_files/tippy-6.2.7/tippy-light-border.css","Packages-I-use_files/tippy-6.2.7/tippy.css","Packages-I-use_files/tippy-6.2.7/tippy.umd.min.js","Packages-I-use_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -1879,7 +1879,10 @@ function init_distill() {
 
     // hoverable references
     $('span.citation[data-cites]').each(function() {
-      var refHtml = $('#ref-' + $(this).attr('data-cites')).html();
+      var refs = $(this).attr('data-cites').split(" ");
+      var refHtml = refs.map(function(ref) {
+        return "<p>" + $('#ref-' + ref).html() + "</p>";
+      }).join("\n");
       window.tippy(this, {
         allowHTML: true,
         content: refHtml,
@@ -2071,7 +2074,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Packages I use and books I read","description":"The packages I use often and useful reference books","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-26T00:00:00.000+00:00","citationText":"lruolin, 2021"}
+{"title":"Packages I use and books I read","description":"The packages I use often and useful reference books","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-26T00:00:00.000+08:00","citationText":"lruolin, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2172,13 +2175,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <h1 id="useful-reference-books">Useful Reference Books</h1>
 <h2 id="r">R</h2>
 <ul>
-<li>R Packages <a href="https://r-pkgs.org/" class="uri">https://r-pkgs.org/</a></li>
-<li>R packages primer <a href="https://kbroman.org/pkg_primer/" class="uri">https://kbroman.org/pkg_primer/</a></li>
-<li>Big Book of R <a href="https://www.bigbookofr.com/" class="uri">https://www.bigbookofr.com/</a></li>
-</ul>
-<h2 id="data-visualization">Data Visualization</h2>
-<ul>
-<li><a href="https://informationisbeautiful.net/visualizations/dataviz-books/" class="uri">https://informationisbeautiful.net/visualizations/dataviz-books/</a></li>
+<li><p>R Packages <a href="https://r-pkgs.org/" class="uri">https://r-pkgs.org/</a></p></li>
+<li><p>R packages primer <a href="https://kbroman.org/pkg_primer/" class="uri">https://kbroman.org/pkg_primer/</a></p></li>
+<li><p>Big Book of R <a href="https://www.bigbookofr.com/" class="uri">https://www.bigbookofr.com/</a>404040 ## Data Visualization</p></li>
+<li><p><a href="https://informationisbeautiful.net/visualizations/dataviz-books/" class="uri">https://informationisbeautiful.net/visualizations/dataviz-books/</a></p></li>
 </ul>
 <h2 id="design-of-experiment">Design of Experiment</h2>
 <ul>
