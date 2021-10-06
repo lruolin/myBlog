@@ -29,7 +29,7 @@ A simple exercise to understand how to run logistic regression with stock market
 library(pacman)
 p_load(ISLR2, tidyverse, tidymodels, janitor, GGally,
        workflows, yardstick, discrim, skimr, ggsci,
-       patchwork)
+       patchwork, ggstatsplot)
 ```
 
 # Data
@@ -67,6 +67,13 @@ stock_market %>%
   ggpairs()
 ```
 
+# A more colorful correlation matrix:
+
+```{r}
+stock_market %>% 
+  ggstatsplot::ggcorrmat()
+```
+
 
 ## A simple ggplot for factor variable (direction):
 
@@ -78,13 +85,14 @@ stock_market %>%
   scale_fill_jco() +
   theme_classic() +
   labs(title = "Direction") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.25))) +
   theme(axis.title = element_text(face = "bold"),
         axis.text.x = element_text(face = "bold"))
 ```
 
 Going the extra mile to create a function:
 
-```{r}
+```{r, fig.height=20}
 plot_fct_boxplot <- function(var_x) {
   stock_market %>% 
   mutate(var_x_fct = factor({{var_x}})) %>%  # so that other classes can be used for plot as well
@@ -92,6 +100,7 @@ plot_fct_boxplot <- function(var_x) {
   geom_bar(aes(fill = var_x_fct), show.legend = F) +
   geom_text(stat = "count", aes(label = ..count..), vjust = -1) +
   scale_fill_jco() + # from ggsci package
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
   theme_classic() +
   labs(title = str_to_title(as_label(enquo(var_x))),
        x = as_label(enquo(var_x))) +
@@ -489,6 +498,7 @@ bind_rows(log_reg_auc,
   coord_equal()  +
   labs(title = "Comparing QDA, LDA and Log Regression",
        subtitle = "QDA is very slightly better than the other two models!") +
+  scale_color_jco() +
   theme_classic() +
   theme(legend.position = "top")
 ```
