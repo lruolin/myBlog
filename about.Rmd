@@ -19,9 +19,12 @@ I tried to look for a chemometrics course that I can take online, but found that
 
 What I would like to achieve for this blog, is a self-practice corner to compile my codes, for the following application areas:
 
-- Planning and design of experiments
-- Basic statistical analysis: t-test, ANOVA
 - Design of experiment: Full factorial design, half factorial design, optimisation. This could be applied to design of chemistry experiments, or even sensory analysis.
-- Modelling: What is the general workflow for different machine learning techniques, PCA, PLS, Clustering, Multivariate linear regression, Discriminant analysis. 
+- Signal pre-processing (for chromatographic, spectral data)
+- Univariate statistical analysis
+- Multivariate statistical analysis
+- PCA as exploratory method to remove redundant variables (unsupervised method)
+- Modelling for classification - PLS-DA, kNN, QDA, LDA
+- Modelling for regression - PLS-R, PCR, OLS-R
 
 Most of the statistical software are expensive and not readily available to resource-tight individuals in companies or students. R and Python are open-source software with powerful packages and allows customization of graphs, but requires a certain level of coding knowledge. This will be the area I want to specialize in: Chemometrics with R.

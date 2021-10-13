@@ -1,0 +1,437 @@
+---
+title: "Tidy Tuesday Bird Bath Data"
+description: |
+  Practicing predicting with logistic regression for bird bath observation
+author:
+  - name: lruolin
+date: 10-08-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Background
+
+This is a post reproducing Julia Silge's tutorial on logistic regression to predict the probablity of seeing birds at bird baths, using the tidymodels framework.
+
+# Learning points
+
+- how to fit logistic regression with interaction, using tidymodels framework
+- how to run cross-validation in parallel
+- must always remember to use recipe to change outcome variable to factor
+- using strata for imbalanced outcome
+- practicing using tidyeval for ggplots for exploratory data analysis
+
+# Packages
+
+```{r}
+library(pacman)
+p_load(tidyverse, tidymodels, ggsci, janitor, tidytuesdayR, skimr,
+       patchwork)
+
+```
+
+
+# Load data
+
+The data is from Tidy Tuesday: 
+
+```{r}
+# to download data
+bird_baths <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-08-31/bird_baths.csv')
+
+
+```
+
+```{r}
+bird_baths %>% 
+  head()
+```
+
+From the documentation:
+
+- urban areas: with population of 1,000 = 100,000
+- rural areas: with population of < 999 people
+
+
+# EDA
+
+```{r}
+bird_baths %>% 
+  skim()
+```
+
+This is a very long dataset: 161057 rows by 5 variables. 
+There are some missing data for urban_rural and bioregions.
+Change all year to factor, all character to factor, and bird count to factor (since 0 = not seen, 1 = seen)
+
+```{r}
+glimpse(bird_baths)
+
+bird_baths %>% 
+  filter(is.na(bioregions)) 
+
+bird_baths %>% 
+  filter(is.na(survey_year))
+
+bird_baths %>% 
+  count(bird_count)
+```
+
+```{r}
+
+bird_bath_working <- bird_baths %>% 
+  mutate(across(.cols = survey_year:bird_type , as.factor)) %>% 
+  na.exclude() # remove NA
+
+glimpse(bird_bath_working)
+```
+
+Reusing my ggplot code from previous post:
+
+```{r}
+# Create function:
+
+plot_fct_boxplot <- function(var_x) {
+  bird_bath_working %>% 
+  mutate(var_x_fct = factor({{var_x}})) %>%  # so that other classes can be used for plot as well
+  ggplot(aes(var_x_fct)) +
+  geom_bar(aes(fill = var_x_fct), show.legend = F) +
+  geom_text(stat = "count", aes(label = ..count..), hjust = -0.1) +
+  scale_fill_jco() + # from ggsci package
+  scale_y_continuous(expand = expansion(mult = c(0, 0.2))) +
+  theme_classic() +
+  labs(title = str_to_title(as_label(enquo(var_x))),
+       x = as_label(enquo(var_x))) +
+  theme(axis.title = element_text(face = "bold"),
+        axis.text.x = element_text(face = "bold")) +
+    coord_flip()
+}
+
+# Set names to loop through:
+
+var_fct <- bird_bath_working %>% 
+  select(survey_year, urban_rural, bioregions, bird_count) %>% 
+  names()
+
+
+plots <- var_fct %>% 
+  syms() %>% 
+  map(function(var) plot_fct_boxplot({{var}}))
+
+
+(plots[[1]] + plots[[2]] + plots[[4]]) / plots[[3]]
+
+
+```
+
+Bird_count is very imbalanced. 
+Most of the observations come from urban area (about 70%). 
+Most of the data is from Sydney Basin. 
+
+```{r, fig.width=20}
+glimpse(bird_bath_working)
+
+bird_bath_working %>% 
+  distinct(bird_type) %>% 
+  count() # there are 169 types of birds seen
+
+top_15_birds <- bird_bath_working %>% 
+  group_by(bird_type) %>% 
+  summarise(times_seen = sum(bird_count)) %>% 
+  arrange(desc(times_seen)) %>% 
+  slice_head(n = 15)
+
+names_top_birds <- top_15_birds %>% 
+  pull(bird_type)
+
+bird_bath_working %>% 
+  filter(bird_type %in% names_top_birds) %>% 
+  group_by(bird_type, bioregions) %>% 
+  summarise(times_seen = sum(bird_count), .groups = "drop") %>% 
+  arrange(desc(times_seen))  %>% 
+  ggplot(aes(bioregions, fct_rev(bird_type))) +
+  geom_tile(aes(fill = times_seen)) +
+  scale_fill_continuous(low = "snow1", high = "darkorange4") +
+  labs(title = "Heatmap for the top 15 types of birds (by total number of times seen)",
+       x = "Bio Regions",
+       y = "Bird type",
+       caption = "Source: Cleary et al, 2016") +
+  theme_classic() +
+  theme(axis.text = element_text(face = "bold"))
+```
+
+
+# Rarest birds
+
+```{r, fig.width=20}
+bottom_15_birds <- bird_bath_working %>% 
+  group_by(bird_type) %>% 
+  summarise(times_seen = sum(bird_count)) %>% 
+  arrange(desc(times_seen)) %>% 
+  slice_tail(n = 15)
+
+names_rare_birds <- bottom_15_birds %>% 
+  pull(bird_type)
+
+names_rare_birds
+
+bird_bath_working %>% 
+  filter(bird_type %in% names_rare_birds) %>% 
+  group_by(bird_type, bioregions) %>% 
+  summarise(times_seen = sum(bird_count), .groups = "drop") %>%
+  arrange(desc(times_seen))  %>% 
+  ggplot(aes(bioregions, fct_rev(bird_type))) +
+  geom_tile(aes(fill = times_seen)) +
+  scale_fill_continuous(low = "snow1", high = "darkorange4") +
+  labs(title = "Heatmap for the rarest 15 types of birds (by total number of times seen)",
+       x = "Bio Regions",
+       y = "Bird type",
+       caption = "Source: Cleary et al, 2016") +
+  theme_classic() +
+  theme(axis.text = element_text(face = "bold"))
+```
+
+# Probability of seeing birds of different in different locations
+
+```{r}
+
+# data that looks at av number of times of seeing birds in urban/rural region
+top_15_urban_rural <- bird_bath_working %>% 
+  filter(bird_type %in% names_top_birds) %>% 
+  group_by(urban_rural, bird_type) %>% 
+  summarise(av_times_seen = mean(bird_count), .groups = "drop") %>%  # mean is used, not sum
+  arrange(desc(av_times_seen)) 
+
+head(top_15_urban_rural)
+
+# pivot wider so that can use data for geom_segment later
+top_15_urban_rural_wide <- top_15_urban_rural %>% 
+  pivot_wider(names_from = urban_rural,
+              values_from = av_times_seen) %>% 
+  arrange(desc(Urban)) %>% 
+  rowid_to_column("order")
+
+head(top_15_urban_rural_wide)
+
+top_15_urban_rural %>% 
+ # inner join to see the ordering
+  left_join(top_15_urban_rural_wide, by = "bird_type") %>% 
+  ggplot(aes(av_times_seen, fct_reorder(bird_type, -order))) +
+  geom_point(aes(col = urban_rural), size = 3) +
+
+  geom_segment(
+    aes(x = Rural, xend = Urban,
+        y = bird_type, yend = bird_type),
+    alpha = 0.7, col = "gray70", size = 1
+  ) +
+  
+  scale_x_continuous(labels = scales::percent, 
+                     limits = c(0, 0.5)) +
+  scale_color_jco() +
+  labs(title = "Av number of times seen for top 15 most common types of birds",
+       subtitle = "Birds are arranged in descending order for probability of seeing in urban areas",
+       x = "Av number of times seen",
+       y = "Bird type",
+       caption = "Source: Cleary et al, 2016",
+       col  = NULL) +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+
+```{r, include = F}
+save.image("birds.Rdata")
+```
+
+# Building a logistic regression model
+
+Learning point: character variables do not work well for modelling.
+Must remember to change outcome variable to a factor. 
+
+```{r}
+glimpse(bird_bath_working)
+
+bird_bath_working <- 
+  bird_bath_working %>% 
+  mutate(bird_seen = if_else(bird_count > 0, "bird seen", "not seen")) %>%  # outcome must be a factor!
+  mutate(across(where(is.character), as.factor))
+
+set.seed(2021101001)
+
+bird_split <- initial_split(bird_bath_working,
+                            strata = bird_count) # since there is an imbalance
+
+# create a df for train and test data
+
+bird_train_data <- training(bird_split) # 120,666
+bird_test_data <- testing(bird_split) # 40,222
+
+# define model:
+lr_model <- logistic_reg()
+
+lr_model
+
+# create recipe: outcome and two predictors
+bird_recipe <- recipe(bird_seen ~ bird_type + urban_rural, data = bird_train_data) %>% 
+                step_dummy(all_nominal_predictors()) # to create dummy variables from factors
+
+
+summary(bird_recipe)
+
+
+bird_recipe %>% prep()
+
+
+# bundle workflow
+
+bird_workflow <- 
+  workflow() %>% 
+  add_model(lr_model) %>% 
+  add_recipe(bird_recipe)
+
+bird_workflow
+
+# create cross-validation: to get better estimates of performance
+set.seed(2021101002)
+bird_folds <- vfold_cv(bird_train_data, v = 10, strata = bird_count) # since there is an imbalance
+
+# fit resamples to workflow:
+doParallel::registerDoParallel()
+control_pred <- tune::control_resamples(save_pred = T)
+lr_fit_rs <- fit_resamples(bird_workflow, bird_folds, control = control_pred)
+
+# collect metrics
+
+collect_metrics(lr_fit_rs) # acc = 0.966, auc = 0.858
+
+rs_roc_plot <- augment(lr_fit_rs) %>% 
+  clean_names() %>%  # so that pred_bird_seen can be used
+  roc_curve(bird_seen, pred_bird_seen) %>% 
+  autoplot()
+
+rs_roc_plot
+
+```
+
+
+```{r, include = F}
+save.image("birds.Rdata")
+
+```
+
+
+# Adding interactions
+
+```{r}
+bird_recipe_interact <- 
+  bird_recipe %>% 
+  step_interact(~starts_with("urban_rural"):starts_with("bird_type"))
+
+bird_workflow_interact <- 
+  workflow() %>% 
+  add_model(lr_model) %>% 
+  add_recipe(bird_recipe_interact)
+
+lr_fit_rs_interact <- fit_resamples(bird_workflow_interact,
+                                    bird_folds,
+                                    control = control_pred)
+
+collect_metrics(lr_fit_rs_interact) # 0.966 acc, 0.869 auc , slightly higher.
+
+```
+
+The AUC is higher for the interact model. However, this model took about 4 hours to run on my laptop....
+
+# Comparing AUC Curves
+
+```{r}
+lr_mod_df <- augment(lr_fit_rs) %>% 
+  clean_names() %>% 
+  roc_curve(bird_seen, pred_bird_seen) %>% 
+  mutate(model = "log reg model")
+
+
+lr_interact_mod_df <- augment(lr_fit_rs_interact) %>% 
+  clean_names() %>% 
+  roc_curve(bird_seen, pred_bird_seen) %>% 
+  mutate(model = "log reg model with interaction") 
+
+bind_rows(lr_mod_df, lr_interact_mod_df) %>% 
+  ggplot(aes(x = 1-specificity, y = sensitivity, col = model)) +
+  geom_path(lwd = 1.5, alpha = 0.5) +
+  geom_abline(lty = 3) +
+  coord_equal() +
+  scale_color_jco() +
+  theme_classic()
+
+```
+
+
+
+# Evaluating model on test data
+
+```{r}
+bird_fit <- parsnip::fit(bird_workflow_interact, bird_test_data)
+```
+
+# Predict the test set
+
+```{r}
+predict(bird_fit, bird_test_data, type = "prob")
+```
+
+# Predicting on new data
+
+```{r}
+
+# Creating new data frame
+new_bird_data <- 
+  tibble(bird_type = top_15_birds$bird_type) %>% 
+  crossing(urban_rural = c("Urban", "Rural")) # all unique combinations
+
+# Augment to new data
+
+birds_predicted_new_df <- augment(bird_fit, new_bird_data) %>% 
+  bind_cols(
+    predict(bird_fit, new_bird_data, type = "conf_int")
+  ) %>% 
+  clean_names()
+
+birds_predicted_new_df
+
+birds_predicted_new_df %>% 
+  filter(bird_type == "Spotted Dove")
+
+# visualizing
+
+birds_predicted_new_df %>% 
+  ggplot(aes(pred_bird_seen, bird_type, col = urban_rural)) +
+  geom_errorbar(aes(
+    xmin = pred_lower_bird_seen,
+    xmax = pred_upper_bird_seen
+  ), 
+  width = 0.2, size = 1.2, alpha = 0.5) +
+  geom_point(size = 3) +
+  scale_x_continuous(labels = scales::percent) +
+  labs(x = "Predicted probability of seeing bird",
+       y = "",
+       col = NULL,
+       caption = "Caption: Cleary et al, 2016") +
+  scale_colour_jco() +
+  theme_classic()
+
+```
+
+
+The spotted dove is very hard to spot in rural places!
+
+
+# Reference:
+
+- [Julia Silge's Youtube Video] [https://www.youtube.com/watch?v=NXot3Q0QtGk]
+- <https://juliasilge.com/blog/bird-baths/>
