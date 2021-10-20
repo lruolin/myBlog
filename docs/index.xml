@@ -7,7 +7,15 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 08 Oct 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 15 Oct 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Text mining from pdf files with Tesseract and pdftools</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20211015 Text mining with tesseract</link>
+      <description>Optical Character Recognition (OCR) for copying text from pdf files</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20211015 Text mining with tesseract</guid>
+      <pubDate>Fri, 15 Oct 2021 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Tidy Tuesday Bird Bath Data</title>
       <dc:creator>lruolin</dc:creator>
