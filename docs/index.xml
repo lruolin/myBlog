@@ -17,6 +17,14 @@
       <pubDate>Fri, 15 Oct 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
+      <title>Retrieving chemical information from the web</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20211022 Retrieving chemical information</link>
+      <description>Webchem: a very useful package!</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20211022 Retrieving chemical information</guid>
+      <pubDate>Fri, 15 Oct 2021 00:00:00 +0000</pubDate>
+    </item>
+    <item>
       <title>Tidy Tuesday Bird Bath Data</title>
       <dc:creator>lruolin</dc:creator>
       <link>https://lruolin.github.io/myBlog/posts/20211008 Tidy Tuesday Bird Bath Log Reg</link>
