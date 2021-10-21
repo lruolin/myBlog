@@ -271,7 +271,6 @@ glimpse(data)
 
 in_house_db <- read_excel("in_house.xlsx") %>% 
   clean_names() %>% 
-  select(ends_with("combined"), lri_db_1_text, lri_db_5_text, lri_wax_text) %>% 
   distinct(cas_combined, .keep_all = T)
 
 glimpse(in_house_db)
@@ -279,8 +278,7 @@ glimpse(in_house_db)
 # merge in sensory descriptor ------
 
 data_sensory_desc <- data %>% 
-  left_join(in_house_db, by = c("cas" = "cas_combined")) %>% 
-  select(-lri_db_1_text, -compound_combined, -fema_combined)
+  left_join(in_house_db, by = c("cas" = "cas_combined"))
 
 glimpse(data_sensory_desc)
 
