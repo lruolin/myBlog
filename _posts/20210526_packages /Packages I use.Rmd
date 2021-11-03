@@ -19,6 +19,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - datapasta
 - rio (to import multiple excel files) <https://johnmackintosh.net/tag-rio/>
+- pdftools (to scrape tabular data)
+- tesseract (for optical character recognition)
 
 # Useful packages for data exploration
 
@@ -71,12 +73,17 @@ knitr::opts_chunk$set(echo = TRUE)
 - FrF2
 
 ## Others
+
  - distill
  - kableExtra
  - DT <https://rstudio.github.io/DT/>
  - pacman (to load libraries quickly)
  - tidytuesdayR (for practice datasets updated weekly) <https://github.com/rfordatascience/tidytuesday>
  
+ 
+## rOpenSci
+
+  - webchem: to retrieve information from open-source databases (eg Pubchem)
  
 # Useful Reference Books
 
