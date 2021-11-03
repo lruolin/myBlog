@@ -12,6 +12,9 @@ Math inside RMarkdown:
 Statistical Inference via Data Science:
 - <https://moderndive.com/index.html>
 
+Using R for Common Scientific Tasks:
+- <https://raw.githack.com/etmckinley/Coffey-Lab-R-Tutorial/main/R-tutorial-xaringnan.html#1>
+
 
 Machine Learning:
 
@@ -23,3 +26,8 @@ Machine Learning:
 
 Text Analysis:
 - <https://smltar.com/>
+
+Analytics for Food Industry:
+
+- <https://www.spssanalyticspartner.com/wp-content/uploads/2016/06/intro-to-predictive-analytics-food-innovation.pdf>
+- <https://www.nature.com/articles/s41598-020-73978-1>

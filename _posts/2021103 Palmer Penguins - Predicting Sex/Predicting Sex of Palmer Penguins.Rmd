@@ -1,0 +1,322 @@
+---
+title: "Palmer Penguins"
+description: |
+  Predicting Sex of Palmer Penguins
+author:
+  - name: lruolin
+date: 10-27-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction
+
+The codes below are mostly from Julia Silge's blog (see Reference for link), as I am trying to follow the screencast to be more familiar with tidymodels framework.
+
+# Learning points
+
+- How to use bootstrapping under tidymodels framework (esp for small datasets)
+- How to use random forest model
+
+
+# Load Packages
+
+```{r}
+library(pacman)
+p_load(tidymodels, palmerpenguins, janitor, skimr, ggstatsplot, ggsci, patchwork,
+       GGally, ranger)
+
+theme_set(theme_classic())
+```
+
+# Data
+
+```{r}
+glimpse(penguins) # 344 x 8 col
+```
+
+## Check for missing values
+
+```{r}
+penguins_orig <- penguins
+
+sapply(penguins_orig, function(x) sum(is.na(x)))
+
+skim(penguins_orig) # need to exclude missing values
+
+
+penguins <- penguins_orig %>% 
+  drop_na()
+```
+
+## Summary statistics
+
+```{r}
+summary(penguins)
+```
+
+
+## EDA
+
+```{r}
+penguins %>% 
+  group_by(species) %>% 
+  summarise(n = n(),
+            .groups = "drop") %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ggplot(aes(species, prop, label = scales::percent(prop))) +
+  geom_col(aes(fill = species), show.legend = F) +
+  geom_text(vjust = -1) +
+  scale_fill_jco() +
+  labs(title = "Species")
+
+
+plot_fcts <- function(var_x) {
+  penguins %>% 
+  group_by({{var_x}}) %>% 
+  summarise(n = n(),
+            .groups = "drop") %>% 
+  mutate(prop = n/sum(n)) %>% 
+  ggplot(aes({{var_x}}, prop, label = scales::percent(prop))) +
+  geom_col(aes(fill = {{var_x}}), show.legend = F) +
+  geom_text(vjust = -1) +
+  scale_fill_jco() +
+  labs(title = as_label(enquo(var_x)))
+
+}
+
+plot_fcts(species)
+plot_fcts(island)
+plot_fcts(sex) # removed na from data, almost 50-50% 
+```
+
+```{r}
+penguins %>% 
+  ggplot(aes(sex, bill_length_mm)) +
+  geom_boxplot() +
+  geom_point() 
+
+plot_boxplots <- function(fct_x, cont_y) {
+  penguins %>% 
+    ggplot(aes({{fct_x}}, {{cont_y}})) +
+    geom_boxplot(aes(fill = {{fct_x}}), show.legend = F) +
+    geom_jitter(alpha = 0.5, aes(col = {{fct_x}}), show.legend = F) +
+    scale_fill_jco() +
+    scale_color_jco()
+  
+}
+
+
+
+```
+
+By Species
+
+```{r}
+bp1 <- plot_boxplots(species, bill_length_mm)
+bp2 <- plot_boxplots(species, bill_depth_mm)
+bp3 <- plot_boxplots(species, flipper_length_mm)
+bp4 <- plot_boxplots(species, body_mass_g)
+
+bp_species <- (bp1 + bp2) / (bp3 + bp4)
+bp_species
+```
+
+By Gender
+
+```{r}
+bp5 <- plot_boxplots(sex, bill_length_mm)
+bp6 <- plot_boxplots(sex, bill_depth_mm)
+bp7 <- plot_boxplots(sex, flipper_length_mm)
+bp8 <- plot_boxplots(sex, body_mass_g)
+
+bp_sex <- (bp5 + bp6) / (bp7 + bp8)
+bp_sex
+```
+
+
+## Correlation
+
+```{r}
+penguins %>% 
+  select_if(is.numeric) %>% 
+  ggstatsplot::ggcorrmat()
+```
+
+```{r}
+penguins %>% 
+  select(-year) %>% 
+  ggpairs(aes(col = sex)) +
+  scale_color_jco() +
+  scale_fill_jco()
+```
+
+# Split data
+
+```{r}
+set.seed(2021110301)
+
+penguin_split <- initial_split(penguins, strata = sex)
+penguin_train <- training(penguin_split)
+penguin_test <- testing(penguin_split)
+```
+
+# Create recipe
+
+```{r}
+penguin_recipe <- recipe(sex ~ ., data = penguins) %>% 
+  update_role(island, year, new_role = "dummy")
+
+summary(penguin_recipe)
+```
+
+# Create bootstrap
+
+```{r}
+set.seed(2021110302)
+penguin_boot <- bootstraps(penguin_train)
+penguin_boot
+```
+
+# Log Reg Model
+
+```{r}
+lr_model <- logistic_reg() %>% 
+  set_engine("glm")
+
+```
+
+```{r}
+lr_workflow <- workflow() %>% 
+  add_model(lr_model) %>% 
+  add_recipe(penguin_recipe)
+```
+
+```{r}
+lr_fit_resamples <- lr_workflow %>% 
+  fit_resamples(
+    resamples = penguin_boot,
+    control = control_resamples(save_pred = T)
+  )
+
+lr_fit_resamples
+```
+
+
+# Random Forest Model
+
+```{r}
+rf_model <- rand_forest() %>% 
+  set_mode("classification") %>% 
+  set_engine("ranger")
+
+rf_model
+```
+
+```{r}
+rf_workflow <- workflow() %>% 
+  add_model(rf_model) %>% 
+  add_recipe(penguin_recipe)
+
+```
+
+```{r}
+rf_fit_resamples <- rf_workflow %>% 
+  fit_resamples(
+    resamples = penguin_boot,
+    control = control_resamples(save_pred = T)
+  )
+
+rf_fit_resamples
+```
+
+# Evaluate models
+
+```{r}
+collect_metrics(lr_fit_resamples)
+
+```
+
+```{r}
+collect_metrics(rf_fit_resamples)
+```
+
+Logistic Reg model performed better.
+
+# Confusion matrix on resampled data
+
+```{r}
+lr_fit_resamples %>% 
+  conf_mat_resampled()
+```
+
+# ROC curve for resampled data
+
+```{r}
+lr_fit_resamples %>% 
+  collect_predictions() %>% 
+  group_by(id) %>% 
+  roc_curve(sex, .pred_female) %>% 
+  ggplot(aes(1-specificity, sensitivity, col = id)) +
+  geom_abline(lty = 2, size = 1.5) +
+  geom_path(show.legend = F, alpha = 0.6, size = 1.2) +
+  coord_equal()
+```
+
+# Evaluate on testing dataset - Log Reg
+
+```{r}
+lr_penguin_final <- lr_workflow %>% 
+  last_fit(penguin_split)
+
+lr_penguin_final
+
+collect_metrics(lr_penguin_final)
+
+collect_predictions(lr_penguin_final) %>% 
+  conf_mat(sex, .pred_class)
+```
+
+```{r}
+lr_penguin_final$.workflow[[1]] %>% 
+  tidy(exponentiate = T) %>% 
+  arrange(desc(estimate))
+```
+
+An increase of 1mm in bill depth will correspond to almost 6x higher odds of being male. 
+
+# Evaluate on testing dataset - Random Forest
+```{r}
+rf_penguin_final <- rf_workflow %>% 
+  last_fit(penguin_split)
+
+rf_penguin_final
+
+collect_metrics(rf_penguin_final)
+
+collect_predictions(rf_penguin_final) %>% 
+  conf_mat(sex, .pred_class)
+
+```
+
+Log Reg is a simpler and more interpretable model as compared to random forest. 
+
+# Visualization to confirm
+
+```{r}
+penguins %>% 
+  ggplot(aes(bill_depth_mm, bill_length_mm, col = sex)) +
+  geom_point() +
+  facet_wrap(~species) +
+  scale_color_jco()
+```
+
+
+# Reference:
+
+-<https://juliasilge.com/blog/palmer-penguins/>
