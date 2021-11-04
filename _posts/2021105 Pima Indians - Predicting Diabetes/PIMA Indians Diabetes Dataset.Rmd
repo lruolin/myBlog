@@ -1,0 +1,548 @@
+---
+title: "Pima Indians Diabetes Dataset"
+description: |
+  Predicting whether a patient has diabetes
+author:
+  - name: lruolin
+date: 11-06-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction
+
+This is a practice on the PIMA Indian diabetes dataset, to predict whether or not a patient has diabetes.
+
+# Learning points
+
+I followed Rebecca Barter's blog post quite closely for this exercise. 
+
+- Automating more EDA plots to understand the data
+- Trying out preprocessing for data, and visualizing the preprocessed data
+- Trying out tuning for Random Forest using cross-validation for parameter tuning
+- Understanding how to extract variable importance and customizing my own plot for visualization. 
+
+# Load packages
+
+```{r}
+library(pacman)
+
+p_load(tidyverse, tidymodels, ggsci, GGally, janitor, ggthemes,
+       mlbench, patchwork, themis, skimr, vip) 
+
+# mlbench: for PIMA Indians dataset
+
+```
+
+
+# Load Data
+
+
+```{r}
+data("PimaIndiansDiabetes2")
+
+diabetes_orig <- PimaIndiansDiabetes2
+```
+
+Notes from the mlbench package:
+
+The data set PimaIndiansDiabetes2 contains a corrected version of the original data set. While the UCI repository index claims that there are no missing values, closer inspection of the data shows several physical impossibilities, e.g., blood pressure or body mass index of 0. In PimaIndiansDiabetes2, all zero values of glucose, pressure, triceps, insulin and mass have been set to NA.
+
+```{r}
+glimpse(diabetes_orig) # 768 x 9
+```
+
+Goal: To predict diabetes (Y) from the other 8 numerical variables (X): 
+
+
+pregnant - Number of times pregnant
+glucose - Plasma glucose concentration (glucose tolerance test)
+pressure - Diastolic blood pressure (mm Hg)
+triceps - Triceps skin fold thickness (mm)
+insulin - 2-Hour serum insulin (mu U/ml)
+mass - Body mass index (weight in kg/(height in m)\^2)
+pedigree	- Diabetes pedigree function
+age - Age (years)
+
+# Missing values
+
+```{r}
+sapply(diabetes_orig, function(x) sum(is.na(x)))  # need to do something about missing values
+```
+
+# EDA
+
+## Check distribution for Y variable (diabetes)
+```{r}
+diabetes_orig %>% 
+  count(diabetes) %>%  # not evenly distributed
+  ggplot(aes(diabetes, n)) +
+  geom_col(aes(fill = diabetes), show.legend = F) +
+  scale_fill_jco() +
+  labs(title  = "Distribution of Y variable - No. of patients with diabetes") +
+  theme_clean()
+```
+
+## Check distribution for X variables
+
+```{r}
+diabetes_orig %>% 
+  ggpairs(aes(col = diabetes, fill = diabetes)) +
+  scale_color_jco() +
+  scale_fill_jco() +
+  theme_clean()
+```
+
+Skewed:
+ - pregnant
+ - glucose
+ - triceps
+ - insulin
+ - mass
+ - pedigree
+ - age
+ 
+Not skewed:
+ - pressure
+ 
+ Almost all the x variables are skewed.
+ 
+
+Some correlation for:
+- number of times pregnant and age
+- insulin and glucose concentration
+- triceps thickness and bmi
+
+## Check for outliers?
+
+```{r}
+
+# 1 plot
+median_df <- diabetes_orig %>% 
+  group_by(diabetes) %>% 
+  summarise(median = median(pregnant))
+
+
+diabetes_orig %>% 
+  ggplot(aes(diabetes, pregnant)) +
+  geom_boxplot(aes(fill = diabetes), show.legend = F) +
+  geom_text(data = median_df, aes(x = diabetes,
+                                y = median,
+                                label = median),
+            vjust = -1, size = 5) +
+  scale_fill_jco() +
+  labs(title = "Pregnant") +
+  theme_clean()
+
+# create function
+
+plot_boxplots_against_outcome <- function(var_y){
+  
+  median_df <- diabetes_orig %>% 
+  group_by(diabetes) %>% 
+  summarise(median = median({{var_y}}, na.rm = T)) # must remove to calculate
+
+
+diabetes_orig %>% 
+  ggplot(aes(diabetes, {{var_y}})) +
+  geom_boxplot(aes(fill = diabetes), show.legend = F) +
+  geom_text(data = median_df, aes(x = diabetes,
+                                y = median,
+                                label = median),
+            vjust = -0.5, size = 4, fontface = "bold") +
+  scale_fill_jco() +
+  labs(title = str_to_title(
+                as_label(enquo(var_y)))) +
+  theme_clean()
+  
+}
+
+# set names to loop through
+
+num_var <- diabetes_orig %>% 
+  select(-diabetes) %>% 
+  names()
+
+num_var %>% 
+  syms() %>% # take strings as input and turn them into symbols
+  map(function(var) plot_boxplots_against_outcome({{var}})) %>% 
+  patchwork::wrap_plots()
+```
+
+People with diabetes tend to have:
+- lower number of times pregnant
+- lower blood glucose
+- lower triceps value
+- lower bmi
+- lower pedigree
+- lower age
+
+```{r}
+diabetes_orig %>% 
+  ggplot(aes(insulin)) +
+  geom_freqpoly(aes(col = diabetes), size = 2) +
+  labs(title = "Insulin") +
+  theme_clean() +
+  scale_color_jco()
+
+# a function
+plot_freqpoly <- function(var_x) {
+  diabetes_orig %>% 
+  ggplot(aes({{var_x}})) +
+  geom_freqpoly(aes(col = diabetes), size = 2) +
+  labs(title = str_to_title(as_label(enquo(var_x)))) +
+  theme_clean() +
+  scale_color_jco()
+}
+
+# map
+num_var %>% 
+  syms() %>% # take strings as input and turn them into symbols
+  map(function(var) plot_freqpoly({{var}})) %>% 
+  patchwork::wrap_plots()
+```
+
+
+
+# Relevel outcome variable 
+
+This is done so that the reference level is Positive (instead of alphabetical order).
+
+```{r}
+diabetes <- diabetes_orig %>% 
+  mutate(diabetes = fct_relevel(diabetes,
+                                "pos", "neg"))
+
+glimpse(diabetes)
+
+```
+
+# Initial split
+
+```{r}
+set.seed(2021110401)
+
+diabetes_split <- initial_split(diabetes, prop = 0.75,
+                                strata = "diabetes")
+
+diabetes_train <- training(diabetes_split)
+diabetes_test <- testing(diabetes_split)
+
+```
+
+# Cross-validation 
+
+```{r}
+diabetes_cv <- vfold_cv(diabetes_train)
+```
+
+# Define recipe
+
+- Missing values: need to impute
+- Transformation for X variables
+- Normalization of data
+
+
+```{r}
+diabetes_recipe <- 
+  recipe(diabetes ~ ., data = diabetes) %>% 
+  step_impute_median(all_predictors()) %>% 
+  step_log(pregnant, glucose, insulin, triceps, mass, pedigree, age,
+           offset = 1) %>% 
+  step_normalize(all_numeric()) %>% 
+  themis::step_smote(diabetes) # class imbalance
+
+diabetes_recipe
+```
+
+# Check reciped
+
+```{r}
+diabetes_preprocessed <- diabetes_recipe %>% 
+  prep(diabetes_train) %>%
+  bake(new_data = NULL) # returns the training dataset
+
+diabetes_preprocessed
+
+skim(diabetes_preprocessed) # no missing
+
+diabetes_preprocessed %>% 
+  ggpairs(aes(col = diabetes, fill = diabetes)) +
+  scale_color_jco() +
+  scale_fill_jco() +
+  theme_clean()
+
+summary(diabetes_preprocessed)
+```
+
+X variables are less skewed.
+Y variable is balanced.
+
+# Logistic Regression model
+
+```{r}
+lr_model <- 
+  logistic_reg() %>% 
+  set_engine("glm") %>% 
+  set_mode("classification")
+```
+
+# Logistic regression workflow
+
+```{r}
+lr_workflow <- workflow () %>% 
+  add_model(lr_model) %>% 
+  add_recipe(diabetes_recipe)
+```
+
+# Fit data to Logistic Regression workflow
+
+```{r}
+lr_fit <- lr_workflow %>% 
+  fit(data = diabetes_train)
+
+```
+
+# Fit data to resamples
+
+```{r}
+lr_fit_resamples <- lr_workflow %>% 
+  fit_resamples(
+    resamples = diabetes_cv,
+    control = control_resamples(save_pred = T)
+  )
+```
+
+# Collect metrics for Log Reg on resampled data
+
+```{r}
+collect_metrics(lr_fit_resamples)
+```
+
+
+# Predict and get metrics on test data
+
+```{r}
+diabetes_lr_augment <- 
+  augment(lr_fit, diabetes_test)
+
+diabetes_lr_augment
+
+```
+
+# Assess Log Reg on test data
+
+```{r}
+metrics <- metric_set(accuracy, roc_auc)
+
+lr_acc <- diabetes_lr_augment %>% 
+  accuracy(truth = diabetes, estimate = .pred_class)
+
+lr_roc_auc <- diabetes_lr_augment %>% 
+  roc_auc(truth = diabetes, estimate = .pred_pos)
+
+lr_metrics <- 
+  bind_rows(lr_acc, lr_roc_auc)
+
+lr_metrics
+```
+
+
+Another way to collect metrics on test dataset:
+
+```{r}
+lr_diabetes_final <- lr_workflow %>% 
+  last_fit(diabetes_split)
+
+lr_metrics_final <- lr_diabetes_final %>% 
+  collect_metrics()
+```
+
+
+
+# Random Forest model
+
+```{r}
+rf_model <- 
+  rand_forest() %>% 
+  set_args(mtry = tune()) %>% 
+  set_engine("ranger", importance = "impurity") %>% 
+  set_mode("classification")
+```
+
+# Random Forest workflow
+
+```{r}
+rf_workflow <- 
+  workflow() %>% 
+  add_model(rf_model) %>% 
+  add_recipe(diabetes_recipe)
+```
+
+# Tune parameters for RF workflow (mtry)
+
+Carry out tuning based using cross-validation object.
+First, specify the range of mtry values to try (mtry)
+Add tuning layer to workflow
+Assess based on accuracy and roc_auc
+
+```{r}
+rf_grid <- expand.grid(mtry = 3:7)
+
+rf_tune_results <- 
+  rf_workflow %>% 
+  tune_grid(resamples = diabetes_cv,
+            grid = rf_grid,
+            metrics = metric_set(accuracy, roc_auc, sens))
+```
+
+# Print RF Tune Results
+
+```{r}
+rf_tune_results %>% 
+  collect_metrics()
+
+rf_tune_results %>% 
+  collect_metrics() %>% 
+  filter(.metric == "accuracy") %>% 
+  arrange(desc(mean)) # mtry 6 has the highest accuracy
+
+rf_tune_results %>% 
+  collect_metrics() %>% 
+  filter(.metric == "roc_auc") %>% 
+  arrange(desc(mean)) # mtry 3 has the highest roc_auc
+```
+
+# Select best tune object
+
+Extract the best value for accuracy metric
+
+```{r}
+finalised_rf_parameters <- rf_tune_results %>% 
+  select_best(metric = "accuracy")
+
+finalised_rf_parameters # mtry 6
+```
+
+# Finalize RF workflow
+
+```{r}
+rf_final_workflow <- rf_workflow %>% 
+  finalize_workflow(finalised_rf_parameters)
+```
+
+# Evaluate RF model on test dataset
+
+last_fit function will train model specified using training data, and produce evaluation on the test data.
+
+```{r}
+rf_fit <- rf_final_workflow %>% 
+  last_fit(diabetes_split)
+
+```
+
+# Collect metrics for test dataset
+
+```{r}
+rf_fit %>% 
+  collect_metrics() # acc = 0.792, roc_auc = 0.861
+```
+
+Compared with Log Reg model, RF has higher accuracy and roc_auc
+
+```{r}
+lr_metrics_final
+```
+
+
+# Generate confusion matrix for RF model
+
+First, collect the predictions from the test set.
+
+```{r}
+# Collect test predictions
+
+test_predictions <- rf_fit %>% 
+  collect_predictions()
+
+```
+
+Then, generate the confusion matrix
+
+```{r}
+test_predictions %>% 
+  conf_mat(truth = diabetes, estimate = .pred_class)
+```
+
+# Finalized Model for dataset
+
+Random Forest model is better than Log Reg model.
+
+Final model is based on the data in the combined training and testing datasets. 
+
+```{r}
+diabetes_final_model <- fit(rf_workflow, diabetes)
+```
+
+# Variable importance
+
+To understand more about what variables were important in determining whether patient will be positive for diabetes:
+
+Using vip package:
+
+```{r}
+diabetes_final_model %>% 
+  extract_fit_parsnip() %>% 
+  vip(num_features = 8) +
+  labs(title = "Variable Importance") +
+  theme_clean()
+```
+
+Manual extraction:
+
+```{r}
+vip <- diabetes_final_model %>% 
+  extract_fit_parsnip()
+
+vip_variables <- as_tibble(as.list(vip$fit$variable.importance))
+
+vip_variables %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(fct_reorder(name, value), value)) +
+  geom_col(fill = "deepskyblue3") +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x = "X variables/Predictors",
+       y = "Importance",
+       title = "Variable Importance for Final RF Model",
+       subtitle = "Glucose concentraton in blood is the most important predictor") +
+  coord_flip() +
+  theme_clean()
+```
+
+
+# Predicting on future dataset:
+
+```{r}
+# create a dataset for future patient
+future_data <- tribble(
+  ~pregnant, ~glucose, ~pressure, ~triceps, ~insulin, ~mass, ~pedigree, ~age,
+  5, 140, 64, 50, 190, 30, 0.35, 59
+)
+
+predict(diabetes_final_model, new_data = future_data)
+
+```
+
+
+# Reference:
+
+-<https://towardsdatascience.com/modelling-binary-logistic-regression-using-tidymodels-library-in-r-part-1-c1bdce0ac055>
+
+- <https://www.rebeccabarter.com/blog/2020-03-25_machine_learning/>
+
+- <https://www.kaggle.com/collinsakal/diabetes-prediction-with-torch-for-r>

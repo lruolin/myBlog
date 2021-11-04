@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Thu, 04 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 06 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Pima Indians Diabetes Dataset</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/2021105 Pima Indians - Predicting Diabetes</link>
+      <description>Predicting whether a patient has diabetes</description>
+      <guid>https://lruolin.github.io/myBlog/posts/2021105 Pima Indians - Predicting Diabetes</guid>
+      <pubDate>Sat, 06 Nov 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/2021105 Pima Indians - Predicting Diabetes/PIMA-Indians-Diabetes-Dataset_files/figure-html5/unnamed-chunk-5-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Palmer Penguins</title>
       <dc:creator>lruolin</dc:creator>
