@@ -23,6 +23,7 @@ Machine Learning:
 - <https://github.com/onmee/ISLR-Answers>
 - <https://www.dataschool.io/15-hours-of-expert-machine-learning-videos/>
 - <https://www.tidymodels.org/>
+- <https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/classification.html>
 
 Text Analysis:
 - <https://smltar.com/>

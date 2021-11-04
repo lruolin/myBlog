@@ -4,7 +4,7 @@ description: |
   Predicting Sex of Palmer Penguins
 author:
   - name: lruolin
-date: 10-27-2021
+date: 11-04-2021
 output:
   distill::distill_article:
     self_contained: false
