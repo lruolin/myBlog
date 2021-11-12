@@ -1,0 +1,322 @@
+---
+title: "AMDIS Annotated Chromatogram"
+description: |
+  Annnotating GCMS peaks with AMDIS output
+author:
+  - name: lruolin
+date: 11-12-2021
+output:
+  distill::distill_article:
+    toc: true
+    self_contained: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+# Learn more about creating blogs with Distill at:
+# https://rstudio.github.io/distill/blog.html
+
+# for the metadata above, can add in under author,name:
+# url:, # affiliation, affiliation_url
+
+```
+
+# Background
+
+One of the reasons why I started to learn R, was that I wanted to draw a chromatogram using ggplot, and then label the peaks of interest **automatically**. That was when I learnt more about AMDIS, which is a peak deconvolution software that allowed for easier identification of co-eluted peaks, as compared to the default vendor software I was using. I loved that the ions corresponding to the identified compound were highlighted out from the whole spectrum when the spectrum was not clean, I loved that I could save new spectrum, and it could connect to NIST for further search.
+
+However, in order to rely on AMDIS results output, I had to improve on the search capability. It took me a while to figure out the software, as no one else was using the software here. The usual SOP was to manually identify the peaks, which would be more accurate (especially when small peaks may be missed out), and then manually write the compound name on the printed handout. How many times did I use the word manually? Learning R was really the best thing that happened to me in the last 2 years.. It allowed me to make plots customised to what I want, different from what the software automatically gave me. I could have thicker lines, different colored lines, annotated peaks with customized annotated text, and even interactive plots..
+
+So, back to AMDIS. In order to improve on the search capability, I had to build up a reliable library that is in **English**. For some reason, the default library I had at work had a lot of german text, which I couldn't comprehend. I did learn that "saur" meant acid after trying to translate over 1000 entries in an attempt to clean up the library. Most importantly, I had to key in the Kovats Index value for all the entries, with valid CAS numbers. I was most thankful when a colleague in Brazil sent me her version of the AMDIS libary, although the KI values were for another type of GC column, I slowly cleaned the entries for the common compounds. I also learnt how to search using the retention index mode, which saved me so much work from looking at multiple excel sheets (1 with GC area and retention times, 1 with my own database, 1 with KI values calculated from retention times)..
+
+I came up with the codes below out of necessity, as there was a sudden project which required me to quickly go through previously generated analysis reports to check that the identification of peaks was done correctly. Through this project, I get to really clean up my AMDIS library because I had to look at over 150 GCMS runs with at least 80 peaks per run. This was a really good way to train my AMDIS library to recognise the common peaks, and I get to have valid KI values specific to my instrument and not just the NIST values. 
+
+To get through this project, I envisioned having a printout, with AMDIS identified peaks (differentiated by color for confirmed and tentatively identified peaks), KI values of identified peaks, as well as to compare it line by line with the peaks identified in the draft report. 
+
+The codes below are a record of how it was done, but the focus is on annotating peaks with AMDIS output, rather than to compare line by line with the previous report. If that is also of interest, this can be easily built in as a geom_text using a separate dataframe. 
+
+I am unable to show to raw data files, so the codes below are just lines of codes without output. I really wish I could share the plots, but instead, I will just share the approach, also for the sake of the future me.
+
+# Approach
+
+1. Export AMDIS report, with correctly identified compound names. There may be tentatively identified compound names, either because there was no KI value in AMDIS search library, or it's not a very good match, and these compound names will have "?" or "??" in the compound name entry. I will use str_detect to look for these question marks, and then recode them to "unsure" or "sure" depending on whether there are question marks, and then use this factor variable to color the geom_text differently. 
+
+2. Export the retention time and signal values, as .csv file. Alternatively, if there is only the .cdf file available, use xcms package to extract the time and TIC values. 
+
+3. Hard code the sample name and retention time cut-offs at the start of the code. 
+
+4. As the x-axis is very long, I will split the retention_time_TIC dataframe, and use a ggplot function to plot for each split. The ggplot function will have to be coded in such a way that it will annotate with the peaks identified by AMDIS within the same retention time window (using filter by min and max RT for the group), and be coloured differently depending on how sure AMDIS is of the identification. I will use coord_cartesian to "zoom in" to look at the smaller peaks, hence large peaks may not be viewed in full. 
+
+5. Plots generated will be exported out as a powerpoint file automatically using the officer package, named by the given sample name.
+
+# Learning points
+
+- How to quickly visualize AMDIS output together with the chromatogram.
+- Splitting the tibble, writing a customized plot function, and using purrr::map to apply function to the splits.
+- Exporting out ggplots as a .pptx file as part of the workflow.
+
+
+# Code
+
+```{r, eval=FALSE, echo = TRUE}
+
+# Load packages -----
+library(pacman)
+p_load(tidyverse, janitor, ggsci, ggthemes, patchwork, officer, rvg)
+
+
+# Load Chromatogram from Chemstation -----
+file <- read_csv("gcms_chromatogram_plot.csv")
+glimpse(file)
+
+# SET SAMPLE NAME -----
+sample_name <- "SAMPLE NAME" # <-----! SET SAMPLE NAME HERE -------
+cut_off <- 85 # <-----! SET RETENTION TIME CUT OFF FOR GGPLOT -------
+
+# Load amdis report
+amdis_text <- read_tsv("amdis.txt") %>% 
+  clean_names() %>% 
+  select(cas, name, rt, ri, area, base_peak, intgr_signal, ri_ri_lib)
+
+glimpse(amdis_text)
+
+# percent area
+sum_area <- amdis_text %>% 
+  mutate(pct_area = round(area/sum(area)*100, 2)) %>% 
+  mutate(rt_rounded = round(rt, 3))
+
+glimpse(sum_area)
+
+# check highest peak area
+sum_area %>% 
+  arrange(desc(pct_area))
+
+# to expand the retention time, use tidyr::expand, 
+# to expand the RT from 0 to 130 min, by 0.01 . Total run time is 130 min.
+
+# expand RT for chromatogram
+glimpse(file)
+
+
+min_rt <- round(min(file$rt), 3)
+max_rt <- round(max(file$rt), 3)
+
+rt_tribble <- tribble( ~rt,
+                      min_rt,
+                      max_rt
+                      ) %>% 
+  tidyr::expand(full_seq(rt, 0.001)) %>% 
+  clean_names() %>% 
+  dplyr::rename(rt_seq = full_seq_rt_0_001)
+
+head(rt_tribble) # rt to 3 dp
+
+# merge in gcms signal and amdis
+
+rt_expanded_signal <- rt_tribble %>% 
+  left_join(file, by = c("rt_seq" = "rt")) %>% 
+  left_join(sum_area, by = c("rt_seq" = "rt_rounded")) %>% 
+  mutate(pct_highest_area = round(signal/max(signal, na.rm = T) * 100, 2))
+
+glimpse(rt_expanded_signal)
+
+
+# ggplot for chromatogram ------
+
+
+# split by group ----
+# add annotation
+
+# to colour compound names by color if unsure ------
+peak_names_clean <- sum_area %>% 
+  mutate(pct_highest_area = round(area/max(area, na.rm = T)*100, 2)) %>% 
+  select(rt_rounded, name, pct_highest_area, ri) %>% 
+  mutate(name_unsure = as.character(str_detect(name, "\\?")), # question marks = unsure in amdis output
+         unsure = case_when(name_unsure == "TRUE" ~ "unsure",
+                            TRUE ~ "sure"),
+         unsure = factor(unsure)) %>% 
+
+  mutate(name_clean = str_replace_all(name, "\\?", ""),
+         name_clean = str_replace_all(name_clean, "\\?\\?", ""),
+         name_clean = str_to_title(str_trim(name_clean)),
+         name_clean = str_replace_all(name_clean, "Alpha", "alpha"),
+         name_clean = str_replace_all(name_clean, "Beta", "beta"),
+         name_clean = str_replace_all(name_clean, "Gamma", "gamma"),
+         name_clean = str_replace_all(name_clean, "Delta", "delta")) %>% 
+  select(-name_unsure, -name) %>% 
+  mutate(y_value = ifelse(pct_highest_area > 20, pct_highest_area -80, pct_highest_area)) %>% 
+  mutate(ki_rounded = round(ri, 0)) %>% 
+  group_by(ki_rounded) %>% 
+  mutate(comb_names = str_c(na.omit(name_clean), collapse = " + ")) %>% 
+  ungroup() %>% 
+  distinct(comb_names, .keep_all = T)
+
+glimpse(peak_names_clean)
+
+# prepare dataframe for gcms chromatogram to split
+
+
+# USE THIS -------
+# split dataframe -------
+rt_split <- rt_expanded_signal %>% 
+  select(rt_seq, pct_highest_area) %>% 
+  drop_na() %>% 
+  filter(rt_seq < cut_off) %>% # ! <---- SET RT FILTER HERE ------
+  mutate(rt_interval = cut_number(rt_seq, n = 6)) %>% 
+  split(.$rt_interval)
+
+
+rt_split[[6]]
+
+
+# create a function to plot ggplot
+
+# test ------
+
+# filter out min and max
+df_min_max <- rt_split[[1]] %>% 
+  mutate(
+    rt_interval_chr = as.character(rt_interval),
+    rt_interval_chr = str_replace_all(rt_interval_chr, "\\[", ""),
+    rt_interval_chr = str_replace_all(rt_interval_chr, "\\]", ""),
+    rt_interval_chr = str_replace_all(rt_interval_chr, "\\(", "")
+  ) %>% 
+  separate(rt_interval_chr, c("min", "max"), ",") %>% 
+  select(min, max) %>% 
+  unique() %>% 
+  mutate(across(.cols = everything(),
+                as.numeric))
+
+glimpse(df_min_max)
+
+# filter peak compounds by min max
+peak_names_clean %>% 
+  filter(between(rt_rounded, df_min_max$min, df_min_max$max))
+
+
+rt_split[[1]]%>% 
+  ggplot(aes(rt_seq, pct_highest_area)) +
+  geom_line() +
+  geom_text(data = peak_names_clean %>% 
+              filter(between(rt_rounded, df_min_max$min, df_min_max$max)),
+            
+            aes(label = paste(name_clean, "; RT", rt_rounded,  sep = " "),
+                x = rt_rounded,
+                col = unsure), 
+            y = 0.75,
+            angle = 90,  nudge_y = 0.5, hjust = 0, size = 4) +
+  scale_color_manual(values = c("black", "red")) +
+  coord_cartesian(ylim = c(0, 2.5)) +
+  theme_clean() +
+  theme(legend.position = "none")
+
+# end test ------
+
+# Create function -----
+
+plot_annotated_chromatogram = function(df) {
+  
+  # filter out min and max
+  df_min_max <- df %>% 
+    mutate(
+      rt_interval_chr = as.character(rt_interval),
+      rt_interval_chr = str_replace_all(rt_interval_chr, "\\[", ""),
+      rt_interval_chr = str_replace_all(rt_interval_chr, "\\]", ""),
+      rt_interval_chr = str_replace_all(rt_interval_chr, "\\(", "")
+    ) %>% 
+    separate(rt_interval_chr, c("min", "max"), ",") %>% 
+    select(min, max) %>% 
+    unique() %>% 
+    mutate(across(.cols = everything(),
+                  as.numeric))
+
+  
+  # ggplot
+  df %>% 
+    ggplot(aes(rt_seq, pct_highest_area)) +
+    geom_line() +
+    geom_text(data = peak_names_clean %>%  # filter names 
+                filter(between(rt_rounded, df_min_max$min, df_min_max$max)),
+              
+              aes(label = paste(name_clean, "; RT", rt_rounded,  sep = " "),
+                  x = rt_rounded, 
+                  col = unsure), 
+              y = 0.75, # fix annotation at a y-value instead of scaled signal
+              angle = 90,  nudge_y = 0.8, hjust = 0, size = 4) +
+    scale_color_manual(values = c("black", "red")) +
+    labs(title = sample_name,
+         x = "RT",
+         y = "scaled_signal") +
+    coord_cartesian(ylim = c(0, 2)) + # zoom in more to see small peaks
+    theme_classic() +
+    theme(legend.position = "none")
+  
+}
+
+# back to apply function on split df -----
+
+
+plots <- rt_split %>% 
+  map(plot_annotated_chromatogram)
+
+length(plots) # number of items in list, since split by 6
+
+plots[1] # check 1 plot
+
+# export using officer ----
+# https://www.pipinghotdata.com/posts/2020-09-22-exporting-editable-ggplot-graphics-to-powerpoint-with-officer-and-purrr/
+
+# export plots as dml
+
+create_dml <- function(plot){
+  rvg::dml(ggobj = plot)
+}
+
+# map dml ------
+chromatogram_dml <- map(plots, create_dml)
+
+
+# SAVE FILE -------
+file_saved_name <- str_c(sample_name, ".pptx")
+
+doc <- read_pptx() %>% 
+  add_slide("Title and Content", "Office Theme") %>% 
+  ph_with(chromatogram_dml[[1]], location = ph_location_fullsize()) %>% 
+  add_slide("Title and Content", "Office Theme") %>% 
+  ph_with(chromatogram_dml[[2]],  location = ph_location_fullsize()) %>% 
+  add_slide("Title and Content", "Office Theme") %>% 
+  ph_with(chromatogram_dml[[3]],  location = ph_location_fullsize()) %>% 
+  add_slide("Title and Content", "Office Theme") %>% 
+  ph_with(chromatogram_dml[[4]],  location = ph_location_fullsize()) %>% 
+  add_slide("Title and Content", "Office Theme") %>% 
+  ph_with(chromatogram_dml[[5]],  location = ph_location_fullsize()) %>% 
+  add_slide("Title and Content", "Office Theme") %>% 
+  ph_with(chromatogram_dml[[6]],  location = ph_location_fullsize()) %>% 
+  print(target = file_saved_name)
+
+# Check highest area to check with excel file
+sum_area %>% 
+  arrange(desc(pct_area)) %>% 
+  select(rt, name,cas) %>% 
+  mutate(sample = sample_name) %>% 
+  kbl() %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+
+
+# Reference
+- <https://community.rstudio.com/t/ggplot-best-way-to-split-x-axis-in-intervals/64931/5>
+
+
+
+
+
+
+
+
+
+
+
+

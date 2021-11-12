@@ -14,14 +14,13 @@ editor_options:
   chunk_output_type: console
 ---
 
-A simple exercise to understand how to run logistic regression with stock market data using the weekly dataset.
+A simple exercise to understand how to run logistic regression with stock market data using tidymodels framework, using the weekly dataset.
 
 # Learning points:
 
 - Customizing my own functions for EDA, and using patchwork to join plots
-- Time series plot - using lubridate (EDA)
-- Fitting logistic regression on the whole dataset, using non-tidymodel and tidymodel framework; as well as on train and test dataset.
-- Generating confusion matrix
+- Fitting logistic regression, LDA and QDA on stock market data
+- Visualizing ROC and comparing AUC
 
 
 # Packages
@@ -31,8 +30,6 @@ library(pacman)
 p_load(ISLR2, tidyverse, tidymodels, janitor, GGally,
        workflows, yardstick, discrim, skimr, ggsci,
        patchwork, ggstatsplot)
-
-theme_set(theme_classic())
 ```
 
 # Data
@@ -147,167 +144,85 @@ num_var %>%
 
 ```
 
-## Plot of numerical variables against year
+Although these plots were seen using the skim() function, I can customise the appearance by building my own functions.
+
+## Plot of change in volume against year
 
 ```{r}
-stock_market %>% 
-  count(year)
+head(stock_market)
 
-# create sequence for number of weeks in data
+min(stock_market$year) # 1990
+max(stock_market$year) # 2010
+
+stock_market %>% 
+  group_by(year) %>% 
+  count() %>% 
+  filter(n !=52)
+
+lubridate::leap_year(1996) # T, 53w
+lubridate::leap_year(2007) # F, 53w
+lubridate::leap_year(1990) # F, 47w
+```
+
+The years 1990, 1996 and 2007 do not have 52 sets of data.
+All other years from 1991 - 2010 do
+
+```{r}
+library(tsibble)
+
+seq(1990:2010)
+w90 <- rep(1:47) %>% 
+  as_tibble()
+
+w90
+
+w91_95 <- rep(1:52, times = 5) %>% 
+  as_tibble()
+
+w96 <- rep(1:53) %>% 
+  as_tibble()
+
+w97_06 <- rep(1:52, times = 10) %>% 
+  as_tibble()
+
+w07 <- w96
+
+w08_10 <- rep(1:52, times = 3) %>% 
+  as_tibble()
+
+weeks <- bind_rows(w90,
+                   w91_95,
+                   w96,
+                   w97_06,
+                   w07,
+                   w08_10) %>% 
+  rename(week_no = value)
 
 stock_market_wk <- stock_market %>% 
-  group_by(year) %>% 
-  mutate(week = row_number()) %>% # create number of weeks
-  ungroup() %>% 
-  mutate(week_digit = str_pad(week, width = 2, pad = "0")) %>% # create 2 digits
-  # Y: year, W: week number, w: weekday number
-  mutate(date = lubridate::parse_date_time(paste(year, week_digit, 1, sep = "/"),
-                                           "Y/W/w")) %>% 
-  select(-week, -week_digit) %>% 
-  select(year, date, everything())
-  
+  bind_cols(weeks)
 
 glimpse(stock_market_wk)
 ```
 
 
-```{r}
-# create ggplot of y vs year
 
-stock_market_wk %>% 
-  ggplot(aes(date, volume)) +
-  geom_line() +
-  theme_classic() +
-  labs(title = "Plot of Vol over time") +
-  theme(axis.title = element_text(face = "bold"),
-        axis.text = element_text(face = "bold"))
+# Split data
 
-# create function
+To use 2015 data for testing
 
-plot_over_time <- function(var_y){
-  stock_market_wk %>% 
-  ggplot(aes(date, {{var_y}})) +
-  geom_line() +
-  theme_classic() +
-  labs(title = str_c(str_to_title(as_label(enquo(var_y))),
-                     " over time")) +
-  theme(axis.title = element_text(face = "bold"),
-        axis.text = element_text(face = "bold"))
-}
-
-# set names to loop through
-num_var # from previous
-
-# iterate
-num_var %>% 
-  syms() %>%  # take strings as input and turn them into symbols
-  map(function(var) plot_over_time({{var}})) %>% 
-  wrap_plots() # from patchwork
-
-```
-
-# Logistic regression on full dataset
-
-Use the full dataset to perform a logistic regression with Direction as the response (Y) and the five lag variables plus Volume as the predictors (X). 
-
-Use the summary function to print the results.
-
-Do any of the predictors appear to be statistically significant? -- Yes, lag2
+To use data prior to 2015 for training
 
 ```{r}
-log_reg_main_e <- glm(direction ~ lag1 + lag2 + lag3 + lag4 + lag5 + volume,
-                      data = stock_market, 
-                      family = binomial(link = "logit"))
-
-summary(log_reg_main_e)
-
-# tidy format
-tidy(log_reg_main_e)
-glance(log_reg_main_e)
-```
-
-Compute the confusion matrix and overall fraction of correct predictions. 
-
-```{r}
-pred <- stock_market %>% 
-  mutate(pred = predict(log_reg_main_e,., type = "response"),
-         pred_dir = case_when(pred >0.5 ~"up", # down: 0, up: 1; alphabetical
-                              TRUE ~ "down"),
-         dir_fct = as.factor(if_else(direction == "Up", "up", "down")),
-         pred_dir_fct = as.factor(if_else(pred_dir == "up", "up", "down"))) 
-  
-
-glimpse(pred)
-
-stock_market %>% 
-  count(direction)
-
-pred %>% 
-  count(dir_fct)
-
-pred %>% 
-  count(pred_dir_fct)
-
-# the predicted model will predict more likely as Up when it is actually Down.
-# low sensitivity: % that is really UP is predicted to be down
-
-library(caret)
-confusionMatrix(data= pred$pred_dir_fct, # predicted
-                reference = pred$dir_fct) # true 
-```
-
-
-Tidymodels framework:
-
-```{r}
-tm_log_reg <- logistic_reg() %>% 
-  set_engine("glm") %>% 
-  set_mode("classification")
-```
-
-```{r}
-tm_log_reg_fit <- 
-  tm_log_reg %>% 
-  fit(direction ~ lag1 + lag2 + lag3 + lag4 + lag5 + volume, data = stock_market)
-
-tm_log_reg_fit
-
-tm_log_reg_fit %>% 
-  pluck("fit") %>% 
-  summary()
-
-predict(tm_log_reg_fit, new_data = stock_market)
-
-augment(tm_log_reg_fit, new_data = stock_market) %>% 
-  conf_mat(truth = direction, estimate = .pred_class) %>% 
-  autoplot(type = "heatmap")
-
-augment(tm_log_reg_fit, new_data = stock_market) %>% 
-  accuracy(truth = direction, estimate = .pred_class)
-```
-
-
-# Fit logistic regression on training data
-
-Training data: from 1990 - 2008
-Test data: 2009 - 2010
-with lag2 as the only predictor
-
-## Split data
-
-```{r}
-set.seed(20211103)
+set.seed(2021100401)
 
 train_data <- stock_market %>% 
-                filter(!year %in% c(2009, 2010))
+                filter(!year == 2005)
 
 test_data <- stock_market %>% 
-              filter(year %in% c(2009, 2010))
+              filter(year == 2005)
 ```
 
-## Create model
-
-The same model can be used, but I will just create again.
+# Create model
 
 ```{r}
 lr_model <- 
@@ -317,17 +232,18 @@ lr_model <-
 ```
 
 
-## Create recipe 
+# Create recipe 
 
 ```{r}
 
 stock_recipe <- 
-  recipe(direction ~ lag2, data = train_data)
+  recipe(direction ~ ., data = train_data) %>% 
+  update_role(year, today, new_role = "ID")
 
 summary(stock_recipe)
 ```
 
-## Create workflow
+# Create workflow
 
 ```{r}
 stock_workflow <- 
@@ -352,7 +268,11 @@ stock_fit %>%
   tidy()
 ```
 
-## Predict
+Smallest p-value is assoicatied with lag1, but the negative coefficient suggests that if the market had a positive return yesterday, then it is less likely to go up today. 
+
+However, at a p-value of 0.15, the p-value is still relatively large, and there is no clear evidence of a real association vetween lag1 and direction. 
+
+# Predict
 
 ```{r}
 
@@ -365,22 +285,6 @@ stock_augment <-
 stock_augment
 ```
 
-## Confusion matrix and accuracy
-
-```{r}
-stock_augment %>% 
-  conf_mat(truth = direction, estimate = .pred_class)
-
-stock_augment %>% 
-  accuracy(truth = direction, estimate = .pred_class) # 62.5%
-
-metrics <- metric_set(accuracy, sens, spec)
-metrics(stock_augment,
-        truth = direction,
-        estimate = .pred_class)
-```
-
-
 ```{r}
 stock_augment %>% 
   roc_curve(truth = direction, .pred_Down) %>% 
@@ -391,6 +295,252 @@ stock_augment %>%
 
 ```
 
+
+# Removing variables with high p-value
+
+
+```{r}
+stock_recipe_two_lag <- 
+  recipe(direction ~ ., data = train_data) %>% 
+  update_role(year, today, lag3, lag4, lag5, volume, new_role = "ID")
+
+summary(stock_recipe_two_lag)
+
+# update workflow
+
+stock_workflow_update <- 
+  workflow() %>% 
+  add_model(lr_model) %>% 
+  add_recipe(stock_recipe_two_lag)
+
+stock_workflow_update
+
+# fit data
+
+stock_fit_update <- 
+  stock_workflow_update %>% 
+  fit(data = train_data)
+
+stock_fit_update %>% 
+  extract_fit_parsnip() %>% 
+  tidy()
+
+# predict
+predict(stock_fit_update, test_data)
+
+# augment
+stock_augment_update <- 
+  augment(stock_fit_update, test_data) %>% 
+  select(year, direction, .pred_class, .pred_Down, .pred_Up)
+
+stock_augment_update
+
+# ROC curve
+stock_augment_update %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  autoplot()
+
+stock_augment_update %>% 
+  roc_auc(truth = direction, .pred_Down)  # 0.558. 
+```
+
+55.8% of the daily movements were correctly predicted.
+
+# A second model - Linear Discriminant: 
+
+```{r}
+
+lda_model <- 
+  discrim_linear() %>% 
+  set_engine("MASS")
+  
+```
+
+MASS::lda() fits a model that estimates a multivariate distribution for the predictors separately for the data in each class (Gaussian with a common covariance matrix). Bayes' theorem is used to compute the probability of each class, given the predictor values.
+
+This engine has no tuning parameters, and is used for classification. 
+
+# Create recipe and workflow
+
+The same recipe can be reused.
+
+```{r}
+
+stock_recipe_two_lag
+
+```
+
+
+```{r}
+
+lda_workflow <- 
+  workflow() %>% 
+  add_model(lda_model) %>% 
+  add_recipe(stock_recipe_two_lag)
+
+```
+
+
+# Fit data
+
+```{r}
+lda_fit <- 
+  lda_workflow %>% 
+  fit(data = train_data)
+
+lda_fit %>% 
+  extract_fit_parsnip() 
+
+```
+
+# Predict
+
+```{r}
+predict(lda_fit, test_data)
+
+lda_augment <- 
+  augment(lda_fit, test_data) %>% 
+  select(year, direction, .pred_class, .pred_Down, .pred_Up)
+
+lda_augment %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  autoplot()
+
+lda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) # 0.558
+```
+
+
+# Comparing logistic regression against linear discriminant 
+
+```{r}
+log_reg_auc <- 
+  stock_augment_update %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  mutate(model = "Log Regression")
+
+lda_auc <- 
+  lda_augment %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  mutate(model = "LDA")
+
+bind_rows(log_reg_auc, lda_auc) %>% 
+  ggplot(aes(x = 1-specificity,
+             y = sensitivity,
+             col = model)) +
+  geom_path(lwd = 1.5, alpha = 0.6) +
+  geom_abline(lty = 3) +
+  coord_equal()  +
+  labs(title = "Comparing LDA with Log Regression",
+       subtitle = "The predictions are almost identical!") +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+# A third model: Quadratic Discriminant Analysis
+
+discrim_quad() defines a model that estimates a multivariate distribution for the predictors separately for the data in each class (usually Gaussian with separate covariance matrices). Bayes' theorem is used to compute the probability of each class, given the predictor values.
+
+regularization_method	:
+A character string for the type of regularized estimation. Possible values are: "diagonal", "shrink_cov", and "shrink_mean" (sparsediscrim engine only).
+
+```{r}
+qda_mod <-
+  discrim_quad() %>%
+  set_engine("MASS")
+```
+
+# Recipe
+
+I used the same recipe
+
+```{r}
+stock_recipe_two_lag
+```
+
+
+# Workflow
+
+```{r}
+qda_workflow <- 
+  workflow() %>% 
+  add_model(qda_mod) %>% 
+  add_recipe(stock_recipe_two_lag)
+```
+
+# Fit data
+
+```{r}
+qda_fit <- 
+  qda_workflow %>% 
+  fit(data = train_data)
+
+qda_fit %>% 
+  extract_fit_parsnip()
+```
+
+
+# Predict
+
+```{r}
+predict(qda_fit, test_data)
+
+qda_augment <- 
+  augment(qda_fit, test_data) %>% 
+  select(year, direction, .pred_class, .pred_Down, .pred_Up)
+
+qda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) # 0.562
+
+qda_auc <- 
+  qda_augment %>% 
+  roc_curve(truth = direction, .pred_Down) %>% 
+  mutate(model = "QDA")
+
+
+```
+
+# Comparing against the first two models
+
+Comparing AUC:
+
+```{r}
+auc_log <- stock_augment_update %>% 
+  roc_auc(truth = direction, .pred_Down) %>% 
+  mutate(model = "Log Reg")
+
+auc_lda <- lda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) %>% 
+  mutate(model = "LDA")
+
+auc_qda <- qda_augment %>% 
+  roc_auc(truth = direction, .pred_Down) %>% 
+  mutate(model = "QDA")
+
+bind_rows(auc_log, auc_lda, auc_qda)
+```
+
+ROC plot:
+
+```{r}
+bind_rows(log_reg_auc, 
+          lda_auc,
+          qda_auc) %>% 
+  ggplot(aes(x = 1-specificity,
+             y = sensitivity,
+             col = model)) +
+  geom_path(lwd = 1.5, alpha = 0.8) +
+  geom_abline(lty = 3) +
+  coord_equal()  +
+  labs(title = "Comparing QDA, LDA and Log Regression",
+       subtitle = "QDA is very slightly better than the other two models!") +
+  scale_color_jco() +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+
+
 # Reference:
 
 - [ISLR2 book] (https://web.stanford.edu/~hastie/ISLRv2_website.pdf)
@@ -400,11 +550,3 @@ stock_augment %>%
 - <https://discrim.tidymodels.org/reference/discrim_linear.html>
 
 - <https://discrim.tidymodels.org/reference/discrim_quad.html>
-
-- <https://stackoverflow.com/questions/32470414/convert-week-number-to-date>
-
-- <https://www.kirenz.com/post/2021-02-17-r-classification-tidymodels/>
-
-- <https://rstudio-pubs-static.s3.amazonaws.com/290310_86f15a6b4efa4085beb912cf0ef757d6.html>
-
-- <https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/classification.html>
