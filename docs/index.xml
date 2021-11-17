@@ -7,7 +7,16 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 12 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Captive Africans Dataset</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/2021117 - Imputation for missing data (Julia Silge's tutorial)</link>
+      <description>Missing data imputation - Following Julia Silge's worked example</description>
+      <guid>https://lruolin.github.io/myBlog/posts/2021117 - Imputation for missing data (Julia Silge's tutorial)</guid>
+      <pubDate>Wed, 17 Nov 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/2021117 - Imputation for missing data (Julia Silge's tutorial)/Impute-missing-data---Captive-Africans_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>AMDIS Annotated Chromatogram</title>
       <dc:creator>lruolin</dc:creator>

@@ -1,0 +1,339 @@
+---
+title: "Captive Africans Dataset"
+description: |
+  Missing data imputation - Following Julia Silge's worked example
+author:
+  - name: lruolin
+date: 11-17-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Introduction
+
+This is dataset on captive Africans, and Julia Silge shows how to impute missing data in her worked exmaple, which I am following closely. The link is [here](https://juliasilge.com/blog/captive-africans-voyages/). 
+
+# Learning points
+
+- Using recipes to impute missing data
+- Using nanir for the gg_miss_upset plot to see the pattern of missingness
+- Using moments package to confirm skewness of distribution as a numerical value
+
+# Load packages
+
+```{r}
+library(pacman)
+
+p_load(tidyverse, tidymodels, ggsci, GGally, janitor, ggthemes, skimr, naniar, kable, kableExtra, moments) 
+
+```
+
+
+# Load Data
+
+More information regarding the dataset can be found [here](https://github.com/rfordatascience/tidytuesday/blob/master/data/2020/2020-06-16/readme.md).
+
+```{r}
+african_names_raw <- readr::read_csv("https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-06-16/african_names.csv")
+
+```
+
+# EDA
+
+## Data shape
+
+```{r}
+glimpse(african_names_raw)
+```
+
+This is a long dataset with 91,490 rows and 11 columns
+
+## Skim
+
+```{r}
+skim(african_names_raw)
+```
+
+There are a lot of missing data for:
+
+- Categorical: gender, port-embark, country of origin
+- Numerical: age, height
+
+### Gender
+
+```{r}
+african_names_raw %>% 
+  count(gender)
+```
+
+```{r}
+african_names_raw %>% 
+  select(gender, age) %>% 
+  ggplot(aes(gender, age)) +
+  geom_boxplot(aes(fill = gender), alpha = 0.6, show.legend = F) +
+  scale_fill_jco() +
+  theme_clean()
+```
+
+- many missing data
+- some children were coded as adults, and vice versa
+- to recode boys, man into male, and girls, woman into female.
+
+
+### Ship name
+```{r}
+african_names_raw %>% 
+  count(ship_name) %>% 
+  arrange(desc(n))
+```
+
+- 444 types of different ships
+
+### Port Disembark
+
+```{r}
+african_names_raw %>% 
+  count(port_disembark, sort = T) %>% 
+  kbl()
+```
+
+5 major ports, this can be recoded into a factor
+
+### Port Embark
+
+```{r}
+african_names_raw %>% 
+  count(port_embark, sort = T) %>% 
+  kbl()
+```
+
+- 60 different ports
+
+### Year arrival
+
+```{r}
+min(african_names_raw$year_arrival) # 1808
+max(african_names_raw$year_arrival) # 1862
+```
+
+
+```{r}
+african_names_raw %>% 
+  group_by(year_arrival) %>% 
+  summarise(n = n()) %>% 
+  ggplot(aes(year_arrival, n)) +
+  geom_col(col = "grey", fill = "deepskyblue4") +
+  scale_fill_jco() +
+  scale_x_continuous(limits = c(1805, 1865), 
+                     n.breaks =8) +
+  labs(title = "No. of arrivals over time, between years 1808-1862") +
+  theme_classic()
+```
+
+There seem to be a gap in information between 1850 - 1860. To filter out information after 1850. 
+
+```{r}
+african_names_raw %>% 
+  filter(year_arrival>1850) %>% 
+  count() %>% 
+  mutate(pct = n/nrow(african_names_raw)*100)
+```
+
+This is about 0.1% of the data that is discarded. 
+
+## Numerical variables
+
+```{r}
+glimpse(african_names_raw)
+
+african_names_raw %>% 
+  select(age, height) %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(name, value)) + 
+  geom_boxplot() +
+  facet_grid(. ~ name, scales = "free") +
+  theme_classic()
+```
+
+```{r}
+african_names_raw %>% 
+  select(age) %>% 
+  ggplot(aes(age)) +
+  geom_freqpoly() +
+  labs(title = "Frequency distribution for Age") +
+  scale_y_continuous(labels = scales::comma_format()) +
+  theme_clean()
+
+min(african_names_raw$age, na.rm = T)
+max(african_names_raw$age, na.rm = T)
+
+african_names_raw %>% 
+  filter(age == 0.5)
+
+african_names_raw %>% 
+  mutate(height_cm = height * 2.54) %>% 
+  filter(age < 2) %>% 
+  select(age, height_cm)
+```
+
+There are babies who are sold as slaves too. 
+
+```{r}
+african_names_raw %>% 
+  count(height, sort = T)
+
+african_names_raw %>%
+  mutate(height_cm = height * 2.54) %>% 
+  select(height_cm) %>% 
+  ggplot(aes(height_cm)) +
+  geom_freqpoly() +
+  labs(title = "Frequency distribution for Height") +
+  scale_y_continuous(labels = scales::comma_format()) +
+  theme_clean()
+
+```
+
+# Edited dataset
+
+- recode gender into male and female, retain NA values for imputation later
+- change height from inch to cm
+
+```{r}
+african_names <- african_names_raw %>% 
+  filter(year_arrival <= 1850) %>% 
+  mutate(gender_recode = factor(gender),
+         gender_recode = case_when(gender_recode == "Boy" ~ "Male",
+                                   gender_recode == "Man" ~ "Male",
+                                   gender_recode == "Girl" ~ "Female",
+                                   gender_recode == "Woman" ~ "Female")) %>% 
+  
+  mutate(port_disembark = factor(port_disembark)) %>% 
+  mutate(height_cm = round(height * 2.54, 2)) %>% 
+  select(-gender, -height) %>% 
+  mutate(across(where(is.character), factor))
+
+# check gender
+african_names %>% 
+  count(gender_recode)
+
+# glimpse
+glimpse(african_names)
+
+```
+
+```{r}
+african_names %>% 
+  select(age, height_cm, gender_recode) %>% 
+  drop_na(gender_recode) %>% 
+  ggpairs(aes(col = gender_recode)) +
+  scale_color_jco() +
+  scale_fill_jco() +
+  theme_classic()
+```
+
+- age is a bimodal distribution
+- height also follows bimodal distribution
+- this is probably because boys, girls were coded as males, females respectively
+
+```{r}
+african_names %>% 
+  select(height_cm) %>% 
+  ggplot(aes(height_cm)) +
+  geom_freqpoly() +
+  theme_classic()
+
+# to confirm skewness using moments package
+height_vector <- african_names %>% 
+                  select(height_cm) %>% 
+                  drop_na() %>% # remove na for calculation
+                  as_vector() # for skewness calculation
+
+moments::skewness(height_vector) #-0.767 : negatively skewed
+```
+
+There are many different approaches to the interpretation of the skewness values. A rule of thumb states that:
+
+- Symmetric: Values between -0.5 to 0.5
+- Moderated Skewed data: Values between -1 and -0.5 or between 0.5 and 1
+- Highly Skewed data: Values less than -1 or greater than 1
+
+
+# naniar package
+
+```{r}
+african_names %>% 
+  select(age, height_cm, gender_recode) %>% 
+  naniar::gg_miss_upset() 
+```
+
+This plot shows that most of the missing data for the three variables come from gender, followed by height and age. 
+
+# Missing data imputation
+
+For machine learning, the data should be split into train and test data before imputation. For this example, Julia Silge wanted to focus on statistical inference rather than predictive analysis, hence the data was only pre-processed to impute missing data, without splitting the data first. 
+
+The aim for the modelling was to find out what changed as years went by, in terms of gender, age and height. However, for the purpose of this exercise, it was for me to familiarise myself with the concept of imputing missing data.
+
+```{r}
+impute_recipe <- recipe(year_arrival ~ gender_recode + age + height_cm,
+                        data = african_names) %>% 
+                step_impute_median(height_cm) %>% # since is negatively skewed
+                step_impute_knn(all_predictors()) # using height to impute age and gender
+```
+
+```{r}
+imputed_data <- impute_recipe %>% 
+                prep() %>% 
+                bake(new_data = NULL)
+```
+
+# To check imputed data
+
+```{r}
+imputed_data %>% 
+  skim()
+```
+
+Now, there is no more missing data. 
+
+# LM
+
+LM is actually not suitable for the linear model defined. Appropriate data transformations should be carried out before doing linear modelling, such as taking care of the skewed data, or robust linear regression. 
+
+```{r}
+lm <- lm(year_arrival ~ gender_recode + age + height_cm,
+         data = imputed_data)
+
+gvlma::gvlma(lm)
+```
+
+# Data preprocessing
+
+The order for carrying out data-preprocessing using recipes package should be in the following order: 
+
+- impute missing data
+- individual transformations (log, sqrt, inverse to remove skewness). Also to take care of outliers. 
+- discretization if required (usually not recommended to bin predictors)
+- dummy variables and encodings
+- create interaction variables
+- normalization - scaling (data has sd of 1), centering (mean = 0)
+- multivariate transformation
+- filters eg near-zero variance filter, high correlation filter to remove predictors
+- row operations eg downsample, upsample, themis::step_smote
+- others eg renaming variables
+- check functions
+
+As mentioned earlier, for machine learning, data-preprocessing should be carried out on **training data** only.
+
+
+
+# Reference:
+
+-<https://juliasilge.com/blog/captive-africans-voyages/>
+
+- <https://www.r-bloggers.com/2020/11/skewness-and-kurtosis-in-statistics/>
