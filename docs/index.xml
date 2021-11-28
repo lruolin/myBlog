@@ -7,7 +7,42 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 17 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 25 Nov 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Applied predictive modelling book - Chap 6: Linear regression</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20211125 - Linear regression  (Chap 6 Applied Predictive Modelling)</link>
+      <description>Tidymodels workflow</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20211125 - Linear regression  (Chap 6 Applied Predictive Modelling)</guid>
+      <pubDate>Thu, 25 Nov 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20211125 - Linear regression  (Chap 6 Applied Predictive Modelling)/Linear-regression---Chap-6-of-Applied-Predictive-Modelling_files/figure-html5/unnamed-chunk-3-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Support Vector Machine with Palmer Penguins</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20211124 - SVM with palmer penguins</link>
+      <description>Tidymodels workflow</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20211124 - SVM with palmer penguins</guid>
+      <pubDate>Wed, 24 Nov 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20211124 - SVM with palmer penguins/Support-Vector-Machine-Palmer-Penguins_files/figure-html5/unnamed-chunk-9-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
+    <item>
+      <title>Bias-Variance Tradeoff</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20211123 - Bias-Variance Tradeoff</link>
+      <description>Notes on preprocessing</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20211123 - Bias-Variance Tradeoff</guid>
+      <pubDate>Tue, 23 Nov 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20211123 - Bias-Variance Tradeoff/bias-variance.jpeg" medium="image" type="image/jpeg"/>
+    </item>
+    <item>
+      <title>Summary for Modelling</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20211123 - Summary for modelling</link>
+      <description>Pointers for different ML models</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20211123 - Summary for modelling</guid>
+      <pubDate>Tue, 23 Nov 2021 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Captive Africans Dataset</title>
       <dc:creator>lruolin</dc:creator>

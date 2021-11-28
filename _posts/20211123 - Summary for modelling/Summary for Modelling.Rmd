@@ -1,0 +1,454 @@
+---
+title: "Summary for Modelling"
+description: |
+  Pointers for different ML models
+author:
+  - name: lruolin
+date: 11-23-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# OVERVIEW
+
+This is a summary post on all the things to take note of when dealing with different models. The text summarises what I read from the three books (links shown in reference)
+
+# KEY SUMMARY
+
+1. Linear models: Go to as a first algorithm to try. Good for large datasets.
+2. k-nearest neighbours: for small datasets, good as a baseline.
+3. Decision trees: Fast, don't need scaling of data, easily visualized and explained.
+4. Random forests: Don't need scaling of data, not good for high dimensional sparse data.
+5. SVM: Good for medium sized datasets with predictors with similar meaning. Require scaling fo data, must carry out parameter tuning.
+6. Neural networks: Sensitive to scaling of data and to choice of parameters. Can build very complex models, but need a long time to train. 
+
+# EDA
+
+- to search for patterns and trends in a dataset
+- how big is the dataset?
+- what do the fields mean?
+- summary statistics
+- pairwise correlations
+- class breakdowns
+- plots of distributions
+
+
+# PREPROCESSING
+
+## Check for errors/artifacts
+
+- visualization to check for outliers, anomalies
+- summary statistics to check 
+
+## Missing values
+
+- Missing data can be imputed if needed.
+- Tree-based techniques can handle missing data.
+
+The steps in recipe package to handle missing data are:
+
+- step_bagimpute, step_impute_linear, step_knn_impute, step_mean_impute, step_impute_median, step_mode_impute, step_unknown
+
+## Centering and scaling
+
+The steps in recipe package to handle missing data are:
+
+- step_center, step_normalize, step_range, step_scale
+
+Normalization (Z-scores) should only be used on normally distributed variables.
+
+For scikit-learn, the available ways are:
+- StandardScaler (mean = 0, variance = 1)
+- RobustScaler (median and quantiles are used, ignoring outliers)
+- MinMaxScaler (all features are exactly between 0 and 1)
+- Normalizer (feature vector has Euclidean length of 1)
+
+## Resolve skewness 
+
+- Log, square root, inverse transformations may be used.
+
+- Log transformation is used to transform skewed data into a normal distribution. Before applying log transformation, ensure that all the data values only contain positive values, otherwise there would be errors.
+
+- Square root and cube transformation has a moderate shape on distribution shape and can be used to reduce left skewness.
+
+- Square and cube root transformation has a fairly strong transformation effect on the distribution shape but is weaker than log transformations. It can be applied to right skewed data.
+
+- Box-Cox, Yeo-Johnson transformations may also be used.
+
+The steps in recipe package to handle missing data are:
+
+- step_Boxcox, step_inverse, step_log, step_sqrt, step_YeoJohnson
+
+## Outliers
+
+- Depends on whether outliers were due to data entry errors, or maybe there's underlying reasons for outliers and you may not want to discard that data point. 
+
+
+## Data reduction/Feature extraction
+
+- Reduce the number of X variables for modelling
+- PCA, PLS
+
+The steps in recipe package to handle missing data are:
+
+- step_pca, step_pls etc
+
+## Removing Predictors
+
+- Near-zero variance predictors: have single unique value, uninformative variable
+- Tree-based techniques can handle such predictors, but not so for linear regression. 
+
+The steps in recipe package to handle missing data are:
+
+- step_nzv, step_rm, step_zv
+
+## Multi-collinearity
+
+- Redundant predictors add more complexity to the model
+
+The steps in recipe package to handle missing data are:
+
+- step_corr (high correlation filter)
+
+# DATA SPLITTING
+
+## Training, Testing
+
+- split into training, testing data. 
+- training data is for fitting model
+- testing data is for evaluating model performance
+
+## Resampling
+
+- from training data, resampling techniques may be used for tuning model parameters
+- resampling techniques include: k-fold cross-validation, bootstrapping
+
+### k-fold cross-validation
+
+- typically 5-fold or 10-fold
+- training data is divided into folds, the first fold is treated as validation set, while the remaining fold are used for model training.
+- 10-fold repeated cv is recommended for small sample sizes due to higher variance (vs bootstrapping has higher bias for smaller sample sizes)
+- for larger sample sizes, simple 10-fold cv may be used for both model assessment (evaluating model performance) and model selection (selecting proper level of flexibility for model) due to faster computational times.
+
+### bootstrapping
+
+- sampling is taken with replacement
+- if the aim is to choose between models of different flexibility, bootstrapping may be used due to lower variance. 
+
+### tuning for model performance
+
+- eg number of neighbours, tuning parameter etc (model-specific parameters)
+
+- one-standard error method: determining the numerically optimal value and its corresponding standard error, and then seek the simplest model whose performance is within a single standard error of the numerically best value.
+
+
+# SUPERVISED LEARNING
+
+- Outcome (Y) is known
+
+## Regression
+
+### Linear regression
+
+
+#### OLS
+
+##### Preprocessing
+
+- must not have missing data
+- check for outliers
+- centering, scaling, normalization
+- remove highly correlated predictors --> if highly correlated, consider PLS
+- number of predictors must NOT be larger than number of observations --> consider reducing number of variables by PCA, PLS, filtering out redundant variables
+
+
+##### Tuning Parameters
+
+No tuning parameters
+
+
+#### Shrinkage methods for linear regression
+
+
+
+##### Ridge Regression
+
+- Fit a model containing all predictors using a technique that constrains or regularizes the coefficient estimates (slope), ie shrinks the coefficient estimates towards zero. 
+
+- Regularization means explicitly restricting a model to avoid over-fitting. 
+
+- Usually, ridge regression is the first choice when comparing between ridge regression and lasso regression. 
+
+- Ridge regression will perform better when the response is a function of many predictors, all with coefficients of roughly equal size
+
+###### Preprocessing:
+
+- impute missing values
+- standardizing of predictors
+
+###### Tuning parameter: 
+
+- tuning parameter, lamda, serves to control the relative effect on regression coefficient estimates.
+
+- when tuning parameter is 0, model is similar to OLS model
+
+- when tuning parameter is infinitely high, model is like a null model without any predictors since all the coefficient estimates are zero, although all predictors are included in the model.
+
+- shrinkage penalty is only applied to coefficient estimates, and not the intercept (which is the mean value when response is zero)
+
+
+
+##### Lasso Regression
+
+- Lasso shrinks the coefficient estimates towards zero. However, some of the coefficient estimates are forced to be exactly zero when the tuning parameter is sufficiently large. 
+
+- It performs variable selection, when the coefficient estimates are zero, the predictors are ignored by the model. 
+
+- Lasso regression will perform better when a relatively small number of predictors have substantial coefficients, and the remaining predictors have coefficients that are very small or equal zero. 
+
+###### Tuning parameter
+
+- tuning parameter, lamda, serves to control the relative effect on regression coefficient estimates.
+
+- when tuning parameter is 0, model is similar to OLS model
+
+- when tuning parameter is infinitely high, model is like a null model without any predictors since all the coefficient estimates are zero, although all predictors are included in the model.
+
+
+###### Preprocessing:
+
+- impute missing values
+- standardizing of predictors
+
+
+
+### Non-Linear regression
+
+#### Neural Networks
+
+##### Preprocessing:
+
+- must remove excessive predictors
+
+#### SVM (Support Vector Machines)
+
+- used for both classification and regression
+- generates optimal hyperplanes with a large margin in n-dimensional space to separate data-points.
+- the basic idea is to discover the maximum marginal hyperplane (MMH) which perfectly separates the data into the given classes. The hyperplane is a decision boundary used to distinguish between two classes.
+- this means the maximum distance between data points of both classes (aka margin)
+- support vectors are the closes points to the hyperplane and help in the orientation of the hyperplane by maximising the margin. 
+
+#### k-nearest neighbours
+
+### Non-Linear regression
+
+#### Decision Trees
+
+Decision trees can be applied to both regression and classification problems. 
+
+##### Preprocessing:
+
+- impute missing data
+- transform outcome variable such that it is not skewed
+- can handle categorical predictors without the need to create dummy variables
+
+##### Tuning parameters:
+
+- optimal level of tree complexity
+
+
+#### Random Forests
+
+##### Preprocessing
+
+##### Tuning
+
+- (1) mtry: number of randomly selected predictors to choose from at each split. In regression context, it is recommended that mtry is set to 1/3 of the number of predictors. 
+
+- start with five values of k that are somewhat evenly spaced across the range from 2 to number of predictors.
+
+- (2) number of trees: as a starting point, use at least 1000 trees. If cross-validation performance profiles are still improving at 1000 trees, then incorporate more trees until performance levels off. 
+
+## Classification
+
+#### k-nearest neighbour
+
+##### Preprocessing:
+
+##### Tuning:
+
+1. Number of neighbours
+
+#### Logistic Regression
+
+Logistic regression models the probability that Y belongs to a particular category.
+
+Generic 0/1 encoding is used for outcome (eg 0 = no, 1 = yes for defaulting on credit)
+
+log(odds of defaulting) = bo + b1X
+
+If X = balance, b1 = 0.0055, one unit increase in balance is associated with an increase in the log odds of defaulting by 0.0055 units. 
+
+If p-value is significant, then there is an assocation with balance and probability of default. 
+
+##### Preprocessing:
+
+- centering, scaling
+- near zero variance predictors removed
+- correlated predictors dealt with
+
+##### Tuning parameters:
+
+- none
+
+#### Support Vector Classifier
+
+- the two outcome classes may not be separable by a hyperplane
+- support vector classifier looks for a hyperplane that can correctly separate most of the training observations into the two classes, but may mis-classify a few observations.
+
+##### Preprocessing:
+
+##### Tuning parameters:
+
+- C: the budget for the amount that the margin can be violated by n observations. If C = 0, then there is no budget for violations to the margin. As C increases, we become more tolerant of violations to the margin, and the margin will widen. 
+
+
+
+
+#### SVM (Support Vector Machines)
+
+- used for both classification and regression
+- generates optimal hyperplanes with a large margin in n-dimensional space to separate data-points.
+- the basic idea is to discover the maximum marginal hyperplane (MMH) which perfectly separates the data into the given classes. The hyperplane is a decision boundary used to distinguish between two classes.
+- this means the maximum distance between data points of both classes (aka margin)
+- support vectors are the closes points to the hyperplane and help in the orientation of the hyperplane by maximising the margin. 
+
+- several approaches available, eg radial basis function kernel
+
+- works well on low-dimension and high-dimension data, but don't scale very well with the number of samples (up to 10,000 samples is ok, but not up to 100,000)
+
+##### Preprocessing:
+
+- scale the data such that all predictors are between 0 and 1, eg by using min-max scaling.
+
+##### Tuning parameters:
+
+- C parameter: a small C means a very restricted model, where each data-point can only have very limited influence, somewhat like a linear model. Increasing C, allows the decision boundary to bend more to correctly classify data points, resulting in a more flexible model.  
+
+- gamma: controls the width of the radial basis function. It determines the scale of what it means for the points to be close together. It limits the importance of each point. A small gamma means a large radius for the rbf kernel, and many points are considered close by. It gives a model of lower complexity. 
+
+### Decision Trees
+
+Decision trees can be applied to both regression and classification problems. The decision tree has three basic components: the internal node, the branch, and the leaf nodes. Each terminal node represents a feature (predictor), and the link represents the decision rule or split rule, and the leaf provides the result of the prediction. 
+
+##### Preprocessing:
+
+- there is no need to normalise X variables
+- balance out the dataset as decision trees are biased with imbalanced data
+
+##### Tuning parameters:
+
+- max_depth: maximum number of questions that can be asked. Limiting the depth of the tree decreases over-fitting. This leads to a lower accuracy on the training set, but an improvement on the test set. 
+
+- max_leaf_nodes
+
+- min_sample_leaf
+
+- setting either one is sufficient to prevent over-fitting
+
+#### Random Forests
+
+##### Preprocessing
+
+##### Tuning
+
+- (1) mtry/max_features: number of randomly selected predictors to choose from at each split. It determines how random the tree is. In classification context, it is recommended that mtry is set to square-root of the number of predictors. 
+
+- start with five values of k that are somewhat evenly spaced across the range from 2 to number of predictors.
+
+- (2) number of trees/n_samples: as a starting point, use at least 1000 trees. If cross-validation performance profiles are still improving at 1000 trees, then incorporate more trees until performance levels off. Averaging more trees will yield a more robust model by reducing over-fitting. However, more trees will yield need more memory and more time to train. 
+
+#### Neural Networks
+
+- able to capture information contained in large amounts of data and build very complex models
+- take a long time to train
+- quite complicated to tune, parameters include number of layers, and number of hidden units per layer.
+
+# UNSUPERVISED LEARNING
+
+- Outcome (Y) is unknown.
+- Often performed as part of exploratory data analysis
+
+## Clustering
+
+#### PCA
+
+- Principal components allow for summarising the set of correlated variables with a smaller number of representative variables that collectively explain most of the variability in the original set.
+
+##### Preprocessing:
+
+- impute missing values
+- variables must be means-centered, scaled
+- remove redundant X variables (curse of dimensionality)
+
+
+#### k-means clustering
+
+- k-means takes data and the number of clusters as input, and selects k random data items as the initial centers of clusters.
+- data items are allocated to the nearest cluster center
+- select new cluster center by averaging the values of other cluster items
+- repeat until there is no change in clusters
+
+
+##### Preprocessing:
+
+
+
+##### Tuning parameters:
+
+- number of clusters, K
+
+
+#### Hierarchical Clustering
+
+- groups data based on different levels of a hierarchy
+- does not require that we commit to a particular number of clusters
+- results in a dendrogram
+
+##### Preprocessing:
+
+- Min-Max scaling
+- Variables should be means-centered and scaled to have standard deviation of one
+
+
+
+# METRICS FOR PERFORMANCE
+
+## Regression
+
+- mean squared error: small if the predicted and true values are very similar
+- root mean squared error: most commonly used, ie how far the residuals are from zero, or as the average distance between the observed and model predicted values.
+- r-squared value: a measure of correlation, not accuracy
+
+## Classification
+
+- accuracy
+- sensitivity, true positive rate
+- specificity. false positive rate = 1-specificity
+- positive predicted value: what is the probability that this sample is an event
+- negative predicted value: analog to specificity
+- false positive rate
+- false negative rate
+- auc under ROC curve
+
+# Reference:
+
+- Applied Predictive Modelling book <http://appliedpredictivemodeling.com/>
+- Python Data Analysis <https://www.oreilly.com/library/view/python-data-analysis/9781789955248/>
+- ISLR <https://www.statlearning.com/>
+

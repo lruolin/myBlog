@@ -25,6 +25,9 @@ Machine Learning:
 - <https://www.tidymodels.org/>
 - <https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/classification.html>
 
+R - Python Dictionary:
+- <https://heads0rtai1s.github.io/2020/11/05/r-python-dplyr-pandas/>
+
 Text Analysis:
 - <https://smltar.com/>
 

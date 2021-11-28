@@ -1,0 +1,210 @@
+---
+title: "Support Vector Machine with Palmer Penguins"
+description: |
+  Tidymodels workflow
+author:
+  - name: lruolin
+date: 11-24-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Support vector machine
+
+- Characterized by what type of kernel function the model uses.
+- Radial basis function based SVM: this kernel function has an additional tuning parameter associated with it, which impacts the smoothness of the boundary.
+- For classification, the model tries to maximise the width of the margin between classes. 
+- Non-linear model
+
+
+# Workflow
+
+- To classify sex for palmer penguins using radial basis functon SVM, using tidymodels workflow
+- To use SVM function
+- To tune parameters, evaluated using resamples
+- To fit to test dataset
+
+## Load packages
+
+```{r, error=FALSE}
+library(pacman)
+p_load(tidymodels, tidyverse, palmerpenguins, kernlab)
+```
+
+## Load dataset
+
+```{r}
+penguins_df <- penguins %>% 
+  filter(!is.na(sex)) %>%  # remoce NA
+  select(-year, -island) # remove these variables as they are not useful in this case
+
+glimpse(penguins_df)
+
+penguins_df %>% 
+  count(sex)
+```
+
+## Initial split
+
+```{r}
+set.seed(20211124)
+penguins_split <- initial_split(penguins)
+
+penguins_train <- training(penguins_split)
+penguins_test <- testing(penguins_split)
+
+```
+
+## 5-fold CV
+
+```{r}
+set.seed(2021112402)
+penguins_cv <- vfold_cv(penguins_train, n = 5)
+```
+
+## Define model
+
+```{r}
+svm_model <- 
+  svm_rbf(cost = tune(), rbf_sigma = tune()) %>% 
+  set_mode("classification") %>% 
+  set_engine("kernlab")
+```
+
+## Define recipe
+
+```{r}
+svm_recipe <- recipe(sex ~ ., data = penguins_df)
+```
+
+## Define workflow
+
+```{r}
+svm_workflow <- 
+  workflow() %>% 
+  add_model(svm_model) %>% 
+  add_recipe(svm_recipe)
+```
+
+## Tuning
+
+Parameters need to be tuned using tune_grid function
+
+```{r}
+cost()
+
+rbf_sigma()
+```
+
+
+## Using Control Object for tuning
+
+```{r, error = FALSE}
+# control object that specifies different aspects of the search
+ctrl <- control_grid(verbose = FALSE, save_pred = TRUE)
+
+# set metric
+roc_res <- metric_set(roc_auc)
+
+set.seed(2021112405)
+
+# tuning results
+svm_results <- 
+  svm_model %>% 
+  tune_grid(
+    svm_recipe,
+    resamples = penguins_cv,
+    metrics = roc_res,
+    control = ctrl
+  )
+
+svm_results
+
+collect_metrics(svm_results)
+
+# ggplot for accuracy vs cost
+
+collect_metrics(svm_results) %>% 
+  ggplot(aes(cost, mean)) +
+  geom_point() +
+  geom_line() +
+  labs(y = "mean accuracy for repeated cv",
+       title = "Average performance profile for SVM classification model") +
+  scale_x_continuous(n.breaks = 20, expand = c(0,0)) +
+  scale_y_continuous(labels = scales::number_format(), limits = c(0.5, 1),
+                     expand = c(0,0)) +
+  theme_classic()
+```
+
+
+## Top Combination
+
+```{r}
+show_best(svm_results,
+          metric = "roc_auc")
+```
+
+## ROC Curve for resamples
+
+```{r}
+collect_predictions(svm_results) %>% 
+  group_by(id) %>% 
+  roc_curve(sex, .pred_female) %>% 
+  ggplot(aes(1-specificity, sensitivity, col = id)) +
+  geom_abline(lty = 2, col = "grey50", size = 1.5) +
+  geom_path(show.legend = F, alpha = 0.6, size = 1.2) +
+  coord_equal() +
+  theme_classic()
+```
+
+## Fit one more time to training and evaluate on testing dataset
+
+```{r, error = FALSE}
+# select best parameter
+best_param <- svm_results %>% 
+  select_best("roc_auc")
+
+best_param
+
+# update workflow object with values from select best
+
+svm_final_workflow <- svm_workflow %>% 
+  finalize_workflow(best_param)
+
+svm_final_workflow
+
+
+svm_fit <- svm_final_workflow %>% 
+  fit(data = penguins_train)
+
+svm_fit
+
+
+```
+
+
+```{r}
+
+# last fit on training dataset and evaluate on test dataset
+
+final_fit <- 
+  svm_final_workflow %>% 
+  last_fit(penguins_split)
+
+final_fit %>% 
+  collect_metrics() # 0.906 : accuracy, #0.970 roc_auc
+
+```
+
+
+
+# Reference
+
+- <https://r4ds.github.io/bookclub-tmwr/svm-model-as-motivating-example.html>
+- <https://www.tidymodels.org/learn/work/tune-svm/>
+- <https://parsnip.tidymodels.org/reference/svm_rbf.html>

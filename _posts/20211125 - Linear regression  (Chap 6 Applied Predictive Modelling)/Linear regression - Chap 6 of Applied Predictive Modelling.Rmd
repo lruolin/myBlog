@@ -1,0 +1,232 @@
+---
+title: "Applied predictive modelling book - Chap 6: Linear regression"
+description: |
+  Tidymodels workflow
+author:
+  - name: lruolin
+date: 11-25-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Linear regression: 
+
+For linear regression, the number of predictors must not exceed number of observations. 
+
+There must not be any missing data for the outcome variable (if so, they should be imputed). 
+Data must be centered and scaled, and correlated variables should be removed (either by subset selection, shrinkage methods - lasso or ridge regression, or by the use of dimensionality reduction - PCA or PLS)
+
+The exercise below is done using the dataset from Applied Predictive Modelling book, and the workflow followed that outlined in this [youtube video](https://www.youtube.com/watch?v=huIGJaokKgM), and I also took reference from Julia Silge's blogpost on [lasso regression for The Office](https://juliasilge.com/blog/lasso-the-office/).
+
+
+# Load packages
+```{r}
+library(pacman)
+p_load(tidymodels, tidyverse, janitor, caret, corrr, glmnet, ISLR, skimr)
+```
+
+
+# IR Spectroscopy
+
+"These data are recorded on a Tecator Infratec Food and Feed Analyzer working in the wavelength range 850 - 1050 nm by the Near Infrared Transmission (NIT) principle. Each sample contains finely chopped pure meat with different moisture, fat and protein contents.
+
+"For each meat sample the data consists of a 100 channel spectrum of absorbances and the contents of moisture (water), fat and protein. The absorbance is -log10 of the transmittance measured by the spectrometer. The three contents, measured in percent, are determined by analytic chemistry."
+
+## Load data 
+
+```{r}
+data(tecator)
+
+absorbance_df <- as.tibble(absorp) %>% 
+  clean_names()
+
+# glimpse(absorbance_df) # absorbance
+
+endpoints_df <- as.tibble(endpoints) %>% 
+  rename("water" = V1,
+         "fat" = V2,
+         "protein" = V3)
+
+glimpse(endpoints_df)
+
+ir_df <- bind_cols(endpoints_df, absorbance_df) %>% 
+  select(-water, -protein) # to predict fat content from IR spectrum
+
+# glimpse(ir_df)
+
+
+```
+
+## EDA
+
+```{r}
+ir_df %>% 
+  ggplot(aes(fat)) + 
+  geom_freqpoly() +
+  theme_classic()
+
+summary(ir_df$fat) # fat (Y) is left skewed
+
+
+# X variables are very correlated
+ir_df %>% 
+  select(-fat) %>% 
+  corrr::correlate() %>% 
+  corrr::rplot()
+```
+
+## Split
+
+```{r}
+set.seed(2021112501)
+ir_split <- initial_split(ir_df)
+
+ir_training <- training(ir_split)
+ir_testing <- testing(ir_split)
+
+# cross validation set
+set.seed(2021112502)
+ir_cv <- vfold_cv(ir_training)
+
+```
+
+## Linear regression
+
+### Define recipe
+
+```{r}
+lm_recipe <- 
+  recipe(fat ~ ., data = ir_training) %>% 
+ # step_sqrt(fat) %>% 
+  #step_center(all_predictors()) # centering is recommended for spectral data to minimise noise
+  
+  step_normalize(everything())
+
+lm_recipe 
+```
+
+
+### Define models
+
+```{r}
+# To set a linear model, but to tune to see whether to use OLS, ridge or lasso, or elasticnet
+lm_model <- linear_reg(penalty = tune(),
+                       mixture = tune()) %>% 
+            set_engine("glmnet")
+
+lm_model
+```
+
+### Tune for linear regression model
+
+```{r}
+# for penalty aka tuning parameter = 0, model is the same as OLS
+# for penalty aka tuning parameter = 1, model is a null model without predictors
+
+# for ridge regression, mixture (alpha) = 0
+# for lasso regression, mixture (alpha) = 1
+
+grid <- expand_grid(
+  penalty = seq(0, 100, by = 10),
+  mixture = seq(0, 1, by = 0.1)
+)
+
+results <- tune_grid(
+  lm_model,
+  preprocessor = lm_recipe,
+  grid = grid,
+  resamples = ir_cv
+)
+
+results %>% 
+  show_best(metric = "rmse")
+
+results %>% 
+  show_best(metric = "rsq")
+
+lm_best_param <- results %>% 
+  select_best(metric = "rmse")
+
+lm_best_param
+
+lm_best_model <- 
+  linear_reg(penalty = 0, mixture = 0.5) %>% 
+  set_engine("glmnet")
+
+lm_final_workflow <- 
+  workflow() %>% 
+  add_model(lm_best_model) %>% 
+  add_recipe(lm_recipe)
+
+lm_final_workflow
+
+# final fit to training dataset
+lm_final_workflow %>% 
+  fit(ir_training) %>% 
+  extract_fit_parsnip() %>% 
+  vip::vip(num_features = 20) +
+  theme_classic()
+
+# These are the wavelengths of interest
+seq(850,1050,2) %>% 
+  as_tibble() %>% 
+  rowid_to_column() %>% 
+  filter(rowid %in% c(1:3, 39:42))
+
+# predict
+lm_fit <- lm_best_model %>% 
+  fit(fat ~., data = ir_df)
+
+tidy(lm_fit)
+
+
+
+# last fit and evaluate on test dataset
+final_fit <- 
+  lm_final_workflow %>% 
+  last_fit(ir_split)
+
+final_fit %>% 
+  collect_metrics() # on test dataset. rmse: 0.246, rsq: 0.934
+
+# predicted fat values
+predict(lm_fit, ir_testing)
+
+ir_aug <- 
+  augment(lm_fit, ir_testing)
+
+
+# glimpse(ir_aug)
+
+# visualizing predicted fat vs actual fat content for test dataset
+ir_aug %>% 
+  ggplot(aes(fat, .pred)) +
+  geom_point(col = "darkblue", size = 3) +
+  geom_abline(lty = 2, col = "grey50", size = 2) +
+  scale_x_continuous(expand = c(0,0), limits = c(0, 60)) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 60)) +
+  labs(title = "Predicted vs Actual Fat Content for Test Dataset",
+       x = "Actual Fat %",
+       y = "Predicted Fat %") +
+  theme_classic() +
+  coord_equal()
+
+# accuracy is slightly off for higher fat % samples - tendency to over-estimate.
+```
+
+For PLS, I attempted to do it earlier [here](https://lruolin.github.io/myBlog/posts/20210328_NIR%20Meat%20Data%20(PLS-regression)/). The workflow is the same, except that the preprocessing did not normalise everything. 
+
+
+
+# Reference
+
+- <http://appliedpredictivemodeling.com/>
+- <https://www.tidymodels.org/learn/models/pls/>
+- <https://juliasilge.com/blog/lasso-the-office/>
+- <https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/linear-model-selection-and-regularization.html>
+- <https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/linear-model-selection-and-regularization.html>
