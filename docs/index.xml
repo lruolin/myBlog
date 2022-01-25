@@ -44,15 +44,6 @@
       <pubDate>Tue, 23 Nov 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
-      <title>Captive Africans Dataset</title>
-      <dc:creator>lruolin</dc:creator>
-      <link>https://lruolin.github.io/myBlog/posts/2021117 - Imputation for missing data (Julia Silge's tutorial)</link>
-      <description>Missing data imputation - Following Julia Silge's worked example</description>
-      <guid>https://lruolin.github.io/myBlog/posts/2021117 - Imputation for missing data (Julia Silge's tutorial)</guid>
-      <pubDate>Wed, 17 Nov 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://lruolin.github.io/myBlog/posts/2021117 - Imputation for missing data (Julia Silge's tutorial)/Impute-missing-data---Captive-Africans_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png" width="1248" height="768"/>
-    </item>
-    <item>
       <title>AMDIS Annotated Chromatogram</title>
       <dc:creator>lruolin</dc:creator>
       <link>https://lruolin.github.io/myBlog/posts/20211112_AMDIS annotated chromatogram</link>
@@ -471,6 +462,14 @@
       <guid>https://lruolin.github.io/myBlog/posts/20210130_Volatiles_tomato</guid>
       <pubDate>Mon, 01 Feb 2021 00:00:00 +0000</pubDate>
       <media:content url="https://lruolin.github.io/myBlog/posts/20210130_Volatiles_tomato/Volatiles_tomatoes_files/figure-html5/unnamed-chunk-6-1.png" medium="image" type="image/png" width="3840" height="2304"/>
+    </item>
+    <item>
+      <title>2022: A new beginning</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20220125 - The year ahead</link>
+      <description>Goals for 2022</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20220125 - The year ahead</guid>
+      <pubDate>Mon, 25 Jan 2021 00:00:00 +0000</pubDate>
     </item>
     <item>
       <title>PCA Wine</title>
