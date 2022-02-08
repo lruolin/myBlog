@@ -1,10 +1,10 @@
 ---
 title: "Chocolate Ratings"
 description: |
-  Goals for 2022
+  Dark Chocolate ratings dataset from TidyTuesday
 author:
   - name: lruolin
-date: 01-29-2021
+date: 01-29-2022
 output:
   distill::distill_article:
     self_contained: false
