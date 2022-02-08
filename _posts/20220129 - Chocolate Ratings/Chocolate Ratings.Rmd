@@ -1,0 +1,621 @@
+---
+title: "Chocolate Ratings"
+description: |
+  Goals for 2022
+author:
+  - name: lruolin
+date: 01-29-2021
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Background
+This dataset is from Week 3 of 2022 (Tidy Tuesday dataset)[https://github.com/rfordatascience/tidytuesday/blob/master/data/2022/2022-01-18/readme.md], and comes from th Flavors of Cacao.
+
+# Packages
+```{r}
+library(pacman)
+p_load(tidyverse, ggsci, janitor, googlesheets4, kableExtra, ggthemes,
+       tidytext, tidymodels, textrecipes)
+
+```
+
+
+# Import
+
+```{r}
+chocolate <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-18/chocolate.csv')
+
+```
+
+
+Taking a glimpse at the data:
+
+```{r}
+glimpse(chocolate)
+```
+
+```{r}
+head(chocolate)
+```
+
+The information below is taken from the tidytuesday website:
+
+```{r}
+# using googlesheets4
+info_table <- read_sheet("https://docs.google.com/spreadsheets/d/198rFQuCTqdgQ_Ek451D8FCRY3jXyGmfGzsGD6Bzftug/edit?usp=sharing")
+
+info_table %>% 
+  kbl() %>% 
+  kable_styling()
+
+```
+
+
+# Data Cleaning
+
+## Understanding the unique values in each column
+
+
+```{r}
+# to see unique values in every column
+chocolate %>% 
+  # summarise_all(list(~n_distinct(.))) %>%    # superseded
+  summarise(across(everything(), list(~n_distinct(.)))) %>% 
+  pivot_longer(everything())
+```
+
+The dataset has 2530 rows, 10 variables.
+
+There are repeated entries all the columns
+
+### Chocolate manufacturers
+
+Top 20 Chocolate Manufactorers
+
+```{r}
+chocolate %>% 
+  count(company_manufacturer, sort = T) %>% 
+  slice_head(n = 20) %>% 
+  ggplot(aes(fct_reorder(company_manufacturer, n), n, label = n)) +
+  geom_col(fill = "sienna") +
+  geom_text(nudge_y = 1.2) +
+  labs(title = "Top 20 Chocolate Manufacturers",
+       x = "",
+       y = "",
+       caption = "Soure: http://flavorsofcacao.com/chocolate_database.html") +
+  coord_flip() +
+  scale_y_continuous(expand = c(0,0), limits = c(0, 60)) +
+  theme_classic() +
+  theme(axis.text = element_text(size = 12),
+        title = element_text(size = 16, face = 'bold'))
+```
+
+Writing a function for top 20 by count, for any column
+
+
+```{r}
+plot_top_twenty <- function(df, var_x) {
+  
+  sorted <- df %>% 
+    count({{var_x}}, sort = T) %>% 
+    slice_head(n = 20)
+  
+  max_n <- max(sorted$n) + 100 # for y axis limit
+  
+  sorted %>% 
+    ggplot(aes(fct_reorder({{var_x}}, n), n, label = n)) +
+    geom_col(fill = "sienna") +
+   # geom_text(nudge_y = 1.2) +
+    coord_flip() +
+    labs(title=paste0("Top 20 for ",rlang::as_label(rlang::enquo(var_x))),
+         x = "",
+         y = "",
+         caption = "Soure: http://flavorsofcacao.com/chocolate_database.html") +
+   scale_y_continuous(expand = c(0,0), limits = c(0, max_n)) +
+   theme_classic() +
+  theme(axis.text = element_text(size = 12),
+        title = element_text(size = 16, face = 'bold'))
+
+}
+
+```
+
+Soma: A Canadian Chocolate Company
+
+```{r}
+chocolate %>% 
+  filter(company_manufacturer == "Soma")
+```
+
+
+### Top 20 Company Location
+
+```{r}
+plot_top_twenty(chocolate, company_location) +
+  geom_text(nudge_y = 30)
+```
+
+Most of the chocolates are from USA.
+
+
+```{r}
+glimpse(chocolate)
+```
+
+### Top 20 Country of Bean Origin
+
+```{r}
+plot_top_twenty(chocolate, country_of_bean_origin) +
+  geom_text(nudge_y = 10)
+```
+
+Most of the beans are from Venezuela, Peru, Dominican Republic.
+
+### Review years
+
+```{r}
+chocolate %>% 
+  count(review_date) %>% 
+  ggplot(aes(review_date, n), label = n) +
+  geom_point(size = 3) +
+  geom_line(size = 1) +
+  geom_label(aes(label = n), hjust = 0, 
+             vjust = 0, nudge_y = 1, col = "sienna", size = 5) +
+  labs(title = "Number of reviews by year",
+       x = "Year",
+       y = "No. of Reviews",
+       caption = "Source: http://flavorsofcacao.com/chocolate_database.html") +
+  scale_y_continuous(limits = c(0, 300)) +
+  scale_x_continuous(limits = c(2006, 2022),
+                     n.breaks = 17 )  +
+  theme_classic() +
+  theme(axis.text = element_text(size = 12),
+        axis.title = element_text(size = 14),
+        axis.title.y = element_blank(),
+        axis.text.y = element_blank(),
+        axis.ticks.y = element_blank(),
+        title = element_text(size = 16, face = "bold"))
+```
+
+Review years are from 2006 to 2021.
+
+## Further cleaning: Parsing cocoa percent and ingredients, remove na
+
+```{r}
+chocolate %>% 
+  skimr::skim()
+```
+
+Remove na values in ingredients column
+
+```{r}
+chocolate_cleaned <- 
+  chocolate %>% 
+  mutate(cocoa_percent = parse_number(cocoa_percent)) %>% 
+  separate(ingredients, c("number_of_ingredients", "type_of_ingredients"),
+           sep = "-") %>% 
+  mutate(type_of_ingredients = str_trim(type_of_ingredients),
+         number_of_ingredients = as.numeric(number_of_ingredients)) %>% 
+  drop_na()
+
+glimpse(chocolate_cleaned)
+      
+```
+
+## Cocoa percent
+
+```{r}
+chocolate_cleaned %>% 
+  summarise_at(c("cocoa_percent", "number_of_ingredients"),
+               list(min = min,
+                    max = max,
+                    median = median,
+                    mean = mean)) %>% 
+  pivot_longer(everything()) %>% 
+  arrange(name)
+
+```
+
+
+Lowest cocoa content:
+
+```{r}
+chocolate_cleaned %>% 
+  filter(cocoa_percent == 42) %>% 
+  select(company_location, country_of_bean_origin, type_of_ingredients, most_memorable_characteristics, rating)
+```
+
+Highest cocoa content:
+
+```{r}
+chocolate_cleaned %>% 
+  filter(cocoa_percent == 100) %>% 
+  select(company_location, country_of_bean_origin, type_of_ingredients, most_memorable_characteristics, rating)
+```
+
+Cocoa content distribution:
+
+```{r}
+chocolate_cleaned %>% 
+  ggplot(aes(cocoa_percent)) +
+  geom_histogram(fill = "sienna", col = "black") +
+  labs(title = "Cocoa Percent Distribution in Dark Chocolate Bars",
+       subtitle = "Cocoa percent ranges from 42 - 100%, with mean cocoa percent at 71.5%",
+       caption = "Source: http://flavorsofcacao.com/chocolate_database.html") +
+  theme_classic()
+```
+
+## Ingredients
+
+```{r}
+chocolate_cleaned %>% 
+  ggplot(aes(number_of_ingredients)) +
+  geom_bar(fill = "sienna", col = "black") +
+  scale_x_continuous(limits = c(0, 6), n.breaks = 7) +
+  scale_y_continuous(expand = c(0,0)) +
+  labs(title = "Distribution of number of ingredients in dark chocolate bars",
+       subtitle = "Most dark chocolate bars have 2 - 3 ingredients",
+       caption = "Source: http://flavorsofcacao.com/chocolate_database.html") +
+  theme_classic()
+```
+
+
+## Ratings
+
+### Average ratings
+```{r}
+chocolate_cleaned %>% 
+  ggplot(aes(x = rating)) +
+  geom_histogram(binwidth = 0.2, fill = "sienna") +
+  labs(title = "Distribution of chocolate ratings",
+       subtitle = "Median chocolate rating is 3.25") +
+  geom_vline(xintercept = median(chocolate_cleaned$rating)) +
+  theme_classic()
+
+max(chocolate_cleaned$rating) # 4
+```
+
+
+### Ratings by country of bean origin
+
+```{r}
+# check number of countries
+
+countries_choc <- chocolate_cleaned %>% 
+  count(country_of_bean_origin) %>% 
+  arrange(n)
+
+# median number of reviews
+median(countries_choc$n) # 40.5
+
+# distribution plot for number of reviews
+countries_choc %>% 
+  ggplot(aes(n)) +
+  geom_histogram(fill = 'sienna', col = 'black') +
+  geom_vline(aes(xintercept = median(n))) +
+  labs(title = "Distribution of number of reviews by country of bean origin") +
+  theme_classic()
+
+# ratings by country of bean origin
+countries_choc_df <- chocolate_cleaned %>% 
+  group_by(country_of_bean_origin) %>% 
+  summarise(min = min(rating),
+            mean = mean(rating),
+            median = median(rating),
+            max = max(rating),
+            n = n()) %>% 
+  filter(n > 40)  # left with 31 countries
+
+countries_choc_df
+
+# plot
+
+countries_choc_df %>% 
+  ggplot(aes(x = fct_reorder(country_of_bean_origin, mean), 
+             y = mean, label = mean)) +
+  geom_point(stat = "identity", col = "sienna", size = 2) +
+  geom_errorbar(aes(ymin = min, ymax = max),
+                col = "sienna") +
+  labs(title = "Mean rating for dark chocolate bars by countries (with number of reviews > 40)",
+       subtitle = "Cuba, Vietnam, Papua New Guinea are the top 3 countries by ratings",
+       x = "Country of bean origin",
+       y = "Mean rating",
+       caption = "Source: Flavors of Cacao") +
+  coord_flip() +
+  theme_classic()
+
+```
+
+I didn't notice that there is a "blend" category for countries until now. This probably means that the beans could have been sourced from different countries. 
+
+## Interplay between ingredients and ratings
+
+```{r}
+ingredients <- chocolate_cleaned %>% 
+  group_by(type_of_ingredients) %>% 
+  summarise(mean = mean(rating),
+            min = min(rating),
+            max = max(rating),
+            n = n()) %>% 
+  arrange(desc(mean)) %>% 
+  filter(n > 15) %>% 
+  mutate(full_ingredients = 
+           str_replace_all(type_of_ingredients, "B", "beans")) %>% 
+  mutate(full_ingredients = str_replace_all(full_ingredients, "C", "cocoa butter")) %>% 
+  mutate(full_ingredients = str_replace_all(full_ingredients, "L", "lecithin")) %>% 
+  mutate(full_ingredients = str_replace_all(full_ingredients, "V", "vanilla")) %>% 
+  mutate(full_ingredients = str_replace_all(full_ingredients, "Sa", "salt")) %>% 
+  mutate(full_ingredients = str_replace_all(full_ingredients, "\\*", "weeteners")) %>% 
+  mutate(full_ingredients = str_replace_all(full_ingredients, "Sweeteners", "sweeteners")) %>% 
+  mutate(full_ingredients = str_replace_all(full_ingredients, "S", "sugar"))
+
+ingredients
+
+# plot
+
+ingredients %>% 
+  ggplot(aes(x = fct_reorder(full_ingredients, mean), 
+             y = mean, label = mean)) +
+  geom_point(stat = "identity", col = "sienna", size = 3) +
+  geom_errorbar(aes(ymin = min, ymax = max),
+                col = "sienna",
+                width = 0.2) +
+  labs(title = "Ingredients and chocolate bar ratings (with number of reviews > 15)",
+       subtitle = "The highest ratings come from chocolates with beans, sugar, cocoa butter",
+       x = "",
+       y = "Mean rating",
+       caption = "Source: Flavors of Cacao") +
+  coord_flip() +
+  theme_classic() +
+  theme(axis.text = element_text(size = 12))
+
+```
+
+Cocoa butter is important to suspend and lubricate sugar particles. Cocoa butter enhances the texture of chocolate, and is responsible for the melt-in-your-mouth quality [Source:](https://www.aalstchocolate.com/post/2016/11/21/chocolate-lesson-101-cocoa-butter#:~:text=The%20function%20of%20cocoa%20butter,1.). 
+
+Lecithin is an emulsifier, and binds the cocoa solids, sugar and milk to cocoa butter. It is a cheaper alternative to cocoa butter, and typically achieves the same effect at 0.5% for what takes 3-4% cocoa butter to achieve. [Source:](https://www.hotelchocolat.com/uk/blog/chocolateknowledge/what-is-lecithin-and-why-is-it-in-chocolate.html)
+
+Interestingly, salt is added to intensify the body's ability to taste sweetness[Source:](https://www.thechocolatejournalist.com/blog/salt-chocolate). This could be why it is used in combination with dark chocolate bars with sweeteners, so that the chocolate is "perceived" to be as sweet as normal chocolate with sugar added. 
+
+Vanilla is usually added to reduce bitterness arising from lower quality beans, and is needed to cover the bitter taste even after adding sugar [Source:](https://parrechocolat.com/blogs/journal/why-is-vanilla-in-your-chocolate#:~:text=Chocolate%20makers%20often%20include%20vanilla,sugar%2C%20so%20they%20added%20vanilla.). I think this could be why chocolates with vanilla added tend to have slightly lower ratings. 
+
+## Text predictor for chocolate ratings
+
+This section is adapted from [Julia Silge's blogpost](https://juliasilge.com/blog/chocolate-ratings/)
+
+```{r}
+glimpse(chocolate_cleaned)
+
+```
+
+Most common words used to describe chocolate charactistics:
+```{r}
+tidy_chocolate <- chocolate_cleaned %>% 
+  unnest_tokens(word, most_memorable_characteristics)
+
+tidy_chocolate %>% 
+  count(word, sort = T)
+```
+
+Mean rating for these words
+```{r}
+glimpse(tidy_chocolate)
+
+tidy_chocolate %>% 
+  group_by(word) %>% 
+  summarise(n = n(),
+            rating = mean(rating)) %>% 
+  mutate(category = case_when(rating > mean(rating) ~ "above mean rating",
+                              TRUE ~ "below mean rating")) %>% 
+  ggplot(aes(n, rating, fill = category)) +
+  geom_hline(yintercept = mean(chocolate$rating), lty = 1) +
+  geom_jitter(aes(color = category), alpha = 0.7) +
+  geom_text(aes(label = word),
+            check_overlap = T,
+            vjust = "top",
+            hjust = "left") +
+  labs(title = "Mean ratings for sensory descriptor words",
+       subtitle = "Commonly used descriptors for highly rated chocolates: balanced, complex, rich, cocoa, fruit, creamy.\nCommonly used descriptors for poorly rated chocolates: chemical, off, bitter, sweet, earthy, intense.",
+       caption = "Source: Flavors of Cacao") +
+  scale_x_log10() +
+  theme_classic() +
+  theme(legend.position = "top")
+```
+
+# Modelling
+
+The aim of the modelling is to predict the rating of chocolate bars, using sensory descriptors(word), country of bean origin, cocoa percent, number of ingredients, and ingredients.
+
+## Split data: train, test, 10-fold cross-validation
+
+```{r}
+set.seed(20220109)
+
+choc_split <- initial_split(chocolate_cleaned, strata = rating)
+choc_train <- training(choc_split)
+choc_test <- testing(choc_split)
+
+set.seed(202201092)
+choc_folds <- vfold_cv(choc_train, strata = rating)
+choc_folds
+
+```
+
+## Create recipe
+
+```{r}
+choc_recipe <- 
+  recipe(rating ~ # country_of_bean_origin + #cocoa_percent + 
+          number_of_ingredients + 
+           type_of_ingredients +
+           most_memorable_characteristics, data = choc_train) %>% 
+  
+ # step_dummy(country_of_bean_origin) %>% 
+  step_dummy(type_of_ingredients) %>% 
+  
+  # transform text into features by tokenizing and computing tf-idf
+  step_tokenize(most_memorable_characteristics) %>% 
+  step_tokenfilter(most_memorable_characteristics, max_tokens = 100) %>% 
+  step_tfidf(most_memorable_characteristics)
+
+# checking if it worked
+choc_prep <- prep(choc_recipe) %>% 
+  bake(new_data = NULL) 
+
+glimpse(choc_prep)
+
+```
+
+
+## Define model
+
+```{r}
+# random forest
+rf_model <- rand_forest(trees = 500) %>% 
+  set_mode("regression")
+
+rf_model
+
+# support vector machine
+svm_model <- svm_linear() %>% 
+  set_mode("regression")
+
+svm_model
+```
+
+## Create workflow
+
+```{r}
+rf_wf <- workflow(choc_recipe, rf_model)
+
+svm_wf <- workflow(choc_recipe, svm_model)
+```
+
+## Evaluate models
+
+```{r}
+doParallel::registerDoParallel()
+control_preds <- control_resamples(save_pred = T)
+
+svm_rs <- fit_resamples(
+  svm_wf,
+  resamples = choc_folds,
+  control = control_preds
+)
+
+ranger_rs <- fit_resamples(
+  rf_wf,
+  resamples = choc_folds,
+  control = control_preds
+)
+```
+
+
+```{r}
+# collect metrics
+collect_metrics(svm_rs)
+
+collect_metrics(ranger_rs)
+```
+
+Initially, I tried to include company location, country of bean origin and cocoa percent, but the rmse was higher than that with just the memorable_characteristics [see Julia Silge's post](https://juliasilge.com/blog/chocolate-ratings/), where rmse = 0.349 for svm workflow and rmse = 0.351 for random forest workflow.
+
+Even after removing these variables, the rmse was similar, so it appears that the addition of number of ingredients and type of ingredients do not really improve the prediction accuracy of the ratings. Hence, I will just go back to using sensory descriptors for prediction.
+
+```{r}
+# create new recipe
+choc_text_recipe <- 
+  recipe(rating ~ 
+           most_memorable_characteristics, data = choc_train) %>% 
+  
+  # transform text into features by tokenizing and computing tf-idf
+  step_tokenize(most_memorable_characteristics) %>% 
+  step_tokenfilter(most_memorable_characteristics, max_tokens = 100) %>% 
+  step_tfidf(most_memorable_characteristics)
+
+# create new workflows
+rf_text_wf <- workflow(choc_text_recipe, rf_model)
+svm_text_wf <- workflow(choc_text_recipe, svm_model)
+
+# evaluate models
+doParallel::registerDoParallel()
+control_preds <- control_resamples(save_pred = T)
+
+svm_text_rs <- fit_resamples(
+  svm_text_wf,
+  resamples = choc_folds,
+  control = control_preds
+)
+
+ranger_text_rs <- fit_resamples(
+  rf_text_wf,
+  resamples = choc_folds,
+  control = control_preds
+)
+
+# collect metrics
+collect_metrics(svm_text_rs)
+collect_metrics(ranger_text_rs)
+```
+
+
+
+## Last Fit
+
+```{r}
+# fit on training data and evaluate on testing data
+final_fitted <- last_fit(svm_text_wf, choc_split) # svm is faster to train
+collect_metrics(final_fitted) # metics on testing data
+
+```
+
+## Final workflow
+
+```{r}
+final_wf <- extract_workflow(final_fitted)
+predict(final_wf, choc_test[55, ])
+```
+
+Final model may be saved using readr::write_rds()
+
+
+## Inspecting coefficients for each term
+
+Which words are more assoicated with high ratings vs low ratings?
+
+```{r}
+extract_workflow(final_fitted) %>% 
+  tidy() %>% 
+  filter(term != "Bias") %>% 
+  group_by(estimate > 0) %>% 
+  slice_max(abs(estimate), n = 10) %>% 
+  ungroup() %>% 
+  mutate(term = str_remove(term, "tfidf_most_memorable_characteristics_")) %>% 
+  ggplot(aes(estimate, fct_reorder(term, estimate), fill = estimate > 0)) +
+  geom_col(alpha = 0.8) +
+  scale_fill_discrete(labels = c("low ratings", "high ratings")) +
+  labs(y = NULL,
+       fill = "More from..",
+       title = "Words assocatied with high/low choc bar ratings",
+       caption = "Source: Flavors of Cacao") +
+  theme_classic()
+```
+
+# Key takeaways
+
+I tried to predict chocolate bar ratings based on sensory descriptors, but the prediction model is not super accurate, as there were not many other predictors used. Even when I tried to include other predictors, the modelling accuracy did not increase. However, it was a good exercise on refreshing my knowledge on tidymodels, since it had been quite some time since I last did modelling, as well as working on text data for the first time. 
+
+Potential future work would be understanding more about text modelling, and looking more into how sensory results analysis could be looked at with R.
+
+
+# References
+
+- https://www.tidyverse.org/blog/2020/05/googlesheets4-0-2-0/
+- https://www.kaggle.com/willcanniford/chocolate-bar-ratings-extensive-eda
+

@@ -10,10 +10,22 @@ Math inside RMarkdown:
 - <https://rpruim.github.io/s341/S19/from-class/MathinRmd.html>
 
 Statistical Inference via Data Science:
+
 - <https://moderndive.com/index.html>
 
 Using R for Common Scientific Tasks:
+
 - <https://raw.githack.com/etmckinley/Coffey-Lab-R-Tutorial/main/R-tutorial-xaringnan.html#1>
+
+Downloading packages from Github:
+
+- <https://cran.r-project.org/web/packages/githubinstall/vignettes/githubinstall.html>
+
+Useful addins:
+
+- pasteAsComment <https://www.r-bloggers.com/2022/02/some-simple-rstudio-addins/>
+- datapasta <https://github.com/MilesMcBain/datapasta>
+- Getting data from google sheets <https://arbor-analytics.com/post/getting-your-data-into-r-from-google-sheets/> 
 
 
 Machine Learning:
@@ -26,9 +38,11 @@ Machine Learning:
 - <https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/classification.html>
 
 R - Python Dictionary:
+
 - <https://heads0rtai1s.github.io/2020/11/05/r-python-dplyr-pandas/>
 
 Text Analysis:
+
 - <https://smltar.com/>
 
 Analytics for Food Industry:

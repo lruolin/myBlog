@@ -10,7 +10,7 @@
   </url>
   <url>
     <loc>https://lruolin.github.io/myBlog/usefullinks.html</loc>
-    <lastmod>2021-11-21T21:03:17+08:00</lastmod>
+    <lastmod>2022-02-06T08:20:19+08:00</lastmod>
   </url>
   <url>
     <loc>https://lruolin.github.io/myBlog/posts/20211125 - Linear regression  (Chap 6 Applied Predictive Modelling)/</loc>
@@ -27,6 +27,10 @@
   <url>
     <loc>https://lruolin.github.io/myBlog/posts/20211123 - Summary for modelling/</loc>
     <lastmod>2021-11-28T23:13:19+08:00</lastmod>
+  </url>
+  <url>
+    <loc>https://lruolin.github.io/myBlog/posts/20211117 - Imputation for missing data (Julia Silge's tutorial)/</loc>
+    <lastmod>2021-11-18T06:37:57+08:00</lastmod>
   </url>
   <url>
     <loc>https://lruolin.github.io/myBlog/posts/20211112_AMDIS annotated chromatogram/</loc>
@@ -221,8 +225,8 @@
     <lastmod>2021-02-01T23:36:52+08:00</lastmod>
   </url>
   <url>
-    <loc>https://lruolin.github.io/myBlog/posts/20220125 - The year ahead/</loc>
-    <lastmod>2022-01-26T06:08:04+08:00</lastmod>
+    <loc>https://lruolin.github.io/myBlog/posts/20220129 - Chocolate Ratings/</loc>
+    <lastmod>2022-02-09T06:36:14+08:00</lastmod>
   </url>
   <url>
     <loc>https://lruolin.github.io/myBlog/posts/20210123_PCA wine/</loc>
