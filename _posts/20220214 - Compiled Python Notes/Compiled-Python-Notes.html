@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Summary for Python Codes</title>
+
+  <meta property="description" itemprop="description" content="Compilation of notes for coding with python"/>
+
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2022-03-10"/>
+  <meta property="article:created" itemprop="dateCreated" content="2022-03-10"/>
+  <meta name="article:author" content="lruolin"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Summary for Python Codes"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="Compilation of notes for coding with python"/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Summary for Python Codes"/>
+  <meta property="twitter:description" content="Compilation of notes for coding with python"/>
+
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output","editor_options"]}},"value":[{"type":"character","attributes":{},"value":["Summary for Python Codes"]},{"type":"character","attributes":{},"value":["Compilation of notes for coding with python\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["lruolin"]}]}]},{"type":"character","attributes":{},"value":["03-10-2022"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc","toc_depth"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]},{"type":"integer","attributes":{},"value":[3]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["chunk_output_type"]}},"value":[{"type":"character","attributes":{},"value":["console"]}]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["Compiled-Python-Notes_files/anchor-4.2.2/anchor.min.js","Compiled-Python-Notes_files/bowser-1.9.3/bowser.min.js","Compiled-Python-Notes_files/crosstalk-1.2.0/css/crosstalk.min.css","Compiled-Python-Notes_files/crosstalk-1.2.0/js/crosstalk.js","Compiled-Python-Notes_files/crosstalk-1.2.0/js/crosstalk.js.map","Compiled-Python-Notes_files/crosstalk-1.2.0/js/crosstalk.min.js","Compiled-Python-Notes_files/crosstalk-1.2.0/js/crosstalk.min.js.map","Compiled-Python-Notes_files/crosstalk-1.2.0/scss/crosstalk.scss","Compiled-Python-Notes_files/datatables-binding-0.20/datatables.js","Compiled-Python-Notes_files/datatables-css-0.0.0/datatables-crosstalk.css","Compiled-Python-Notes_files/distill-2.2.21/template.v2.js","Compiled-Python-Notes_files/dt-core-1.11.3/css/jquery.dataTables.extra.css","Compiled-Python-Notes_files/dt-core-1.11.3/css/jquery.dataTables.min.css","Compiled-Python-Notes_files/dt-core-1.11.3/js/jquery.dataTables.min.js","Compiled-Python-Notes_files/dt-ext-keytable-1.11.3/css/keyTable.dataTables.min.css","Compiled-Python-Notes_files/dt-ext-keytable-1.11.3/js/dataTables.keyTable.min.js","Compiled-Python-Notes_files/header-attrs-2.11.3/header-attrs.js","Compiled-Python-Notes_files/htmlwidgets-1.5.4/htmlwidgets.js","Compiled-Python-Notes_files/jquery-3.6.0/jquery-3.6.0.js","Compiled-Python-Notes_files/jquery-3.6.0/jquery-3.6.0.min.js","Compiled-Python-Notes_files/jquery-3.6.0/jquery-3.6.0.min.map","Compiled-Python-Notes_files/popper-2.6.0/popper.min.js","Compiled-Python-Notes_files/tippy-6.2.7/tippy-bundle.umd.min.js","Compiled-Python-Notes_files/tippy-6.2.7/tippy-light-border.css","Compiled-Python-Notes_files/tippy-6.2.7/tippy.css","Compiled-Python-Notes_files/tippy-6.2.7/tippy.umd.min.js","Compiled-Python-Notes_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure img {
+    width: 100%;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme
+    $('code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          return "<p>" + $('#ref-' + ref).html() + "</p>";
+        }).join("\n");
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="Compiled-Python-Notes_files/header-attrs-2.11.3/header-attrs.js"></script>
+  <script src="Compiled-Python-Notes_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+  <link href="Compiled-Python-Notes_files/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+  <script src="Compiled-Python-Notes_files/datatables-binding-0.20/datatables.js"></script>
+  <script src="Compiled-Python-Notes_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <link href="Compiled-Python-Notes_files/dt-core-1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+  <link href="Compiled-Python-Notes_files/dt-core-1.11.3/css/jquery.dataTables.extra.css" rel="stylesheet" />
+  <script src="Compiled-Python-Notes_files/dt-core-1.11.3/js/jquery.dataTables.min.js"></script>
+  <link href="Compiled-Python-Notes_files/dt-ext-keytable-1.11.3/css/keyTable.dataTables.min.css" rel="stylesheet" />
+  <script src="Compiled-Python-Notes_files/dt-ext-keytable-1.11.3/js/dataTables.keyTable.min.js"></script>
+  <link href="Compiled-Python-Notes_files/crosstalk-1.2.0/css/crosstalk.min.css" rel="stylesheet" />
+  <script src="Compiled-Python-Notes_files/crosstalk-1.2.0/js/crosstalk.min.js"></script>
+  <script src="Compiled-Python-Notes_files/popper-2.6.0/popper.min.js"></script>
+  <link href="Compiled-Python-Notes_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="Compiled-Python-Notes_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="Compiled-Python-Notes_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="Compiled-Python-Notes_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="Compiled-Python-Notes_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="Compiled-Python-Notes_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="Compiled-Python-Notes_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Summary for Python Codes","description":"Compilation of notes for coding with python","authors":[{"author":"lruolin","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-03-10T00:00:00.000+08:00","citationText":"lruolin, 2022"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Summary for Python Codes</h1>
+<!--radix_placeholder_categories-->
+<!--/radix_placeholder_categories-->
+<p><p>Compilation of notes for coding with python</p></p>
+</div>
+
+<div class="d-byline">
+  lruolin  
+  
+<br/>03-10-2022
+</div>
+
+<div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#learning-points">Learning points</a>
+<ul>
+<li><a href="#codes">CODES</a>
+<ul>
+<li><a href="#terminal">Terminal</a></li>
+<li><a href="#base-python">Base Python</a></li>
+<li><a href="#other-packages">Other packages</a></li>
+</ul></li>
+<li><a href="#libraries">LIBRARIES</a></li>
+<li><a href="#reticulate">RETICULATE</a>
+<ul>
+<li><a href="#installing-libraries">Installing libraries</a></li>
+<li><a href="#creating-variables-in-python">Creating variables in python</a></li>
+<li><a href="#loading-python-variables-into-r">Loading python variables into R</a></li>
+<li><a href="#loading-r-variables-back-into-python">Loading R variables back into python</a></li>
+</ul></li>
+<li><a href="#references">References</a></li>
+</ul></li>
+</ul>
+</nav>
+</div>
+<h1 id="learning-points">Learning points</h1>
+<ul>
+<li><p>Linking with google sheets to have a searchable dictionary for coding with python</p></li>
+<li><p>Unfortunately, new line within a cell does not show up in DT below, so the formatting isn’t great.</p></li>
+<li><p>Learning how to use Python in R, using reticulate package</p></li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<h2 id="codes">CODES</h2>
+<h3 id="terminal">Terminal</h3>
+<h3 id="base-python">Base Python</h3>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div id="htmlwidget-275516f91a73488f08c3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-275516f91a73488f08c3">{"x":{"filter":"none","vertical":false,"extensions":["KeyTable"],"editable":{"target":"cell","disable":{"columns":null},"numeric":[],"area":[]},"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177"],["Help and documentation","Help and documentation","Installation","Installation","Installation","Installation","magic command for plots to appear in notebook","append an element to the list","define function to append an element to the list","check type of variable","check if an object is an instance of a particular type","check if an object is an instance of a particular type among those present in the tuple","import a module (a file with the .py extension)","convert to string","convert to integer","check if is boolean","if True, evaluates the block that follows","if, elif, else - if statement can be optionally followed by one or more elif blocks and a catchall else block if all of the conditions are false","for loops are for iterating over a collection (eg list or tuple).","A for loop can be exited altogether with the break keyword.","A while loop specifies a condition and a block of code that is to be executed until the condition evaluates to False or the loop is explicitly ended with break","range: returns an iterator that yields a sequence of evenly spaced integers:","Tuple is a fixed-length, immutable sequence of Python objects","Nested tuple","Convert to tuple","List are variable-length and their contents can be modified in place. They are defined by square brackets or using the list type function","Using list function","Adding element to list using append function","Adding element to a list at a specific location using insert function, but this is computationally expensive.","pop: remove and return an element at a particular index","remove: locates the first such value and removes it from the list","Concatenating list","append multiple elements to a list using extend, preferred computationally over addition","sort a list in place","sort a list using secondary sort key (a function that produces a value to use to sort the objects)","slicing: [start:stop]\nnegative indices slice the sequence relative to the end","slicing [::2] to take every other element","slicing using -1 to reverse the list of tuple","enumerate, which returns a sequence of (i, value) tuples","enumerate to compute a dictionary mapping the values of a sequence to their locations in the sequence","sorted function returns a new sorted list from the elements of any sequence","zip pairs up elements of a number of lists, tuples or other sequences to create a list of tuples","zip can take an arbitrary number of sequences, and the number of elements it produces is determined by the shortest sequence","zip to simultaneously iteratate over multiple sequences, possibly combined with enumerate","Given a “zipped” sequence, zip can be applied in a clever way to “unzip” the sequence. \nAnother way to think about this is converting a list of rows into a list of columns.","reversed iterates over the elements of a sequence in reverse order","print to return command output. If using within function, then use return","see reserved keywords (that cannot be used as variable names)","check data type using type","data type conversion, but cannot convert string to integer","Using backslash before special characters to escape character","list : any values between two square brackets","len: to count number of items in a list","append: to add new data to list","insert : to add new data to specific place in list","remove: to remove data from list. This only takes in one value at a time, and only removes the first instance of that value.","view all the build in functions for list using dir()","Tuple is a fixed-length, immutable sequence of Python objects, created using ( ). Very similar to list except it is immutable.","Dictionary: contains a collection of key-value pairs. \nCreated using { }.","access dictionary using key-pair pair","remove data in dictionary using pop","del : remove data in dictionary using del","keys(): return all the keys in the dictionary","values(): return all the values in the dictionary","Nested list: list within list (adding list to a list), where each inner list represents a row in a datatable","Access first row of nested list","Access particular cell of nested list","basic matplotlib plot","plot with markers. google for matplotlib.markers -&gt; https://matplotlib.org/3.3.0/api/markers_api.html","linestyle: '-', '--'. 'dashdot', 'dotted'","change color: https://matplotlib.org/gallery/color/named_colors.html","Set axis label and titles","Set xlim and ylim","Multiplots","fig.tight_layout() to increase padding between each subplot","ax.bar for barplot","stacked bar chart","stacked bar chart with legend","change size of plot","import csv file","suppress warnings","plot histogram","convert pandas df to nested list","plot boxplot","scatterplot","remove na values in pandas df","Pair up two lists element-wise to create dictionary","Pair up two tuples element-wise to create dictionary","default value in dictionary","default value in dictionary using get. get will return None if key is not present, while pop will raise an exception.","setting values in a dict to be other collections, like lists, eg categorising a list of word by their first letters as a dict of lists. \nOutput: {'a' : ['apple', 'atom'], 'b' : ['bat', 'bar', 'book'] }","setting values in a dict to be other collections, like lists, eg categorising a list of word by their first letters as a dict of lists. \nOutput: {'a' : ['apple', 'atom'], 'b' : ['bat', 'bar', 'book'] }","setting values in a dict to be other collections, like lists, eg categorising a list of word by their first letters as a dict of lists. \nOutput: {'a' : ['apple', 'atom'], 'b' : ['bat', 'bar', 'book'] }","copy","form a new list by filtering the elements of a collection using list comprehension.\nbasic form:\n[expr for val in collection if condition]","list comprehension: filter out strings with length 2 or less and also convert them to uppercase","dictionary comprehension:\ndict_comp = {key-expr : value_expr for value in collection if condition}","nested list comprehension for filtering","nested list comprehension for filtering","for loops are for iterating over a collection (eg list or tuple).\nfor value in list/tuple, execute the code below","Using for loop to sum up items in list","Using for loop to iterate over a tuple","Using for loop to iterate over a list to count number of entries\nalternatively, use len()","Using for loop to calculate average","for loop with if statement to count","for loop with if statement to sum (if meet condition)","for loop with if statement to calculate average (if meet condition)","for loop with if statement to find max value, can also use max()","for loop with if statement to find min value, can also use min()","for loop to iterate through dictionary","for loop to iterate through dictionary to count 0 values\n(can be broadly applied to iterate through dictionary for any other condition, eg greater than, less than)","for loop to iterate through dictionary to sum values if meet certain conditions eg greater than, less than, != 0","for loop to iterate through dictionary to find min or max values","for loop to iterate through list to find count if meet condition A and count if meet condition B","While loop: will execute the code as long as condition is true.\n\nwhile (condition):\n    expression\n\nbut has problem of running indefinitely if expression is always True\nNeed to introduce conditions that will change from True to False","while loop to calculate total sum in a list","Using for loop to count even numbers in list","Using for loop to sum even numbers in list","Using for loop to convert values in list to integer","Using for loop to count the number of lists in a list using isinstance","Using for loop to segment list into group","Using for loop for sentiment analysis: if one of the negative words exist in text, increase the count by 1. similarly for positive","nested list: each inner list represents a row, can be accessed by indexing.","import csv file as list of list (dictionary is more useful), remember to change numerical values from string to numbers using float() or int()","import csv file as list of dictionary, using for loop","import csv file as dataframe","check dimension (number of rows, columns) of dataframe","Using for loop to iterate through nested list(like tabular data), or list of list","Using for loop to iterate through nested list to print first column of every row","Using for loop to iterate through nested list to sum up values from every row nth column, eg 2nd col is sales","Using for loop to iterate through nested list to calculate average for every row nth column","Using for loop to interate through nested list to find max value in nth column","Using for loop to interate through nested list to find min value in nth column","Using for loop to iterate through nested list with multiple conditions","Using for loop to iterate through list of dictionary to print rows of same column","Using for loop to iterate through list of dictionary to sum all rows in a column","Using for loop to iterate through list of dictionary to calculate average of a column","Using for loop to iterate through list of dictionary to find min value","Using for loop to filter and store values for nested list or dictionary","Using for loop to filter and create multiple sublists","Using for loop to compile unique values in data dictionaries","Using for loop to compile total for each unique value (eg total population for each country)","List comprehension: filter out numbers greater than 5.\nCan form a new list by filtering the elements of a collection.\nBasic form: [expr for val in collection if condition]","Import csv file into a nested list","change display max columns (pandas)","convert list to dataframe (pandas)","see first few lines","create function. If python reaches the end of a function without encountering a return statement, None is returned automatically. x, y are positional arguments and z is a keyword argument.","help() to get help on function","to get help on function","to get all functions in library","to get help on function","to get help on library","plt lineplot","plt 2 lineplots","customize lineplots \n(https://matplotlib.org/3.3.0/api/markers_api.html)\n(https://matplotlib.org/api/_as_gen/matplotlib.lines.Line2D.html#matplotlib.lines.Line2D.set_linestyle)\n(https://matplotlib.org/gallery/color/named_colors.html)","plt with defined axis titles, title, similar to lab(R)","plt with x and y limits defined (like scale_x_continuous, R)","plt multipanel plots","plt bar plot, with rotated x ticklabels","plot stacked bar chart","plot stacked bar chart (3 layers)","plot histogram","plot overlapping histograms, can change color or alpha setting","plot boxplot","convert df to nested list (after importing using pd)","create function to extract a column fron a nested list\n\nto use:\nmy_col = extract_column(list_name, col_number)","merge two sets of data by appending rows (rbind)","check type of data","sort dictionary by values. key = operator.itemgetter(1) if you want to sort by value, (0) if you want to sort by key.\nreverse = True if you want to sort by descending order","convert dictionary to individual sorted list, and then slice to get top 10.","install package","plot top ten, barplot, with labeled bars","extract columns from data_nested_list eg lat, long","folium: base map + heat map\nhttps://python-visualization.github.io/folium/quickstart.html","view plot in jupyter notebook - magic command","install package"],["help(len)","?round","conda install package_name","pip install package_name","conda update package_name","pip install --upgrade package_name","%matplotlib","a = [1,2,3]\na.append(4). # append 4\na\n--&gt; [1,2,3,4]","# create function\ndef append_element(somelist, element):\n    somelist.append(element)\n\n# run function\ndata = [1,2,3]\nappend_element(data, 4)\ndata\n--&gt; [1,2,3,4]","a = 5\ntype(a)\n--&gt; int","a = 5\n\nisinstance(a, int)\n--&gt; True","a = 5\n\nisinstance(a, (int, float))","# saved as some_module.py\nPI = 3.14159\n\ndef f(x):\n    return x + 2\n\ndef g(a,b):\n    return a + b\n\n# to run some_module.py \nimport some_module\n# alternatively: import some_module as sm\n# from some_module import PI as pi; g as another_name\n\nresults = some_module.f(5)","str()","int()","bool()","if x &lt; 0:\n    print('It's negative')","if x &lt; 0:\n    print('It's negative')\nelif x == 0:\n    print('Equal to zero')\nelif 0 &lt; x &lt; 5:\n    print(\"Positive but smaller than 5\")\nelse:\n    print(\"Positive and larger than or equal to 5\")","sequence = [1,2,None,4,5]\ntotal = 0\nfor value in sequence:\n    if value is None:\n        continue\n    total += value","sequence = [1,2,0,4,6,5,2,1]\ntotal_until_5 = 0\n\nfor value in sequence:\n    if value == 5:\n        break\n    total_until_5 += value","x=256 \ntotal = 0 \nwhile x &gt; 0:\n    if total &gt; 500: \n        break\n    total += x \n    x=x//2","list(range(10))\n--&gt; [0,1,2,3,4,5,6,7,8,9]\n\nlist(range(0,20,2))     #specify start, end, space\n\nlist(range(5,0,-1)).     # can also be negative space","tup = 4,5,6\ntup\n--&gt; (4,5,6)","nested_tup = (4,5,6),(7,8)","tuple([4,0,2])","a_list = [2,3,7,None]\n\ntup = (\"foo\", \"bar\", \"baz\")\nb_list = list(tup)\n\nb_list[1]","gen = range(10)\nlist(gen)\n--&gt; [0,1,2,3,4,5,6,7,8,9]","b_list.append('dwarf')\nb_list \n--&gt; ['foo', 'bar','baz', 'dwarf']","b_list.insert(1, 'red')\nb_list\n--&gt; ['foo', 'red', 'bar','baz', 'dwarf']","b_list.pop(2)\n--&gt; 'peekaboo'\n\nb_list\n--&gt; ['foo','red','baz','dwarf']","b_list.remove('foo')","[4,None,'foo'] + [7,8,(2,3)]","x = [4, None, 'foo']\nx.extend([7,8,(2,3)])\n\neverything = []\nfor chunk in list_of_lists:\n    everything.extend(chunk)","a = [7,2,5,1,3]\na.sort()\na\n--&gt; [1,2,3,5,7]","b = ['saw','small','He']\nb.sort(key = len)","seq = [7,2,3,7,5,6,0,1]\nseq[1:5]\n--&gt; [2,3,7,5]","seq[::2]","seq[::-1] # reverse","i = 0\nfor value in collection:\n    # do something with value\n    i += 1\n\n# enumerate\nfor i, value in enumerate(collection):\n    # do something with value","some_list = ['foo', 'bar', 'baz']\nmapping = {}\n\nfor i, v in enumerate(some_list):\n    mapping[v] = i\n\nmapping\n--&gt; {'bar' : 1, 'baz': 2, 'foo':0}","sorted([7,1,2,6,0,3,2])\n--&gt; [0,1,2,2,3,6,7]","seq1 = ['foo','bar', 'baz']\nseq2 = ['one', 'two', 'three']\nzipped = zip(seq1, seq2)\n\nlist(zipped)\n--&gt; [('foo', 'one'), ('bar', 'two'), ('baz', 'three)]","seq3 = [False, True]\nlist(zip(seq1, seq2, seq3))\n\nlist(zip(seq1, seq2, seq3))\n[('foo', 'one', False), ('bar', 'two', True)]","for i, (a, b) in enumerate(zip(seq1, seq2)): \n    print('{0}: {1}, {2}'.format(i, a, b))","In [96]: pitchers = [('Nolan', 'Ryan'), ('Roger', 'Clemens'), ('Schilling', 'Curt')]\nIn [97]: first_names, last_names = zip(*pitchers)\nIn [98]: first_names\nOut[98]: ('Nolan', 'Roger', 'Schilling')\n\nIn [99]: last_names\nOut[99]: ('Ryan', 'Clemens', 'Curt')","list(reversed(range(10)))\n--&gt; [9,8,7,6,5,4,3,2,1,0]","print(1000 + 2000)","import keyword\nkeyword.kwlist","type(2022)\n--&gt; int","float()   # convert to float\nint()      # convert to integer\nstr()      # convert to string","name = 'my name\\'s robot'\nprint(name)\n\n--&gt; my name's robot","sales = [500,1000,1500]\nsales[2]\n--&gt; 1500","len(list_name)","my_list = [ ]\nmy_list.append(60)","my_list.insert(0, 'hi')","my_list.remove(60)","dir([ ])","my_tuple = (1, 2006, 3)","sales = {'2006' : 399, '2007', 442, '2008', 358}","sales['2006']","sales.pop('2006')","del sales['2006']","list(sales.keys())","list(sales.values())","database = [['a','b','c','d','e'],\n                    ['f','g','h','i','j']]","database[0]","database[0][1]","list_a = [ ]\nlist_b = [ ]\n\nfig,ax - plt.subplots()\nax.plot(list_a, list_b)\nplt.show()","list_a = [ ]\nlist_b = [ ]\n\nfig,ax - plt.subplots()\nax.plot(list_a, list_b, marker = 'o')\nplt.show()","list_a = [ ]\nlist_b = [ ]\n\nfig,ax - plt.subplots()\nax.plot(list_a, list_b, marker = 'v', linestyle = '--')\nplt.show()","list_a = [ ]\nlist_b = [ ]\n\nfig,ax - plt.subplots()\nax.plot(list_a, list_b, marker = 'v', linestyle = '--',\n            color = 'darkseagreen')\nplt.show()","list_a = [ ]\nlist_b = [ ]\n\nfig,ax - plt.subplots()\nax.plot(list_a, list_b, marker = 'v', linestyle = '--',\n            color = 'darkseagreen')\n\nax.set_xlabel('x-axis title')\nax.set_ylabel('y-axis_title')\n\nax.set_title('Title')\nplt.show()","list_a = [ ]  # x\nlist_b = [ ]  # y\n\nfig,ax - plt.subplots()\nax.plot(list_a, list_b, marker = 'v', linestyle = '--',\n            color = 'darkseagreen')\n\nax.set_xlabel('x-axis title')\nax.set_ylabel('y-axis_title')\n\nax.set_ylim(0,10)\nax.set_xlim(0, 4)\n\nax.set_title('Title')\nplt.show()","fig, ax = plt.subplots(3, 2) # 3 rows, 2 columns\nplt.show() # will show faceted empty grids","fig.tight_layout()\n\nplt.show()","list_a = [ ]\nlist_b = [ ]\n\nfig, ax = plt.subplots()\nax.bar(list_a, list_b)\n\nax.set_xticklabels(list_a, rotation = 90)\n\nax.set_ylabel('y-axis label title) # axis title\n\nplt.show()","list_a = [ ]\nlist_b = [ ]\nlist_c = [ ]\n\nfig, ax = plt.subplots()\nax.bar(list_a, list_b)\nax.bar(list_a, list_c, bottom = list_c)\n\nax.set_xticklabels(list_a, rotation = 90)\n\nax.set_ylabel('y-axis label title) # axis title\n\nplt.show()","list_a = [ ]\nlist_b = [ ]\nlist_c = [ ]\nx_fct = [ ]\n\nfig,ax = plt.subplots()\nax.bar(x_fct, list_a, label = 'a')\nax.bar(x_fct, list_b, bottom = list_a, label = 'b')\n\ntotal_a_b = [a + b for a, b in zip(list_a, list_b)]\nax.bar(x_fct, list_c, bottom = total_a_b, label = 'c)\n\nax.set_xticklabels(x_fct, rotation = 90) # rotate text \n\nax.set_y_labels('y-axis title')\n\nax.legend() # to set legend\n\nplt.show()","fig, ax = plt.subplots(3,2, figsize = (15, 15)) # make plot bigger","pd.read_csv('filename.csv')","import warnings\nwarnings.filterwarnings('ignore')","fig, ax = plt.subplots()\nax.hist(list_a)\n\nplt.show()","my_list = my_df.values.tolist()","fig, ax = plt.subplots()\nax.boxplot([list_a, list_b]) \n\nax.set_xticklabels(['a', 'b'])\nax.set_ylabel('y-axis label')\n\nplt.show()","fig, ax = plt.subplots()\n\nax.scatter(list_a, list_b)\n\nax.set_xlabel(\"a\")      #Set the x-axis name\nax.set_ylabel(\"b\")     #Set the y-axis name\n\nplt.show()","df_cleaned = df.drop_na()","mapping = {}\nfor key, value in zip(key_list, value_list):\n    mapping[key] = value","mapping = dict(zip(range(5), reversed(range(5))))","if key in some_dict:\n    value = some_dict[key]\nelse:\n    value = default_value","# better method\n\nvalue = some_dict.get(key, default_value)","words = ['apple', 'bat', 'bar', 'atom', 'book]\nby_letter = { }\n\nfor word in words:\n    letter = word[0]     # first letter\n    if letter not in by_letter:\n        by_letter[letter] = [word]\n    else:\n        by_letter[letter].append(word)","# better method\n\nfor word in words:\n    letter = word[0]\n    by_letter.setdefault(letter, [ ]).append(word)","# even better method\n\nfrom collections import defaultdict\nby_letter = defaultdict(list)\n\nfor word in words:\n    by_letter[word[0]].append(word)","c = a.copy()","# equivalent to this:\n\nresult = [ ]\nfor val in collection:\n    if collection:\n    result.append(expr)","strings = {'a', 'as', 'bat', 'car', 'dove', 'python'}\n\n[x.upper() for x in strings in len(x) &gt; 2]\n--&gt; ['BAT', 'CAR', 'DOVE', 'PYTHON']","strings = {'a', 'as', 'bat', 'car', 'dove', 'python'}\n\nloc_mapping = {val : index for index, val in enumerate(strings)}\nloc_mapping\n--&gt; {'a' : 0, 'as' : 1, 'bat' : 2, 'car' : 3, 'dove' : 4, 'python' : 5}","# get a list of names with two or more 'e's\n\nall_data = [['John', 'Emily', 'Michael', 'Mary', 'Steven'],\n                 ['Maria', 'Juan', 'Javier', 'Natalia', 'Pilar']]\n\nnames_of_interest = [ ] \nfor names in all_data:\n    enough_es = [name for name in names if name.count('e') &gt;= 2] \n    names_of_interest.extend(enough_es)","# better method\n\nresult = [name for name in all_data for name in names if name.count('e')  &gt; = 2]\nresult\n\n['Steven']","for i in range(5):\n    print(i)","population = [100, 400, 600, 800]\nnum_of_entries = len(population)\n\ntotal_pop = 0      # to store total pop, for loop for summation\n\nfor index in range(num_of_entries):\n    total_pop += population[index]\n\nprint(total_pop)   # same indent as for\n\n# equivalent to:\ntotal_pop = population[0] + population[1] + population[2] + population[3]","tuple = (1,2,3,4,5)\n\nfor element in tuple:\n   print(element)","my_list = [100, 300, 500]\n\ncount_of_entries = 0\n\nfor data in my_list:\n    count_of_entries += 1\n\nprint(count_of_entries)","my_list = [100, 300, 500]\n\ncount_of_entries = 0\ntotal = 0\n\nfor value in my_list:\n    total += value\n\naverage = total/len(my_list)\nprint(average)","list_a = [1,2,3,4,5]\nabove_3 = 0\n\nfor value in list_a:\n    if value &gt; 3:\n        above_3 += 1\n\nprint(above_3)","list_a = [1,2,3,4,5]\nabove_3_sum = 0\n\nfor value in list:\n    if value &gt; 3:\n        above_3_sum += value\nprint(above_3_sum)  # print same indent as for","list_a = [0,1,2,3,4,5]\ntotal_sum = 0\ntotal_count = 0\n\nfor value in list:\n    if value != 0:\n        total_sum += value\n\ntotal_av = total_sum/total_count\nprint(total_av)","list_a = [1,2,3,4,5]\n\nmax_value = list_a[0]    # first value as a start\n\nfor value in list_a:\n    if value &gt; max_value:     # currently first value\n         max_value = value\n\nprint(max_value)","list_a = [1,2,3,4,5]\n\nmin_value = list_a[0]    # first value as a start\n\nfor value in list_a:\n    if value &lt; min_value and value != 0:\n         min_value = value\n\nprint(min_value)","my_dict = {'a' : 1, 'b' : 2, 'c' : 3}\n\nfor key, value in my_dict.items():    # note .items()\n    print(key)\n    print(value)","my_dict = {'a' : 0, 'b' : 1, 'c' : 2}\n\nzero_counts = 0        # as a starting point\n\nfor key, value in my_dict.items():    # note .items()\n    if value == 0:\n        zero_counts += 1       # note indent \n\nprint(zero_counts)","my_dict = {'a' : 50, 'b' : 100, 'c' : 200}\n\nsum_greater_100 = 0        # as a starting point\n\nfor key, value in my_dict.items():    # note .items()\n    if value &gt;100:\n        sum_greater_100 += value       # note use value\n\nprint(sum_greater_100)","my_dict = {'a' : 50, 'b' : 100, 'c' : 200}\n\nmin_value = my_dict['a']        # as a starting point\n\nfor key, value in my_dict.items():    # note .items()\n    if value &lt; min_value and value != 0:\n        min_value = value       # note use value\n\nprint(min_value)","my_list = [1,3,5,7,9,11]\n\nodd_above_5 = 0\nodd_below_5 = 0\n\nfor number in my_list:\n    if number &gt; 5:                     # condition A\n        odd_above_5 += 1\n\n    elif number &lt;= 5:                 # condition B\n        odd_below_5 += 1\n\nprint(odd_above_5)\nprint(odd_below_5)","number = 3\n\nwhile number &lt; 10:\n    print(number)\n    number += 1       # keep summing until 10","my_list = [10, 20 ,30]\nnum_entries = len(my_list)       # so that can set condition later\nindex = 0                                   # create index\ntotal = 0                                     # as a starting point\n\nwhile index &lt; num_entries:         # condition\n    total += my_list[index]            # add value to total\n    index += 1                              # my_list[0] + [1] ...\n\nprint(total)","my_list = [1,2,3,4,5]\n\ncount_even = 0\n\nfor num in my_list:\n    if num % 2 == 0:\n        count_even += 1\n\nprint(count_even)","my_list = [1,2,3,4,5]\n\nsum_even = 0\n\nfor num in my_list:\n    if num % 2 == 0:\n        sum_even += num\n\nprint(sum_even)","my_list = [1,2,'3',4,5]    # note 3 is a str\n\nfor index in range(len(my_list)):\n    data[index] = int(data[index])\n\nprint(data)","list_of_list = [[1,2,],[3,4]]\n\ncount_list = 0\n\nfor element in list_of_list:\n    if isinstance(element, list):\n        count_list += 1\n\nprint(count_list)","my_list = [104, 203, 1004, 2001, 10003, 20003]\n\nsegment_count = [0,0,0]\n\nfor num in my_list:\n    if num &lt; 500:\n        segment_count[0] += 1\n    elif num &lt; 1500:\n        segment_count[1] += 1\n    else:\n        segment_count[2] += 1\n\nprint(segment_count)","my_text = [\"I am happy, excited, glad. She is upset, hungry, mad.']\n\nsentiment = {'pos' : 0, 'neg' : 0}\n\nfor text in my_text:\n    if 'happy' in text or 'excited' in text or 'glad' in text:\n        sentiment['pos'] += 1\n    if 'upset' in text or 'hungry' in text or 'mad' in text:\n         sentiment['neg'] += 1\n\nprint(sentiment)","my_list = [[1,2,3], [4,5,6]]\nmy_list[0][1]  # first row, second item\n\n--&gt; 2","import csv\n\nwith open('file.csv', newline = '', encoding = 'utf=8') as f:\n    reader = csv.reader(f)\n    data_list = list(reader)\n\nprint(data_list[0])   # header\nprint()\n\ndata_list = data_list[1:]    # remove header\nprint(data_list[:3])   # prints first 3 rows (list type)","import csv\n\ndata_dict = [ ]\n\nwith open('file.csv') as csv_file:\n    csv_reader = csv.DictReader(csv_file, delimiter = ',')\n    for row in csv_reader:\n        data_dict.append(dict(row))\n\nprint(data_dict[:1])   # prints first row","import pandas as pd\n\ndf = pd.read_csv('file.csv')","df.shape","for row in nested_list:\n    print(row)","for row in nested_list:\n    print(row[0])","total_sales = 0\n\nfor row in nested_list:\n    sales = row[3]     # the column you want to sum\n    total_sales += float(sales)\n\nprint(total_sales)","total_sales = 0\ntotal_rows = 0\n\nfor row in nested_list:\n    sales = row[3]    # not +=\n    total_sales += float(sales)\n    total rows += 1\n    total_av = total_sales/total_av\n\nprint(total_av)","# have the first row, nth col as starting point\nmax_sales = nested_list[0][3]\n\nfor row in nested_list:\n    sales = row[3]\n    if sales &gt; max_sales:\n        max_sales = sales\n\nprint(max_sales)","# have the first row, nth col as starting point\nmin_sales = nested_list[0][3]\n\nfor row in nested_list:\n    sales = float(row[3])\n    if sales &lt; min_sales and min_sales &gt; 0:\n        min_sales = sales\n\nprint(min_sales)","total_sales_com_x = 0\n\nfor row in nested_list:\n    company = row[4]\n    genre = row[5]\n    sales = float(row[3])\n\n    if company == 'xxx' and genre == 'yyy':\n        total_sales_com_x += sales\n\nprint(total_sales_com_x)","for row in nested_dict:\n    print row['col_name']","total_sum = 0\n\nfor row in nested_dict:\n    col_to_sum = float(row['col_name'])\n    total_sum += col_to_sum # variabled defined earlier\n\nprint(total_sum)","total_sum = 0\ntotal_rows = 0\n\nfor row in nested_dict:\n    col_to_sum = float(row['col_name'])\n    total_sum += col_to_sum\n    total_rows += 1\n    av = total_sum/total_rows\n\nprint(av)","# use first datapoint as starting point\nlowest_value = float(nested_dict[0]['col_name'])\n\nfor row in nested_dict:\n    value = float(row['col_name'])\n    if value &lt; lowest_value and value &gt; 0:\n        lowest_value = value\n\nprint(lowest_value)","my_list = [[]]\n\nfiltered_list = [ ]\n\nfor row in my_list:\n    population = row[2]\n    country = row[3]\n\n    if country == 'Singapore':\n        filtered_list.append(country)\n\nprint(filtered_list)","my_list = [[ ]]\n\nsg_list = [ ]\nmsia_list = [ ]\n\nfor row in my_list:\n    country = row[3]\n    if country == 'Singapore':\n        sg_list.append(row)\n    elif country == 'Malaysia':\n        msia_list.append(row)\n\nprint(sg_list)\nprint(msia_list)","list = [ [ ] ] \n\ncountry_tally = { } # dictionary\n\nfor row in list:\n   country = row[3]\n\nif country in country_tally:\n    country_tally[country] += 1\n\nelse:\n    country_tally[country] = 1\n\nprint(country_tally)","list = [ [ ] ]\n\ncountry_pop = { }\n\nfor row in list:\n    country = row[3]    # 2nd column\n    if country in country_pop:\n        country_pop[country] += row[3]   # add on\n    else:\n        country_pop[country] = row[3]     # new\n\nprint(country_pop)","my_list = [2,3,4,5,6,7]\n\nlist_greater_5 = [num for num in my_list if num &gt; 5]","import csv\n\ndatabase_raw = [ ]   # empty nested list\n\nwith open('file.csv', newline = '', encoding = 'utf8') as f:\n    reader = csv.reader(f)\n    for row in reader:\n        database_raw.append(row)\n\n# remove header\ndatabase = database_raw[1:]","import pandas as pd\n\npd.set_option('display.max_columns', 500)","df = pd.DataFrame(df)","df.pd.head()","def my_function(x, y, z = 1.5)\n    if z &gt; 1:\n        return (z * (x + y))\n    else:\n        return (z / (x + y))","help(round)","?round","print(dir(pprint))","help(math.log)","help(math)","months = [ ] # list\ntemp = [ ] # list\n\nimport matplotlib.pyplot as plt \n\nfig, ax = plt.subplots()\nax.plot(months, temp)       # x, y\nplt.show()","months = [ ] # list\ntemp_a = [ ] # list\ntemp_b = [ ]  # list\n\nimport matplotlib.pyplot as plt \n\nfig, ax = plt.subplots()\nax.plot(months, temp_a)       # x, y\nax.plot(months, temp_b)       # second plot\nplt.show()","months = [  ]     # list\ntemp = [   ]       # list\n\nfig,ax = plt.subplots()\nax.plot(months, temp, marker = 'o', linestyle = '-', color = 'r')\nplt.show()","months = [ ]\ntemp = [ ]\n\nfig, ax = plt.subplots()\nax.plot(month, temp, marker = 'o', linestyle = '--')\n\nax.set_xlabel('Month')\nax.set_ylabel('Temp')\n\nax.set_title('Temp change over month')\n\nplt.show()","months = [ ]\ntemp = [ ]\n\nfig, ax = plt.subplots()\nax.plot(month, temp, marker = 'o', linestyle = '--')\n\nax.set_xlabel('Month')\nax.set_ylabel('Temp')\n\nax.set_title('Temp change over month')\n\nax.set_ylim(0, 50)\nax.set_xlim(0,5)      # first 6 months\n\nplt.show()","fig, ax = plt.subplots(3, 2, figsize = (15, 15))\n# 3 rows by 2 columns multiplot\n\nfig.tight_layout()      # to add padding","fig, ax = plt.subplot()\n\nax.bar(x_list, y_list)\n\nax.set_xticklabels(x, rotation = 90)\n\nplt.show()","list_y1 = [ ]\nlist_y2 = [ ]\nlist_x = [ ]\n\nfig,ax = plt.subplot()\nax.bar(list_x, list_y1)\n\n# plot of the same axis again for second layer\nax.bar(list_x, list_y2, bottom - list_y1)\n\nax.set_xticklabels(list_x, rotation = 45)\n\n#set y axis title\nax.set_ylabel('Y Axis Title')\n\nplt.show()","list_y1 = [ ]\nlist_y2 = [ ]\nlist_y3 = [ ]\nlist_x = [ ]\n\nfig,ax = plt.subplot()\nax.bar(list_x, list_y1)\n\n# plot of the same axis again for second layer\nax.bar(list_x, list_y2, bottom - list_y1)\n\n# sum y1, y2\ntotal_y1_y2 = [a + b for a, b in zip(list_y1, list_y2)\n\n# third layer\nax.bar(list_x, list_y3, bottom = total_y1_y2)\n\nax.set_xticklabels(list_x, rotation = 45)\n\n#set y axis title\nax.set_ylabel('Y Axis Title')\n\nplt.show()","fig, ax = plt.subplots()\n\nax.hist(list_a)\n\nplt.show()","list_a = [ ]\nlist_b = [ ]\n\nfig,ax = plt.subplots()\nax.hist(list_a, label = 'A')\nax.hist(list_b, label = 'B')\n\n# set x and y axis titles\nax.set_ylabel('Y axis title')\nax.set_xlabel('X axis title')\n\n# show legend\nax.legend()\n\nplt.show()","fig, ax = plt.subplots()\n\nax.boxplot([list_a, list_b])         # nested list\n\n# add tick labels\nax.set_xticklabels(['A', 'B'])\n\n# set y axis title\nax.set_ylabel('Y-axis title')\n\nplt.show()","nested_list = df.values.to.list()","def extract_column(my_list, col_number):\n\n    col = [ ]\n    for row in my_list:\n        col.append(row[col_number])\n    \n    return col","df = pd.concat([df1, df2], ignore_index = True)","type(my_list)","import operator\n\nsorted_list = dict(sorted(nested_list.items(), key = operator.itemgetter(1), reverse = True))","sorted_col_x_list = list(sorted(my_dict.keys())\nsorted_col_y_list = list(sorted(my_dict.values())\n\ntop_10_x = sorted_col_x_list[:10]\ntop_10_y = sorted_col_y_list[:10]","!pip install packagename","fig, ax = plt.subplots()\n\nax.bar(sorted_x_list, sorted_y_list)\nax.set_xlabel('x-axis title')\nax.set_ylabel('y-axis title')\nax.set_title('Title')\n\nax.set_ticklabels(sorted_x_list, rotation = 90)\n\n# labels\nfor index, value in enumerate(sorted_y_list):\n    plt.text(index - 0.3, value + 5, str(value))\n\nplt.show()","lat_lon_list = [ ]\nfor row in nested_listings:\n    lat = row[1]\n    lon = row[2]\n    \n    lat_lon_list.append([lat, lon])   #need square brackets\n\nprint(lat_lon_list)","# base map\nmap_folium = folium.Map([1.35, 103], zoom_start = 11)\n\n# heatmap\nHeatMap(lat_lon_list, radius = 8, gradient = {0.2: 'blue', 0.4 : ' purple, 0.6:'orange', 1.0: 'red' }).add_to(map_folium)\n\ndisplay(map_folium)","%matplotlib inline","import sys\n!{sys.executable} -m pip install pyjanitor\nimport janitor"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>Purpose<\/th>\n      <th>Code<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"keys":true,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+</div>
+<h3 id="other-packages">Other packages</h3>
+<h4 id="workflow-for-normal-eda">Workflow for normal EDA</h4>
+<ul>
+<li><p>Make a copy of the original dataset before making any changes.</p></li>
+<li><p>Get a feel of data. Use glimpse() for R, Use my_df.head().T for python. Other commands include: df.tail(), df.index(), df.columns, df.describe(), df.info, df.shape, df.sample(5, random_state = 0)</p></li>
+<li><p>Check datatype to see if there is any need to change to the right dtype</p></li>
+<li><p>Check which columns are redundant, and drop if not necessary df_dropped_age_sex = df.drop([‘Age’, ‘Sex’], axis = 1).head(1).T</p></li>
+<li><p>Check for duplicated rows (only those that match perfectly across all columns) data_iris_preprocessed = data_iris.drop_duplicates()</p></li>
+<li><p>Check descriptive statistics, and get summary statistics to see if there is a need for scaling, outliers.</p></li>
+<li><p>Check for unique values to see if any factor-recoding should be done.</p></li>
+<li><p>Boxplot/Histogram to see if there are any outliers</p></li>
+<li><p>Check class distribution</p></li>
+<li><p>Check correlation</p></li>
+<li><p>Check skews of univariate plots. Histograms may be used to show distribution for numerical data.</p></li>
+<li><p>Check for outliers - ascertain whether it is due to measurement error, data corruption, or it is a true outlier (requires domain knowledge). It is not a good idea to remove outliers without knowing why. One way to remove outliers is to use the IQR method to check if they are outliers.</p></li>
+<li><p>For categorical data, counts (barplot) may be used.</p></li>
+<li><p>For bivariate relationships (numerial/numerical): use scatterplot to show relationship, or jointplot to show both scatterplot and histogram.</p></li>
+<li><p>For bivariate relationships (numerical Y, categorical X): use boxplots</p></li>
+<li><p>For multivariate relationships, use pairplot</p></li>
+</ul>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div id="htmlwidget-e2e6fc390e8547560f51" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-e2e6fc390e8547560f51">{"x":{"filter":"none","vertical":false,"extensions":["KeyTable"],"editable":{"target":"cell","disable":{"columns":null},"numeric":[1],"area":[]},"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240","241","242","243","244","245","246","247","248","249","250","251","252","253","254","255","256","257","258","259","260","261","262","263","264","265","266","267","268","269","270","271","272","273","274","275","276","277","278","279"],[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200,201,202,203,204,205,206,207,208,209,210,211,212,213,214,215,216,217,218,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,266,267,268,269,270,271,272,273,274,275,276,277,278,279],["numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","seaborn","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","seaborn","seaborn","seaborn","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","janitor","janitor","pandas","pandas","seaborn","seaborn","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","numpy","from sklearn import datasets","from sklearn import datasets","from sklearn import datasets","from sklearn import datasets","from sqlalchemy import create_engine","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","pandas","from sklearn import preprocessing","from sklearn import preprocessing","from sklearn import preprocessing","from sklearn import preprocessing","from sklearn import preprocessing","from sklearn import preprocessing","from sklearn import preprocessing","from sklearn import preprocessing","from sklearn.preprocessing import Normalizer","from sklearn.preprocessing import Normalizer","from sklearn.preprocessing import PolynomialFeatures","from sklearn.preprocessing import PolynomialFeatures","from sklearn.preprocessing import PolynomialFeatures","from sklearn.preprocessing import PolynomialFeatures","pandas","pandas","pandas","pandas","pandas","pandas","from sklearn.cluster import KMeans","from sklearn.cluster import KMeans","from sklearn.cluster import KMeans","from sklearn.cluster import KMeans","pandas","from sklearn.impute import KNNImputer","from sklearn.impute import KNNImputer","from sklearn.preprocessing import LabelBinarizer, MultiLabelBinarizer","from sklearn.preprocessing import LabelBinarizer, MultiLabelBinarizer","from sklearn.preprocessing import LabelBinarizer, MultiLabelBinarizer","pandas","pandas","pandas","pandas","from sklearn.feature_extraction import DictVectorizer","from sklearn.feature_extraction import DictVectorizer","from sklearn.feature_extraction import DictVectorizer","from sklearn.feature_extraction import DictVectorizer","from sklearn.feature_extraction import DictVectorizer","numpy, pandas","numpy, pandas","numpy, pandas","seaborn","pandas","pandas","seaborn","seaborn","seaborn","seaborn","seaborn","seaborn","seaborn","seaborn","seaborn","seaborn","seaborn","base","numpy"],["create data","dimensions of data","data type","create array from nested lists","basic indexing for one-dimensional array","transpose","compute absolute value element wise","compute square root","compute exponent (e^x)","compute natural log (base e), log base 10, log base 2 and log (1 + x)","compute the sign of each element (1 - pos, 0 - zero, -1 - neg)","compute the ceiling of each element - the smallest integer greater than or equal to that number","compute the floor of each element - the largest integer less than or equal to each element","round elements to the nearest integer, preserving the dtype","returns the fractional and integral parts of an array as a separate array","returns boolean array indicating whether each value is NaN (Not a Number)","trigo functions","inverse trigo","sum all elements in the array or along an axis","mean","standard deviation","variance","minimum","maximum","indices of minimum elements","indices of maximum alements","cumulative sum of elements starting from 0","cumulative product of elements starting from 1","sort","one-dimensional array: return unique sorted values in an array","compute the sorted, common elements in x and y","compute the sorted union of elements","compute a boolean array indicating whether each element of x is contained in y","draw samples from a uniform distribution","create array","stack together different arrays","stack together different arrays","import csv file","import csv - select the columns you need","create pandas dataframe from array","save dataframe","read csv","convert dictionary or nested list to dataframe","convert dictionary or nested list to dataframe, specifying row index","convert list to pandas series","convert list to pandas series, specifying row index, in this case is countries","read csv with specified index column, index col = 0","inspect first five rows of data. head is a function so need round brackets","inspect last five rows of data.","check the dimensions attribute of dataframe. this is not a function so don't need round brackets","select columns using square brackets. in this case, select countries column","select columns using dot, attribute. but prefer to use square brackets in case there are special characters in column name","select first row of countries column","select first row of countries column","glimpse columns","iloc index based selection to filter rows. To filter for first row in this case.","iloc index based selection to filter rows. To filter for two rows in this case","iloc index based selection to filter rows, exclusive of last index. In this case, filtering for 2nd and 3rd row (0 index)","iloc to select all rows, and second column","iloc to select 2nd and 3rd row, 2nd column","iloc to select last five rows, all columns","loc for label based selection: first five rows, with selected columns. index is inclusive (0 index, until 4)","loc for selecting rows, first 6 rows","loc for selecting all rows, and certain columns","set index for future selection","use loc after setting index","conditional selection","conditional selection - or using |","conditional selection using isin (start with square brackets)","filter out is null values","look for is null values","conditional selection using and &amp;","see summary statistics","check for unique values","check for data types. This is an attribute, no round brackets","rename columns","mutate/create new columns","query - filter rows that meets conditions (within round brackets)","sort values descending","sort values ascending","reset index","reset index but old column is not added as new column","method chaining (within a pair of round brackets)","import titanic data","filter to select columns","filter to select rows containing 'bbi'","filter to select columns by regular expression (in this case, ends with e)","query - filter rows that meets conditions (within round brackets)","query - filter rows that meets conditions (within round brackets)","query - filter rows that meets conditions (within round brackets)","query - filter rows that meets conditions (within round brackets), can also use or","assign to create or mutate new columns","query - filter rows that meet conditions","assign to create or mutate new columns","sort values descending","sort values ascending","aggregate these functions over the rows","aggregate these functions over the columns","method chaining (within a pair of round brackets)","method chaining (within a pair of round brackets). Query, filter, groupby, aggregate, sort_values, reset_index","import from url","look at columns","melt to pivot longer","melt to pivot longer. var_name = need to clean. value_name = new col name.","create converted data as new column (assign, pd.to_datetime)","set index for future selection, inplace = True would directly modify the dataset","set max display row options","create a list of unique values, top 20 data","using loc to filter rows","remove column","merge dataset. how = inner, left, right, outer, cross. default - inner","merge dataset","merge dataset with suffixes","see what columns there are (this is an attribute, so no round brackets are needed)","find unique values for a certain column","aggregate minimum and maximum values for both columns","get summary statistics for certain columns","count missing values","select columns, group by, agg sum, find certain rows, or other conditions. Note quotation marks for query","prepare data for scatterplot","plot scatterplot","plot line chart","barchart","return count of unique values, in descending order","return count of unique values, in descending order","return count of unique values","count of missing values","percentage missing values in each column","check if there are any missing values","check for column types","export to csv","export to excel","rename columns","remove spaces from column names","make lower case and remobe trailing white spaces for column names","apply a numpy universal function to whole df","apply a numpy universal function to whole df","apply a reducting function on either axis (0 = row, 1 = col)","apply a function","make a copy of dataset","change to date, can specify format","change a series to lower case","change a series to upper case","change a series to title case","change a series to Upper Case","change a series to swap case","replace values in a series","check if series contains a string pattern, returns a series of booleans","check if series ends with a string pattern, returns a series of booleans","combined the smaller categories into a series called 'others'","combined the smaller categories into a series called 'others'","check value_counts","replace text in column","split a string into multiple columns. expand = True means will return a dataframe and assign to original dataframe. note the two square brackets","see all columns","clean column names. import janitor first","rename columns","reset display column options","randomly display any 5 rows","set theme","scatterplot","create a matrix using np.array","view number of rows and column","add two matrices","subtract two matrices","multiply two matrices","mutiply two matrices","element-wise multiply two matrices","set seed","generate three random floats between 0.0 and 1.0. eg output: array([0.5488135 , 0.71518937, 0.60276338])","generate random integers. eg output: array([3, 7, 9])","load digits dataset. load_boston, load_iris","digits dataset - create features matrix","digits dataset - create target vector","digits dataset - view first observation","create a connection to the database - define connection","pd.read_sql_query. select * means select all","view first two rows (head)","iloc to select rows. [0] is first row","iloc to select first three rows, index exclusive","set a certain column to be index using set_index","using set_index, followed by .loc to filter for rows in data","select rows using conditions: show top two rows where column 'Sex' is 'female'","filter rows where multiple condition","replacing values. df.replace('existing', 'new')","multple replacements","renaming columns, only accepts dictionary. df.rename(columns = {'Existing':'New'})","rename multiple columns","find max of a column","find min of a column","find sum of a column","find count of a column","find skewness of a column. If skewness = 0, data is symmetrical. if skewness is greater than 1 or less than -1, distribution is highly skewed. used to check if further data transformation is required. (left-skewed, right-skewed)","Kurtosis refers to the degree of presence of outliers in the distribution. Distributions with large kurtosis exhibit tail data exceeding the tails of the normal distribution (e.g., five or more standard deviations from the mean). Distributions with low kurtosis exhibit tail data that are generally less extreme than the tails of the normal distribution.","find median","find mode","find standard error of mean","find variance","find unique values for a certain column","number of unique values for whole df","value counts","check for missing values","replace values with NaN","drop columns, if column does not have any unique/useful variables. axis = 1 means column","drop multiple columns","deleting rows","check for duplicated data in rows","report if there are any duplicated rows","list duplicated rows","remove duplicated rows - only matches perfectly across all columns","group by and then find mean","group by and then find mean","define a function for uppercase and apply function","define a function for uppercase and apply function","group rows, apply function to groups","bindrows: pd.concat([dataframe_a, dataframe_b], axis = 0). need to have same header columns","bindcols: pd.concat([dataframe_a, dataframe_b], axis = 1)","pd.merge(df1, df2, on = 'col_name')","full join = outer join","left join","specify column name in each data frame to merge on","MinMaxScaler: import package, create feature, create scaler (minmax scaler uses the minimum and maximum values of a feature to rescale values to within a range)","MinMaxScaler: scale feature. scikit-learn uses fit to calculate the min and max values of features, and transform to rescale the feature. fit_transform to do bo operations at once","MinMaxScaler: show feature","StandardScaler = means centering. Standardizing data so that it has mean 0, std dev 1. More often used than MinMaxScaler. Transformed feature represents the number of std dev the original value is away from the feature's mean value. PCA works better with standardization. Neural Network prefer MinMaxScaling. Step 1 - Create scaler","StandardScaler - transform the feature, x = np array","StandardScaler - show feature","RobustScaler - create scaler","RobustScaler - transform feature","Normalizer - rescales the values on individual observations to have unit norm, ie the sum of their lengths is 1. often used in text classification when every word or n-word group is a feature. l2: Euclidean norm - distance between two points (straight line), rescales an observation values so that they sum to 1, which may be desired. l1: Manhattan norm - distance for a human walking on street (walk left, walk right)","Normalizer - transform the feature matrix","PolynomialFeatures - generate polynomial and interaction features. for degree = 2, will create new features raised to second power: x1, x2, x1^2, x2^2, and includes interaction terms x1x2.","PolynomialFeatures - create polynomial feature","PolynomialFeatures - restrict only to interaction terms","PolynomialFeatures - restrict only to interaction terms","Create a custom transformation to one or more features - define function","Create a custom transformation - apply function","Outliers - create function to detect outlers","Outliers - return function","Outliers - log transform to dampen effect of outliers, only if outliers are genuine calues and not due to error or miscoding. Can also use RobustScaler for rescaling.","Outliers due to error or miscoding - drop or replace them with NaN","using kmeans clustering as a preprocessing step to group similar observations and output a new feature contaiining each observation's group membership. Steps: create k-means clusterer","kmeans - fit clusterer","kmeans - predict values","kmeans - view the first few observations","drop na rows","KNNImputer to impute missing values: create imputer","KNNImputer - fit and transform","Encoding nomical categorical features - one-hot encoding: create one-hot encoder","one-hot encoding: one-hot encode feature","one-hot encoding: view feature class","pd.get_dummies","encoding ordinal categorical features into numerical equivalents - create features","encoding ordinal categorical features into numerical equivalents - create mapper","encoding ordinal categorical features - replace feature values with scale","convert a dictionary into a feature matrix - create dictionary","convert a dictionary into a feature matrix - create dictionary vectorizer","convert a dictionary into a feature matrix","convert a dictionary into a feature matrix - get feature names","convert a dictionary into a feature matrix - view feature names","create correlation matrix from dataframe - create dataframe from array","create correlation matrix","select upper triangle of correlation matrix","boxplots to see if scaling is required","select specific dtypes (wide format)","melt dataset into long format before using seaborn for plot","melt dataset into long format before using seaborn for plot","categorical data distribution","Bivariate - numerical/numerical - scatterplot","Bivariate - numerical/numerical - scatter and hist plot","Bivariate - numerical/numerical - scatter with regression line and hist plot","Bivariate - numerical Y, categorical X","Bivariate - numerical Y, categorical X, sorted boxplot. (sort neighbourhood by saleprice)","Bivariate - numerical Y, categorical X, sorted boxplot. (sort neighbourhood by saleprice)","Multivariate distributions - pairplot with regression","Correlogram - compute the correlation matrix from dataframe","Correlogram - create correlation heatmap","count unique values for each column","check total missing"],["data = np.random.randn(2, 3) # create 2 rows, 3 cols random numbers","data.shape    --&gt; (2, 3)","data.dtype     --&gt; dtype('float64')","arr = np.array(your_nested_list)","arr[5]","my_array.T","np.abs(my_array)","np.sqrt(my_array)","np.exp(my_array)","np.log(my_array)\nnp.log10(my_array)\nnp.log2(my_array)\nnp.log1p(my_array)","np.sign(my_array)","np.ceil(my_array)","np.floor(my_array)","np.rint(my_array)","np.modf(my_array)","np.isnan(my_array)","np.cos(my_array)\nnp.sin(my_array)\nnp.cosh(my_array_","np.arccos(my_array)\nnp.arccosh(my_array)\nnp.arcsin(my_array)\nnp.arcsinh(my_array)\nnp.arctan(my_array)\nnp.arctanh(my_array)","my_array.sum()","my_array.mean()","my_array.std()","my_array.var()","my_array.min()","my_array.max()","my_array.argmin()","my_array.argmax()","my_array.cumsum()","my_array.cumprod()","my_array.sort()","np.unique(my_array)","np.intersect1d(x, y)","np.union1d(x, y)","np.in1d(x, y)","np.random.rand(3,2)","a = np.array([2,3,4]) # need square brackets","np.vstack(array_a, array_b) # vertical","np.hstack(array_a, array_b) # horizontal","x = pd.read_csv('music.csv', header = 0).values","x = pd.read_csv('music.csv', usecols = ['artist', 'plays']).values","df = pd.DataFrame(my_array)","df.to_csv('pd.csv')","data = pd.read_csv('my_file.csv')","pd.DataFrame(my_dict)","pd.DataFrame(my_dict, index = ['row_index_label_a', 'row_index_label_b']","pd.Series(my_list)","pd.Series(my_list, index = ['Singapore', 'Thailand', 'Vietnam'])","pd.read_csv('my_csv_file.csv', index_col = 0)","my_df.head()","my_df.tail()","my_df.shape","covid_df['countries']","covid_df.countries","covid_df.countries[0]","covid_df['countries'][0]","covid_df.head().T","covid_df.iloc[0]","covid_df.iloc[0, 10]","covid_df.iloc[1:3]","covid_df.iloc[:, 1]","covid_df.iloc[1:3, 1]","covid_df.iloc[-5:]","covid_df.loc[:4, ['deaths', 'countries']]","covid_df.loc[:5]","covid_df.loc[:, ['countries', 'deaths']","covid_df.set_index('countries')","covid_df.loc['Singapore']","covid_df[covid_df.countries == 'Singapore']","covid_df[(covid_df.continent == 'Asia') | (covid_df.deaths &lt; 400000)]","covid_df[covid_df.countries.isin(['Singapore', 'Malaysia'])]","covid_df[covid_df.deaths.notnull()]","covid_df[covid_df.deaths.isnull()]","covid_df[covid_df.continent.isin(['Asia', 'Europe']) &amp; (covid_df.deaths &gt; 1000000)]","covid_df.describe().T","covid_df['countries'].unique()","covid_df.dtypes","df.rename(columns={\"orig_col\": \"new_col_name\", \"orig_col_b\": \"new_col_b\"})","df.assign(temp_f=df['temp_c'] * 9 / 5 + 32)","wine.query(\"alcohol &gt; 14 and color_filter == 1\")","df.sort_values(by='col1', ascending=False)","df.sort_values(by=['col1'])","df.reset_index()","df.reset_index(drop=True)","(df.reset_index(drop = True) \\ .loc[:, ['alcohol', 'ci', 'hue']] )","sns.load_dataset('titanic')","titanic.filter(['sex', 'age', 'survived']","df.filter(like = 'bbi', axis = 0) # axis = 0 means rows","df.filter(regex = 'e$', axis = 1)","titanic.query(\"embark_town == 'Southhampton'\") #note quotation marks","df.query('sales &gt; 60000')","titanic.query('index &lt; 3') # first three rows","df.query('(sales &gt; 50000) and (region in ['East', 'West'])')","titanic.assign(fare_10x = titanic.fare * 10)","iris.query('Sepal_Length &gt; 5')","iris.assign(sepal_ratio = lambda x : x.sepal_width / x.sepal_length)","titanic.sort_values(['age'], ascending = False)","titanic.sort_values(['age'])","df.agg(['sum', 'min'])","df.agg(\"mean\", axis=\"columns\")","(titanic.query(....)\\ .filter(.....) \\ .sort_values(['age'], ascending = False))","(covid_cleaned = (covid_data.query(...) \\ .filter(['country', 'confirmed']) \\ .groupby('country') \\ .agg('sum') \\ .sort_values('confirmed', ascending = False) \\ .reset_index() )","pd.read_csv('url_add')","my_df.columns","pd.melt(df, id_vars=['A'], value_vars=['B', 'C'])","covid_cleaned = covid_data.melt(id_vars = ['country', 'subregion'], var_name = 'date_raw', value_name = 'confirmed')","covid_data.assign(date = pd.to_datetime(covid_data.date_raw, format = '%m/%d/%y'))","covid_data.set_index('country', inplace = True)","pd.set_option('display.max_rows', 155)","(covid_data.filter(['country']) \\ .drop_duplicates() \\. head(n=20) )","covid_data.loc['US']","covid_deaths.drop(columns = ['lat', 'long'], inplace = True)","(covid_confirmed.merge(covid_deaths, on = ['country', 'subregion', 'date'], how = 'left'))","df1.merge(df2, left_on = 'lkey', right_on = 'rkey')","df1.merge(df2, left_on='lkey', right_on='rkey', suffixes=('_left', '_right'))","covid_data.columns","(covid_data.filter(['country'] \\ .drop_duplicates())","(covid_data.filter(['long', 'lat') \\ .agg(['min', 'max'])","(covid_data.filter(['confirmed', 'dead', 'recovered']) \\.describe() )","(covid_data.isnull() \\ .sum() )","(covid_data.filter(['country', 'data', 'confirmed']) \\.groupby(['country', 'date']) \\.agg('sum') \\.query)'date == datetime.date(2020,3,21)') \\.query('country in ['US', 'China', 'Italy']') )","covid_plot = (covid_data.query('date == datetime.date(2020, 3, 29)') \\.filter(['country', 'dead', 'confirmed']) \\.groupby('country') \\.agg('sum') \\.sort_values('confirmed', ascending = False) \\ .reset_index() )","sns.scatterplot(data = covid_plot, x = 'confirmed', y = 'dead')","sns.lineplot(data = covid_line_plot_data, x = 'date', y = 'confirmed')","sns.barplot(data = covid_bar_plot_data, x = 'country', y = 'confirmed', color = 'darkred')","my_series.value_counts()","my_series.value_counts(normalize = True)","my_series.value_counts(dropna = False)","my_df.isna().sum().sum()","my_df.isna().mean()","my_df.isna().any().any()","covid_df.info()","df.to_csv('filename.csv')","df.to_excel('filename.xlsx')","df.columns = df.columns.str_lower()","df.columns = df.columns.str.replace('', '_')","df.columns = df.columns.str.lower().str.rstrip()","df.apply(np.cumsum)","df.apply(np.sqrt)","df.apply(np.sum, axis = 0) # row","df.apply(lambda x: x.max() - x.min())","df = df_orig.copy()","dates = pd.to_datetime('20210203')","series.str.lower()","series.str.upper()","series.str.title()","series.str.capitalize()","series.str.swapcase()","pd.Series(['foo', 'fuz', np.nan]).str.replace('f.', 'ba', regex=True)","my_series.str.contains('og', regex = False)","my_series.str.endswith('t')","top_four = genre.value_counts().nlargest(4).index","genre_updated = genre.where(genre.isin(top_four), other = 'Other')","genre_updated.value_counts()","df['Sales'] = df['Sales'].str.replace('$', '')","df[['first', 'middle', 'last']] = df.name.str.split('', expand = True)","pd.set_option('display.max_columns', None)","cleaned_df = df.clean_names()","(stocks_df.clean_names() \\.rename_column('old_company_name', 'new_company_name'))","pd.reset_option('display.max_columns')","df.sample(5, random_state = 0)","sns.set_theme(style = 'white')","sns.scatterplot(data = df, x = df['sepal_length'], y = df['sepal_width'], hue = df.species)","matrix = np.array([[1,2,3, 4], [5,6,7,8], [9,10,11, 12]])","my_matrix.shape","np.add(matrix_a, matrix_b)","np.subtract(matrix_a, matrix_b)","np.multiply(matrix_a, matrix_b)","matrix_a @ matrix_b","matrix_a * matrix_b","np.random.seed(0)","np.random.random(3)","np.random.randint(0,11,3)","digits = datasets.load_digits()","features = digits.data","target = digits.target","features[0]","database_connection = create_engine('sqlite:///sample.db')","dataframe = pd.read_sql_query('SELECT *  FROM data',\n                    database_connection)","my_df.head(2)","titanic_df.iloc[0]","titanic_df.iloc[:4]","titanic_df.set_index(titanic_df['Name'])","titanic_df.loc['Braund, Mr. Owen Harris']","titanic_df[titanic_df['Sex'] == 'female'].head(2)","titanic_df[(titanic_df['Sex'] == 'female') &amp; (titanic_df['Age'] &gt;= 60)]","titanic_df.replace('female', 'Woman').head(2)","titanic_df['Sex'].replace(['female', 'male'], # existing\n                          ['Woman', 'Man']) \\ # new\n                        .head(5)","titanic_df.rename(columns = {'Pclass': 'PassengerClass'}).head(1).T","titanic_df.rename(columns = {\n    'Pclass' : 'PassengerClass',\n    'Sex' : 'Gender'}).head(1).T","df['Age'].max()","df['Age'].min()","df['Age'].sum()","df['Age'].count()","df['Age'].skew()","df['Age'].kurt()","df['Age'].median()","df['Age'].mode()","df['Age'].sem()","df['Age'].var()","df['Sex'].unique()","df.nunique().sort_values(ascending = True)","df['Sex'].value_counts()","df[df['Age'].isnull()].head(2)","df['Sex'] = df['Sex'].replace('male', np.nan)","df.drop('Age', axis = 1).head(1).T","df_dropped_age_sex = df.drop(['Age', 'Sex'], axis = 1).head(1).T","df[df['Name'] != 'Braund, Mr. Owen Harris'].head(1)","duplicated = data_iris.duplicated()","duplicated.any()","print(data_iris[duplicated])","data_iris_preprocessed = data_iris.drop_duplicates()","df.groupby('Sex').mean().T","df.groupby(['Sex', 'Survived'])['Age'].mean()","def uppercase(x):\n    return x.upper()","df['Name'].apply(uppercase)[0:2]","df.groupby('Sex').apply(lambda x : x.count()).T","pd.concat([dataframe_a, dataframe_b], axis = 0)","pd.concat([dataframe_a, dataframe_b], axis = 1)","pd.merge(df_employees, df_sales, on = 'employee_id')","pd.merge(df_employees, df_sales, on = 'employee_id', how = 'outer')","pd.merge(df_employees, df_sales, on = 'employee_id', how = 'left')","pd.merge(df_employees, df_sales, \n         left_on = 'employee_id',\n         right_on = 'employee_id')","minmax_scale = preprocessing.MinMaxScaler(feature_range=(0,1)) # create scaler","scaled_feature = minmax_scale.fit_transform(feature)  # fit and transform.","scaled_feature # show feature","scaler = preprocessing.StandardScaler()","standardized = scaler.fit_transform(x)","standardized","robust_scaler = preprocessing.RobustScaler()","robust_scaler.fit_transform(x)","normalizer = Normalizer(norm = 'l2') # Euclidean norm, create normalizer","normalizer.transform(features)","polynomial_interaction = PolynomialFeatures(degree = 2, # max deg of polynomial\n                                            include_bias = False)","polynomial_interaction.fit_transform(features)","interaction = PolynomialFeatures(degree = 2,\n                                 interaction_only = True,\n                                 include_bias = False)","interaction.fit_transform(features)","def add_ten(x):\n    return x + 10","df.apply(add_ten)","def return_indices_of_outliers(x):\n    q1,q3 = np.percentile(x, [25,75])\n    iqr = q3 - q1\n    lower_bound = q1 - (iqr * 1.5)\n    upper_bound = q3 + (iqr * 1.5)\n    return np.where((x &gt; upper_bound) | (x &lt; lower_bound))","return_indices_of_outliers(feature)","houses['log_of_sq_feet'] = [np.log(x) for x in houses['Square Feet']]","houses[houses['Bathrooms'] &lt; 20] # filtering in less than 20","clusterer = KMeans(3, random_state = 0)","clusterer.fit(features)","dataframe['group'] = clusterer.predict(features)","dataframe.head(5)","dataframe.dropna()","imputer = KNNImputer(n_neighbors = 3)","imputer.fit_transform(x)","one_hot = LabelBinarizer()","one_hot.fit_transform(my_feature)","one_hot.classes_","pd.get_dummies(feature[:,0])","dataframe = pd.DataFrame({'Score': ['Low', 'Low', 'Medium', 'Medium', 'High']})","scale_mapper = {'Low' : 1,\n                'Medium' : 2,\n                'High' : 3}","dataframe['Score'].replace(scale_mapper)","data_dict = [{'Red' : 2, 'Blue' : 4},\n             {'Red' : 4, 'Blue' : 3},\n             {'Red' : 1, 'Yellow' : 2},\n             {'Red' : 2, 'Yellow' : 2}]","dictvectorizer = DictVectorizer(sparse = False) # default is sparse = True; here is dense","features = dictvectorizer.fit_transform(data_dict)","feature_names = dictvectorizer.get_feature_names()","feature_names  # ['Blue', 'Red', 'Yellow']","dataframe = pd.DataFrame(features)","corr_matrix = dataframe.corr().abs()\ndataframe.corr()","upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape),\n                                  k = 1).astype(bool))","sns.boxplot(x = 'variable', y = 'value', data = pd.melt(df_num)\nplt.title('Boxplot showing distribution')","df_num = data_processed.select_dtypes(include = ['float64'])","df_num_melted = pd.melt(df_num)","g = sns.FacetGrid(df_num_melted,\n                  col = 'variable',\n                  col_wrap = 8,\n                  height = 3,\n                  aspect = 1,\n                  sharey = False,\n                  sharex = False)\n\ng = g.map(sns.histplot,\n           'value',\n           stat = 'density',\n           kde = True\n           )\n\ng.fig.tight_layout()\n\ng.fig.suptitle(\"Distribution for numerical variables\")","ax = sns.countplot(x = 60, data = dataset)\n\nax.set_title(\"Count for Y - Rock or Metal\")\n\nfor p in ax.patches:\n    ax.annotate(f'\\n{p.get_height()}', \n                (p.get_x()+0.2, p.get_height()), \n                ha='center', va='top',\n                color='white')\nplt.show()","sns.scatterplot(x = housing['1stfloor_sq_ft'], y = housing['sale_price'])","sns.jointplot(x = housing['1stfloor_sq_ft'], y = housing['sale_price'])","sns.jointplot(data = housing, x = ['1stfloor_sq_ft'], y = ['sale_price'], kind = 'reg')","fig, ax = plt.subplots(3,3,figsize = (15,10))\n\nfor var, subplot in zip(categorical, ax.flatten()):\n    sns.boxplot(x = var, y = 'SalePrice', data = housing, ax = subplot)","sorted_nb = houring.groupby(['Neighbourhood'])['SalePrice'].median().sort_values()","sns.boxplot(x = housing['Neighbourhood'], y = housing['SalePrice'], order = list(sorted_nb.index))","sns.pairplot(credit[['Balance','Age','Cards','Education','Income','Limit','Rating']])","correlation = df.corr(method = 'Pearson')","sns.heatmap(df_red.corr(), annot = True, fmt = '.2f', linewidth = 2)","unique_vals = data_oil.nunique().sort_values(ascending = True)\nprint(unique_vals)","print('Missing: %d' % sum(np.isnan(X).flatten()))"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>No.<\/th>\n      <th>Package<\/th>\n      <th>Purpose<\/th>\n      <th>Code<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"keys":true,"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<h2 id="libraries">LIBRARIES</h2>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div id="htmlwidget-89c89eab3c7728af6fe3" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-89c89eab3c7728af6fe3">{"x":{"filter":"none","vertical":false,"extensions":["KeyTable"],"editable":{"target":"cell","disable":{"columns":null},"numeric":[],"area":[]},"data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44"],["numpy","pandas","matplotlib","scipy","scikit-learn","statsmodels","datetime","pprint","matplotlib.pyplot","warnings","defaultdict","csv","operator","folium","seaborn","datetime","pyjanitor","sklearn","sqlalchemy","sklearn","sklearn.preprocessing","sklearn.cluster",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["import numpy as np","import pandas as pd","import matplotlib as plt","import seaborn as sns",null,"import statsmodels as sm","from datetime import datetime, date, time","from pprint import pprint","import matplotlib.pyplot as plt","import warning","from collections import defaultdict","import csv","import operator","import folium","import seaborn as sns","import datetime","import janitor","from sklearn import datasets","from sqlalchemy import create_engine","from sklearn import preprocessing","from sklearn.preprocessing import Normalizer","from sklearn.cluster import KMeans",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],["numerical computing","work with structured or tabular data","creating plots","mathematical computing","machine learning toolkit","regression analysis models eg linear models, ANOVA, time series, non-parametric methods, visualization of stats model results","built in library, for working with dates and times","pretty print","basic plotting module in python. https://matplotlib.org/index.html","warnings","create defaultdict","import csv file as list of list or list of dictionary","sort dictionary based on values","to visualize geospatial data","to visualize data",null,"to clean column names","load scikit-learn's datasets","connect to sql","preprocessing eg min max scaling","Normalizer to rescale values","using kmeans clustering as a preprocessing step to group similar observations and output a new feature contaiining each observation's group membership",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>library<\/th>\n      <th>code<\/th>\n      <th>purpose<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"keys":true,"order":[],"autoWidth":false,"orderClasses":false,"columnDefs":[{"orderable":false,"targets":0}]}},"evals":[],"jsHooks":[]}</script>
+</div>
+<h2 id="reticulate">RETICULATE</h2>
+<h3 id="installing-libraries">Installing libraries</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://rstudio.github.io/reticulate/'>reticulate</a></span><span class='op'>)</span>
+
+<span class='co'>## check configuration</span>
+<span class='co'># py_config()</span>
+<span class='co'># y_discover_config()</span>
+
+<span class='co'># install packages - https://rstudio.github.io/reticulate/articles/python_packages.html</span>
+<span class='co'># py_install('pandas')</span>
+<span class='co'># py_install('scipy')</span>
+<span class='co'># py_install('matplotlib.pyplot')</span>
+<span class='co'># py_install('seaborn')</span>
+<span class='co'># py_install('scikit-learn')</span>
+</code></pre>
+</div>
+</div>
+<h3 id="creating-variables-in-python">Creating variables in python</h3>
+<p>Import libraries Indicate chunk code with Python instead of R.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>my_python_array <span class="op">=</span> np.array([<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">6</span>,<span class="dv">8</span>])</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>my_python_array</span></code></pre></div>
+<pre><code>array([2, 4, 6, 8])</code></pre>
+</div>
+<h3 id="loading-python-variables-into-r">Loading python variables into R</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_r_array</span> <span class='op'>&lt;-</span> <span class='va'>py</span><span class='op'>$</span><span class='va'>my_python_array</span>
+</code></pre>
+</div>
+</div>
+<h3 id="loading-r-variables-back-into-python">Loading R variables back into python</h3>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>my_python_array_2 <span class="op">=</span> r.my_r_array</span></code></pre></div>
+</div>
+<h2 id="references">References</h2>
+<ul>
+<li>Python Data Science Handbook, Jake VanderPlas</li>
+<li>Python for Data Analysis, Wes McKinney</li>
+<li>Heicoders AI100 Course</li>
+<li><a href="https://rstudio.github.io/reticulate/" class="uri">https://rstudio.github.io/reticulate/</a></li>
+<li><a href="https://anderfernandez.com/en/blog/how-to-use-python-in-r/" class="uri">https://anderfernandez.com/en/blog/how-to-use-python-in-r/</a></li>
+<li><a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/reticulate.pdf" class="uri">https://raw.githubusercontent.com/rstudio/cheatsheets/main/reticulate.pdf</a></li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>

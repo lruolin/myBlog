@@ -1,0 +1,221 @@
+---
+title: "Summary for Python Codes"
+description: |
+  Compilation of notes for coding with python
+author:
+  - name: lruolin
+date: 03-10-2022
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Learning points
+
+- Linking with google sheets to have a searchable dictionary for coding with python
+
+- Unfortunately, new line within a cell does not show up in DT below, so the formatting isn't great. 
+
+- Learning how to use Python in R, using reticulate package
+
+```{r, echo = FALSE}
+# Load Packages
+
+library(googlesheets4)
+library(pacman)
+p_load(tidyverse, DT)
+```
+
+
+
+## CODES
+
+### Terminal
+
+
+```{r, include = FALSE}
+
+bash_ref <- read_sheet("https://docs.google.com/spreadsheets/d/19ETrS6Y63terLDonmvh3tUrjdOozpxGqkxG_Y8SwjdM/edit#gid=0", sheet = 'bash') %>% 
+  drop_na(Command)
+
+glimpse(bash_ref)
+tail(bash_ref)
+
+bash_ref_formatted <- bash_ref %>% 
+  mutate(Command = str_trim(Command)) %>% 
+  select(Command, Notes, `What you will see`)
+```
+
+
+
+### Base Python
+
+```{r, include = FALSE}
+
+py_ref <- read_sheet("https://docs.google.com/spreadsheets/d/19ETrS6Y63terLDonmvh3tUrjdOozpxGqkxG_Y8SwjdM/edit#gid=0", sheet = 'python') %>% 
+  drop_na(Code)
+
+glimpse(py_ref)
+tail(py_ref)
+
+py_ref_formatted <- py_ref %>% 
+  mutate(Purpose = str_trim(Purpose),
+         Code = str_trim(Code)) %>% 
+  select(-Author, -`Use in`, -No., - Source)
+```
+
+
+```{r, echo = FALSE, layout="l-body-outset"}
+# DT
+datatable(py_ref_formatted,
+          editable = 'cell',
+          extensions = 'KeyTable',
+          options = list(keys = TRUE))
+```
+
+### Other packages
+
+#### Workflow for normal EDA 
+
+- Make a copy of the original dataset before making any changes.
+
+- Get a feel of data. Use glimpse() for R, 
+  Use my_df.head().T for python. 
+  Other commands include: df.tail(), df.index(), df.columns, df.describe(), df.info, df.shape, df.sample(5, random_state = 0)
+  
+- Check datatype to see if there is any need to change to the right dtype
+
+- Check which columns are redundant, and drop if not necessary
+  df_dropped_age_sex = df.drop(['Age', 'Sex'], axis = 1).head(1).T
+
+- Check for duplicated rows (only those that match perfectly across all columns)
+  data_iris_preprocessed = data_iris.drop_duplicates()
+  
+- Check descriptive statistics, and get summary statistics to see if there is a need for scaling, outliers. 
+
+- Check for unique values to see if any factor-recoding should be done.
+
+- Boxplot/Histogram to see if there are any outliers
+
+- Check class distribution
+
+- Check correlation
+
+- Check skews of univariate plots. Histograms may be used to show distribution for numerical data. 
+
+- Check for outliers - ascertain whether it is due to measurement error, data corruption, or it is a true outlier (requires domain knowledge). It is not a good idea to remove outliers without knowing why. One way to remove outliers is to use the IQR method to check if they are outliers. 
+  
+- For categorical data, counts (barplot) may be used. 
+
+- For bivariate relationships (numerial/numerical): use scatterplot to show relationship, or jointplot to show both scatterplot and histogram. 
+
+- For bivariate relationships (numerical Y, categorical X): use boxplots
+
+- For multivariate relationships, use pairplot
+
+
+
+
+```{r, include = FALSE}
+
+codes_ref <- read_sheet("https://docs.google.com/spreadsheets/d/19ETrS6Y63terLDonmvh3tUrjdOozpxGqkxG_Y8SwjdM/edit#gid=0", sheet = 'packages-codes') %>% 
+  select(-Source) %>% 
+  drop_na(Code)
+
+glimpse(codes_ref)
+
+codes_ref_formatted <- codes_ref %>% 
+  mutate(Purpose = str_trim(Purpose),
+         Code = str_trim(Code)) 
+
+glimpse(codes_ref_formatted)
+```
+
+
+```{r, echo = FALSE, layout="l-body-outset"}
+# DT
+datatable(codes_ref_formatted,
+          editable = 'cell',
+          extensions = 'KeyTable',
+          options = list(keys = TRUE))
+```
+
+
+## LIBRARIES
+
+```{r, include = FALSE}
+lib <- read_sheet('https://docs.google.com/spreadsheets/d/19ETrS6Y63terLDonmvh3tUrjdOozpxGqkxG_Y8SwjdM/edit#gid=1257383810', sheet = 'Libraries') %>% 
+  select(library, code, purpose)
+
+glimpse(lib)
+```
+
+```{r, echo = FALSE, layout="l-body-outset"}
+# DT
+datatable(lib,
+          editable = 'cell',
+          extensions = 'KeyTable',
+          options = list(keys = TRUE))
+```
+
+
+## RETICULATE
+
+### Installing libraries
+
+```{r}
+library(reticulate)
+
+## check configuration
+# py_config()
+# y_discover_config()
+
+# install packages - https://rstudio.github.io/reticulate/articles/python_packages.html
+# py_install('pandas')
+# py_install('scipy')
+# py_install('matplotlib.pyplot')
+# py_install('seaborn')
+# py_install('scikit-learn')
+```
+
+
+### Creating variables in python
+
+Import libraries
+Indicate chunk code with Python instead of R. 
+
+```{python}
+import numpy as np
+my_python_array = np.array([2,4,6,8])
+my_python_array
+```
+
+### Loading python variables into R
+
+```{r}
+my_r_array <- py$my_python_array
+```
+
+### Loading R variables back into python
+
+```{python}
+my_python_array_2 = r.my_r_array
+```
+
+
+
+## References
+
+- Python Data Science Handbook, Jake VanderPlas
+- Python for Data Analysis, Wes McKinney
+- Heicoders AI100 Course
+- <https://rstudio.github.io/reticulate/> 
+- <https://anderfernandez.com/en/blog/how-to-use-python-in-r/>
+- <https://raw.githubusercontent.com/rstudio/cheatsheets/main/reticulate.pdf> 
+
+
+

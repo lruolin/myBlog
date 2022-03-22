@@ -6,21 +6,21 @@
       "description": "Hi, this is my practice corner for coding in R.",
       "author": [],
       "contents": "\nAbout this blog: a place to code and build portfolio. About me: food scientist, used to analyse data with Excel and SPSS before I met R. Attended a short modular course on R and want to build and expand on what I have learnt.\nAristotle — ‘The more you know, the more you know you don’t know.’\nand that makes me want to learn even more.\nI tried to look for a chemometrics course that I can take online, but found that there wasn’t any suitable one avaible in Singapore. Most of the chemometrics courses were catered for PHD or Masters students already enrolled in overseas universities, or were data science machine learning courses for other domains such as fintech.\nWhat I would like to achieve for this blog, is a self-practice corner to compile my codes, for the following application areas:\nDesign of experiment: Full factorial design, half factorial design, optimisation. This could be applied to design of chemistry experiments, or even sensory analysis.\nSignal pre-processing (for chromatographic, spectral data)\nUnivariate statistical analysis\nMultivariate statistical analysis\nPCA as exploratory method to remove redundant variables (unsupervised method)\nModelling for classification - PLS-DA, kNN, QDA, LDA\nModelling for regression - PLS-R, PCR, OLS-R\nMost of the statistical software are expensive and not readily available to resource-tight individuals in companies or students. R and Python are open-source software with powerful packages and allows customization of graphs, but requires a certain level of coding knowledge. This will be the area I want to specialize in: Chemometrics with R.\n\n\n\n",
-      "last_modified": "2022-02-09T06:49:35+08:00"
+      "last_modified": "2022-03-22T16:13:32+08:00"
     },
     {
       "path": "index.html",
       "title": "myBlog",
       "author": [],
       "contents": "\n\n\n\n",
-      "last_modified": "2022-02-09T06:49:36+08:00"
+      "last_modified": "2022-03-22T16:13:35+08:00"
     },
     {
       "path": "usefullinks.html",
       "title": "Useful Links",
       "author": [],
       "contents": "\nCreating blog using distill package:\nProgramming for Psychologists : https://youtu.be/uLUqZp1kAWc\nMath inside RMarkdown:\nhttps://rpruim.github.io/s341/S19/from-class/MathinRmd.html\nStatistical Inference via Data Science:\nhttps://moderndive.com/index.html\nUsing R for Common Scientific Tasks:\nhttps://raw.githack.com/etmckinley/Coffey-Lab-R-Tutorial/main/R-tutorial-xaringnan.html#1\nDownloading packages from Github:\nhttps://cran.r-project.org/web/packages/githubinstall/vignettes/githubinstall.html\nUseful addins:\npasteAsComment https://www.r-bloggers.com/2022/02/some-simple-rstudio-addins/\ndatapasta https://github.com/MilesMcBain/datapasta\nGetting data from google sheets https://arbor-analytics.com/post/getting-your-data-into-r-from-google-sheets/\nMachine Learning:\nhttps://online.stat.psu.edu/stat508/lesson/1a\nhttps://web.stanford.edu/~hastie/ISLRv2_website.pdf\nhttps://github.com/onmee/ISLR-Answers\nhttps://www.dataschool.io/15-hours-of-expert-machine-learning-videos/\nhttps://www.tidymodels.org/\nhttps://emilhvitfeldt.github.io/ISLR-tidymodels-labs/classification.html\nR - Python Dictionary:\nhttps://heads0rtai1s.github.io/2020/11/05/r-python-dplyr-pandas/\nText Analysis:\nhttps://smltar.com/\nAnalytics for Food Industry:\nhttps://www.spssanalyticspartner.com/wp-content/uploads/2016/06/intro-to-predictive-analytics-food-innovation.pdf\nhttps://www.nature.com/articles/s41598-020-73978-1\n\n\n\n",
-      "last_modified": "2022-02-09T06:49:37+08:00"
+      "last_modified": "2022-03-22T16:13:36+08:00"
     }
   ],
   "collections": ["posts/posts.json"]

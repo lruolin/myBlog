@@ -7,7 +7,15 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Sat, 29 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 10 Mar 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Summary for Python Codes</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20220214 - Compiled Python Notes</link>
+      <description>Compilation of notes for coding with python</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20220214 - Compiled Python Notes</guid>
+      <pubDate>Thu, 10 Mar 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Chocolate Ratings</title>
       <dc:creator>lruolin</dc:creator>
