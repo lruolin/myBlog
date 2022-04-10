@@ -1,0 +1,155 @@
+---
+title: "Efficient coding"
+description: |
+  Efficiency is getting more output for less work input
+author:
+  - name: lruolin
+date: 04-01-2022
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+# Background
+
+Benchmarking and profiling are key to efficient programming. 
+This post is on how to do both benchmarking and profiling. All codes run, but how do you compare the different methods such that you choose the most efficient one?
+
+I also discovered that you can change the outlook of R (perhaps by giving you a random quote each time it starts up). Feels like opening a fortune cookie to eat.. 
+
+
+# Load packages
+
+```{r}
+library(microbenchmark)
+library(profvis)
+
+```
+
+
+# Benchmarking in R
+
+Benchmarking is the process of testing the performance of certain functions/operations repeatedly, and allows you to see the amount of time taken. A good way to compare is to look at the median time taken.
+
+## Example 1
+
+```{r}
+df = data.frame(v = 1:4, name = letters[1:4])
+
+microbenchmark::microbenchmark(df[3,2],
+                               df[3, "name"],
+                               df$name[3])
+```
+
+## Example 2
+
+Creating your own functions
+
+```{r}
+x <- 1:100 # initiate vector to cumulatively sum
+
+# method 1: with a for loop 
+
+cum_sum_for_loop <- function(x) {
+  
+  for (i in x) {
+    if (i == 1) {
+      xc = x[i]
+    }
+    
+    else {
+      xc = c(xc, sum(x[1:i]))
+    }
+  }
+  
+  xc
+}
+
+# method 2: apply
+
+cum_sum_apply <- function(x) {
+  sapply(x, function(x) sum(1:x))
+}
+
+
+# method 3: cumsum function
+
+# compare in nanoseconds
+microbenchmark::microbenchmark(cum_sum_for_loop(x),
+                               cum_sum_apply(x),
+                               cumsum(x))
+
+# compare in seconds
+microbenchmark::microbenchmark(cum_sum_for_loop(x),
+                               cum_sum_apply(x),
+                               cumsum(x),
+                               unit = "s")
+
+```
+
+The third method is the fastest.
+
+
+# Profilling in R
+
+Profiling involves running many lines of code to find bottlenecks. 
+This helps in understanding why codes take so long to run. 
+
+```{r}
+# Only run these examples in interactive R sessions
+if (interactive()) {
+
+# Profile some code
+profvis({
+  dat <- data.frame(
+    x = rnorm(5e4),
+    y = rnorm(5e4)
+  )
+
+  plot(x ~ y, data = dat)
+  m <- lm(x ~ y, data = dat)
+  abline(m, col = "red")
+})
+  
+# Save a profile to an HTML file
+p <- profvis({
+  dat <- data.frame(
+    x = rnorm(5e4),
+    y = rnorm(5e4)
+  )
+
+  plot(x ~ y, data = dat)
+  m <- lm(x ~ y, data = dat)
+  abline(m, col = "red")
+})
+htmlwidgets::saveWidget(p, "profile.html")
+
+# Can open in browser from R
+browseURL("profile.html")
+
+}
+
+```
+
+
+# Modifying startup in R
+
+To access the Rprofile:
+
+`usethis::edit_r_profile()`
+
+To see a quote from the fortunes package each time R starts up:
+
+`paste(as.character(fortunes::fortune()), collapse = " ")`
+
+# References
+
+Efficient R Programming
+
+<https://damien-datasci-blog.netlify.app/post/2020-12-31-pimp-your-r-startup-message/>
