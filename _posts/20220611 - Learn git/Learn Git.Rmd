@@ -1,0 +1,368 @@
+---
+title: "Learn Git"
+description: |
+  Git - what every one working with data science should know
+author:
+  - name: lruolin
+date: 06-11-2022
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Background
+
+A short summary on working with git, with key points taken from Headfirst Git book.
+
+# Command line
+
+`pwd` - print working directory
+
+`mkdir` - make new directory, don't use spaces unless going to use quotations
+
+`ls` - list
+
+`ls -A` - list hidden files as well
+
+`cd` - change directory
+
+`cd ..` - return to parent directory
+
+
+
+
+# Installation
+
+`git version` - to check which version of git had been installed
+
+# Beginning git
+
+Git is important for:
+
+- version control
+- collaboration between multiple team players
+
+## Git repo
+
+Git repo is a folder for housing all the files in a project. You will need to create one as a first step.
+
+The top folder of the project needs to have `git init` run to get things started with git.
+
+# 00 - Checking git help
+
+  `git <command> --help` for longer version, `q` to quit
+  `git <command> -h` for shorter version
+  
+  `git config --global core.editor "atom --wait"` to set Atom as git editor
+
+## Workflow
+
+1. Create a project folder (one for each chapter of the book)
+  Use command line commends to create folder
+
+2. Initialize Git after cd into folder, and then `git init`
+
+3. Initializing a Git repo inside a folder, and the folder will be the working directory. Check using `ls -A`.
+
+4. Create new file to work on (can be .md file)
+
+5. Add files to commit
+
+  `git add newfile.md`
+  `git add file1 file2 file3` for multiple files
+  `git status` to check status
+
+6. Commit the files 
+  `git commit -m "my first commit"`
+
+7. Check status of repo
+  `git status`
+
+# 02 - Branching out
+
+Branches allow you to keep your changes completely independent of each other.
+
+Branches allow multiple peple to contribute to the same project.
+
+Branches allow you to work on multiple tasks at the same time. 
+
+You should always work on a branch, then then default to master. 
+
+## Creating branch
+
+Create a branch for every/any new task or feature to add in.
+Delete them after they have been merged into master. 
+
+  `git branch my-first-branch`
+  
+  `git branch` to list all branches
+  
+## Switching branches
+
+  `git switch my-first-branch`
+  
+  `git branch` to check if switched correctly
+  
+## Create and switch to branch immediately
+
+  `git switch -c my-first-branch`
+  `git branch` to check if switched correctly
+
+## Merging branches
+
+  `git merge branch-name` - branch that is to be merged into the branch you are on.
+
+### Merging to master branch
+
+  `git status` to check which branch you are on
+  `git switch master` to go to master branch
+  `git merge add-fall-menu` to merge add-fall-menu branch into master
+  `ls` to check if newly added files were added
+  
+### Merge commits
+
+- A merge commit has two parents: the first parent is the lastt commit on the branch that is the proposer; the second parent is the last commit from the proposee branch that was merged in. 
+
+- Merge commit: diverged branches come together.
+
+### Merge conflicts
+
+When two copies of the same file exists in the branch to merge into and the branch you are in
+
+<<<<<<< HEAD  <-- Marks the beginning of the conflict region
+There's a version-control tool called Git
+ For software it's an excellent fit
+ If you attitude ranges
+ Feel free to make changes
+ Since you've got a great tracking kit
+ 
+=======     <-- Divides the two sides of the merge
+
+There's a version control tool called Git
+When you feel like you just want to quit
+Go and try something new
+You can track what you can do
+Since you've got a great tracking kit
+
+.>>>>>>> improvisation   <-- end of the region, branch name that you are merging into the head (master
+
+Resolve the conflicts
+
+`git add filename.md`
+`git commit -m "msg"`
+
+### Deleting branches
+
+Branches should be deleted after you have merged them
+You cannot delete the branch you are on!
+
+`git branch -d name_of_branch_to_delete`
+
+### Undoing delete
+
+`git branch <branch name> <base-commit-id>`
+
+
+# 03 - Git Repository
+
+## Git log for one branch
+
+`git log --oneline` to display one line with abbrev unique commit id
+
+## Git log for whole repo
+
+`git log --oneline --all --graph`
+
+## Visualizing file differences
+
+`git status`
+`git diff` to compare files in index with that in working directory
+`git diff --cached` to compare last commit with index
+
+## Visualizing differences between branches
+
+`git diff branch_master branch_branch`
+
+Branch master is the target
+Branch_branch is the branch to merge into target
+
+# 04 - Undoing mistakes
+
+## Undo changes to file using Restore
+
+Takes file from index and overwrites the version in the working directory
+
+`git restore invitation.md`
+
+`git restore file-a file-b file-c` for restoring multiple files
+
+## Undoing commits
+
+`git restore --staged invititation-card.md` copies the conents of the file as they were last committed into the index
+
+## Deleting files
+
+`git rm file.md` removes files from working diretory and index, but not object database
+
+## Delete a directory
+
+`git rm -r` r stands for recursive
+
+## Renaming or moving files
+
+`git mv file-a.md file-b.md` file-a is the old name, file-b is the new name
+
+## Edit commit messages
+
+`git status` to check that you are on the same branch as the commit you wish to edit, and that the working directory is clean. There should not be any uncommitted changes! 
+
+If there are any staged changes, can use `git restore --staged <file>` to let Git put them back in the working directory, then you can amend the latest commit. 
+
+`git commit --amend -m "new commit message"` to record a commit replacing the one you had with the new commit message.
+
+## Renaming branches
+
+`git branch` to check branch name
+`git branch -m old-name new-name`
+`git branch` to check change took place
+
+This works regardless of what branch you are on, since it is explicitly stated. 
+
+## Removing commits
+
+`git reset <commit id>`  -> mixed reset mode, appear in working directory
+
+`git reset --soft <commit id>` -> appear in index
+
+`git reset --hard <commit id>` --> destructive, will nv see it in index or working directory
+
+Reset is commit level
+Restore is file level
+
+`git revert HEAD` : commit id is still in the graph, but its effects are negated with the new commit that the revert command created.
+
+# 05 - Working remote
+
+## Clone
+
+`git clone <url>`
+
+Make changes
+
+`git status` : will see that your branch is ahead by 1 commit
+
+`git push` : will prompt for username and password (PAT)
+
+`git remote -v`
+
+
+## Workflow to push master branch
+
+1. `git init` or fork the repository, then `git clone <url>`
+
+2. `git switch -c feature-a` to create branch, switch to that branch, and make changes
+
+3. `git branch` to check branch you are on.
+
+4. `git switch master` to switch to master branch
+
+5. `git merge feature-a` to merge feature branch into master branch
+
+6. `git push` to push the master branch
+
+7. `git branch -d feature-a` to delete branch after merging
+
+
+## Pushing local branches
+
+`git branch` to check that you are on master
+
+`git switch -c feature-b` to create new feature-b branch, add files/make changes
+
+`git add feat-b-01.md` to add file
+
+`git commit -m "my first commit on feat-b"` 
+
+`git push` and follow instructions to set upstream origin
+
+### Pull requests - another way to merge branches
+
+A pull request is a way to request that your code be merged into another branch, typically an integration branch like the master. 
+
+Instead of merging back into the master **directly**, you push the branch to the remote, and create a pull request. They can then review and give comments/feedback, and when they approve your pull request, you can go ahead and merge your changes. 
+
+- Pull request
+- New pull request
+- Choose target (LHS, should be your OWN base) and source (RHS), branch to merge
+- Can compare changes
+- Create pull request
+- Merge pull request
+- Confirm merge pull request
+
+For solo projects, it is better to merge into integration branch locally and push the integration branch to the remote.
+
+# 06 - Team Collaboration
+
+### Workflow - player 1
+
+1. Clone repo: `git clone <url>` (fork first if needed)
+
+2. Create branch `git switch -c addison-first-faq`
+
+3. Edit files locally in Atom
+
+4. Add and commit file.
+
+  `git add FAQ.md`
+  
+  `git commit -m "first commit"`
+  
+5. Check git branch: `git branch`
+
+6. Push local branch: `git push` and follow instructions
+
+7. Go to github website to merge pull request. 
+
+8. Delete merged branch on github.
+
+**If pushing to master**:
+
+5a: Check git branch: `git branch`
+
+6a: Switch to master branch: `git switch master`
+
+7a. Push to master: `git push`
+
+8a. Delete merged branch: `git branch -d addison-first-faq`
+
+## Workflow - Player 2 (pull to update)
+
+1. cd into player 2 working directory with the git cloned repo
+
+2. `git branch` to be at the master branch
+
+3. `git pull` to update a branch in your clone to most recent version
+
+## Fetch
+
+`git fetch` to fetch all changes in the remote and update your tracking branches to reflect the changes, but aren't present in your clone.
+
+`git status` to see where things stands
+
+`git branch -a` to see all the branches in the repo
+
+`git fetch` followed by `git merge`is better than `git pull`
+
+Git fetch is a safer alternative because it pulls in all the commits from your remote but doesn’t make any changes to your local files.
+
+
+
+
+
+
+# References
+Head First Git

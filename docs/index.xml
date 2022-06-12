@@ -7,7 +7,15 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 01 Apr 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Learn Git</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20220611 - Learn git</link>
+      <description>Git - what every one working with data science should know</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20220611 - Learn git</guid>
+      <pubDate>Sat, 11 Jun 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Efficient coding</title>
       <dc:creator>lruolin</dc:creator>
