@@ -1,0 +1,768 @@
+---
+title: "Tidymodels notes"
+description: |
+  Notes on tidymodels
+author:
+  - name: lruolin
+date: 06-30-2022
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# NOTES - GENERAL
+
+- Define the ML problem: Is it classification or regression?
+- What is the existing methdology?
+- How will ML help? 
+- How will output from ML be used?
+
+
+# USEFUL PACKAGES
+
+## General
+
+- here: to retrieve files from working directory
+
+
+## Data wrangling
+
+- tidyverse
+
+- lubridate
+
+- janitor
+
+
+
+
+
+
+## EDA
+
+- skimr::skim()
+
+- Hmisc:: rcorr()
+
+- GGally::ggpairs() for pairplot
+
+- ggstatsplot::ggcorrmat()
+
+- jtools::export_summs() to see lm summary, plot_summs() to view coefficients
+
+- huxtable
+
+- interactions:: interact_plot() to visualize interactions, spinoff from jtools
+
+
+
+
+## Visualization
+
+
+- ggplot
+
+- ggthemes for fancy themes (theme_wsj, theme_tufte, theme_gdocs, theme_fivethirtyeight, theme_few)
+
+- ggalt: Extr coordinate systems, statistical transformations
+
+- ggsci for jco style
+
+- ggthemr for predefined themes: fresh, greyscale, pale
+  ggthemr('fresh')
+
+- scales
+
+- ggfortify:: autoplot() for linear model, pca, clustering
+
+- ggstance:: coord_flip() simpler version
+
+- gridExtra, patchwork 
+
+
+
+
+
+
+## Modelling
+
+- tidymodels
+
+- broom, modelr
+
+- vip
+
+- doParallel, ranger, usemodelsyes for RF modelling
+
+- xgboost for XGBoost
+
+- glmnet for logistic regression
+
+- kernlab for SVM
+
+- kknn for KNN
+
+
+
+
+## Reporting
+
+- DT
+
+- plotly
+
+
+# EDA: What to look out for
+
+As part of data cleaning process, assign cleaned dataset to a new variable and **do not overwrite the original dataset**
+
+
+## Check on Y first!
+
+Is it skewed (numerical y)?
+
+Is it imbalanced (categorical y)?
+
+Recode y to reflect the CORRECT reference variable. 
+
+
+
+## Duplicated rows
+
+Remove duplicated rows
+
+`step_rm()`
+
+## Non-unique columns 
+
+Zero variance columns do not add useful information to the model.
+
+`step_zv()`
+`step_nzv()`
+
+
+Remove.
+
+## Missing values
+
+Why are there missing values? Is it due to human error, or was it purposely omitted (not at random), for example, females do not report their age for surveys?
+
+This will affect the decision on whether to remove the column (with missing values), or the rows with missing values (but will also remove other information), or to impute the missing data.
+
+`step_impute___`
+
+`step_naomit()`
+
+
+## Datatypes
+
+Check with `skim()` that the proper column types have been assigned. 
+
+
+## Numerical
+
+### Check the min, max, mean, median
+
+Use `summary()` to check on statistics and `skim()` to check on distribution, or `ggpairs()` can also be used
+
+This is to see if scaling, transformation steps are required.
+
+`step_YeoJohnson()`
+
+`step_BoxCox()`
+
+`step_log()`
+
+
+
+### Visualize using boxplots (Univariate)
+
+This is to check if there are any outliers, and also for summary statistics.
+
+Create a boxplot function to loop over all numeric columns. 
+
+
+
+### Visualize using histograms or frequency distributions (Univariate)
+
+This is to check if any transformations are required, and whether the data is unimodal, bimodal or multimodal. May need to discretise in such cases. 
+
+Create a geom_hist function to loop over all numeric columns.
+
+
+### Check for non-linear transformations
+
+Does x vary linearly with y? Or are polynomial transformations required?
+
+
+
+### Check for correlations
+
+Visualize the correlation plot, and also correlation matrix to see which variables are inter-correlated, and also which variables correlate well with y variable. The latter would be important as a predictor variable.
+
+
+If there are highly correlated variables, can use `step_corr()` to remove. 
+
+
+
+
+
+### Normalise variables to mean = 0, sd = 1
+
+Scale affects certain models, especially for linear regression and PCA. 
+
+`step_normalize()`
+`step_center()`
+`step_scale()`
+
+
+
+
+
+
+## Categorical
+
+## What is your REFERENCE variable?
+
+Code it to be the first variable. 
+
+
+## Check the count of the categories
+
+Are there too many categories?
+
+`textrecipes::step_clean_names` to clean text column
+
+
+`step_other` to collapse if there are too many variables.
+
+
+
+
+## Encode categorical variables
+
+Change from factor to numerical using `step_dummy`
+
+
+
+
+
+## Multivariate
+
+### Check for interactions between variables
+
+This requires domain knowledge.
+
+`step_interactions()` to create new predictor variables. 
+
+
+
+
+
+
+# CLASSIFICATION MODELS
+
+
+## Split
+
+Split the data first before preprocessig to avoid data leakage.
+
+**Take note of using strata for `initial_split()`.**
+
+[Tidymodels Split](https://www.tidymodels.org/start/recipes/#data-split)
+
+
+```{r eval = FALSE}
+
+set.seed(220629)
+df_split <- 
+  df_cleaned %>% 
+  initial_split(prop = 0.75,
+                strate = y_variable_column_if_imbalanced)
+
+df_train <- 
+  df_split %>% 
+  training()
+
+df_test <- 
+  df_split %>%
+  testing()
+```
+
+
+
+## Preprocess
+
+[Tidymodels Feature Engineering](https://www.tidymodels.org/start/recipes/#features)
+
+
+You can have different recipes, with different sets of preprocessed data, for eg:
+
+recipe_all_variables
+
+recipe_with_interactions
+
+recipe_for_rf (need not normalise variables)
+
+recipe_for_lr (need to normalise)
+
+
+## Tuning
+
+### Define model
+
+[Tidymodels parsnip](https://parsnip.tidymodels.org/articles/Examples.html)
+
+#### Logistic Regression
+
+```{r eval=FALSE}
+
+logistic_regression_model <- 
+  logistic_reg() %>% 
+  set_engine("glm") %>% 
+  set_mode("classification")
+
+```
+
+
+
+#### Random Forest
+
+```{r eval=FALSE}
+
+rf <- 
+  rand_forest() %>% 
+  set_args(trees = 1000,
+           mtry = tune()) %>% 
+           # min_n = tune()) %>% 
+  set_engine("ranger",
+             importance = "impurity") %>% 
+  set_mode("classification")
+
+```
+
+
+#### XGBoost
+
+```{r eval=FALSE}
+xg_boost <- 
+  boost_tree(trees = 1000,
+             mtry = tune(),
+             min_n = tune(),
+             tree_depth = tune(),
+             sample_size = tune(),
+             learn_rate = tune()) %>% 
+  set_engine("xgboost") %>% 
+  set_mode("classification")
+```
+
+
+
+### Set up workflow
+
+```{r eval=FALSE}
+
+workflow_rf <- 
+  workflow() %>% 
+  add_recipe(your_recipe) %>% 
+  add_model(your_model_name)
+
+```
+
+
+
+### Tune
+
+```{r eval=FALSE}
+# set up cv
+set.seed(220628)
+cv <- 
+  df_train %>% 
+  vfold_cv(10)
+
+
+grid_rf <- 
+  expand.grid(mtry = c(3,4,5,6))
+
+
+set.seed(220627)
+tuned_rf <- 
+  workflow_rf %>% # workflow defined earlier
+  tune_grid(grid = grid_rf, # defined earlier
+            resamples = cv,
+            metrics = metrics_set(#sens,
+                                  #spec,
+                                  #f_meas,
+                                  accuracy,
+                                  roc_auc))
+```
+
+
+### Select best
+
+```{r eval=FALSE}
+
+parameters_tuned_RF <- 
+  tuned_rf %>% 
+  select_best("roc_auc")
+```
+
+
+
+### Finalise workflow
+
+
+```{r eval=FALSE}
+
+finalized_workflow_rf <- 
+  workflow_rf %>% # earlier workflow
+  finalize_workflow(parameters_tuned_RF) # with tuned best parameters
+
+```
+
+
+
+### Last fit
+
+```{r eval=FALSE}
+
+fit_RF <- 
+  finalized_workflow_rf %>% # workflow with best parameters
+  last_fit(df_split) # fit to whole dataset, predict on test
+
+```
+
+
+
+## Assess model
+
+### Model metrics
+
+```{r eval=FALSE}
+
+performance_rf <- 
+  fit_RF %>% # last fit
+  collect_metrics() %>% 
+  mutate(model_name = "Model A (RF)")
+
+```
+
+Use `bind_cols` for several models
+
+### Predictions
+
+```{r eval=FALSE}
+
+predictions_rf <- 
+  fit_RF %>% # last fit
+  collect_predictions()
+  
+```
+
+#### Create Confusion Matrix
+
+It is better to create your own function for creating this.
+And then create a tibble with prediction_results (df), actual_y, and map2 to tag confusion matrix to each set of prediction_results.
+
+```{r eval=FALSE}
+predictions_rf %>% 
+  select(.pred_class, your_actual_y_column) %>% 
+  conf_mat(estimate = .pred_class,
+           truth = your_actual_y_column) %>% 
+  pluck(1) %>% 
+  as_tibble() %>% 
+  mutate() %>% # create col names for TP, TN, FP, FN based on prediction_y == Yes and actual_y == Yes etc
+  ggplot() +
+  geom_tile() + 
+  scale_fill_manual() + 
+  geom_label() +
+  geom_text()
+
+```
+
+#### Create ROC-AUC plots
+
+```{r eval=FALSE}
+
+# combined predictions by different models into a tibble using bind_rows
+
+combined_tibble %>% 
+  group_by(your_models_column_name) %>% 
+  roc_curve(your_actual_y_column_name,
+            your_predicted_y_column_name) %>% 
+  autoplot()
+
+```
+
+
+# REGRESSION MODELS
+
+## Split
+
+Split the data first before preprocessig to avoid data leakage
+
+[Tidymodels Split](https://www.tidymodels.org/start/recipes/#data-split)
+
+```{r eval = FALSE}
+
+set.seed(220629)
+df_split <- 
+  df_cleaned %>% 
+  initial_split(prop = 0.75)
+
+df_train <- 
+  df_split %>% 
+  training()
+
+df_test <- 
+  df_split %>%
+  testing()
+
+```
+
+
+## Preprocess
+
+[Tidymodels Feature Engineering](https://www.tidymodels.org/start/recipes/#features)
+
+You can have different recipes, with different sets of preprocessed data, for eg:
+
+recipe_all_variables
+
+recipe_with_interactions
+
+recipe_for_rf (need not normalise variables)
+
+recipe_for_lr (need to normalise)
+
+## Tuning
+
+[Tidymodels Case Study][https://www.tidymodels.org/start/case-study/]
+
+### Define model
+
+#### OLS
+
+```{r eval=FALSE}
+ols <- 
+  linear_reg() %>% 
+  set_engine("lm")
+```
+
+#### Random Forest
+
+```{r eval=FALSE}
+
+rf <- 
+  rand_forest() %>% 
+  set_args(trees = 1000,
+           mtry = tune(),
+           min_n = tune()) %>% 
+  set_engine("ranger",
+             importance = "permutation") %>% 
+  set_mode("regression")
+
+```
+
+
+
+
+### Set up workflow
+
+You can set up multiple workflows
+
+```{r eval = FALSE}
+
+workflow_ols <- 
+  workflow() %>% 
+  add_recipe(your_recipe_name) %>% 
+  add_model(your_model_name)
+
+```
+
+
+### Tune using CV
+
+
+
+```{r eval=FALSE}
+set.seed(22063001)
+
+cv <- your_training_set %>% 
+  vfold(cv)
+
+tuned_ols <- 
+  workflow_ols %>% 
+  tune_grid(resamples = cv)
+
+```
+
+
+
+### Select best hyperparameters
+
+```{r eval=FALSE}
+parameters_tuned_ols <- 
+  tuned_ols %>%  # from above
+  select_best(metric = "rmse")
+```
+
+
+### Finalise workflow
+
+
+```{r eval=FALSE}
+
+finalized_workflow_ols <- 
+  workflow_ols %>%  # workflow set up earlier
+  finalize_workflow(parameters_tuned_ols) # best hyperparameters
+```
+
+
+### Last fit
+
+```{r eval=FALSE}
+
+fit_ols <- 
+  finalized_workflow_ols %>%  # workflow with best hyperparamters
+  last_fit(data_split) # data used for initial_split with training AND testing
+```
+
+
+## Workflowsets
+
+[Tidymodels Workflowsets](https://workflowsets.tidymodels.org/)
+
+Workflow sets allot holding multiple workflow objects, by crossing all combinations of preprocessors and model specifications. This set can then be tuned or resampled using a set of specific functions. 
+
+1. Have different recipes (recipe_base, recipe_filter_correlation)
+
+2. Have different models (model_glm, model_knn)
+
+Rather than creating 4 combinations of preprocessors and models, a workflow set can be created.
+
+
+3. Create workflow set:
+
+```{r eval = FALSE}
+
+workflow_SETS <- 
+  workflow_set(
+    preproc = list(simple = base_recipe,
+                   filter = recipe_filter_correlation),
+    models = list(glmnet = model_glm,
+                  knn = model_knn),
+    cross = T)
+  )
+
+```
+
+
+
+
+
+
+4. Set up resamples
+
+```{r eval = FALSE}
+
+seed <- 20220706
+
+CV <- 
+  df_train %>% 
+  vfold_cv(repeats = 10, 
+           strata = y_variable_column_name)
+
+```
+
+5. Grid search using workflow_map()
+
+```{r eval=FALSE}
+# set up grid
+
+Grid_control <- 
+  control_grid(
+    save_pred = T,
+    save_workflow = T,
+    parallel_over = "everything"
+  )
+
+
+tuned_grid <- 
+  workflow_SETS %>% 
+  workflow_map(
+    seed = seed,
+    resamples = CV,
+    control = Grid_control,
+    verbose = T,
+    grid = 10
+  )
+
+# visualize
+tuned_grid %>% 
+  autoplot()
+
+```
+
+
+## Assess Model
+
+### Assess model performance based on rmse, mae, rsq
+
+
+```{r eval = FALSE}
+
+performance_ols <- 
+  fit_ols %>%  # last fitted model on testing dataset
+  collect_metrics()  # default is rmse
+
+
+
+```
+
+
+### Assess predictions based by visualizing pred.y against actual.y
+
+```{r eval = FALSE}
+
+predictions_ols <- 
+  fit_ols %>%  # last fitted model on testing dataset
+  collect_predictions() # will show .pred, actual_y
+```
+
+
+
+## Interpretability
+
+If y was transformed, change it back to original form. 
+
+Find out variable importance. 
+
+
+Refine model if needed to remove certain variables.
+
+Plot predicted_y and actual_y, and use interactive tools to show any identifiers (eg name, id)
+
+
+Preprocess again if needed.
+
+This is an iterative process!
+
+
+
+
+
+
+
+# STORE YOUR MODEL
+
+`saveRDS("model_name.rds")`
+
+
+# SAVE YOUR .RData
+
+`save.image("project_name_date.Rdata")`

@@ -1,0 +1,603 @@
+---
+title: "Predicting coffee cupping scores"
+description: |
+  Revisiting the coffee dataset
+author:
+  - name: lruolin
+date: 06-25-2022
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+    toc_depth: 3
+editor_options: 
+  chunk_output_type: console
+---
+
+# Background
+
+Revisiting the dataset to see if total cupping score can be predicted from the variables in the dataset.
+
+What I know so far:
+
+- Total Cupping Score is the summation of scores from the 10 attributes: aroma, flavor, aftertaste, acidity, body, balance, uniformity, clean_cup, sweetness and cupper_points.
+
+- Quakers refer to immature/unripe beans. This is a defect variable, same as category_one_defect and category_two_defect. The more the defects, the lower the total cupping score.
+
+
+# Key Objectives and Learning Points
+
+- To carry out data cleaning and EDA for this dataset
+
+- To practice using tidymodels framework to predict total cupping score
+
+Most of the exercises I encountered online use the 10 attributes as part of prediction for the total cupping score, but I decided to leave them out due to the way it is calculated. I wanted to look at whether other variables, such as country of origin, processing methods, moisture etc can predict the total cupping score.
+
+
+However, towards the end of the exercises, when I was evaluating the model, I realised that my model is really quite sub-optimal. The r-sq was ridiculously low, and the rmse is about 3.
+
+What could the reason be? Perhaps the choice of variables was not suitable, perhaps I did not engineer my features well enough? I think I already chose the easiest algorithm, as the dataset was very skewed and had a lot of categories, so I decided to use random forest, which doesn't require a lot of feature engineering...
+
+Perhaps these variables are not enough to predict the cupping score?
+Quality isn't just a measure of country, region, processing methods, although they can give some indications as to whether the coffee beans are good... I'm probably missing some additional information...
+
+Other exercises that used the 10 attributes had very good R-sq values, and understandably so, because total cupping points are calculated from these attributes by summing them up...
+
+
+Nevertheless, I shall take it as an exercise using the tidymodels framework, and let me mull over how my ML can be improved... 
+
+# Loading packages
+
+
+```{r}
+library(pacman)
+p_load(#qacData, 
+       tidyverse, lubridate,
+       janitor, skimr,
+       ggsci, ggthemes, ggthemr,
+       DT,
+       tidymodels,
+       GGally,
+       doParallel, ranger,
+       plotly,
+       vip)
+
+ggthemr::ggthemr("fresh")
+```
+
+
+
+# Loading the data
+
+```{r}
+coffee_ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-07-07/coffee_ratings.csv')
+
+```
+
+
+
+# Data wrangling
+
+
+Extracting column names
+
+```{r}
+# extract col names-----
+coffee_col_names <- colnames(coffee_ratings) %>% 
+  as_tibble(.)
+
+coffee_col_names %>% 
+  print(n = nrow(.))
+
+```
+
+
+Initial look at the data
+
+```{r}
+skim(coffee_ratings)
+```
+
+```{r}
+# count -----
+coffee_ratings %>% 
+  count(species) # mostly arabica
+
+coffee_ratings %>% 
+  count(owner) %>% 
+  arrange(desc(n))  # 316 unique owners
+
+
+```
+
+
+```{r}
+# create a function to count and sort
+count_and_sort <- function(col){
+  coffee_ratings %>% 
+    count({{col}}) %>% 
+    arrange(desc(n))
+}
+
+# 37 unique countries
+count_and_sort(country_of_origin)
+
+count_and_sort(farm_name) # many missing values for farm name, 572 unique farms
+
+count_and_sort(lot_number)
+count_and_sort(owner)
+count_and_sort(farm_name)
+count_and_sort(species)
+count_and_sort(mill)
+count_and_sort(ico_number)
+count_and_sort(company)
+count_and_sort(altitude)
+count_and_sort(region)
+count_and_sort(producer)
+count_and_sort(bag_weight)
+count_and_sort(in_country_partner)
+count_and_sort(harvest_year)
+count_and_sort(grading_date)
+count_and_sort(owner_1)
+count_and_sort(variety)
+count_and_sort(processing_method)
+count_and_sort(color)
+count_and_sort(expiration)
+count_and_sort(certification_body) %>% datatable()
+count_and_sort(unit_of_measurement)
+
+```
+
+
+Robusta vs Arabica
+
+```{r}
+# robusta vs arabica -----
+
+coffee_ratings %>% 
+  ggplot(aes(total_cup_points, fill = species)) +
+  geom_density(alpha = 0.4)
+
+
+```
+
+Change to correct columns and remove redundant columns
+
+Filter to just include Arabica, since Robusta is traditionally a more inferior grade
+
+```{r}
+
+coffee_a <- 
+  coffee_ratings %>% 
+  dplyr::filter(species == "Arabica") %>%
+  mutate(across(where(is.character), as.factor)) %>% 
+  mutate_at(c("altitude"), as.numeric) %>% 
+  mutate_at(c("harvest_year"), as.character) %>% 
+  mutate(grading_date = lubridate::mdy(grading_date)) %>% 
+  mutate(expiration = lubridate::mdy(expiration)) %>% 
+  # collapse less than 10 into 1 category
+  mutate(certification_body = fct_lump_min(certification_body,10)) %>% 
+  select(-lot_number,
+         -ico_number,
+         -bag_weight,
+         -farm_name,
+         -mill,
+         -producer,
+         -owner_1,
+         -certification_address,
+         -certification_contact
+  )
+
+```
+
+Next, to clean up the harvest years.
+
+```{r}
+harvest_years <- 
+  coffee_a %>% 
+  select(harvest_year, 
+         # grading_date
+  ) %>% 
+  unique() %>% 
+  print(nrow = nrow(.))
+
+
+harvest_years %>% datatable()
+
+
+
+coffee_b <- 
+  coffee_a %>% 
+  filter(!harvest_year %in% c("May-August",
+                              "mmm",
+                              "TEST",
+                              "January Through April",
+                              "August to December",
+                              "Mayo a Julio",
+                              "Abril - Julio")) %>% 
+  mutate(harvest_year = str_to_lower(harvest_year),
+         harvest_year = str_replace_all(harvest_year, "[[:punct:]]", " "),
+         #harvest_year_num = str_extract(harvest_year, "\\d{4}"))
+
+         harvest_year = str_replace_all(harvest_year, "4t 10", "2010"),
+         harvest_year = str_replace_all(harvest_year, "4t 2011", "2011"),
+         harvest_year = str_replace_all(harvest_year, "4t 2010", "2010"),
+         harvest_year = str_replace_all(harvest_year, "47 2010", "2010"),
+         harvest_year = str_replace_all(harvest_year, "23 july 2010", "2010"),
+         harvest_year = str_replace_all(harvest_year, "3t 2011", "2011"),
+         harvest_year = str_replace_all(harvest_year, "4t72010", "2010"),
+         harvest_year = str_replace_all(harvest_year, "08 09 crop", "2009"),
+         harvest_year = str_replace_all(harvest_year, "1t 2011", "2011"),
+         harvest_year_num = as.factor(parse_number(harvest_year)))
+
+# check       
+coffee_b %>% 
+  select(harvest_year, harvest_year_num) %>% 
+  unique() %>% 
+  datatable()
+
+ggplot(coffee_b,
+       aes(x = harvest_year_num,
+           y = total_cup_points)) +
+  geom_boxplot() +
+  ggtitle("Harvest years")
+
+# leave it as it is
+coffee_b %>% 
+  # filter(is.na(harvest_year_num)) %>% 
+  select(harvest_year, grading_date)
+
+
+```
+
+
+There are some obvious outliers for altitude, which should be removed.
+
+```{r}
+altitude <- coffee_b %>% 
+  select(starts_with("altitude"), unit_of_measurement )
+
+altitude %>% datatable()
+
+coffee_c <- 
+  coffee_b %>% 
+  select(-altitude_low_meters, 
+         -altitude_high_meters, -harvest_year,
+         -altitude, -unit_of_measurement) %>% 
+  # remove obvious outliers
+  filter(altitude_mean_meters < 5000 & altitude_mean_meters > 50)
+
+coffee_c %>% 
+  ggplot(aes(altitude_mean_meters)) +
+  geom_boxplot()
+
+
+skim(coffee_c)
+
+plot_boxplot <- function(df, col){
+  {{df}} %>% 
+    ggplot(aes({{col}})) +
+    geom_boxplot()
+}
+
+plot_boxplot(coffee_c, total_cup_points)
+
+
+# remove the sample with cup points = 0
+coffee_c %>% 
+  filter(total_cup_points == 0)
+
+```
+
+```{r}
+coffee_d <- 
+  coffee_c %>% 
+  filter(total_cup_points != 0) %>% 
+  select(-grading_date, -expiration,
+         -owner, -company, -region, -species)
+
+skim(coffee_d)
+
+plot_boxplot(coffee_d, total_cup_points)
+plot_boxplot(coffee_d, number_of_bags)
+plot_boxplot(coffee_d, moisture)
+plot_boxplot(coffee_d, category_one_defects)
+plot_boxplot(coffee_d, quakers)
+plot_boxplot(coffee_d, category_two_defects)
+```
+
+```{r}
+# Univariate factor variables
+
+coffee_d %>% 
+  ggplot(aes(quakers)) +
+  geom_bar(stat = "count")
+
+
+plot_bar <- function(col){
+  coffee_d %>% 
+    ggplot(aes({{col}})) +
+    geom_bar(stat = "count") +
+    ggtitle(enquo(col))
+}
+
+plot_bar(quakers)
+plot_bar(category_one_defects)
+plot_bar(category_two_defects)
+
+
+coffee_d %>% 
+  ggplot(aes(total_cup_points)) +
+  geom_histogram()
+
+plot_hist <- function(df, col){
+  
+  {{df}} %>% 
+    ggplot(aes({{col}})) +
+    geom_histogram() +
+    ggtitle(enquo(col))
+}
+
+
+plot_hist(coffee_d, total_cup_points)
+plot_hist(coffee_d, altitude_mean_meters)
+
+```
+
+
+
+```{r}
+coffee_d %>% 
+  ggplot(aes(x = altitude_mean_meters,
+             y = total_cup_points)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = F) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2),
+              se = F,
+              col = "red")
+
+```
+
+
+```{r}
+coffee_d %>% 
+  ggplot(aes(x = moisture,
+             y = total_cup_points)) +
+  geom_point()
+```
+
+
+
+
+
+Dataset to be used for modelling:
+
+```{r}
+coffee_cleaned <- coffee_d %>% 
+  # mutate(log10_points = log10(total_cup_points)) %>% 
+  mutate(variety = fct_explicit_na(variety)) %>% 
+  
+  mutate(processing_method = fct_explicit_na(processing_method)) %>% 
+  
+  mutate(color = na_if(color, "None")) %>% 
+  mutate(color = fct_explicit_na(color)) %>% 
+  
+  select(total_cup_points,
+         country_of_origin,
+         in_country_partner,
+         variety,
+         processing_method,
+         color,
+         certification_body,
+         harvest_year_num,
+         moisture,
+         category_one_defects,
+         category_two_defects,
+         quakers,
+         altitude_mean_meters)
+
+
+```
+
+
+```{r}
+# plot variety by total cup points
+coffee_cleaned %>% 
+  ggplot(aes(fct_reorder(variety, total_cup_points), 
+             total_cup_points)) +
+  geom_boxplot() +
+  coord_flip()
+
+# create function
+plot_ordered_boxplot <- function(df, col){
+  df %>% 
+    ggplot(aes(fct_reorder({{col}}, total_cup_points), 
+               total_cup_points)) +
+    geom_boxplot() +
+    coord_flip() +
+    ggtitle(enquo(col))
+}
+
+
+plot_ordered_boxplot(coffee_cleaned, country_of_origin)
+plot_ordered_boxplot(coffee_cleaned, in_country_partner)
+plot_ordered_boxplot(coffee_cleaned, variety)
+plot_ordered_boxplot(coffee_cleaned, processing_method)
+plot_ordered_boxplot(coffee_cleaned, color)
+plot_ordered_boxplot(coffee_cleaned, certification_body)
+
+```
+
+```{r}
+
+# ggpairs-----
+coffee_cleaned %>% 
+  select(where(is.numeric)) %>% 
+  ggpairs()
+
+
+skim(coffee_cleaned)
+```
+
+
+# Tidymodels
+
+I will only be using random forest to model, and the preprocessing recipe is quite simple as random forest is insensitive to skewed distributions. However, missing values must be imputed.
+
+## Split
+
+```{r}
+set.seed(22071301)
+coffee_split <- 
+  coffee_cleaned %>% 
+  initial_split()
+
+
+coffee_train <- 
+  coffee_split %>% 
+  training()
+
+
+coffee_test <- 
+  coffee_split %>% 
+  testing()
+```
+
+## Preprocess
+
+```{r}
+recipe_rf <- 
+  recipe(total_cup_points ~.,
+         data = coffee_train) %>% 
+  step_impute_knn(all_predictors()) %>% 
+  step_poly(altitude_mean_meters, degree = 2)
+
+```
+
+
+## Fit
+
+```{r}
+RF <- 
+  rand_forest() %>% 
+  set_args(mtry = tune(),
+           min_n = tune(),
+           trees = 1000) %>% 
+  set_engine("ranger",
+             importance = "permutation") %>% 
+  set_mode("regression")
+
+```
+
+
+## Tune
+
+```{r}
+workflow_rf <- 
+  workflow() %>% 
+  add_recipe(recipe_rf) %>% 
+  add_model(RF)
+
+```
+
+## Cross-validate
+
+```{r}
+set.seed(22071302)
+CV <- 
+  coffee_train %>% 
+  vfold_cv(v=10)
+
+tuned_rf <- 
+  workflow_rf %>% 
+  tune_grid(resamples = CV)
+
+tuned_rf %>% 
+  autoplot()
+
+parameters_tuned_rf <- 
+  tuned_rf %>% 
+  select_best(metric = "rmse")
+
+best_workflow_rf <- 
+  workflow_rf %>% 
+  finalize_workflow(parameters_tuned_rf)
+
+fit_rf <- 
+  best_workflow_rf %>% 
+  last_fit(coffee_split)
+
+```
+
+## Assess model
+
+```{r}
+model_performance_rf <- 
+  fit_rf %>% 
+  collect_metrics()
+
+model_performance_rf # rmse = 2.07, r-sq = 0.267
+
+
+```
+
+
+## Assess predictions
+
+```{r}
+predictions_rf <- 
+  fit_rf %>% 
+  collect_predictions()
+
+predictions_plot <- predictions_rf %>% 
+  ggplot(aes(x = total_cup_points,
+             y = .pred)) +
+  geom_point(color = "midnightblue",
+             alpha = 0.5) +
+  geom_abline(color = "red",
+              lty = 2) +
+  labs(x = "Actual Total Cupping Points",
+       y = "Predicted Total Cupping Points") +
+  tune::coord_obs_pred()
+
+
+
+plotly::ggplotly(predictions_plot)
+```
+
+
+The predictions were quite off for those with actual scores below 80, and the model tend to over-estimate the cupping scores.
+
+
+## Variable Importance
+
+```{r}
+finalized_model <- 
+  best_workflow_rf %>% 
+  fit(coffee_cleaned)
+
+
+feat_imp_model <- 
+  RF %>% 
+  finalize_model(select_best(tuned_rf)) %>% 
+  set_engine("ranger",
+             importance = "permutation")
+
+
+feature_importance <- 
+  workflow() %>% 
+  add_recipe(recipe_rf) %>% 
+  add_model(feat_imp_model) %>% 
+  fit(coffee_train) %>% 
+  extract_fit_parsnip() %>% 
+  vip()
+
+feature_importance
+
+```
+
+
+
+# References:
+
+- <https://tdunn.ca/posts/2020-07-12-tidytuesday-2020-week-28/>

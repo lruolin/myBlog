@@ -7,7 +7,24 @@
     <description>My Blog
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Sat, 11 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 30 Jun 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Tidymodels notes</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20220630 - tidymodels notes</link>
+      <description>Notes on tidymodels</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20220630 - tidymodels notes</guid>
+      <pubDate>Thu, 30 Jun 2022 00:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Predicting coffee cupping scores</title>
+      <dc:creator>lruolin</dc:creator>
+      <link>https://lruolin.github.io/myBlog/posts/20220625 - Predict coffee cupping score</link>
+      <description>Revisiting the coffee dataset</description>
+      <guid>https://lruolin.github.io/myBlog/posts/20220625 - Predict coffee cupping score</guid>
+      <pubDate>Sat, 25 Jun 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://lruolin.github.io/myBlog/posts/20220625 - Predict coffee cupping score/Predict-coffee-cupping-score_files/figure-html5/unnamed-chunk-7-1.png" medium="image" type="image/png" width="1248" height="768"/>
+    </item>
     <item>
       <title>Learn Git</title>
       <dc:creator>lruolin</dc:creator>
